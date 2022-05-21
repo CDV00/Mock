@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Text;
 using Contracts;
 using Course.BLL.Services;
@@ -109,7 +111,7 @@ b.MigrationsAssembly("CourseAPI"));
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Blogger_BE", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Mock-BE1", Version = "v1" });
                 c.AddSecurityDefinition(name: "Bearer", securityScheme: new OpenApiSecurityScheme
                 {
                     Name = "Authorization",
@@ -135,6 +137,11 @@ b.MigrationsAssembly("CourseAPI"));
                         new List<string>()
                     }
                 });
+
+                // Set the comments path for the Swagger JSON and UI.
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
         }
         public static void ConfigureLoggerService(this IServiceCollection services) =>

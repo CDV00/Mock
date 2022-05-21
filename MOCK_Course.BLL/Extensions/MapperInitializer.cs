@@ -15,6 +15,7 @@ namespace Course.BLL.Extensions
             CreateMap<CategoryRequest, CategoryResponse>().ReverseMap();
 
             CreateMap<RegisterRequest, AppUser>().ForMember(x => x.UserName, opt => opt.MapFrom(x => x.Email)).ReverseMap();
+            CreateMap<UserResponse, AppUser>().ReverseMap();
         }
     }
 }

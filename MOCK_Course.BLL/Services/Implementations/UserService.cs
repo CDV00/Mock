@@ -44,9 +44,11 @@ namespace Course.BLL.Services.Implementations
                 if (!result.Succeeded)
                     return new Response<LoginResponse>(false, "password don't correct", null);
 
+                var userResponse = _mapper.Map<UserResponse>(user);
+
                 List<Claim> authClaims = await GetClaims(user);
                 var token = GenerateAccessToken(authClaims);
-                return new Response<LoginResponse>(true, new LoginResponse(token));
+                return new Response<LoginResponse>(true, new LoginResponse(token,userResponse));
             }
             catch (Exception ex)
             {
