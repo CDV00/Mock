@@ -22,11 +22,12 @@ namespace Course.BLL.Services.Implementations
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
         private const int TokenExpires = 24;
-        public UserService(UserManager<AppUser> userManager, IMapper mapper, IConfiguration configuration)
+        public UserService(UserManager<AppUser> userManager, IMapper mapper, IConfiguration configuration, SignInManager<AppUser> signInManager)
         {
             _mapper = mapper;
             _userManager = userManager;
             _configuration = configuration;
+            _signInManager = signInManager;
         }
         public async Task<Response<LoginResponse>> Login(LoginRequest loginRequest)
         {
@@ -63,7 +64,6 @@ namespace Course.BLL.Services.Implementations
             try
             {
                 var user = _mapper.Map<AppUser>(registerRequest);
-                user.Id = Guid.NewGuid();
 
                 var result = await _userManager.CreateAsync(user, registerRequest.Password);
 
