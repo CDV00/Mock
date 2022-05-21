@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,7 +21,6 @@
 
   <ItemGroup>
     <Folder Include="Requests\" />
-    <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
