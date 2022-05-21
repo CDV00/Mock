@@ -7,6 +7,7 @@ using Course.BLL.Requests;
 using Course.DAL.Models;
 using Course.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Course.BLL.Services.Implementations
 {
@@ -27,7 +28,8 @@ namespace Course.BLL.Services.Implementations
         {
             try
             {
-                var result = await _categoryRepository.GetAll().ToListAsync();
+                var result = await _categoryRepository.GetAll().Where(c => c.ParentId == null).Include("SubCategories").ToListAsync();
+
                 return new Responses<CategoryResponse>(true, _mapper.Map<IEnumerable<CategoryResponse>>(result));
             }
             catch (Exception ex)
@@ -43,6 +45,41 @@ namespace Course.BLL.Services.Implementations
                 var category = _mapper.Map<Category>(categoryRequest);
 
                 await _categoryRepository.CreateAsync(category);
+                await _unitOfWork.SaveChangesAsync();
+                return new Response<CategoryResponse>(
+                    true,
+                    _mapper.Map<CategoryResponse>(category)
+                );
+            }
+            catch (Exception ex)
+            {
+                return new Response<CategoryResponse>(false, ex.Message, null);
+            }
+        }
+
+        public async Task<BaseResponse> remove(Guid id)
+        {
+            try
+            {
+                var category = await _categoryRepository.GetByIdAsync(id);
+
+                _categoryRepository.Remove(category);
+                await _unitOfWork.SaveChangesAsync();
+                return new BaseResponse(true, null, null);
+            }
+            catch (Exception ex)
+            {
+                return new Response<CategoryResponse>(false, ex.Message, null);
+            }
+        }
+
+        public async Task<Response<CategoryResponse>> Update(CategoryUpdateRequest categoryUpdateRequest)
+        {
+            try
+            {
+                var category = _mapper.Map<Category>(categoryUpdateRequest);
+
+                _categoryRepository.Update(category);
                 await _unitOfWork.SaveChangesAsync();
                 return new Response<CategoryResponse>(
                     true,

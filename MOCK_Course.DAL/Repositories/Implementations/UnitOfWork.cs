@@ -37,9 +37,9 @@ namespace Course.DAL.Repositories.Implementations
         /// Save all changes async
         /// </summary>
         /// <returns></returns>
-        public async Task SaveChangesAsync()
+        public async Task<int> SaveChangesAsync()
         {
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync();
         }
         #endregion
     }

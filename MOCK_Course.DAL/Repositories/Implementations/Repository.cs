@@ -42,7 +42,7 @@ namespace Course.DAL.Repositories.Implementations
         /// Implement GetAll method
         /// </summary>
         /// <returns></returns>
-        public IQueryable<T> GetAll() => DbSet.AsNoTracking();
+        public  IQueryable<T> GetAll() => DbSet.AsNoTracking();
         /// <summary>
         /// Implement GetAllAsync method
         /// </summary>

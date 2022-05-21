@@ -1,5 +1,5 @@
 ﻿using System;
-using Course.DAL.Models;
+using System.Collections.Generic;
 
 namespace Course.BLL.Responses
 {
@@ -8,5 +8,7 @@ namespace Course.BLL.Responses
         public Guid Id { get; set; }
         public string Name { get; set; }
         public Guid? ParentId { get; set; }
+
+        public ICollection<CategoryResponse> SubCategories { get; set; }
     }
 }

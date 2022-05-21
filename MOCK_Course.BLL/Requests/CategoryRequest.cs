@@ -11,5 +11,9 @@ namespace Course.BLL.Requests
 
         public Guid? ParentId { get; set; }
     }
-    
+    public class CategoryUpdateRequest : CategoryRequest
+    {
+        [Required]
+        public Guid Id { get; set; }
+    }
 }
