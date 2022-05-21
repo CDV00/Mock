@@ -67,7 +67,7 @@ namespace CourseAPI.Extensions.ServiceExtensions
 
                 // Configure Login.
                 //Configure verify email (email existed is required)
-                options.SignIn.RequireConfirmedEmail = true;
+                options.SignIn.RequireConfirmedEmail = false;
                 // Verify phone number
                 options.SignIn.RequireConfirmedPhoneNumber = false;
             }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();

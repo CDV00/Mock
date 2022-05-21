@@ -43,13 +43,12 @@ namespace Course.BLL.Services.Implementations
             try
             {
                 var category = _mapper.Map<Category>(categoryRequest);
-                category.Id = Guid.NewGuid();
 
                 await _categoryRepository.CreateAsync(category);
                 await _unitOfWork.SaveChangesAsync();
                 return new Response<CategoryResponse>(
                     true,
-                    _mapper.Map<CategoryResponse>(categoryRequest)
+                    _mapper.Map<CategoryResponse>(category)
                 );
             }
             catch (Exception ex)

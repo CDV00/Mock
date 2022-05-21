@@ -18,6 +18,7 @@ namespace Course.BLL.Services.Implementations
     public class UserService : IUserService
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
         private const int TokenExpires = 24;
@@ -37,7 +38,12 @@ namespace Course.BLL.Services.Implementations
                     return new Response<LoginResponse>(false, "Email don't exist", null);
                 }
 
-                List<Claim> authClaims = GetClaims(user);
+                var result = await _signInManager.PasswordSignInAsync(user, loginRequest.Password, loginRequest.Remember, false);
+
+                if (!result.Succeeded)
+                    return new Response<LoginResponse>(false, "password don't correct", null);
+
+                List<Claim> authClaims = await GetClaims(user);
                 var token = GenerateAccessToken(authClaims);
                 return new Response<LoginResponse>(true, new LoginResponse(token));
             }
@@ -99,10 +105,14 @@ namespace Course.BLL.Services.Implementations
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
             return tokenString;
         }
-        private static List<Claim> GetClaims(AppUser user)
+        private async Task<List<Claim>> GetClaims(AppUser user)
         {
+            var roles = await _userManager.GetRolesAsync(user);
+            if (roles == null) throw new Exception("Can't get role of user");
+
             var authClaims = new List<Claim>() {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Role, string.Join(";",roles))
                 //new Claim(ClaimTypes.Role, "User")
                 };
             return authClaims;

@@ -49,13 +49,15 @@ namespace CourseAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MOCK_CourseAPI v1"));
+  
             }
             else
             {
                 app.UseHsts();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MOCK_CourseAPI v1"));
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
