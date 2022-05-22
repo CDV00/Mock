@@ -41,7 +41,7 @@ namespace Course.BLL.Services.Implementations
             }
             catch (Exception ex)
             {
-                return new Response<CartResponse>(false, "Add Cart Fail!", null);
+                return new Response<CartResponse>(false, ex.Message, null);
             }
         }
 
@@ -49,6 +49,7 @@ namespace Course.BLL.Services.Implementations
         {
             try
             {
+                // GEt Shopping cart theo Us
                 var result = await _shoppingCartRepository.GetByIdAsync(userId);
                 return new Responses<CartResponse>(true, _mapper.Map<IEnumerable<CartResponse>>(result));
             }
