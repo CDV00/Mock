@@ -1,25 +1,79 @@
-﻿using Course.BLL.Requests;
-using Course.BLL.Responses;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Course.BLL.Responses;
+using Course.BLL.Requests;
+using Course.DAL.Models;
+using Course.DAL.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Course.BLL.Services.Implementations
 {
     public class ShoppingCartService : IShoppingCartService
     {
-        public Task<Response<CartResponse>> Add(CartRequest cartRequest)
+        private readonly IShoppingCartRepository _shoppingCartRepository;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+
+        public ShoppingCartService(IShoppingCartRepository shoppingCartRepository,
+            IMapper mapper,
+            IUnitOfWork unitOfWork)
         {
-            throw new NotImplementedException();
+            _shoppingCartRepository = shoppingCartRepository;
+            _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
 
-        public Task<Responses<CartResponse>> GetAll(Guid userId)
+        public async Task<Response<CartResponse>> Add(CartRequest cartRequest)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var cart = _mapper.Map<ShoppingCart>(cartRequest);
+
+                await _shoppingCartRepository.CreateAsync(cart);
+                await _unitOfWork.SaveChangesAsync();
+                return new Response<CartResponse>(
+                    true,
+                    _mapper.Map<CartResponse>(cart)
+                );
+            }
+            catch (Exception ex)
+            {
+                return new Response<CartResponse>(false, "Add Cart Fail!", null);
+            }
         }
 
-        public Task<BaseResponse> Remove(Guid IdShoppingCart)
+        public async Task<Responses<CartResponse>> GetAll(Guid userId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var result = await _shoppingCartRepository.GetByIdAsync(userId);
+                return new Responses<CartResponse>(true, _mapper.Map<IEnumerable<CartResponse>>(result));
+            }
+            catch (Exception ex)
+            {
+                return new Responses<CartResponse>(false, ex.Message, null);
+            }
+        }
+
+        public async Task<BaseResponse> Remove(Guid IdShoppingCart)
+        {
+            try
+            {
+                var result = await _shoppingCartRepository.GetByIdAsync(IdShoppingCart);
+                if(result != null)
+                {
+                    result.IsDeleted = true;
+                }
+                return new BaseResponse { IsSuccess = true };
+                
+            }
+            catch (Exception ex)
+            {
+                return new Responses<BaseResponse>(false, ex.Message, null);
+            }
         }
     }
 }

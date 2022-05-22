@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Course.BLL.Responses;
 using Course.BLL.Requests;
-using Course.BLL.Responses;
 using Course.DAL.Models;
 using Course.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;

@@ -144,6 +144,7 @@ b.MigrationsAssembly("CourseAPI"));
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
         }
         /// <summary>
         /// Configure Services
@@ -153,6 +154,7 @@ b.MigrationsAssembly("CourseAPI"));
         {
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IShoppingCartService, ShoppingCartService>();
         }
     }
 }

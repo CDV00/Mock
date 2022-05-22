@@ -24,21 +24,39 @@ namespace CourseAPI.Controllers
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
         [HttpGet]
-        public async Task<Responses<CartResponse>> GetAll(Guid userId)
+        public async Task<ActionResult<Responses<CartResponse>>> GetAll(Guid userId)
         {
-            throw new NotImplementedException();
+            var result = await _shoppingCartService.GetAll(userId);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
         }
-
+        /// <summary>
+        /// Add Shopping Cart of user
+        /// </summary>
+        /// <param name="cartRequest"></param>
+        /// <returns></returns>
         [HttpPost]
-        public async Task<Response<CartResponse>> Create(CartRequest cartRequest)
+        public async Task<ActionResult<Response<CartResponse>>> Create(CartRequest cartRequest)
         {
-            throw new NotImplementedException();
+            var result = await _shoppingCartService.Add(cartRequest);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
         }
 
+        /// <summary>
+        /// Remove Shopping Cart
+        /// </summary>
+        /// <param name="IdShoppingCart"></param>
+        /// <returns></returns>
         [HttpDelete]
-        public async Task<BaseResponse> Remove(Guid IdShoppingCart)
+        public async Task<ActionResult<BaseResponse>> Remove(Guid IdShoppingCart)
         {
-            throw new NotImplementedException();
+            var result = await _shoppingCartService.Remove(IdShoppingCart);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
         }
     }
 }
