@@ -6,7 +6,7 @@ namespace Course.BLL.Services
 {
     public interface IUserService 
     {
-        public Task<BaseResponse> Register(RegisterRequest registerRequest);
+        public Task<Response<UserResponse>> Register(RegisterRequest registerRequest);
         Task<Response<LoginResponse>> Login(LoginRequest loginRequest);
     }
 }

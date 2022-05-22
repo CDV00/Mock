@@ -9,7 +9,7 @@ namespace Course.BLL.Responses
         {
             this.data = data;
         }
-        public Response(bool isSuccess, string message, int? error) : base(isSuccess, error, message)
+        public Response(bool isSuccess, string message,string error) : base(isSuccess, error, message)
         {
         }
     }
@@ -20,7 +20,7 @@ namespace Course.BLL.Responses
         {
             Data = data;
         }
-        public Responses(bool isSuccess, string message, int? error) : base(isSuccess, error, message)
+        public Responses(bool isSuccess, string message, string error) : base(isSuccess, error, message)
         {
         }
     }

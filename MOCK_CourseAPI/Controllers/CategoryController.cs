@@ -35,7 +35,7 @@ namespace CourseAPI.Controllers
         /// <param name="categoryRequest"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<BaseResponse>> Add(CategoryRequest categoryRequest)
+        public async Task<ActionResult<Response<CategoryResponse>>> Add(CategoryRequest categoryRequest)
         {
             var result = await _categoryService.Add(categoryRequest);
             if (result.IsSuccess == false)
@@ -49,7 +49,7 @@ namespace CourseAPI.Controllers
         /// <param name="categoryUpdateRequest"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<ActionResult<BaseResponse>> Update(CategoryUpdateRequest categoryUpdateRequest)
+        public async Task<ActionResult<Response<CategoryResponse>>> Update(CategoryUpdateRequest categoryUpdateRequest)
         {
             var result = await _categoryService.Update(categoryUpdateRequest);
             if (result.IsSuccess == false)

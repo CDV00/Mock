@@ -34,6 +34,7 @@ namespace Course.BLL.Services.Implementations
             try
             {
                 var user = await _userManager.FindByEmailAsync(loginRequest.Email);
+
                 if (user is null)
                 {
                     return new Response<LoginResponse>(false, "Email don't exist", null);
@@ -46,9 +47,9 @@ namespace Course.BLL.Services.Implementations
 
                 var userResponse = _mapper.Map<UserResponse>(user);
 
-                List<Claim> authClaims = await GetClaims(user);
+                List<Claim> authClaims = await GetClaims(user, userResponse);
                 var token = GenerateAccessToken(authClaims);
-                return new Response<LoginResponse>(true, new LoginResponse(token,userResponse));
+                return new Response<LoginResponse>(true, new LoginResponse(token, userResponse));
             }
             catch (Exception ex)
             {
@@ -61,7 +62,7 @@ namespace Course.BLL.Services.Implementations
         /// </summary>
         /// <param name="registerRequest"></param>
         /// <returns></returns>
-        public async Task<BaseResponse> Register(RegisterRequest registerRequest)
+        public async Task<Response<UserResponse>> Register(RegisterRequest registerRequest)
         {
             try
             {
@@ -69,27 +70,17 @@ namespace Course.BLL.Services.Implementations
 
                 var result = await _userManager.CreateAsync(user, registerRequest.Password);
 
+                var userResponse = _mapper.Map<UserResponse>(user);
+
                 if (result.Succeeded)
                 {
-                    return new BaseResponse
-                    {
-                        IsSuccess = true,
-                        Message = "Success"
-                    };
+                    return new Response<UserResponse>(true, userResponse);
                 }
-                return new BaseResponse
-                {
-                    IsSuccess = false,
-                    Message = result.Errors.ToList()[0].Description
-                };
+                return new Response<UserResponse>(false, result.Errors.ToList()[0].Description, null);
             }
             catch (Exception ex)
             {
-                return new BaseResponse
-                {
-                    IsSuccess = false,
-                    Message = ex.Message
-                };
+                return new Response<UserResponse>(false, ex.Message, null);
             }
         }
         private string GenerateAccessToken(IEnumerable<Claim> claims)
@@ -107,10 +98,14 @@ namespace Course.BLL.Services.Implementations
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
             return tokenString;
         }
-        private async Task<List<Claim>> GetClaims(AppUser user)
+        private async Task<List<Claim>> GetClaims(AppUser user, UserResponse userResponse)
         {
             var roles = await _userManager.GetRolesAsync(user);
-            if (roles == null) throw new Exception("Can't get role of user");
+
+            if (roles.Count > 0)
+            {
+                userResponse.IsHaveRole = true;
+            }
 
             var authClaims = new List<Claim>() {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
