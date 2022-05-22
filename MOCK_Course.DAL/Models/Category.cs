@@ -22,5 +22,6 @@ namespace Course.DAL.Models
 
         public ICollection<Category> SubCategories { get; set; }
         public ICollection<Courses> Courses { get; set; }
+        public ICollection<AppUser> User { get; set; }
     }
 }

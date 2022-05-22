@@ -15,19 +15,21 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Course.BLL.Services.Implementations
 {
-    public class UserService : IUserService
+    public class AccountService : IAccountService
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly RoleManager<IdentityRole<Guid>> _roleManager;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
         private const int TokenExpires = 24;
-        public UserService(UserManager<AppUser> userManager, IMapper mapper, IConfiguration configuration, SignInManager<AppUser> signInManager)
+        public AccountService(UserManager<AppUser> userManager, IMapper mapper, IConfiguration configuration, SignInManager<AppUser> signInManager, RoleManager<IdentityRole<Guid>> roleManager)
         {
             _mapper = mapper;
             _userManager = userManager;
             _configuration = configuration;
             _signInManager = signInManager;
+            _roleManager = roleManager;
         }
         public async Task<Response<LoginResponse>> Login(LoginRequest loginRequest)
         {
@@ -48,6 +50,10 @@ namespace Course.BLL.Services.Implementations
                 var userResponse = _mapper.Map<UserResponse>(user);
 
                 List<Claim> authClaims = await GetClaims(user, userResponse);
+
+                if(!userResponse.IsHaveRole)
+                    return new Response<LoginResponse>(true, new LoginResponse(null, userResponse));
+
                 var token = GenerateAccessToken(authClaims);
                 return new Response<LoginResponse>(true, new LoginResponse(token, userResponse));
             }
@@ -113,6 +119,78 @@ namespace Course.BLL.Services.Implementations
                 //new Claim(ClaimTypes.Role, "User")
                 };
             return authClaims;
+        }
+
+        public async Task<Response<LoginResponse>> AddRole(AddRoleRequest addRoleRequest)
+        {
+            try
+            {
+                var user = await _userManager.FindByIdAsync(addRoleRequest.UserId.ToString());
+
+                if (user == null)
+                    return new Response<LoginResponse>(false, "can't find user", null);
+
+                var roles = await _userManager.GetRolesAsync(user);
+
+                if (roles.Count > 0)
+                {
+                    return new Response<LoginResponse>(false, "User already have role", null);
+                }
+
+                if (addRoleRequest.CategoryId == null)
+                {
+                    await AddStudentRole(user);
+                }
+
+                if (addRoleRequest.CategoryId != null)
+                {
+                    await AddInstructorRole(user);
+                }
+
+                user.Description = addRoleRequest.Description;
+
+                var userResponse = _mapper.Map<UserResponse>(user);
+
+                List<Claim> authClaims = await GetClaims(user, userResponse);
+                var token = GenerateAccessToken(authClaims);
+
+                return new Response<LoginResponse>(true, new LoginResponse(token, userResponse));
+            }
+            catch (Exception ex)
+            {
+                return new Response<LoginResponse>(false, ex.Message, null);
+            }
+        }
+
+        private async Task AddInstructorRole(AppUser user)
+        {
+            var InstructorRole = "Instructor";
+
+            bool existRole = await _roleManager.RoleExistsAsync(InstructorRole);
+
+            if (!existRole)
+            {
+                var role = new IdentityRole<Guid>();
+                role.Name = InstructorRole;
+                await _roleManager.CreateAsync(role);
+            }
+
+            await _userManager.AddToRoleAsync(user, InstructorRole);
+        }
+        private async Task AddStudentRole(AppUser user)
+        {
+            var InstructorRole = "Student";
+
+            bool existRole = await _roleManager.RoleExistsAsync(InstructorRole);
+
+            if (!existRole)
+            {
+                var role = new IdentityRole<Guid>();
+                role.Name = InstructorRole;
+                await _roleManager.CreateAsync(role);
+            }
+
+            await _userManager.AddToRoleAsync(user, InstructorRole);
         }
     }
 }

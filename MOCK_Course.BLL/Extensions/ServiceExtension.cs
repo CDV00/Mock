@@ -25,7 +25,7 @@ namespace Course.BLL.Extensions
         public static void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<ICategoryService, CategoryService>();
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAccountService, AccountService>();
         }
     }
 }

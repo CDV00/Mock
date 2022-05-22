@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CourseAPI.Migrations
 {
-    public partial class createDb : Migration
+    public partial class CreateDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -22,10 +22,56 @@ namespace CourseAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ParentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Categories_Categories_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "Categories",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppRoleClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppRoleClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AppRoleClaims_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetUsers",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Fullname = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FacebookLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -33,6 +79,7 @@ namespace CourseAPI.Migrations
                     YoutubeLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Instroduction = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -57,51 +104,11 @@ namespace CourseAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Categories",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ParentcategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Categories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Categories_Categories_ParentcategoryId",
-                        column: x => x.ParentcategoryId,
+                        name: "FK_AspNetUsers_Categories_CategoryId",
+                        column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AppRoleClaims",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AppRoleClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AppRoleClaims_AspNetRoles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -190,39 +197,19 @@ namespace CourseAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Subscriptions",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Subscriptions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Subscriptions_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Courses",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Summary = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ShortDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Learn = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Requirement = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CourseLevel = table.Column<int>(type: "int", nullable: false),
+                    ThumbnailUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PreviewVideoUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    View = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<decimal>(type: "money", nullable: false),
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
@@ -251,12 +238,36 @@ namespace CourseAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Carts",
+                name: "Subscriptions",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Subscriptions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Subscriptions_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Carts",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -375,7 +386,6 @@ namespace CourseAPI.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TotalTime = table.Column<int>(type: "int", nullable: false),
                     CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -482,20 +492,46 @@ namespace CourseAPI.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("9e59da69-3d3e-428d-a207-d53908753582"), "6f220217-2ed3-4cd4-a18f-5775b9ffc285", "Student", null },
-                    { new Guid("9e59da69-3d3e-428d-a207-d5390875f522"), "a8597b46-98e5-4c84-9d4f-0b8cd4e45fa8", "Instructor", null },
-                    { new Guid("9e59da69-3d3e-428d-a207-d5390875f582"), "fad41c8d-0c64-4a3c-9a37-fa1fa562db36", "Admin", null }
+                    { new Guid("9e59da69-3d3e-428d-a207-d53908753582"), "e2a878b6-565d-47bb-88b6-7df6fc5a31da", "Student", null },
+                    { new Guid("9e59da69-3d3e-428d-a207-d5390875f522"), "e6da178b-fce6-4f99-b9ec-9098130c518c", "Instructor", null },
+                    { new Guid("9e59da69-3d3e-428d-a207-d5390875f582"), "d5c1fc41-b3b1-410f-9594-94a40c50569e", "Admin", null }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "CreatedAt", "CreatedBy", "Description", "Email", "EmailConfirmed", "FacebookLink", "FirstName", "Instroduction", "IsActive", "IsDeleted", "LastName", "LinkedlnLink", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UpdatedAt", "UpdatedBy", "UserName", "YoutubeLink" },
-                values: new object[] { new Guid("9e59da69-3d3e-428d-a207-d53908752532"), 0, "1f9a0327-c05b-4cac-a926-72c145dfe745", new DateTime(2022, 5, 20, 12, 47, 27, 631, DateTimeKind.Utc).AddTicks(1611), null, null, "admin123@gmail.com", true, null, null, null, true, false, null, null, false, null, null, null, "AQAAAAEAACcQAAAAEIZsNdPtcjyIyZDR+Uu8XaKTg8eXtDR9c3uQHKQrlzzelwFkvDGRbWx0JkHqyVkGlA==", null, false, "", false, null, null, null, null });
+                columns: new[] { "Id", "AccessFailedCount", "CategoryId", "ConcurrencyStamp", "CreatedAt", "CreatedBy", "Description", "Email", "EmailConfirmed", "FacebookLink", "FirstName", "Fullname", "Instroduction", "IsActive", "IsDeleted", "LastName", "LinkedlnLink", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UpdatedAt", "UpdatedBy", "UserName", "YoutubeLink" },
+                values: new object[] { new Guid("9e59da69-3d3e-428d-a207-d53908752532"), 0, null, "8b44e3b9-cadf-404a-9c30-9e82b6f61f6a", new DateTime(2022, 5, 22, 15, 4, 27, 717, DateTimeKind.Utc).AddTicks(4017), null, null, "admin123@gmail.com", true, null, null, null, null, true, false, null, null, false, null, "admin123@gmail.com", null, "AQAAAAEAACcQAAAAEKfiXLqj4rCwna5g4ley2qNRB9PGjXZ97LcDru/IrSAb7P8M9hYlXf990zKiRsXWqg==", null, false, "", false, null, null, "admin123", null });
+
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "Id", "CreatedAt", "CreatedBy", "IsActive", "IsDeleted", "Name", "ParentId", "UpdatedAt", "UpdatedBy" },
+                values: new object[,]
+                {
+                    { new Guid("9e47da69-3d3e-428d-a207-d53908753582"), new DateTime(2022, 5, 22, 15, 4, 27, 658, DateTimeKind.Utc).AddTicks(9533), null, true, false, "Development", null, null, null },
+                    { new Guid("9e47da02-3d3e-428d-a207-d53908753582"), new DateTime(2022, 5, 22, 15, 4, 27, 662, DateTimeKind.Utc).AddTicks(261), null, true, false, "Business", null, null, null },
+                    { new Guid("9e47da02-3d3e-248d-a207-d53908753582"), new DateTime(2022, 5, 22, 15, 4, 27, 662, DateTimeKind.Utc).AddTicks(360), null, true, false, "IT - SoftWare", null, null, null }
+                });
 
             migrationBuilder.InsertData(
                 table: "AppUserRoles",
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[] { new Guid("9e59da69-3d3e-428d-a207-d5390875f582"), new Guid("9e59da69-3d3e-428d-a207-d53908752532") });
+
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "Id", "CreatedAt", "CreatedBy", "IsActive", "IsDeleted", "Name", "ParentId", "UpdatedAt", "UpdatedBy" },
+                values: new object[,]
+                {
+                    { new Guid("7a70ebdc-8364-4b07-957b-c0c8352046be"), new DateTime(2022, 5, 22, 15, 4, 27, 661, DateTimeKind.Utc).AddTicks(9951), null, true, false, "Web Developer", new Guid("9e47da69-3d3e-428d-a207-d53908753582"), null, null },
+                    { new Guid("22be68bb-305e-49c5-8be2-1a941df33338"), new DateTime(2022, 5, 22, 15, 4, 27, 662, DateTimeKind.Utc).AddTicks(210), null, true, false, "Data Science", new Guid("9e47da69-3d3e-428d-a207-d53908753582"), null, null },
+                    { new Guid("44807556-f76d-4487-9d56-14d127ff0a4a"), new DateTime(2022, 5, 22, 15, 4, 27, 662, DateTimeKind.Utc).AddTicks(241), null, true, false, "Mobile App", new Guid("9e47da69-3d3e-428d-a207-d53908753582"), null, null },
+                    { new Guid("178c33e6-6d99-4c65-a140-f8d7cab7ceec"), new DateTime(2022, 5, 22, 15, 4, 27, 662, DateTimeKind.Utc).AddTicks(299), null, true, false, "Finace", new Guid("9e47da02-3d3e-428d-a207-d53908753582"), null, null },
+                    { new Guid("4c647bc6-782d-4c6d-9d57-39e6207b8d7e"), new DateTime(2022, 5, 22, 15, 4, 27, 662, DateTimeKind.Utc).AddTicks(321), null, true, false, "Investor", new Guid("9e47da02-3d3e-428d-a207-d53908753582"), null, null },
+                    { new Guid("a84b4339-3992-4c31-8751-574b3ac6bded"), new DateTime(2022, 5, 22, 15, 4, 27, 662, DateTimeKind.Utc).AddTicks(341), null, true, false, "Sale", new Guid("9e47da02-3d3e-428d-a207-d53908753582"), null, null },
+                    { new Guid("7109340e-d4ed-45f3-8eb2-cbcbf6323b93"), new DateTime(2022, 5, 22, 15, 4, 27, 662, DateTimeKind.Utc).AddTicks(387), null, true, false, "IT Certification", new Guid("9e47da02-3d3e-248d-a207-d53908753582"), null, null },
+                    { new Guid("43897d96-b828-4bc8-9596-e64321f17c86"), new DateTime(2022, 5, 22, 15, 4, 27, 662, DateTimeKind.Utc).AddTicks(482), null, true, false, "Network & Security", new Guid("9e47da02-3d3e-248d-a207-d53908753582"), null, null },
+                    { new Guid("9ef3dde9-3281-43d9-a927-1a5901f63ef1"), new DateTime(2022, 5, 22, 15, 4, 27, 662, DateTimeKind.Utc).AddTicks(507), null, true, false, "Hard Ware", new Guid("9e47da02-3d3e-248d-a207-d53908753582"), null, null }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AppRoleClaims_RoleId",
@@ -525,6 +561,11 @@ namespace CourseAPI.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_CategoryId",
+                table: "AspNetUsers",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
@@ -542,9 +583,9 @@ namespace CourseAPI.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Categories_ParentcategoryId",
+                name: "IX_Categories_ParentId",
                 table: "Categories",
-                column: "ParentcategoryId");
+                column: "ParentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CourseCompletions_CourseId",

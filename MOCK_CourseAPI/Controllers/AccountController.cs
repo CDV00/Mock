@@ -10,8 +10,8 @@ namespace CourseAPI.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly IUserService _userService;
-        public AccountController(IUserService userService)
+        private readonly IAccountService _userService;
+        public AccountController(IAccountService userService)
         {
             _userService = userService;
         }
@@ -41,6 +41,17 @@ namespace CourseAPI.Controllers
         public async Task<ActionResult<LoginResponse>> Login(LoginRequest loginRequest)
         {
             var result = await _userService.Login(loginRequest);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpPost("AddRole")]
+        public async Task<ActionResult<LoginResponse>> AddRole(AddRoleRequest addRoleRequest)
+        {
+            var result = await _userService.AddRole(addRoleRequest);
             if (result.IsSuccess)
             {
                 return Ok(result);

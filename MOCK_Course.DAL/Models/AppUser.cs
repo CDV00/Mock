@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Course.DAL.Models
 {
@@ -7,11 +8,16 @@ namespace Course.DAL.Models
         public string Fullname { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string ProfileLink { get; set; }
         public string FacebookLink { get; set; }
         public string LinkedlnLink { get; set; }
         public string YoutubeLink { get; set; }
-        public string Instroduction { get; set; }
+        //public string Instroduction { get; set; }
+        public string HeadLine { get; set; }
         public string Description { get; set; }
+
+        public Guid? CategoryId { get; set; }
+        public Category Category { get; set; }
 
         public ICollection<Enrollment> Enrollments { get; set; }
         public ICollection<CourseCompletion> CourseCompletions { get; set; }
