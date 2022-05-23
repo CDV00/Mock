@@ -26,6 +26,7 @@ namespace Course.BLL.Extensions
             CreateMap<Section, SectionRequest>().ReverseMap();
             CreateMap<SectionRequest, SectionResponse>().ReverseMap();
             CreateMap<Section, SectionUpdateRequest>().ReverseMap();
+            CreateMap<Lesson, LessonRequest>().ReverseMap();
 
 
             CreateMap<ShoppingCart, CartResponse>().ReverseMap();
@@ -36,9 +37,15 @@ namespace Course.BLL.Extensions
             CreateMap<CartCourse, Courses>().ReverseMap();
 
 
-            //CreateMap<, CoursesResponse>().ReverseMap();
-            CreateMap<CoursesRequest, CoursesResponse>().ReverseMap();
-            CreateMap<CoursesRequest, CoursesResponse>().ReverseMap();
+            CreateMap <Courses, CoursesResponse > ().ReverseMap();
+            CreateMap <Category, CategoryCourseRespones> ().ReverseMap();
+            CreateMap <AppUser, UserCourseResponse> ().ReverseMap();
+
+            CreateMap<CourseRequest, CoursesResponse>().ReverseMap();
+
+            CreateMap<Section, SectionRequest>().ReverseMap();
+            CreateMap<AudioLanguage, AudioLanguageRequest>().ReverseMap();
+            CreateMap<CloseCaption, CloseCaptionRequest>().ReverseMap();
         }
     }
 }

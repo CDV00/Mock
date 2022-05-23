@@ -50,8 +50,8 @@ namespace Course.DAL.Data
             modelBuilder.ApplyConfiguration(new AudioLanguageConfiguration());
             modelBuilder.ApplyConfiguration(new CloseCaptionConfiguration());
 
-            modelBuilder.SeedData();
             modelBuilder.ConfigTablesOfIdentity();
+            //modelBuilder.SeedData();
         }
     }
 }

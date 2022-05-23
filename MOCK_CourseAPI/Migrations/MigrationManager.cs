@@ -1,8 +1,6 @@
-using Course.DAL.Data;
+﻿using Course.DAL.Data;
 using Course.DAL.Models;
 using CourseAPI.Data;
-using CourseAPI.Migrations;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,14 +9,12 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
-namespace CourseAPI
+namespace CourseAPI.Migrations
 {
-    public class Program
+    public static class MigrationManager
     {
-        public static async Task Main(string[] args)
+        public static async Task<IHost> MigrateDatabaseAsync(this IHost host)
         {
-            var host = CreateHostBuilder(args).Build();
-
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
@@ -29,7 +25,7 @@ namespace CourseAPI
                         var userManager = services.GetRequiredService<UserManager<AppUser>>();
                         var roleManager = services.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
                         await appContext.Database.MigrateAsync();
-                        await Seed.SeedDataAsync(userManager, roleManager, appContext);
+                        await Seed.SeedDataAsync(userManager, roleManager,appContext);
                     }
                     catch (Exception ex)
                     {
@@ -39,14 +35,7 @@ namespace CourseAPI
                 }
             }
 
-            host.Run();
+            return host;
         }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
     }
 }
