@@ -139,15 +139,15 @@ namespace CourseAPI.Migrations
                         {
                             Id = new Guid("9e59da69-3d3e-428d-a207-d53908752532"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "4f394783-f6ca-4ad3-8119-342c534ee06c",
-                            CreatedAt = new DateTime(2022, 5, 22, 19, 24, 35, 185, DateTimeKind.Utc).AddTicks(5351),
+                            ConcurrencyStamp = "eb2c9a0f-14a9-43a1-a37b-67dc03f468f4",
+                            CreatedAt = new DateTime(2022, 5, 23, 4, 33, 1, 344, DateTimeKind.Utc).AddTicks(8181),
                             Email = "admin123@gmail.com",
                             EmailConfirmed = true,
                             IsActive = true,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "admin123@gmail.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEEf/xxoGq+k517ECLhozJD75pku+KpLg6L31mn90KUCekX+ZlnILoRtSM82GP69+mw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHhd9pXDZbqS4T53nHxAxEXX3CLvdHKMek/d5mXTR1XxhkfVRBu7jSFsCA6uIOulOg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -210,15 +210,15 @@ namespace CourseAPI.Migrations
                         new
                         {
                             Id = new Guid("9e47da69-3d3e-428d-a207-d53908753582"),
-                            CreatedAt = new DateTime(2022, 5, 22, 19, 24, 35, 155, DateTimeKind.Utc).AddTicks(3921),
+                            CreatedAt = new DateTime(2022, 5, 23, 4, 33, 1, 300, DateTimeKind.Utc).AddTicks(2405),
                             IsActive = true,
                             IsDeleted = false,
                             Name = "Development"
                         },
                         new
                         {
-                            Id = new Guid("6373f39b-7049-4997-b4b7-b1c451474d23"),
-                            CreatedAt = new DateTime(2022, 5, 22, 19, 24, 35, 157, DateTimeKind.Utc).AddTicks(1538),
+                            Id = new Guid("f597e979-b5cd-4d54-83ef-07330b7c62a6"),
+                            CreatedAt = new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4309),
                             IsActive = true,
                             IsDeleted = false,
                             Name = "Web Developer",
@@ -226,8 +226,8 @@ namespace CourseAPI.Migrations
                         },
                         new
                         {
-                            Id = new Guid("31a4a026-6ed9-4fac-a78b-bdad8593d704"),
-                            CreatedAt = new DateTime(2022, 5, 22, 19, 24, 35, 157, DateTimeKind.Utc).AddTicks(1693),
+                            Id = new Guid("c50a01ee-821f-4269-b207-01a077931ba9"),
+                            CreatedAt = new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4593),
                             IsActive = true,
                             IsDeleted = false,
                             Name = "Data Science",
@@ -235,8 +235,8 @@ namespace CourseAPI.Migrations
                         },
                         new
                         {
-                            Id = new Guid("d96f1c89-fdf1-40ed-b80e-cc2cc1b7b92a"),
-                            CreatedAt = new DateTime(2022, 5, 22, 19, 24, 35, 157, DateTimeKind.Utc).AddTicks(1707),
+                            Id = new Guid("3e6d0a31-52b4-4a9e-9607-ea9ba24d13de"),
+                            CreatedAt = new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4613),
                             IsActive = true,
                             IsDeleted = false,
                             Name = "Mobile App",
@@ -245,15 +245,15 @@ namespace CourseAPI.Migrations
                         new
                         {
                             Id = new Guid("9e47da02-3d3e-428d-a207-d53908753582"),
-                            CreatedAt = new DateTime(2022, 5, 22, 19, 24, 35, 157, DateTimeKind.Utc).AddTicks(1717),
+                            CreatedAt = new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4623),
                             IsActive = true,
                             IsDeleted = false,
                             Name = "Business"
                         },
                         new
                         {
-                            Id = new Guid("5563d518-96d3-4412-8c87-bfb05c9957ac"),
-                            CreatedAt = new DateTime(2022, 5, 22, 19, 24, 35, 157, DateTimeKind.Utc).AddTicks(1736),
+                            Id = new Guid("fb6fbc75-df67-4872-b62d-c7f14090a388"),
+                            CreatedAt = new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4659),
                             IsActive = true,
                             IsDeleted = false,
                             Name = "Finace",
@@ -261,8 +261,8 @@ namespace CourseAPI.Migrations
                         },
                         new
                         {
-                            Id = new Guid("163433d0-57d7-442d-bb55-d294e5326c2f"),
-                            CreatedAt = new DateTime(2022, 5, 22, 19, 24, 35, 157, DateTimeKind.Utc).AddTicks(1743),
+                            Id = new Guid("f43b19ff-5540-4378-ad6b-5ca877187da6"),
+                            CreatedAt = new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4669),
                             IsActive = true,
                             IsDeleted = false,
                             Name = "Investor",
@@ -270,8 +270,8 @@ namespace CourseAPI.Migrations
                         },
                         new
                         {
-                            Id = new Guid("0cb68005-bb52-4ee7-a293-52670ac7d1a6"),
-                            CreatedAt = new DateTime(2022, 5, 22, 19, 24, 35, 157, DateTimeKind.Utc).AddTicks(1752),
+                            Id = new Guid("8d3fa2d7-48c3-4ec8-a48a-591c39d0b90f"),
+                            CreatedAt = new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4678),
                             IsActive = true,
                             IsDeleted = false,
                             Name = "Sale",
@@ -280,15 +280,15 @@ namespace CourseAPI.Migrations
                         new
                         {
                             Id = new Guid("9e47da02-3d3e-248d-a207-d53908753582"),
-                            CreatedAt = new DateTime(2022, 5, 22, 19, 24, 35, 157, DateTimeKind.Utc).AddTicks(1760),
+                            CreatedAt = new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4688),
                             IsActive = true,
                             IsDeleted = false,
                             Name = "IT - SoftWare"
                         },
                         new
                         {
-                            Id = new Guid("29304f68-b4b7-4e3c-8151-04b03ba03cd2"),
-                            CreatedAt = new DateTime(2022, 5, 22, 19, 24, 35, 157, DateTimeKind.Utc).AddTicks(1791),
+                            Id = new Guid("23a73f21-a261-4f4b-93ca-5891920f3ef9"),
+                            CreatedAt = new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4702),
                             IsActive = true,
                             IsDeleted = false,
                             Name = "IT Certification",
@@ -296,8 +296,8 @@ namespace CourseAPI.Migrations
                         },
                         new
                         {
-                            Id = new Guid("1d100f08-c490-44fd-8103-2e594eeff99d"),
-                            CreatedAt = new DateTime(2022, 5, 22, 19, 24, 35, 157, DateTimeKind.Utc).AddTicks(1800),
+                            Id = new Guid("9e4d3c3d-f14f-4157-a735-482cf8fc8648"),
+                            CreatedAt = new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4735),
                             IsActive = true,
                             IsDeleted = false,
                             Name = "Network & Security",
@@ -305,8 +305,8 @@ namespace CourseAPI.Migrations
                         },
                         new
                         {
-                            Id = new Guid("6526816f-0bd3-4975-b943-68ffe5b50278"),
-                            CreatedAt = new DateTime(2022, 5, 22, 19, 24, 35, 157, DateTimeKind.Utc).AddTicks(1807),
+                            Id = new Guid("098a0add-2149-42a5-a917-ad100ae36386"),
+                            CreatedAt = new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4745),
                             IsActive = true,
                             IsDeleted = false,
                             Name = "Hard Ware",
@@ -798,19 +798,19 @@ namespace CourseAPI.Migrations
                         new
                         {
                             Id = new Guid("9e59da69-3d3e-428d-a207-d53908753582"),
-                            ConcurrencyStamp = "8717b15f-0b37-4c57-be6a-42a52e3d21ca",
+                            ConcurrencyStamp = "3a89c074-7f9f-43f4-bfa8-818297971910",
                             Name = "Student"
                         },
                         new
                         {
                             Id = new Guid("9e59da69-3d3e-428d-a207-d5390875f522"),
-                            ConcurrencyStamp = "d36ef623-acf0-4731-a0bc-ecc478a2b5a4",
+                            ConcurrencyStamp = "5759c7f1-58d9-4b65-83b1-ae6e49d367f0",
                             Name = "Instructor"
                         },
                         new
                         {
                             Id = new Guid("9e59da69-3d3e-428d-a207-d5390875f582"),
-                            ConcurrencyStamp = "715cfb42-ac9c-4500-8523-d6396e84cb46",
+                            ConcurrencyStamp = "75c56dff-d489-4734-ab69-0f73b78de309",
                             Name = "Admin"
                         });
                 });

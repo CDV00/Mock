@@ -46,6 +46,24 @@ namespace CourseAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Language",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Language", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AppRoleClaims",
                 columns: table => new
                 {
@@ -74,10 +92,11 @@ namespace CourseAPI.Migrations
                     Fullname = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProfileLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FacebookLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LinkedlnLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     YoutubeLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Instroduction = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HeadLine = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -257,6 +276,30 @@ namespace CourseAPI.Migrations
                         name: "FK_Subscriptions_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "audioLanguages",
+                columns: table => new
+                {
+                    CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LanguageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_audioLanguages", x => new { x.CourseId, x.LanguageId });
+                    table.ForeignKey(
+                        name: "FK_audioLanguages_Courses_CourseId",
+                        column: x => x.CourseId,
+                        principalTable: "Courses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_audioLanguages_Language_LanguageId",
+                        column: x => x.LanguageId,
+                        principalTable: "Language",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -492,24 +535,24 @@ namespace CourseAPI.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("9e59da69-3d3e-428d-a207-d53908753582"), "e2a878b6-565d-47bb-88b6-7df6fc5a31da", "Student", null },
-                    { new Guid("9e59da69-3d3e-428d-a207-d5390875f522"), "e6da178b-fce6-4f99-b9ec-9098130c518c", "Instructor", null },
-                    { new Guid("9e59da69-3d3e-428d-a207-d5390875f582"), "d5c1fc41-b3b1-410f-9594-94a40c50569e", "Admin", null }
+                    { new Guid("9e59da69-3d3e-428d-a207-d53908753582"), "3a89c074-7f9f-43f4-bfa8-818297971910", "Student", null },
+                    { new Guid("9e59da69-3d3e-428d-a207-d5390875f522"), "5759c7f1-58d9-4b65-83b1-ae6e49d367f0", "Instructor", null },
+                    { new Guid("9e59da69-3d3e-428d-a207-d5390875f582"), "75c56dff-d489-4734-ab69-0f73b78de309", "Admin", null }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "CategoryId", "ConcurrencyStamp", "CreatedAt", "CreatedBy", "Description", "Email", "EmailConfirmed", "FacebookLink", "FirstName", "Fullname", "Instroduction", "IsActive", "IsDeleted", "LastName", "LinkedlnLink", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UpdatedAt", "UpdatedBy", "UserName", "YoutubeLink" },
-                values: new object[] { new Guid("9e59da69-3d3e-428d-a207-d53908752532"), 0, null, "8b44e3b9-cadf-404a-9c30-9e82b6f61f6a", new DateTime(2022, 5, 22, 15, 4, 27, 717, DateTimeKind.Utc).AddTicks(4017), null, null, "admin123@gmail.com", true, null, null, null, null, true, false, null, null, false, null, "admin123@gmail.com", null, "AQAAAAEAACcQAAAAEKfiXLqj4rCwna5g4ley2qNRB9PGjXZ97LcDru/IrSAb7P8M9hYlXf990zKiRsXWqg==", null, false, "", false, null, null, "admin123", null });
+                columns: new[] { "Id", "AccessFailedCount", "CategoryId", "ConcurrencyStamp", "CreatedAt", "CreatedBy", "Description", "Email", "EmailConfirmed", "FacebookLink", "FirstName", "Fullname", "HeadLine", "IsActive", "IsDeleted", "LastName", "LinkedlnLink", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfileLink", "SecurityStamp", "TwoFactorEnabled", "UpdatedAt", "UpdatedBy", "UserName", "YoutubeLink" },
+                values: new object[] { new Guid("9e59da69-3d3e-428d-a207-d53908752532"), 0, null, "eb2c9a0f-14a9-43a1-a37b-67dc03f468f4", new DateTime(2022, 5, 23, 4, 33, 1, 344, DateTimeKind.Utc).AddTicks(8181), null, null, "admin123@gmail.com", true, null, null, null, null, true, false, null, null, false, null, "admin123@gmail.com", null, "AQAAAAEAACcQAAAAEHhd9pXDZbqS4T53nHxAxEXX3CLvdHKMek/d5mXTR1XxhkfVRBu7jSFsCA6uIOulOg==", null, false, null, "", false, null, null, "admin123", null });
 
             migrationBuilder.InsertData(
                 table: "Categories",
                 columns: new[] { "Id", "CreatedAt", "CreatedBy", "IsActive", "IsDeleted", "Name", "ParentId", "UpdatedAt", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { new Guid("9e47da69-3d3e-428d-a207-d53908753582"), new DateTime(2022, 5, 22, 15, 4, 27, 658, DateTimeKind.Utc).AddTicks(9533), null, true, false, "Development", null, null, null },
-                    { new Guid("9e47da02-3d3e-428d-a207-d53908753582"), new DateTime(2022, 5, 22, 15, 4, 27, 662, DateTimeKind.Utc).AddTicks(261), null, true, false, "Business", null, null, null },
-                    { new Guid("9e47da02-3d3e-248d-a207-d53908753582"), new DateTime(2022, 5, 22, 15, 4, 27, 662, DateTimeKind.Utc).AddTicks(360), null, true, false, "IT - SoftWare", null, null, null }
+                    { new Guid("9e47da69-3d3e-428d-a207-d53908753582"), new DateTime(2022, 5, 23, 4, 33, 1, 300, DateTimeKind.Utc).AddTicks(2405), null, true, false, "Development", null, null, null },
+                    { new Guid("9e47da02-3d3e-428d-a207-d53908753582"), new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4623), null, true, false, "Business", null, null, null },
+                    { new Guid("9e47da02-3d3e-248d-a207-d53908753582"), new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4688), null, true, false, "IT - SoftWare", null, null, null }
                 });
 
             migrationBuilder.InsertData(
@@ -522,15 +565,15 @@ namespace CourseAPI.Migrations
                 columns: new[] { "Id", "CreatedAt", "CreatedBy", "IsActive", "IsDeleted", "Name", "ParentId", "UpdatedAt", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { new Guid("7a70ebdc-8364-4b07-957b-c0c8352046be"), new DateTime(2022, 5, 22, 15, 4, 27, 661, DateTimeKind.Utc).AddTicks(9951), null, true, false, "Web Developer", new Guid("9e47da69-3d3e-428d-a207-d53908753582"), null, null },
-                    { new Guid("22be68bb-305e-49c5-8be2-1a941df33338"), new DateTime(2022, 5, 22, 15, 4, 27, 662, DateTimeKind.Utc).AddTicks(210), null, true, false, "Data Science", new Guid("9e47da69-3d3e-428d-a207-d53908753582"), null, null },
-                    { new Guid("44807556-f76d-4487-9d56-14d127ff0a4a"), new DateTime(2022, 5, 22, 15, 4, 27, 662, DateTimeKind.Utc).AddTicks(241), null, true, false, "Mobile App", new Guid("9e47da69-3d3e-428d-a207-d53908753582"), null, null },
-                    { new Guid("178c33e6-6d99-4c65-a140-f8d7cab7ceec"), new DateTime(2022, 5, 22, 15, 4, 27, 662, DateTimeKind.Utc).AddTicks(299), null, true, false, "Finace", new Guid("9e47da02-3d3e-428d-a207-d53908753582"), null, null },
-                    { new Guid("4c647bc6-782d-4c6d-9d57-39e6207b8d7e"), new DateTime(2022, 5, 22, 15, 4, 27, 662, DateTimeKind.Utc).AddTicks(321), null, true, false, "Investor", new Guid("9e47da02-3d3e-428d-a207-d53908753582"), null, null },
-                    { new Guid("a84b4339-3992-4c31-8751-574b3ac6bded"), new DateTime(2022, 5, 22, 15, 4, 27, 662, DateTimeKind.Utc).AddTicks(341), null, true, false, "Sale", new Guid("9e47da02-3d3e-428d-a207-d53908753582"), null, null },
-                    { new Guid("7109340e-d4ed-45f3-8eb2-cbcbf6323b93"), new DateTime(2022, 5, 22, 15, 4, 27, 662, DateTimeKind.Utc).AddTicks(387), null, true, false, "IT Certification", new Guid("9e47da02-3d3e-248d-a207-d53908753582"), null, null },
-                    { new Guid("43897d96-b828-4bc8-9596-e64321f17c86"), new DateTime(2022, 5, 22, 15, 4, 27, 662, DateTimeKind.Utc).AddTicks(482), null, true, false, "Network & Security", new Guid("9e47da02-3d3e-248d-a207-d53908753582"), null, null },
-                    { new Guid("9ef3dde9-3281-43d9-a927-1a5901f63ef1"), new DateTime(2022, 5, 22, 15, 4, 27, 662, DateTimeKind.Utc).AddTicks(507), null, true, false, "Hard Ware", new Guid("9e47da02-3d3e-248d-a207-d53908753582"), null, null }
+                    { new Guid("f597e979-b5cd-4d54-83ef-07330b7c62a6"), new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4309), null, true, false, "Web Developer", new Guid("9e47da69-3d3e-428d-a207-d53908753582"), null, null },
+                    { new Guid("c50a01ee-821f-4269-b207-01a077931ba9"), new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4593), null, true, false, "Data Science", new Guid("9e47da69-3d3e-428d-a207-d53908753582"), null, null },
+                    { new Guid("3e6d0a31-52b4-4a9e-9607-ea9ba24d13de"), new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4613), null, true, false, "Mobile App", new Guid("9e47da69-3d3e-428d-a207-d53908753582"), null, null },
+                    { new Guid("fb6fbc75-df67-4872-b62d-c7f14090a388"), new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4659), null, true, false, "Finace", new Guid("9e47da02-3d3e-428d-a207-d53908753582"), null, null },
+                    { new Guid("f43b19ff-5540-4378-ad6b-5ca877187da6"), new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4669), null, true, false, "Investor", new Guid("9e47da02-3d3e-428d-a207-d53908753582"), null, null },
+                    { new Guid("8d3fa2d7-48c3-4ec8-a48a-591c39d0b90f"), new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4678), null, true, false, "Sale", new Guid("9e47da02-3d3e-428d-a207-d53908753582"), null, null },
+                    { new Guid("23a73f21-a261-4f4b-93ca-5891920f3ef9"), new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4702), null, true, false, "IT Certification", new Guid("9e47da02-3d3e-248d-a207-d53908753582"), null, null },
+                    { new Guid("9e4d3c3d-f14f-4157-a735-482cf8fc8648"), new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4735), null, true, false, "Network & Security", new Guid("9e47da02-3d3e-248d-a207-d53908753582"), null, null },
+                    { new Guid("098a0add-2149-42a5-a917-ad100ae36386"), new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4745), null, true, false, "Hard Ware", new Guid("9e47da02-3d3e-248d-a207-d53908753582"), null, null }
                 });
 
             migrationBuilder.CreateIndex(
@@ -571,6 +614,11 @@ namespace CourseAPI.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_audioLanguages_LanguageId",
+                table: "audioLanguages",
+                column: "LanguageId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Carts_CourseId",
@@ -676,6 +724,9 @@ namespace CourseAPI.Migrations
                 name: "AppUserTokens");
 
             migrationBuilder.DropTable(
+                name: "audioLanguages");
+
+            migrationBuilder.DropTable(
                 name: "Carts");
 
             migrationBuilder.DropTable(
@@ -695,6 +746,9 @@ namespace CourseAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Language");
 
             migrationBuilder.DropTable(
                 name: "Enrollment");

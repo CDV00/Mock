@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CourseAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220522150429_CreateDB")]
+    [Migration("20220523043303_CreateDB")]
     partial class CreateDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,7 +62,7 @@ namespace CourseAPI.Migrations
                     b.Property<string>("Fullname")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Instroduction")
+                    b.Property<string>("HeadLine")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
@@ -99,6 +99,9 @@ namespace CourseAPI.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("ProfileLink")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -138,20 +141,35 @@ namespace CourseAPI.Migrations
                         {
                             Id = new Guid("9e59da69-3d3e-428d-a207-d53908752532"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "8b44e3b9-cadf-404a-9c30-9e82b6f61f6a",
-                            CreatedAt = new DateTime(2022, 5, 22, 15, 4, 27, 717, DateTimeKind.Utc).AddTicks(4017),
+                            ConcurrencyStamp = "eb2c9a0f-14a9-43a1-a37b-67dc03f468f4",
+                            CreatedAt = new DateTime(2022, 5, 23, 4, 33, 1, 344, DateTimeKind.Utc).AddTicks(8181),
                             Email = "admin123@gmail.com",
                             EmailConfirmed = true,
                             IsActive = true,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "admin123@gmail.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKfiXLqj4rCwna5g4ley2qNRB9PGjXZ97LcDru/IrSAb7P8M9hYlXf990zKiRsXWqg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHhd9pXDZbqS4T53nHxAxEXX3CLvdHKMek/d5mXTR1XxhkfVRBu7jSFsCA6uIOulOg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
                             UserName = "admin123"
                         });
+                });
+
+            modelBuilder.Entity("Course.DAL.Models.AudioLanguage", b =>
+                {
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("LanguageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CourseId", "LanguageId");
+
+                    b.HasIndex("LanguageId");
+
+                    b.ToTable("audioLanguages");
                 });
 
             modelBuilder.Entity("Course.DAL.Models.Category", b =>
@@ -194,15 +212,15 @@ namespace CourseAPI.Migrations
                         new
                         {
                             Id = new Guid("9e47da69-3d3e-428d-a207-d53908753582"),
-                            CreatedAt = new DateTime(2022, 5, 22, 15, 4, 27, 658, DateTimeKind.Utc).AddTicks(9533),
+                            CreatedAt = new DateTime(2022, 5, 23, 4, 33, 1, 300, DateTimeKind.Utc).AddTicks(2405),
                             IsActive = true,
                             IsDeleted = false,
                             Name = "Development"
                         },
                         new
                         {
-                            Id = new Guid("7a70ebdc-8364-4b07-957b-c0c8352046be"),
-                            CreatedAt = new DateTime(2022, 5, 22, 15, 4, 27, 661, DateTimeKind.Utc).AddTicks(9951),
+                            Id = new Guid("f597e979-b5cd-4d54-83ef-07330b7c62a6"),
+                            CreatedAt = new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4309),
                             IsActive = true,
                             IsDeleted = false,
                             Name = "Web Developer",
@@ -210,8 +228,8 @@ namespace CourseAPI.Migrations
                         },
                         new
                         {
-                            Id = new Guid("22be68bb-305e-49c5-8be2-1a941df33338"),
-                            CreatedAt = new DateTime(2022, 5, 22, 15, 4, 27, 662, DateTimeKind.Utc).AddTicks(210),
+                            Id = new Guid("c50a01ee-821f-4269-b207-01a077931ba9"),
+                            CreatedAt = new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4593),
                             IsActive = true,
                             IsDeleted = false,
                             Name = "Data Science",
@@ -219,8 +237,8 @@ namespace CourseAPI.Migrations
                         },
                         new
                         {
-                            Id = new Guid("44807556-f76d-4487-9d56-14d127ff0a4a"),
-                            CreatedAt = new DateTime(2022, 5, 22, 15, 4, 27, 662, DateTimeKind.Utc).AddTicks(241),
+                            Id = new Guid("3e6d0a31-52b4-4a9e-9607-ea9ba24d13de"),
+                            CreatedAt = new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4613),
                             IsActive = true,
                             IsDeleted = false,
                             Name = "Mobile App",
@@ -229,15 +247,15 @@ namespace CourseAPI.Migrations
                         new
                         {
                             Id = new Guid("9e47da02-3d3e-428d-a207-d53908753582"),
-                            CreatedAt = new DateTime(2022, 5, 22, 15, 4, 27, 662, DateTimeKind.Utc).AddTicks(261),
+                            CreatedAt = new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4623),
                             IsActive = true,
                             IsDeleted = false,
                             Name = "Business"
                         },
                         new
                         {
-                            Id = new Guid("178c33e6-6d99-4c65-a140-f8d7cab7ceec"),
-                            CreatedAt = new DateTime(2022, 5, 22, 15, 4, 27, 662, DateTimeKind.Utc).AddTicks(299),
+                            Id = new Guid("fb6fbc75-df67-4872-b62d-c7f14090a388"),
+                            CreatedAt = new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4659),
                             IsActive = true,
                             IsDeleted = false,
                             Name = "Finace",
@@ -245,8 +263,8 @@ namespace CourseAPI.Migrations
                         },
                         new
                         {
-                            Id = new Guid("4c647bc6-782d-4c6d-9d57-39e6207b8d7e"),
-                            CreatedAt = new DateTime(2022, 5, 22, 15, 4, 27, 662, DateTimeKind.Utc).AddTicks(321),
+                            Id = new Guid("f43b19ff-5540-4378-ad6b-5ca877187da6"),
+                            CreatedAt = new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4669),
                             IsActive = true,
                             IsDeleted = false,
                             Name = "Investor",
@@ -254,8 +272,8 @@ namespace CourseAPI.Migrations
                         },
                         new
                         {
-                            Id = new Guid("a84b4339-3992-4c31-8751-574b3ac6bded"),
-                            CreatedAt = new DateTime(2022, 5, 22, 15, 4, 27, 662, DateTimeKind.Utc).AddTicks(341),
+                            Id = new Guid("8d3fa2d7-48c3-4ec8-a48a-591c39d0b90f"),
+                            CreatedAt = new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4678),
                             IsActive = true,
                             IsDeleted = false,
                             Name = "Sale",
@@ -264,15 +282,15 @@ namespace CourseAPI.Migrations
                         new
                         {
                             Id = new Guid("9e47da02-3d3e-248d-a207-d53908753582"),
-                            CreatedAt = new DateTime(2022, 5, 22, 15, 4, 27, 662, DateTimeKind.Utc).AddTicks(360),
+                            CreatedAt = new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4688),
                             IsActive = true,
                             IsDeleted = false,
                             Name = "IT - SoftWare"
                         },
                         new
                         {
-                            Id = new Guid("7109340e-d4ed-45f3-8eb2-cbcbf6323b93"),
-                            CreatedAt = new DateTime(2022, 5, 22, 15, 4, 27, 662, DateTimeKind.Utc).AddTicks(387),
+                            Id = new Guid("23a73f21-a261-4f4b-93ca-5891920f3ef9"),
+                            CreatedAt = new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4702),
                             IsActive = true,
                             IsDeleted = false,
                             Name = "IT Certification",
@@ -280,8 +298,8 @@ namespace CourseAPI.Migrations
                         },
                         new
                         {
-                            Id = new Guid("43897d96-b828-4bc8-9596-e64321f17c86"),
-                            CreatedAt = new DateTime(2022, 5, 22, 15, 4, 27, 662, DateTimeKind.Utc).AddTicks(482),
+                            Id = new Guid("9e4d3c3d-f14f-4157-a735-482cf8fc8648"),
+                            CreatedAt = new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4735),
                             IsActive = true,
                             IsDeleted = false,
                             Name = "Network & Security",
@@ -289,8 +307,8 @@ namespace CourseAPI.Migrations
                         },
                         new
                         {
-                            Id = new Guid("9ef3dde9-3281-43d9-a927-1a5901f63ef1"),
-                            CreatedAt = new DateTime(2022, 5, 22, 15, 4, 27, 662, DateTimeKind.Utc).AddTicks(507),
+                            Id = new Guid("098a0add-2149-42a5-a917-ad100ae36386"),
+                            CreatedAt = new DateTime(2022, 5, 23, 4, 33, 1, 302, DateTimeKind.Utc).AddTicks(4745),
                             IsActive = true,
                             IsDeleted = false,
                             Name = "Hard Ware",
@@ -483,6 +501,38 @@ namespace CourseAPI.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Enrollment");
+                });
+
+            modelBuilder.Entity("Course.DAL.Models.Language", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Language");
                 });
 
             modelBuilder.Entity("Course.DAL.Models.Lesson", b =>
@@ -750,19 +800,19 @@ namespace CourseAPI.Migrations
                         new
                         {
                             Id = new Guid("9e59da69-3d3e-428d-a207-d53908753582"),
-                            ConcurrencyStamp = "e2a878b6-565d-47bb-88b6-7df6fc5a31da",
+                            ConcurrencyStamp = "3a89c074-7f9f-43f4-bfa8-818297971910",
                             Name = "Student"
                         },
                         new
                         {
                             Id = new Guid("9e59da69-3d3e-428d-a207-d5390875f522"),
-                            ConcurrencyStamp = "e6da178b-fce6-4f99-b9ec-9098130c518c",
+                            ConcurrencyStamp = "5759c7f1-58d9-4b65-83b1-ae6e49d367f0",
                             Name = "Instructor"
                         },
                         new
                         {
                             Id = new Guid("9e59da69-3d3e-428d-a207-d5390875f582"),
-                            ConcurrencyStamp = "d5c1fc41-b3b1-410f-9594-94a40c50569e",
+                            ConcurrencyStamp = "75c56dff-d489-4734-ab69-0f73b78de309",
                             Name = "Admin"
                         });
                 });
@@ -881,6 +931,25 @@ namespace CourseAPI.Migrations
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Course.DAL.Models.AudioLanguage", b =>
+                {
+                    b.HasOne("Course.DAL.Models.Courses", "Course")
+                        .WithMany("AudioLanguages")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Course.DAL.Models.Language", "Language")
+                        .WithMany("AudioLanguages")
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Language");
                 });
 
             modelBuilder.Entity("Course.DAL.Models.Category", b =>
@@ -1128,6 +1197,8 @@ namespace CourseAPI.Migrations
 
             modelBuilder.Entity("Course.DAL.Models.Courses", b =>
                 {
+                    b.Navigation("AudioLanguages");
+
                     b.Navigation("Carts");
 
                     b.Navigation("CourseCompletions");
@@ -1142,6 +1213,11 @@ namespace CourseAPI.Migrations
             modelBuilder.Entity("Course.DAL.Models.Enrollment", b =>
                 {
                     b.Navigation("CourseReviews");
+                });
+
+            modelBuilder.Entity("Course.DAL.Models.Language", b =>
+                {
+                    b.Navigation("AudioLanguages");
                 });
 
             modelBuilder.Entity("Course.DAL.Models.Lesson", b =>

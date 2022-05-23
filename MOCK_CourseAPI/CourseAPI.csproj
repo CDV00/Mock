@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <UserSecretsId>aa9455ce-145a-4fcd-abf5-cb0e9fc0b722</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
     <Folder Include="Requests\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
