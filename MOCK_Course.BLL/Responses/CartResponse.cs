@@ -5,6 +5,7 @@ namespace Course.BLL.Responses
 {
     public class CartResponse
     {
+        public Guid Id { get; set; }
         public CartUser CartUser { get; set; }
         public CartCourse Course { get; set; }
     }

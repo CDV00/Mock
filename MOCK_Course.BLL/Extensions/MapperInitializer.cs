@@ -14,11 +14,15 @@ namespace Course.BLL.Extensions
             CreateMap<CategoryRequest, CategoryResponse>().ReverseMap();
             CreateMap<RegisterRequest, AppUser>().ForMember(x => x.UserName, opt => opt.MapFrom(x => x.Email)).ReverseMap();
 
+            CreateMap<Courses, CoursesResponse>().ReverseMap();
+            CreateMap<Courses, CoursesRequest>().ReverseMap();
+            CreateMap<CoursesRequest, CoursesResponse>().ReverseMap();
+
             CreateMap<ShoppingCart, CartResponse>().ReverseMap();
             CreateMap<ShoppingCart, CartRequest>().ReverseMap();
             CreateMap<CartRequest, CartResponse>().ReverseMap();
             CreateMap<CartUser, AppUser>().ReverseMap();
-            //CreateMap<CartCourse, Course>().ReverseMap();
+            CreateMap<CartCourse, Courses>().ReverseMap();
         }
     }
 }

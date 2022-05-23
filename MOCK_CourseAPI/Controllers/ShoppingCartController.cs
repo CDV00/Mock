@@ -37,7 +37,7 @@ namespace CourseAPI.Controllers
         /// <param name="cartRequest"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Response<CartResponse>>> Create(CartRequest cartRequest)
+        public async Task<ActionResult<Response<CartResponse>>> Create([FromForm]CartRequest cartRequest)
         {
             var result = await _shoppingCartService.Add(cartRequest);
             if (result.IsSuccess == false)
@@ -51,12 +51,18 @@ namespace CourseAPI.Controllers
         /// <param name="IdShoppingCart"></param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<ActionResult<BaseResponse>> Remove(Guid IdShoppingCart)
+        public async Task<ActionResult<BaseResponse>> Remove([FromForm]Guid IdShoppingCart)
         {
             var result = await _shoppingCartService.Remove(IdShoppingCart);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
         }
+
+        //[HttpGet("total-cart")]
+        //public async Task<ActionResult<Responses<int>>> TotalCart(Guid userId)
+        //{
+           
+        //}
     }
 }

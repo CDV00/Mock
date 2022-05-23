@@ -30,8 +30,8 @@ namespace Course.BLL.Services.Implementations
         {
             try
             {
+                var cartuser = new CartUser();
                 var cart = _mapper.Map<ShoppingCart>(cartRequest);
-
                 await _shoppingCartRepository.CreateAsync(cart);
                 await _unitOfWork.SaveChangesAsync();
                 return new Response<CartResponse>(
@@ -50,7 +50,7 @@ namespace Course.BLL.Services.Implementations
             try
             {
                 // GEt Shopping cart theo Us
-                var result = await _shoppingCartRepository.GetByIdAsync(userId);
+                var result = await _shoppingCartRepository.GetAll().Where(s => s.UserId == userId).ToListAsync();
                 return new Responses<CartResponse>(true, _mapper.Map<IEnumerable<CartResponse>>(result));
             }
             catch (Exception ex)
@@ -76,5 +76,6 @@ namespace Course.BLL.Services.Implementations
                 return new Responses<BaseResponse>(false, ex.Message, null);
             }
         }
+
     }
 }
