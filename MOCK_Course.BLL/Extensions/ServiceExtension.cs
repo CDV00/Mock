@@ -30,7 +30,7 @@ namespace Course.BLL.Extensions
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IShoppingCartService, ShoppingCartService>();
             services.AddScoped<ICourseService, CourseService>();
-            services.AddScoped<IUserService, UserService>();
+           //services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAccountService, AccountService>();
         }
     }
