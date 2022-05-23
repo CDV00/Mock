@@ -36,7 +36,7 @@ namespace Course.BLL.Extensions
             CreateMap<CartCourse, Courses>().ReverseMap();
 
 
-            CreateMap<, CoursesResponse>().ReverseMap();
+            //CreateMap<, CoursesResponse>().ReverseMap();
             CreateMap<CoursesRequest, CoursesResponse>().ReverseMap();
             CreateMap<CoursesRequest, CoursesResponse>().ReverseMap();
         }
