@@ -9,41 +9,38 @@ using Course.DAL.Models;
 using Course.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Course.DAL.Data;
+using Course.DAL.Repositories.Implementations;
 
 namespace Course.BLL.Services.Implementations
 {
     public class ShoppingCartService : IShoppingCartService
     {
-        private readonly IShoppingCartRepository _shoppingCartRepository;
+        private readonly ShoppingCartRepository _shoppingCartRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly AppDbContext _context;
 
-        public ShoppingCartService(IShoppingCartRepository shoppingCartRepository,
+        public ShoppingCartService(ShoppingCartRepository shoppingCartRepository,
             IMapper mapper,
-            IUnitOfWork unitOfWork, AppDbContext context)
+            IUnitOfWork unitOfWork)
         {
             _shoppingCartRepository = shoppingCartRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
-            _context = context;
         }
 
-        public async Task<Response<CartResponse>> Add(CartRequest cartRequest)
+        public async Task<Response<BaseResponse>> Add(CartRequest cartRequest)
         {
             try
             {
                 var cart = _mapper.Map<ShoppingCart>(cartRequest);
                 await _shoppingCartRepository.CreateAsync(cart);
                 await _unitOfWork.SaveChangesAsync();
-                return new Response<CartResponse>(
-                    true,
-                    _mapper.Map<CartResponse>(cart)
-                );            
+                return new Response<BaseResponse>(
+                    true, null);
             }
             catch (Exception ex)
             {
-                return new Response<CartResponse>(false, ex.Message, null);
+                return new Response<BaseResponse>(false, ex.Message, null);
             }
         }
 
@@ -51,8 +48,7 @@ namespace Course.BLL.Services.Implementations
         {
             try
             {
-                // GEt Shopping cart theo Us
-                var result = await _shoppingCartRepository.GetAll().Where(s => s.UserId == userId).Include(s=>s.User).Include(s=>s.Course).ToListAsync();
+                var result = await _shoppingCartRepository.GetAll().Where(s => s.UserId == userId).Include(s => s.User).Include(s => s.Course).Include(s => s.User).Include(s => s.Course.Category).ToListAsync();
 
                 return new Responses<CartResponse>(true, _mapper.Map<IEnumerable<CartResponse>>(result));
             }
@@ -67,12 +63,12 @@ namespace Course.BLL.Services.Implementations
             try
             {
                 var result = await _shoppingCartRepository.GetByIdAsync(IdShoppingCart);
-                if(result != null)
-                {
-                    result.IsDeleted = true;
-                }
+
+                _shoppingCartRepository.Remove(result);
+                await _unitOfWork.SaveChangesAsync();
+
                 return new BaseResponse { IsSuccess = true };
-                
+
             }
             catch (Exception ex)
             {

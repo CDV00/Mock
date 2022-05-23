@@ -15,6 +15,10 @@ namespace CourseAPI.Controllers
         {
             _coursesService = coursesService;
         }
+        /// <summary>
+        /// Error mapper category and user
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<Responses<CoursesResponse>>> GetAll()
         {

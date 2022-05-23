@@ -19,6 +19,11 @@ namespace Course.BLL.Responses
         public Guid Id { get; set; }
         public string Title { get; set; }
         public decimal Price { get; set; }
-        public CategoryResponse category {get;set;}
+        public CartCategory category {get;set;}
+    }
+    public  class CartCategory
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
     }
 }
