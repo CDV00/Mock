@@ -50,11 +50,8 @@ namespace Course.BLL.Services.Implementations
                 var userResponse = _mapper.Map<UserResponse>(user);
 
                 List<Claim> authClaims = await GetClaims(user, userResponse);
-
-                if(!userResponse.IsHaveRole)
-                    return new Response<LoginResponse>(true, new LoginResponse(null, userResponse));
-
                 var token = GenerateAccessToken(authClaims);
+
                 return new Response<LoginResponse>(true, new LoginResponse(token, userResponse));
             }
             catch (Exception ex)
@@ -68,25 +65,41 @@ namespace Course.BLL.Services.Implementations
         /// </summary>
         /// <param name="registerRequest"></param>
         /// <returns></returns>
-        public async Task<Response<UserResponse>> Register(RegisterRequest registerRequest)
+        public async Task<Response<RegisterResponse>> Register(RegisterRequest registerRequest)
         {
             try
             {
                 var user = _mapper.Map<AppUser>(registerRequest);
+                user.Description = registerRequest.Description;
 
                 var result = await _userManager.CreateAsync(user, registerRequest.Password);
 
+                if (!result.Succeeded)
+                {
+                    return new Response<RegisterResponse>(false, result.Errors.ToList()[0].Description, null);
+                }
+
+                if (registerRequest.CategoryId == null)
+                {
+                    await AddStudentRole(user);
+                }
+
+                if (registerRequest.CategoryId != null)
+                {
+                    await AddInstructorRole(user);
+                }
+
                 var userResponse = _mapper.Map<UserResponse>(user);
 
-                if (result.Succeeded)
-                {
-                    return new Response<UserResponse>(true, userResponse);
-                }
-                return new Response<UserResponse>(false, result.Errors.ToList()[0].Description, null);
+                List<Claim> authClaims = await GetClaims(user, userResponse);
+                var token = GenerateAccessToken(authClaims);
+
+                return new Response<RegisterResponse>(true, new RegisterResponse(token, userResponse));
+
             }
             catch (Exception ex)
             {
-                return new Response<UserResponse>(false, ex.Message, null);
+                return new Response<RegisterResponse>(false, ex.Message, null);
             }
         }
         private string GenerateAccessToken(IEnumerable<Claim> claims)
@@ -94,6 +107,7 @@ namespace Course.BLL.Services.Implementations
 
             var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["AuthSettings:Secret"]));
             var signCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+
             var token = new JwtSecurityToken(
                 issuer: _configuration["AuthSettings:ValidIssuer"],
                 audience: _configuration["AuthSettings:ValidAudience"],
@@ -101,65 +115,23 @@ namespace Course.BLL.Services.Implementations
                 expires: DateTime.Now.AddHours(TokenExpires),
                 signingCredentials: signCredentials
                 );
+
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
             return tokenString;
         }
         private async Task<List<Claim>> GetClaims(AppUser user, UserResponse userResponse)
         {
             var roles = await _userManager.GetRolesAsync(user);
-
-            if (roles.Count > 0)
-            {
-                userResponse.IsHaveRole = true;
-            }
+            userResponse.Role = string.Join(",", roles); 
 
             var authClaims = new List<Claim>() {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Role, string.Join(";",roles))
+                new Claim(ClaimTypes.Role, string.Join(",",roles))
                 //new Claim(ClaimTypes.Role, "User")
                 };
+
             return authClaims;
-        }
-
-        public async Task<Response<LoginResponse>> AddRole(AddRoleRequest addRoleRequest)
-        {
-            try
-            {
-                var user = await _userManager.FindByIdAsync(addRoleRequest.UserId.ToString());
-
-                if (user == null)
-                    return new Response<LoginResponse>(false, "can't find user", null);
-
-                var roles = await _userManager.GetRolesAsync(user);
-
-                if (roles.Count > 0)
-                {
-                    return new Response<LoginResponse>(false, "User already have role", null);
-                }
-
-                if (addRoleRequest.CategoryId == null)
-                {
-                    await AddStudentRole(user);
-                }
-
-                if (addRoleRequest.CategoryId != null)
-                {
-                    await AddInstructorRole(user);
-                }
-
-                user.Description = addRoleRequest.Description;
-
-                var userResponse = _mapper.Map<UserResponse>(user);
-
-                List<Claim> authClaims = await GetClaims(user, userResponse);
-                var token = GenerateAccessToken(authClaims);
-
-                return new Response<LoginResponse>(true, new LoginResponse(token, userResponse));
-            }
-            catch (Exception ex)
-            {
-                return new Response<LoginResponse>(false, ex.Message, null);
-            }
         }
 
         private async Task AddInstructorRole(AppUser user)

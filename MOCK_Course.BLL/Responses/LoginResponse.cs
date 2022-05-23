@@ -17,6 +17,12 @@
         public string FullName { get; set; }
         public string Email { get; set; }   
         public string Id { get;set; }
-        public bool IsHaveRole { get; set; } = false;
+        public string Role { get; set; } 
+    }
+    public class RegisterResponse : LoginResponse
+    {
+        public RegisterResponse(string token, UserResponse userResponse) : base(token, userResponse)
+        {
+        }
     }
 }

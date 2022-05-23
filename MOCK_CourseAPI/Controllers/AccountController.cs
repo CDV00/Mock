@@ -22,7 +22,7 @@ namespace CourseAPI.Controllers
         /// <param name="registerRequest"></param>
         /// <returns></returns>
         [HttpPost("register")]
-        public async Task<ActionResult<Response<UserResponse>>> Register(RegisterRequest registerRequest)
+        public async Task<ActionResult<Response<RegisterResponse>>> Register(RegisterRequest registerRequest)
         {
             var result = await _userService.Register(registerRequest);
             if (result.IsSuccess)
@@ -41,17 +41,6 @@ namespace CourseAPI.Controllers
         public async Task<ActionResult<LoginResponse>> Login(LoginRequest loginRequest)
         {
             var result = await _userService.Login(loginRequest);
-            if (result.IsSuccess)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
-
-        [HttpPost("AddRole")]
-        public async Task<ActionResult<LoginResponse>> AddRole(AddRoleRequest addRoleRequest)
-        {
-            var result = await _userService.AddRole(addRoleRequest);
             if (result.IsSuccess)
             {
                 return Ok(result);

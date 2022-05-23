@@ -6,8 +6,7 @@ namespace Course.BLL.Services
 {
     public interface IAccountService 
     {
-        public Task<Response<UserResponse>> Register(RegisterRequest registerRequest);
+        public Task<Response<RegisterResponse>> Register(RegisterRequest registerRequest);
         Task<Response<LoginResponse>> Login(LoginRequest loginRequest);
-        Task<Response<LoginResponse>> AddRole(AddRoleRequest addRoleRequest);
     }
 }
