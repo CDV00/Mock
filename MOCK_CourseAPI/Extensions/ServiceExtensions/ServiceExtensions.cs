@@ -166,6 +166,10 @@ b.MigrationsAssembly("CourseAPI"));
             services.AddScoped<IShoppingCartService, ShoppingCartService>();
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IAccountService, AccountService>();
+            //services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IShoppingCartService, ShoppingCartService>();
+            services.AddScoped<ICourseService, CourseService>();
         }
     }
 }

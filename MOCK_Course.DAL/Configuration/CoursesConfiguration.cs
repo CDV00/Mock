@@ -1,6 +1,7 @@
 ﻿using Course.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 
 namespace Course.DAL.Configuration
 {
@@ -21,7 +22,6 @@ namespace Course.DAL.Configuration
             builder.Property(c => c.Price).HasColumnType("money");
 
             builder.HasQueryFilter(u => !u.IsDeleted);
-
         }
     }
 }

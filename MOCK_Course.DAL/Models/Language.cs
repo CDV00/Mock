@@ -8,5 +8,6 @@ namespace Course.DAL.Models
         public string Name { get; set; }
 
         public ICollection<AudioLanguage> AudioLanguages { get; set; }
+        public ICollection<CloseCaption> CloseCaptions { get; set; }
     }
 }

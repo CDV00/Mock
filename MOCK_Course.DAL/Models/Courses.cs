@@ -20,7 +20,12 @@ namespace Course.DAL.Models
         /// </summary>
         public string PreviewVideoUrl { get; set; }
         public int View { get; set; } = 0;
+
+        public bool RequireLogin { get; set; } 
+        public bool RequireEnroll { get; set; }
+
         public decimal Price { get; set; }
+        public decimal DiscountPrice { get; set; }
 
         public Guid CategoryId { get; set; }
         public Category Category { get; set; }
@@ -33,6 +38,7 @@ namespace Course.DAL.Models
         public ICollection<ShoppingCart> Carts { get; set; }
         public ICollection<Order> Orders { get; set; }
         public ICollection<AudioLanguage> AudioLanguages { get; set; }
+        public ICollection<CloseCaption> CloseCaptions { get; set; }
     }
     public enum Level
     {
