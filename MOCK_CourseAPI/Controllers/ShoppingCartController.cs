@@ -37,7 +37,7 @@ namespace CourseAPI.Controllers
         /// <param name="cartRequest"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<BaseResponse> Create([FromBody]CartRequest cartRequest)
+        public async Task<ActionResult<BaseResponse>> Create([FromBody]CartRequest cartRequest)
         {
             var result = await _shoppingCartService.Add(cartRequest);
             if (result.IsSuccess == false)
