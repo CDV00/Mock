@@ -1,30 +1,96 @@
-﻿using Course.BLL.Requests;
+﻿using AutoMapper;
+using Course.BLL.Requests;
 using Course.BLL.Responses;
+using Course.DAL.Models;
+using Course.DAL.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Course.BLL.Services.Implementations
 {
     public class SectionService : ISectionService
     {
-        public Task<Response<SectionResponse>> Add(SectionRequest sectionRequest)
+        private readonly ISectionRepositoty _sectionRepositoty;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        public SectionService(ISectionRepositoty sectionRepositoty,
+            IMapper mapper,
+            IUnitOfWork unitOfWork)
         {
-            throw new NotImplementedException();
+            _sectionRepositoty = sectionRepositoty;
+            _mapper = mapper;
+            _unitOfWork = unitOfWork;
+        }
+        public async Task<Response<SectionResponse>> Add(SectionRequest sectionRequest)
+        {
+            try
+            {
+                var section = _mapper.Map<Section>(sectionRequest);
+
+                await _sectionRepositoty.CreateAsync(section);
+                await _unitOfWork.SaveChangesAsync();
+                return new Response<SectionResponse>(
+                    true,
+                    _mapper.Map<SectionResponse>(section)
+                );
+            }
+            catch (Exception ex)
+            {
+                return new Response<SectionResponse>(false, ex.Message, null);
+            }
         }
 
-        public Task<Responses<SectionResponse>> GetAll(Guid courseId)
+        public async Task<Responses<SectionResponse>> GetAll(Guid courseId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var result = await _sectionRepositoty.GetAll().Where(s => s.CourseId == courseId).ToListAsync();
+                return new Responses<SectionResponse>(true, _mapper.Map<IEnumerable<SectionResponse>>(result));
+            }
+            catch (Exception ex)
+            {
+                return new Responses<SectionResponse>(false, ex.Message, null);
+            }
         }
 
-        public Task<BaseResponse> Remove(Guid idSection)
+        public async Task<BaseResponse> Remove(Guid idSection)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var result = await _sectionRepositoty.GetByIdAsync(idSection);
+                if (result != null)
+                {
+                    result.IsDeleted = true;
+                }
+                return new BaseResponse { IsSuccess = true };
+
+            }
+            catch (Exception ex)
+            {
+                return new Responses<BaseResponse>(false, ex.Message, null);
+            }
         }
 
-        public Task<Response<SectionResponse>> Update(SectionUpdateRequest sectionRequest)
+        public async Task<Response<SectionResponse>> Update(SectionUpdateRequest sectionRequest)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var section = _mapper.Map<Section>(sectionRequest);
+
+                _sectionRepositoty.Update(section);
+                await _unitOfWork.SaveChangesAsync();
+                return new Response<SectionResponse>(
+                    true,
+                    _mapper.Map<SectionResponse>(section)
+                );
+            }
+            catch (Exception ex)
+            {
+                return new Response<SectionResponse>(false, ex.Message, null);
+            }
         }
     }
 }
