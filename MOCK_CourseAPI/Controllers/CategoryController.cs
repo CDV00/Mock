@@ -32,7 +32,7 @@ namespace CourseAPI.Controllers
         /// <summary>
         /// Create new Category
         /// </summary>
-        /// <param name="categoryRequest"></param>
+        /// <param name="categoryRequest">CategoryResponse</param>
         /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<Response<CategoryResponse>>> Add(CategoryRequest categoryRequest)
@@ -46,7 +46,7 @@ namespace CourseAPI.Controllers
         /// <summary>
         /// Update an Category
         /// </summary>
-        /// <param name="categoryUpdateRequest"></param>
+        /// <param name="categoryUpdateRequest">CategoryUpdate</param>
         /// <returns></returns>
         [HttpPut]
         public async Task<ActionResult<Response<CategoryResponse>>> Update(CategoryUpdateRequest categoryUpdateRequest)
@@ -60,7 +60,7 @@ namespace CourseAPI.Controllers
         /// <summary>
         /// Delete an Category
         /// </summary>
-        /// <param name="Id"></param>
+        /// <param name="Id">Id Category</param>
         /// <returns></returns>
         [HttpDelete]
         public async Task<ActionResult<BaseResponse>> Delete(Guid Id)

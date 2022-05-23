@@ -17,10 +17,11 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// Register a account
+        /// Register a account, if categoryId (category of course) == null then user role is student, 
+        /// otherwise user role is Instructor
         /// </summary>
         /// <param name="registerRequest"></param>
-        /// <returns></returns>
+        /// <returns>token and User Information</returns>
         [HttpPost("register")]
         public async Task<ActionResult<Response<RegisterResponse>>> Register(RegisterRequest registerRequest)
         {
@@ -33,10 +34,10 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// Login 
+        /// Login with email and password
         /// </summary>
         /// <param name="loginRequest"></param>
-        /// <returns>Token and user</returns>
+        /// <returns>Token and user Information</returns>
         [HttpPost("login")]
         public async Task<ActionResult<LoginResponse>> Login(LoginRequest loginRequest)
         {
