@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Course.DAL.Models;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Course.BLL.Requests
@@ -7,6 +8,9 @@ namespace Course.BLL.Requests
     {
         [Required]
         public string Title { get; set; }
+        public int? TotalTime { get; set; }
+        public Guid CourseId { get; set; }
+
     }
     public class SectionUpdateRequest
     {

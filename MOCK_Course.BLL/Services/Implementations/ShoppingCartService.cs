@@ -33,7 +33,6 @@ namespace Course.BLL.Services.Implementations
         {
             try
             {
-
                 var cart = _mapper.Map<ShoppingCart>(cartRequest);
                 await _shoppingCartRepository.CreateAsync(cart);
                 await _unitOfWork.SaveChangesAsync();

@@ -153,6 +153,7 @@ b.MigrationsAssembly("CourseAPI"));
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
             services.AddScoped<ICousesRepository, CousesRepository>();
+            services.AddScoped<ISectionRepositoty, SectionRepositoty>();
 
         }
         /// <summary>
@@ -166,6 +167,7 @@ b.MigrationsAssembly("CourseAPI"));
             //services.AddScoped<IUserService, UserService>();
             services.AddScoped<IShoppingCartService, ShoppingCartService>();
             services.AddScoped<ICourseService, CourseService>();
+            services.AddScoped<ISectionService, SectionService>();
         }
     }
 }

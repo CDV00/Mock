@@ -21,8 +21,16 @@ namespace Course.BLL.Extensions
             CreateMap<Courses, CoursesRequest>().ReverseMap();
             CreateMap<CoursesRequest, CoursesResponse>().ReverseMap();
 
+
+            CreateMap<Section, SectionResponse>().ReverseMap();
+            CreateMap<Section, SectionRequest>().ReverseMap();
+            CreateMap<SectionRequest, SectionResponse>().ReverseMap();
+            CreateMap<Section, SectionUpdateRequest>().ReverseMap();
+
+
             CreateMap<ShoppingCart, CartResponse>().ReverseMap();
             CreateMap<ShoppingCart, CartRequest>().ReverseMap();
+
             CreateMap<CartRequest, CartResponse>().ReverseMap();
             CreateMap<CartUser, AppUser>().ReverseMap();
             CreateMap<CartCourse, Courses>().ReverseMap();

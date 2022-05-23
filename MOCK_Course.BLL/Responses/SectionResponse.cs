@@ -6,5 +6,7 @@ namespace Course.BLL.Responses
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
+        public int? TotalTime { get; set; }
+        public Guid CourseId { get; set; }
     }
 }

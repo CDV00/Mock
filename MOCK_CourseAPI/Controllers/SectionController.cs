@@ -18,27 +18,39 @@ namespace CourseAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<Responses<SectionResponse>> GetAll(Guid userCourse)
+        public async Task<ActionResult<Responses<SectionResponse>>> GetAll([FromForm]Guid courseId)
         {
-            throw new NotImplementedException();
+            var result = await _sectionService.GetAll(courseId);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
         }
 
         [HttpPost]
-        public async Task<Response<SectionResponse>> Create(SectionRequest sectionRequest)
+        public async Task<ActionResult<Response<SectionResponse>>> Create([FromForm]SectionRequest sectionRequest)
         {
-            throw new NotImplementedException();
+            var result = await _sectionService.Add(sectionRequest);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
         }
 
         [HttpPut]
-        public async Task<Response<SectionResponse>> Update(SectionUpdateRequest sectionUpdateRequest)
+        public async Task<ActionResult<Response<SectionResponse>>> Update([FromForm]SectionUpdateRequest sectionUpdateRequest)
         {
-            throw new NotImplementedException();
+            var result = await _sectionService.Update(sectionUpdateRequest);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
         }
 
         [HttpDelete]
-        public async Task<BaseResponse> Remove(Guid id)
+        public async Task<ActionResult<BaseResponse>> Remove([FromForm] Guid id)
         {
-            throw new NotImplementedException();
+            var result = await _sectionService.Remove(id);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
         }
     }
 }
