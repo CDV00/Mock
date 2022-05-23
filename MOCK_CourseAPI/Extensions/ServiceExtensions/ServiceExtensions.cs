@@ -163,7 +163,7 @@ b.MigrationsAssembly("CourseAPI"));
         {
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<IUserService, UserService>();
+            //services.AddScoped<IUserService, UserService>();
             services.AddScoped<IShoppingCartService, ShoppingCartService>();
             services.AddScoped<ICourseService, CourseService>();
         }
