@@ -8,6 +8,6 @@ namespace Course.DAL.Repositories
         //IPostRepository Posts { get; }
         //ICategoryRepository Categories { get; }
         void SaveChanges();
-        Task SaveChangesAsync();
+        Task<int> SaveChangesAsync();
     }
 }

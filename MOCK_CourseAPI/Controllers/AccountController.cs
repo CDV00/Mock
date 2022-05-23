@@ -10,14 +10,19 @@ namespace CourseAPI.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly IUserService _userService;
-        public AccountController(IUserService userService)
+        private readonly IAccountService _userService;
+        public AccountController(IAccountService userService)
         {
             _userService = userService;
         }
 
+        /// <summary>
+        /// Register a account
+        /// </summary>
+        /// <param name="registerRequest"></param>
+        /// <returns></returns>
         [HttpPost("register")]
-        public async Task<ActionResult<BaseResponse>> Register(RegisterRequest registerRequest)
+        public async Task<ActionResult<Response<RegisterResponse>>> Register(RegisterRequest registerRequest)
         {
             var result = await _userService.Register(registerRequest);
             if (result.IsSuccess)
@@ -26,6 +31,12 @@ namespace CourseAPI.Controllers
             }
             return BadRequest(result);
         }
+
+        /// <summary>
+        /// Login 
+        /// </summary>
+        /// <param name="loginRequest"></param>
+        /// <returns>Token and user</returns>
         [HttpPost("login")]
         public async Task<ActionResult<LoginResponse>> Login(LoginRequest loginRequest)
         {

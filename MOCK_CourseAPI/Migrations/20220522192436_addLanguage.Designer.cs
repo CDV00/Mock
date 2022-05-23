@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CourseAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220520193515_addfiled")]
-    partial class addfiled
+    [Migration("20220522192436_addLanguage")]
+    partial class addLanguage
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,6 +29,9 @@ namespace CourseAPI.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
+
+                    b.Property<Guid?>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -59,7 +62,7 @@ namespace CourseAPI.Migrations
                     b.Property<string>("Fullname")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Instroduction")
+                    b.Property<string>("HeadLine")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
@@ -97,6 +100,9 @@ namespace CourseAPI.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("ProfileLink")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -118,6 +124,8 @@ namespace CourseAPI.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -133,20 +141,35 @@ namespace CourseAPI.Migrations
                         {
                             Id = new Guid("9e59da69-3d3e-428d-a207-d53908752532"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f1db1acf-d4ac-413d-a54b-c700329b5542",
-                            CreatedAt = new DateTime(2022, 5, 20, 19, 35, 13, 439, DateTimeKind.Utc).AddTicks(6861),
+                            ConcurrencyStamp = "4f394783-f6ca-4ad3-8119-342c534ee06c",
+                            CreatedAt = new DateTime(2022, 5, 22, 19, 24, 35, 185, DateTimeKind.Utc).AddTicks(5351),
                             Email = "admin123@gmail.com",
                             EmailConfirmed = true,
                             IsActive = true,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "admin123@gmail.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEBIm7uchiQIObU4PWfBXwuWks8Ljqq7tXt/ihlGGzLjkPSYkinp5UHWSa88ZZU9Taw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEf/xxoGq+k517ECLhozJD75pku+KpLg6L31mn90KUCekX+ZlnILoRtSM82GP69+mw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
                             UserName = "admin123"
                         });
+                });
+
+            modelBuilder.Entity("Course.DAL.Models.AudioLanguage", b =>
+                {
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("LanguageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CourseId", "LanguageId");
+
+                    b.HasIndex("LanguageId");
+
+                    b.ToTable("audioLanguages");
                 });
 
             modelBuilder.Entity("Course.DAL.Models.Category", b =>
@@ -170,7 +193,7 @@ namespace CourseAPI.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ParentcategoryId")
+                    b.Property<Guid?>("ParentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -181,9 +204,116 @@ namespace CourseAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ParentcategoryId");
+                    b.HasIndex("ParentId");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("9e47da69-3d3e-428d-a207-d53908753582"),
+                            CreatedAt = new DateTime(2022, 5, 22, 19, 24, 35, 155, DateTimeKind.Utc).AddTicks(3921),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Development"
+                        },
+                        new
+                        {
+                            Id = new Guid("6373f39b-7049-4997-b4b7-b1c451474d23"),
+                            CreatedAt = new DateTime(2022, 5, 22, 19, 24, 35, 157, DateTimeKind.Utc).AddTicks(1538),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Web Developer",
+                            ParentId = new Guid("9e47da69-3d3e-428d-a207-d53908753582")
+                        },
+                        new
+                        {
+                            Id = new Guid("31a4a026-6ed9-4fac-a78b-bdad8593d704"),
+                            CreatedAt = new DateTime(2022, 5, 22, 19, 24, 35, 157, DateTimeKind.Utc).AddTicks(1693),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Data Science",
+                            ParentId = new Guid("9e47da69-3d3e-428d-a207-d53908753582")
+                        },
+                        new
+                        {
+                            Id = new Guid("d96f1c89-fdf1-40ed-b80e-cc2cc1b7b92a"),
+                            CreatedAt = new DateTime(2022, 5, 22, 19, 24, 35, 157, DateTimeKind.Utc).AddTicks(1707),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Mobile App",
+                            ParentId = new Guid("9e47da69-3d3e-428d-a207-d53908753582")
+                        },
+                        new
+                        {
+                            Id = new Guid("9e47da02-3d3e-428d-a207-d53908753582"),
+                            CreatedAt = new DateTime(2022, 5, 22, 19, 24, 35, 157, DateTimeKind.Utc).AddTicks(1717),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Business"
+                        },
+                        new
+                        {
+                            Id = new Guid("5563d518-96d3-4412-8c87-bfb05c9957ac"),
+                            CreatedAt = new DateTime(2022, 5, 22, 19, 24, 35, 157, DateTimeKind.Utc).AddTicks(1736),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Finace",
+                            ParentId = new Guid("9e47da02-3d3e-428d-a207-d53908753582")
+                        },
+                        new
+                        {
+                            Id = new Guid("163433d0-57d7-442d-bb55-d294e5326c2f"),
+                            CreatedAt = new DateTime(2022, 5, 22, 19, 24, 35, 157, DateTimeKind.Utc).AddTicks(1743),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Investor",
+                            ParentId = new Guid("9e47da02-3d3e-428d-a207-d53908753582")
+                        },
+                        new
+                        {
+                            Id = new Guid("0cb68005-bb52-4ee7-a293-52670ac7d1a6"),
+                            CreatedAt = new DateTime(2022, 5, 22, 19, 24, 35, 157, DateTimeKind.Utc).AddTicks(1752),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Sale",
+                            ParentId = new Guid("9e47da02-3d3e-428d-a207-d53908753582")
+                        },
+                        new
+                        {
+                            Id = new Guid("9e47da02-3d3e-248d-a207-d53908753582"),
+                            CreatedAt = new DateTime(2022, 5, 22, 19, 24, 35, 157, DateTimeKind.Utc).AddTicks(1760),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "IT - SoftWare"
+                        },
+                        new
+                        {
+                            Id = new Guid("29304f68-b4b7-4e3c-8151-04b03ba03cd2"),
+                            CreatedAt = new DateTime(2022, 5, 22, 19, 24, 35, 157, DateTimeKind.Utc).AddTicks(1791),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "IT Certification",
+                            ParentId = new Guid("9e47da02-3d3e-248d-a207-d53908753582")
+                        },
+                        new
+                        {
+                            Id = new Guid("1d100f08-c490-44fd-8103-2e594eeff99d"),
+                            CreatedAt = new DateTime(2022, 5, 22, 19, 24, 35, 157, DateTimeKind.Utc).AddTicks(1800),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Network & Security",
+                            ParentId = new Guid("9e47da02-3d3e-248d-a207-d53908753582")
+                        },
+                        new
+                        {
+                            Id = new Guid("6526816f-0bd3-4975-b943-68ffe5b50278"),
+                            CreatedAt = new DateTime(2022, 5, 22, 19, 24, 35, 157, DateTimeKind.Utc).AddTicks(1807),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Hard Ware",
+                            ParentId = new Guid("9e47da02-3d3e-248d-a207-d53908753582")
+                        });
                 });
 
             modelBuilder.Entity("Course.DAL.Models.CourseCompletion", b =>
@@ -373,6 +503,38 @@ namespace CourseAPI.Migrations
                     b.ToTable("Enrollment");
                 });
 
+            modelBuilder.Entity("Course.DAL.Models.Language", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Language");
+                });
+
             modelBuilder.Entity("Course.DAL.Models.Lesson", b =>
                 {
                     b.Property<Guid>("Id")
@@ -521,9 +683,6 @@ namespace CourseAPI.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TotalTime")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -641,19 +800,19 @@ namespace CourseAPI.Migrations
                         new
                         {
                             Id = new Guid("9e59da69-3d3e-428d-a207-d53908753582"),
-                            ConcurrencyStamp = "d0e2abc8-7387-45fe-a8b9-34c18d27f352",
+                            ConcurrencyStamp = "8717b15f-0b37-4c57-be6a-42a52e3d21ca",
                             Name = "Student"
                         },
                         new
                         {
                             Id = new Guid("9e59da69-3d3e-428d-a207-d5390875f522"),
-                            ConcurrencyStamp = "3f7b1df8-f5ca-4247-bc81-ccbeb6f5f754",
+                            ConcurrencyStamp = "d36ef623-acf0-4731-a0bc-ecc478a2b5a4",
                             Name = "Instructor"
                         },
                         new
                         {
                             Id = new Guid("9e59da69-3d3e-428d-a207-d5390875f582"),
-                            ConcurrencyStamp = "c2beadf7-0d85-47b0-8f07-24d0358526eb",
+                            ConcurrencyStamp = "715cfb42-ac9c-4500-8523-d6396e84cb46",
                             Name = "Admin"
                         });
                 });
@@ -764,14 +923,43 @@ namespace CourseAPI.Migrations
                     b.ToTable("AppUserTokens");
                 });
 
-            modelBuilder.Entity("Course.DAL.Models.Category", b =>
+            modelBuilder.Entity("Course.DAL.Models.AppUser", b =>
                 {
-                    b.HasOne("Course.DAL.Models.Category", "Parentcategory")
-                        .WithMany("Categories")
-                        .HasForeignKey("ParentcategoryId")
+                    b.HasOne("Course.DAL.Models.Category", "Category")
+                        .WithMany("User")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.Navigation("Parentcategory");
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Course.DAL.Models.AudioLanguage", b =>
+                {
+                    b.HasOne("Course.DAL.Models.Courses", "Course")
+                        .WithMany("AudioLanguages")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Course.DAL.Models.Language", "Language")
+                        .WithMany("AudioLanguages")
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Language");
+                });
+
+            modelBuilder.Entity("Course.DAL.Models.Category", b =>
+                {
+                    b.HasOne("Course.DAL.Models.Category", "ParentCategory")
+                        .WithMany("SubCategories")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("ParentCategory");
                 });
 
             modelBuilder.Entity("Course.DAL.Models.CourseCompletion", b =>
@@ -1000,13 +1188,17 @@ namespace CourseAPI.Migrations
 
             modelBuilder.Entity("Course.DAL.Models.Category", b =>
                 {
-                    b.Navigation("Categories");
-
                     b.Navigation("Courses");
+
+                    b.Navigation("SubCategories");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Course.DAL.Models.Courses", b =>
                 {
+                    b.Navigation("AudioLanguages");
+
                     b.Navigation("Carts");
 
                     b.Navigation("CourseCompletions");
@@ -1021,6 +1213,11 @@ namespace CourseAPI.Migrations
             modelBuilder.Entity("Course.DAL.Models.Enrollment", b =>
                 {
                     b.Navigation("CourseReviews");
+                });
+
+            modelBuilder.Entity("Course.DAL.Models.Language", b =>
+                {
+                    b.Navigation("AudioLanguages");
                 });
 
             modelBuilder.Entity("Course.DAL.Models.Lesson", b =>

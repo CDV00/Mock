@@ -9,6 +9,14 @@ namespace Course.DAL.Models
             CreatedAt = DateTime.UtcNow;
             IsActive = true;
         }
+
+        public BaseEntity(T id)
+        {
+            Id = id;
+            CreatedAt = DateTime.UtcNow;
+            IsActive = true;
+        }
+
         public T Id { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }

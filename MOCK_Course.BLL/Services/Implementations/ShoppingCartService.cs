@@ -8,6 +8,7 @@ using Course.BLL.Requests;
 using Course.DAL.Models;
 using Course.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Course.DAL.Data;
 
 namespace Course.BLL.Services.Implementations
 {
@@ -16,28 +17,29 @@ namespace Course.BLL.Services.Implementations
         private readonly IShoppingCartRepository _shoppingCartRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly AppDbContext _context;
 
         public ShoppingCartService(IShoppingCartRepository shoppingCartRepository,
             IMapper mapper,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork, AppDbContext context)
         {
             _shoppingCartRepository = shoppingCartRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _context = context;
         }
 
         public async Task<Response<CartResponse>> Add(CartRequest cartRequest)
         {
             try
             {
-                var cartuser = new CartUser();
                 var cart = _mapper.Map<ShoppingCart>(cartRequest);
                 await _shoppingCartRepository.CreateAsync(cart);
                 await _unitOfWork.SaveChangesAsync();
                 return new Response<CartResponse>(
                     true,
                     _mapper.Map<CartResponse>(cart)
-                );
+                );            
             }
             catch (Exception ex)
             {

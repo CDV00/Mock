@@ -22,6 +22,7 @@ namespace Course.DAL.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<Lesson> Lessons { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<AudioLanguage> audioLanguages { get; set; }
         #endregion
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
@@ -45,6 +46,7 @@ namespace Course.DAL.Data
             modelBuilder.ApplyConfiguration(new SectionConfiguration());
             modelBuilder.ApplyConfiguration(new ShoppingCartConfiguration());
             modelBuilder.ApplyConfiguration(new SubscriptionConfiguration());
+            modelBuilder.ApplyConfiguration(new AudioLanguageConfiguration());
 
             modelBuilder.SeedData();
             modelBuilder.ConfigTablesOfIdentity();
