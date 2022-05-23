@@ -7,6 +7,6 @@ namespace Course.BLL.Services
     public interface ICourseService
     {
         Task<Responses<CoursesResponse>> GetAll();
-        Task<Response<CoursesResponse>> Add(CoursesRequest coursesRequest);
+        Task<Response<CoursesResponse>> Add(CourseRequest courseRequest);
     }
 }

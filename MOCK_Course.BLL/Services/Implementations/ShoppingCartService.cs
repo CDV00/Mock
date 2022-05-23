@@ -53,7 +53,8 @@ namespace Course.BLL.Services.Implementations
             try
             {
                 // GEt Shopping cart theo Us
-                var result = await _shoppingCartRepository.GetAll().Where(s => s.UserId == userId).ToListAsync();
+                var result = await _shoppingCartRepository.GetAll().Where(s => s.UserId == userId).Include(s=>s.User).Include(s=>s.Course).ToListAsync();
+
                 return new Responses<CartResponse>(true, _mapper.Map<IEnumerable<CartResponse>>(result));
             }
             catch (Exception ex)

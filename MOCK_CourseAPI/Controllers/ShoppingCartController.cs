@@ -37,7 +37,7 @@ namespace CourseAPI.Controllers
         /// <param name="cartRequest"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Response<CartResponse>>> Create([FromForm]CartRequest cartRequest)
+        public async Task<ActionResult<Response<CartResponse>>> Create([FromBody]CartRequest cartRequest)
         {
            
             var result = await _shoppingCartService.Add(cartRequest);
@@ -52,7 +52,7 @@ namespace CourseAPI.Controllers
         /// <param name="IdShoppingCart"></param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<ActionResult<BaseResponse>> Remove([FromForm]Guid IdShoppingCart)
+        public async Task<ActionResult<BaseResponse>> Remove([FromBody]Guid IdShoppingCart)
         {
             var result = await _shoppingCartService.Remove(IdShoppingCart);
             if (result.IsSuccess == false)

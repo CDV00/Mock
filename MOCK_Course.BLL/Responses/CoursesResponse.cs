@@ -1,5 +1,4 @@
 ﻿using System;
-using Course.DAL.Models;
 
 namespace Course.BLL.Responses
 {
@@ -7,10 +6,21 @@ namespace Course.BLL.Responses
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
-        public string ShortDescription { get; set; }
-        public string Description { get; set; }
         public decimal Price { get; set; }
-        public Guid CategoryId { get; set; }
-
+        public decimal DiscountPrice { get; set; } = 0;
+        public DateTime CreatedAt { get; set; }
+        public CategoryCourseRespones CategoryResponse { get; set; } 
+        public UserCourseResponse UserResponse { get; set; }
     }
+
+    public class CategoryCourseRespones
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+    }
+    public class UserCourseResponse
+    {
+        public Guid Id { get; set; }
+        public string Fullname { get; set; }
+    } 
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Course.BLL.Responses;
@@ -28,7 +27,7 @@ namespace Course.BLL.Services.Implementations
         {
             try
             {
-                var result = await _cousesRepository.GetAll().ToListAsync();
+                var result = await _cousesRepository.GetAll().Include(c=>c.User).Include(c=>c.Category).ToListAsync();
                 return new Responses<CoursesResponse>(true, _mapper.Map<IEnumerable<CoursesResponse>>(result));
             }
             catch (Exception ex)
@@ -37,11 +36,11 @@ namespace Course.BLL.Services.Implementations
             }
         }
 
-        public async Task<Response<CoursesResponse>> Add(CoursesRequest coursesRequest)
+        public async Task<Response<CoursesResponse>> Add(CourseRequest courseRequest)
         {
             try
             {
-                var course = _mapper.Map<Courses>(coursesRequest);
+                var course = _mapper.Map<Courses>(courseRequest);
 
                 await _cousesRepository.CreateAsync(course);
                 await _unitOfWork.SaveChangesAsync();

@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Course.DAL.Models;
+using System;
 using System.Collections.Generic;
 
-namespace Course.DAL.Models
+namespace Course.BLL.Requests
 {
-    public class Courses : BaseEntity<Guid>
+    public class CourseRequest
     {
         public string Title { get; set; }
         public string ShortDescription { get; set; }
@@ -19,31 +20,17 @@ namespace Course.DAL.Models
         /// Intro Course overview provider type. (
         /// </summary>
         public string PreviewVideoUrl { get; set; }
-        public int View { get; set; } = 0;
 
         public bool RequireLogin { get; set; } = false;
         public bool RequireEnroll { get; set; } = false;
 
         public decimal Price { get; set; } = 0;
         public decimal DiscountPrice { get; set; } = 0;
-
-        public Guid CategoryId { get; set; }
-        public Category Category { get; set; }
         public Guid UserId { get; set; }
-        public AppUser User { get; set; }
+        public Guid CategoryId { get; set; }
 
-        public ICollection<Section> Sections { get; set; }
-        public ICollection<CourseCompletion> CourseCompletions { get; set; }
-        public ICollection<Enrollment> Enrollments { get; set; }
-        public ICollection<ShoppingCart> Carts { get; set; }
-        public ICollection<Order> Orders { get; set; }
-        public ICollection<AudioLanguage> AudioLanguages { get; set; }
-        public ICollection<CloseCaption> CloseCaptions { get; set; }
-    }
-    public enum Level
-    {
-        Beginer,
-        Intermedia,
-        Expert
+        public ICollection<SectionRequest> Sections { get; set; }
+        public ICollection<AudioLanguageRequest> AudioLanguageRequests { get; set; }
+        public ICollection<CloseCaptionRequest> CloseCaptionRequests { get; set; }
     }
 }

@@ -25,9 +25,9 @@ namespace CourseAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<BaseResponse>> Add([FromForm]CoursesRequest coursesRequest)
+        public async Task<ActionResult<BaseResponse>> Add([FromBody]CourseRequest courseRequest)
         {
-            var result = await _coursesService.Add(coursesRequest);
+            var result = await _coursesService.Add(courseRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);

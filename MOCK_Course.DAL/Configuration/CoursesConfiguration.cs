@@ -20,8 +20,18 @@ namespace Course.DAL.Configuration
                 .HasForeignKey(c => c.UserId);
 
             builder.Property(c => c.Price).HasColumnType("money");
+            builder.Property(c => c.DiscountPrice).HasColumnType("money");
 
             builder.HasQueryFilter(u => !u.IsDeleted);
+
+            builder.HasData(new Courses()
+            {
+                Id = Guid.NewGuid(),
+                Title = "New Course",
+                UserId = Guid.Parse("9e59da69-3d3e-428d-a207-d53908752532"),
+                CategoryId = Guid.Parse("29304F68-B4B7-4E3C-8151-04B03BA03CD2"),
+                CourseLevel = Level.Beginer
+            });
         }
     }
 }
