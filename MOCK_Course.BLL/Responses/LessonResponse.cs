@@ -1,17 +1,14 @@
 ﻿using System;
 
-namespace Course.BLL.Requests
+namespace Course.BLL.Responses
 {
-    public class LessonRequest
+    public class LessonResponse
     {
+        public Guid Id { get; set; }
         public string Title { get; set; }
         public string VideoUrl { get; set; }
         public string VideoPoster { get; set; }
         public bool IsPreview { get; set; }
         public int TotalTime { get; set; }
-    }
-    public class LessonUpdateRequest :LessonRequest
-    {
-        public Guid Id { get; set; }
     }
 }

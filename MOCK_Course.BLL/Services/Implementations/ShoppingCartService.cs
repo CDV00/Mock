@@ -15,11 +15,11 @@ namespace Course.BLL.Services.Implementations
 {
     public class ShoppingCartService : IShoppingCartService
     {
-        private readonly IShoppingCartRepository _shoppingCartRepository;
+        private readonly ShoppingCartRepository _shoppingCartRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public ShoppingCartService(IShoppingCartRepository shoppingCartRepository,
+        public ShoppingCartService(ShoppingCartRepository shoppingCartRepository,
             IMapper mapper,
             IUnitOfWork unitOfWork)
         {

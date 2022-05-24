@@ -16,6 +16,6 @@ namespace Course.BLL.Requests
         public Guid Id { get; set; }
         [Required]
         public string Title { get; set; }
-        public ICollection<LessonRequest> LessonRequests { get; set; }
+        public ICollection<LessonUpdateRequest> LessonRequests { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace Course.DAL.Configuration
             // 1-n:course-section
             builder.HasOne(s => s.Course)
                 .WithMany(c => c.Sections)
-                .HasForeignKey(s => s.CourseId);
+                .HasForeignKey(s => s.CourseId).OnDelete(DeleteBehavior.Cascade);
 
             builder.HasQueryFilter(u => !u.IsDeleted);
         }
