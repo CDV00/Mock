@@ -14,10 +14,10 @@ namespace Course.BLL.Services.Implementations
 {
     public class LessonService : ILessonService
     {
-        private readonly LessonRepository _LessonRepositoty;
+        private readonly ILessonRepository _LessonRepositoty;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public LessonService(LessonRepository LessonRepositoty,
+        public LessonService(ILessonRepository LessonRepositoty,
             IMapper mapper,
             IUnitOfWork unitOfWork)
         {
