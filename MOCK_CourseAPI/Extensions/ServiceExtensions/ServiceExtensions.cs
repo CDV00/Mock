@@ -155,6 +155,8 @@ b.MigrationsAssembly("CourseAPI"));
             services.AddScoped<ICousesRepository, CousesRepository>();
             services.AddScoped<ISectionRepositoty, SectionRepositoty>();
             services.AddScoped<ILessonRepository, LessonRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<ICourseReviewRepository, CourseReviewRepository>();
         }
         /// <summary>
         /// Configure Services
@@ -171,6 +173,8 @@ b.MigrationsAssembly("CourseAPI"));
             services.AddScoped<ISectionService, SectionService>();
             services.AddScoped<ILessonService, LessonService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<ICourseReviewService, CourseReviewService>();
 
         }
     }

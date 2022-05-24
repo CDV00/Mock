@@ -45,6 +45,25 @@ namespace Course.BLL.Services.Implementations
             }
 
         }
+        /// <summary>
+        /// get order by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<Response<OrderResponse>> GetById(Guid id)
+        {
+            try
+            {
+                var result = await _orderRepository.GetByIdAsync(id);
+                return new Response<OrderResponse>(true, _mapper.Map<OrderResponse>(result));
+
+            }
+            catch (Exception ex)
+            {
+                return new Response<OrderResponse>(false, ex.Message, null);
+            }
+
+        }
 
         /// <summary>
         /// Add Order
@@ -56,7 +75,7 @@ namespace Course.BLL.Services.Implementations
             try
             {
                 var order = _mapper.Map<Order>(orderRequest);
-
+                order.Id = new Guid();
                 await _orderRepository.CreateAsync(order);
                 await _unitOfWork.SaveChangesAsync();
                 return new Response<OrderResponse>(
@@ -70,7 +89,11 @@ namespace Course.BLL.Services.Implementations
             }
         }
 
-
+        /// <summary>
+        /// delete order
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<BaseResponse> Delete(Guid id)
         {
             try
@@ -82,21 +105,34 @@ namespace Course.BLL.Services.Implementations
             }
             catch (Exception ex)
             {
-                return new BaseResponse(false);
+                return new BaseResponse(false,ex.Message,null);
             }
 
         }
 
 
-
-        public Task<Response<OrderResponse>> GetById(Guid id)
+        /// <summary>
+        /// update order
+        /// </summary>
+        /// <param name="orderUpdateRequest"></param>
+        /// <returns></returns>
+        public async Task<Response<OrderResponse>> Update(OrderUpdateRequest orderUpdateRequest)
         {
-            throw new NotImplementedException();
-        }
+            try
+            {
+                var order = _mapper.Map<Order>(orderUpdateRequest);
 
-        public Task<Responses<OrderResponse>> Update(OrderRequest orderRequest)
-        {
-            throw new NotImplementedException();
+                _orderRepository.Update(order);
+                await _unitOfWork.SaveChangesAsync();
+                return new Response<OrderResponse>(
+                    true,
+                    _mapper.Map<OrderResponse>(order)
+                );
+            }
+            catch (Exception ex)
+            {
+                return new Response<OrderResponse>(false, ex.Message, null);
+            }
         }
     }
 }

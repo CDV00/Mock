@@ -4,6 +4,7 @@ using Course.BLL.Requests;
 using Course.DAL.Models;
 using System.Collections.Generic;
 using System.Linq;
+using Course.BLL.Responses;
 
 namespace Course.BLL.Extensions
 {
@@ -60,6 +61,16 @@ namespace Course.BLL.Extensions
             CreateMap<AppUser, UpdateProfileRequest>().ReverseMap();
             CreateMap<AppUser, ChangePasswordRequest>().ReverseMap();
             CreateMap<AppUser, UserProfileResponse>().ReverseMap();
+
+            //Order
+            CreateMap<Order, OrderRequest>().ReverseMap();
+            CreateMap<Order, OrderResponse>().ReverseMap();
+            CreateMap<Order, OrderUpdateRequest>().ReverseMap();
+
+            //CourseReview
+            CreateMap<CourseReview, CourseReviewRequest>().ReverseMap();
+            CreateMap<CourseReview, CourseReviewUpdateRequest>().ReverseMap();
+            CreateMap<CourseReview, CourseReviewResponse>().ReverseMap();
         }
     }
 }
