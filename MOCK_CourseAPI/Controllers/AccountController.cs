@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Course.BLL.Requests;
-using Course.BLL.Responses;
+using Course.BLL.Responsesnamespace;
 using Course.BLL.Services;
 using Microsoft.AspNetCore.Mvc;
 

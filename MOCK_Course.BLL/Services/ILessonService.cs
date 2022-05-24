@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Course.BLL.Responses;
+using Course.BLL.Responsesnamespace;
 using Course.BLL.Requests;
 using System;
 
@@ -9,7 +9,7 @@ namespace Course.BLL.Services
     {
         Task<Responses<LessonResponse>> GetAll(Guid courseId);
         Task<Response<LessonResponse>> Add(LessonRequest LessonRequest);
-        Task<BaseResponse> Remove(Guid idLesson);
+        Task<Responsesnamespace.BaseResponse> Remove(Guid idLesson);
         Task<Response<LessonResponse>> Update(LessonUpdateRequest LessonRequest);
     }
 }

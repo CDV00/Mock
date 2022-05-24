@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Course.BLL.Responses
+namespace Course.BLL.Responsesnamespace
 {
     public class SectionResponse
     {

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Course.BLL.Requests;
-using Course.BLL.Responses;
+using Course.BLL.Responsesnamespace;
 using Course.DAL.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;

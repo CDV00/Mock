@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Course.BLL.Responses;
+using Course.BLL.Responsesnamespace;
 using Course.BLL.Requests;
 using Course.DAL.Models;
 using System.Collections.Generic;
@@ -55,6 +55,11 @@ namespace Course.BLL.Extensions
             CreateMap<Section, SectionRequest>().ReverseMap();
             CreateMap<AudioLanguage, AudioLanguageRequest>().ReverseMap();
             CreateMap<CloseCaption, CloseCaptionRequest>().ReverseMap();
+
+            // AppUser
+            CreateMap<AppUser, UpdateProfileRequest>().ReverseMap();
+            CreateMap<AppUser, ChangePasswordRequest>().ReverseMap();
+            CreateMap<AppUser, UserProfileResponse>().ReverseMap();
         }
     }
 }

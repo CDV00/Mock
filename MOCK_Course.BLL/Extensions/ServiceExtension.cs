@@ -21,6 +21,7 @@ namespace Course.BLL.Extensions
             services.AddScoped<ISectionRepositoty, SectionRepositoty>();
             services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
             services.AddScoped<ILessonRepository, LessonRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
         }
         /// <summary>
         /// Configure Services
@@ -35,6 +36,8 @@ namespace Course.BLL.Extensions
             //.AddScoped<IUserService, UserService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ILessonService, LessonService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IOrderService, OrderService>();
         }
     }
 }

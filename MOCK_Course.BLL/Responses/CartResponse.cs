@@ -1,7 +1,7 @@
 ﻿using Course.DAL.Models;
 using System;
 
-namespace Course.BLL.Responses
+namespace Course.BLL.Responsesnamespace
 {
     public class CartResponse
     {

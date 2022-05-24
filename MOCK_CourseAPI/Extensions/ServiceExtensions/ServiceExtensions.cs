@@ -170,6 +170,7 @@ b.MigrationsAssembly("CourseAPI"));
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<ISectionService, SectionService>();
             services.AddScoped<ILessonService, LessonService>();
+            services.AddScoped<IUserService, UserService>();
 
         }
     }
