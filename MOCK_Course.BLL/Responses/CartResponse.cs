@@ -1,20 +1,19 @@
-﻿using Course.DAL.Models;
-using System;
+﻿using System;
 
 namespace Course.BLL.Responses
 {
     public class CartResponse
     {
         public Guid Id { get; set; }
-        public CartUser CartUser { get; set; }
-        public CartCourse Course { get; set; }
+        public CartUserResponse CartUser { get; set; }
+        public CartCourseResponse Course { get; set; }
     }
-    public class CartUser
+    public class CartUserResponse
     {
         public Guid Id { get; set; }
         public string Fullname { get; set; }
     }
-    public class CartCourse
+    public class CartCourseResponse
     {
         public Guid Id { get; set; }
         public string Title { get; set; }

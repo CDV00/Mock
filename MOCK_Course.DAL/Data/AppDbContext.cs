@@ -22,6 +22,8 @@ namespace Course.DAL.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<Lesson> Lessons { get; set; }
         public DbSet<Category> Categories { get; set; }
+
+        public DbSet<Language> Languages { get; set; }
         public DbSet<AudioLanguage> AudioLanguages { get; set; }
         public DbSet<CloseCaption> CloseCaptions { get; set; }
         #endregion

@@ -1,10 +1,11 @@
-﻿using Course.DAL.Models;
+﻿using Course.BLL.Requests;
+using Course.DAL.Models;
 using System;
 using System.Collections.Generic;
 
-namespace Course.BLL.Requests
+namespace Course.BLL.Responses
 {
-    public class CourseRequest
+    public class CourseResponse
     {
         public string Title { get; set; }
         public string ShortDescription { get; set; }
@@ -30,11 +31,9 @@ namespace Course.BLL.Requests
 
         public Guid UserId { get; set; }
         public Guid CategoryId { get; set; }
-        public IList<AudioLanguageCreateRequest> AudioLanguages { get; set; }
-        public IList<CloseCaptionCreateRequest> CloseCaptions { get; set; }
-    }
-    public class UpdateCourseRequest : CourseRequest
-    {
         public Guid Id { get; set; }
+
+        public IList<AudioLanguageCreateResponse> AudioLanguages { get; set; }
+        public IList<CloseCaptionCreateResponse> CloseCaptions { get; set; }
     }
 }

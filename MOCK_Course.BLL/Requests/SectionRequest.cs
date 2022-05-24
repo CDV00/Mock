@@ -1,21 +1,19 @@
-﻿using Course.DAL.Models;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Course.BLL.Requests
 {
-    public class SectionRequest
+    public class SectionCreateRequest
     {
         [Required]
         public string Title { get; set; }
-        public ICollection<LessonRequest> LessonRequests { get; set; }
+        public Guid CourseId { get; set; }
     }
-    public class SectionUpdateRequest
+    public class SectionUpdateRequest 
     {
         public Guid Id { get; set; }
         [Required]
         public string Title { get; set; }
-        public ICollection<LessonUpdateRequest> LessonRequests { get; set; }
+
     }
 }

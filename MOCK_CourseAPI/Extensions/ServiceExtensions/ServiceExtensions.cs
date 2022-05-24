@@ -81,7 +81,7 @@ namespace CourseAPI.Extensions.ServiceExtensions
             {
                 //CVPANHTNT6-59
                 options.UseSqlServer(configuration.GetConnectionString("MOCK_Course"), b =>
-b.MigrationsAssembly("CourseAPI"));
+                b.MigrationsAssembly("CourseAPI"));
             });
         }
 
@@ -154,7 +154,10 @@ b.MigrationsAssembly("CourseAPI"));
             services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
             services.AddScoped<ICousesRepository, CousesRepository>();
             services.AddScoped<ISectionRepositoty, SectionRepositoty>();
-
+            services.AddScoped<ILessonRepository, LessonRepository>();
+            services.AddScoped<IAudioLanguageRepository, AudioLanguageRepository>();
+            services.AddScoped<ICloseCaptionRepository, CloseCaptionRepository>();
+            services.AddScoped<ILanguageRepository, LanguageRepository>();
         }
         /// <summary>
         /// Configure Services
@@ -163,15 +166,15 @@ b.MigrationsAssembly("CourseAPI"));
         public static void ConfigureServices(this IServiceCollection services)
         {
             services.AddScoped<ICategoryService, CategoryService>();
-            //services.AddScoped<IUserService, UserService>();
             services.AddScoped<IShoppingCartService, ShoppingCartService>();
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<IAccountService, AccountService>();
-            //services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IShoppingCartService, ShoppingCartService>();
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<ISectionService, SectionService>();
+            services.AddScoped<ILessonService, LessonService>();
+            services.AddScoped<IAudioLanguageService, AudioLanguageService>();
+            services.AddScoped<ICloseCaptionService, CloseCaptionService>();
+            services.AddScoped<ILanguageService, LanguageService>();
         }
     }
 }

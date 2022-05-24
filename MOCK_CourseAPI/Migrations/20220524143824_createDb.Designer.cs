@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CourseAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220523150002_createDb")]
+    [Migration("20220524143824_createDb")]
     partial class createDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -135,26 +135,6 @@ namespace CourseAPI.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("9e59da69-3d3e-428d-a207-d53908752532"),
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "82456e9a-0db4-4e6e-b633-2b85b9fea339",
-                            CreatedAt = new DateTime(2022, 5, 23, 14, 59, 59, 741, DateTimeKind.Utc).AddTicks(3555),
-                            Email = "admin123@gmail.com",
-                            EmailConfirmed = true,
-                            IsActive = true,
-                            IsDeleted = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "admin123@gmail.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGkTxvq95hLUSalkit21iCp/VxvJJnkRHaNOL+jZ12SOSbWe4xNR9snkAHAYPpPNgg==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "",
-                            TwoFactorEnabled = false,
-                            UserName = "admin123"
-                        });
                 });
 
             modelBuilder.Entity("Course.DAL.Models.AudioLanguage", b =>
@@ -606,9 +586,6 @@ namespace CourseAPI.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TotalTime")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -721,26 +698,6 @@ namespace CourseAPI.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("9e59da69-3d3e-428d-a207-d53908753582"),
-                            ConcurrencyStamp = "13201d82-91eb-4949-b6e5-3e2b7f750069",
-                            Name = "Student"
-                        },
-                        new
-                        {
-                            Id = new Guid("9e59da69-3d3e-428d-a207-d5390875f522"),
-                            ConcurrencyStamp = "17745af8-eee7-412d-ac92-787dff3f35fe",
-                            Name = "Instructor"
-                        },
-                        new
-                        {
-                            Id = new Guid("9e59da69-3d3e-428d-a207-d5390875f582"),
-                            ConcurrencyStamp = "dee0c2be-3c0f-4a0d-b5c0-bb6980769c62",
-                            Name = "Admin"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -821,13 +778,6 @@ namespace CourseAPI.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AppUserRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = new Guid("9e59da69-3d3e-428d-a207-d53908752532"),
-                            RoleId = new Guid("9e59da69-3d3e-428d-a207-d5390875f582")
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>

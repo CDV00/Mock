@@ -8,18 +8,16 @@ using Course.BLL.Requests;
 using Course.DAL.Models;
 using Course.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Course.DAL.Data;
-using Course.DAL.Repositories.Implementations;
 
 namespace Course.BLL.Services.Implementations
 {
     public class ShoppingCartService : IShoppingCartService
     {
-        private readonly ShoppingCartRepository _shoppingCartRepository;
+        private readonly IShoppingCartRepository _shoppingCartRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public ShoppingCartService(ShoppingCartRepository shoppingCartRepository,
+        public ShoppingCartService(IShoppingCartRepository shoppingCartRepository,
             IMapper mapper,
             IUnitOfWork unitOfWork)
         {

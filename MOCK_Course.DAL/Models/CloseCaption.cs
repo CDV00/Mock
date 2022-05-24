@@ -9,5 +9,7 @@ namespace Course.DAL.Models
 
         public Guid LanguageId { get; set; }
         public Language Language { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

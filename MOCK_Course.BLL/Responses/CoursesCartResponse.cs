@@ -2,7 +2,7 @@
 
 namespace Course.BLL.Responses
 {
-    public class CoursesResponse
+    public class CoursesCartResponse
     {
         public Guid Id { get; set; }
         public string Title { get; set; }

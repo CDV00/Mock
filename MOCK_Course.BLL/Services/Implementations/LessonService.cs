@@ -3,7 +3,6 @@ using Course.BLL.Requests;
 using Course.BLL.Responses;
 using Course.DAL.Models;
 using Course.DAL.Repositories;
-using Course.DAL.Repositories.Implementations;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,10 +13,10 @@ namespace Course.BLL.Services.Implementations
 {
     public class LessonService : ILessonService
     {
-        private readonly LessonRepository _LessonRepositoty;
+        private readonly ILessonRepository _LessonRepositoty;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public LessonService(LessonRepository LessonRepositoty,
+        public LessonService(ILessonRepository LessonRepositoty,
             IMapper mapper,
             IUnitOfWork unitOfWork)
         {
@@ -25,7 +24,7 @@ namespace Course.BLL.Services.Implementations
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
-        public async Task<Response<LessonResponse>> Add(LessonRequest LessonRequest)
+        public async Task<Response<LessonResponse>> Add(LessonCreateRequest LessonRequest)
         {
             try
             {
@@ -64,7 +63,7 @@ namespace Course.BLL.Services.Implementations
                 var result = await _LessonRepositoty.GetByIdAsync(idLesson);
                 _LessonRepositoty.Remove(result);
                 await _unitOfWork.SaveChangesAsync();
-                return new BaseResponse { IsSuccess = true };
+                return new BaseResponse(true);
             }
             catch (Exception ex)
             {

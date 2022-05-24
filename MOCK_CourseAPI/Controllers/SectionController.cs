@@ -27,7 +27,7 @@ namespace CourseAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Response<SectionResponse>>> Create([FromForm]SectionRequest sectionRequest)
+        public async Task<ActionResult<Response<SectionResponse>>> Create([FromForm]SectionCreateRequest sectionRequest)
         {
             var result = await _sectionService.Add(sectionRequest);
             if (result.IsSuccess == false)

@@ -86,6 +86,22 @@ namespace CourseAPI.Data
                 });
             }
 
+            if (!await appContext.Languages.AnyAsync())
+            {
+                await appContext.Languages.AddAsync(new Language
+                {
+                    Name = "English",
+                });
+                await appContext.Languages.AddAsync(new Language
+                {
+                    Name = "Vietnamese",
+                });
+                await appContext.Languages.AddAsync(new Language
+                {
+                    Name = "Japan",
+                });
+            }
+
             await appContext.SaveChangesAsync();
         }
     }

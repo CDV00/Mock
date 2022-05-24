@@ -3,6 +3,7 @@ using Course.BLL.Responses;
 using Course.BLL.Requests;
 using Course.BLL.Services;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace CourseAPI.Controllers
 {
@@ -16,11 +17,11 @@ namespace CourseAPI.Controllers
             _coursesService = coursesService;
         }
         /// <summary>
-        /// Error mapper category and user
+        /// Error mapper Courses and user
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<Responses<CoursesResponse>>> GetAll()
+        public async Task<ActionResult<Responses<CoursesCartResponse>>> GetAll()
         {
             var result = await _coursesService.GetAll();
             if (result.IsSuccess == false)
@@ -29,9 +30,32 @@ namespace CourseAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<BaseResponse>> Add([FromBody]CourseRequest courseRequest)
+        public async Task<ActionResult<BaseResponse>> Add([FromBody] CourseRequest courseRequest)
         {
             var result = await _coursesService.Add(courseRequest);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<Response<CourseResponse>>> Update(UpdateCourseRequest CoursesUpdateRequest)
+        {
+            var result = await _coursesService.Add(CoursesUpdateRequest);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Delete an Courses
+        /// </summary>
+        /// <param name="Id">Id Courses</param>
+        /// <returns></returns>
+        [HttpDelete]
+        public async Task<ActionResult<BaseResponse>> Delete(Guid Id)
+        {
+            var result = await _coursesService.Remove(Id);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);

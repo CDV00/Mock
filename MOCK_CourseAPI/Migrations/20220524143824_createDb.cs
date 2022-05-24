@@ -456,7 +456,6 @@ namespace CourseAPI.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TotalTime = table.Column<int>(type: "int", nullable: true),
                     CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -559,26 +558,6 @@ namespace CourseAPI.Migrations
                         principalTable: "Lessons",
                         principalColumn: "Id");
                 });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[,]
-                {
-                    { new Guid("9e59da69-3d3e-428d-a207-d53908753582"), "13201d82-91eb-4949-b6e5-3e2b7f750069", "Student", null },
-                    { new Guid("9e59da69-3d3e-428d-a207-d5390875f522"), "17745af8-eee7-412d-ac92-787dff3f35fe", "Instructor", null },
-                    { new Guid("9e59da69-3d3e-428d-a207-d5390875f582"), "dee0c2be-3c0f-4a0d-b5c0-bb6980769c62", "Admin", null }
-                });
-
-            migrationBuilder.InsertData(
-                table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "CategoryId", "ConcurrencyStamp", "CreatedAt", "CreatedBy", "Description", "Email", "EmailConfirmed", "FacebookLink", "FirstName", "Fullname", "HeadLine", "IsActive", "IsDeleted", "LastName", "LinkedlnLink", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfileLink", "SecurityStamp", "TwoFactorEnabled", "UpdatedAt", "UpdatedBy", "UserName", "YoutubeLink" },
-                values: new object[] { new Guid("9e59da69-3d3e-428d-a207-d53908752532"), 0, null, "82456e9a-0db4-4e6e-b633-2b85b9fea339", new DateTime(2022, 5, 23, 14, 59, 59, 741, DateTimeKind.Utc).AddTicks(3555), null, null, "admin123@gmail.com", true, null, null, null, null, true, false, null, null, false, null, "admin123@gmail.com", null, "AQAAAAEAACcQAAAAEGkTxvq95hLUSalkit21iCp/VxvJJnkRHaNOL+jZ12SOSbWe4xNR9snkAHAYPpPNgg==", null, false, null, "", false, null, null, "admin123", null });
-
-            migrationBuilder.InsertData(
-                table: "AppUserRoles",
-                columns: new[] { "RoleId", "UserId" },
-                values: new object[] { new Guid("9e59da69-3d3e-428d-a207-d5390875f582"), new Guid("9e59da69-3d3e-428d-a207-d53908752532") });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AppRoleClaims_RoleId",
@@ -782,4 +761,3 @@ namespace CourseAPI.Migrations
         }
     }
 }
-

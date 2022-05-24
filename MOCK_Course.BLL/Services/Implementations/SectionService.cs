@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using AutoMapper;
 using Course.BLL.Requests;
 using Course.BLL.Responses;
 using Course.DAL.Models;
@@ -17,33 +16,23 @@ namespace Course.BLL.Services.Implementations
         private readonly ISectionRepositoty _sectionRepositoty;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly ILessonService _lessonService;
         public SectionService(ISectionRepositoty sectionRepositoty,
             IMapper mapper,
-            IUnitOfWork unitOfWork, ILessonService lessonService)
+            IUnitOfWork unitOfWork)
         {
             _sectionRepositoty = sectionRepositoty;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
-            _lessonService = lessonService;
         }
-        public async Task<Response<SectionResponse>> Add(SectionRequest sectionRequest)
+        public async Task<Response<SectionResponse>> Add(SectionCreateRequest sectionRequest)
         {
             try
             {
                 var section = _mapper.Map<Section>(sectionRequest);
 
                 await _sectionRepositoty.CreateAsync(section);
-
-                if (sectionRequest.LessonRequests.Count > 0)
-                {
-                    foreach (var lesionRequest in sectionRequest.LessonRequests)
-                    {
-                        await _lessonService.Add(lesionRequest);
-                    }
-                }
-
                 await _unitOfWork.SaveChangesAsync();
+
                 return new Response<SectionResponse>(
                     true,
                     _mapper.Map<SectionResponse>(section)
@@ -59,7 +48,7 @@ namespace Course.BLL.Services.Implementations
         {
             try
             {
-                var result = await _sectionRepositoty.GetAll().Where(s => s.CourseId == courseId).Include(l => l.Lessons).ToListAsync();
+                var result = await _sectionRepositoty.GetAll().Where(s => s.CourseId == courseId).ToListAsync();
 
                 return new Responses<SectionResponse>(true, _mapper.Map<IEnumerable<SectionResponse>>(result));
             }
@@ -78,7 +67,7 @@ namespace Course.BLL.Services.Implementations
                 _sectionRepositoty.Remove(result);
                 _unitOfWork.SaveChanges();
 
-                return new BaseResponse { IsSuccess = true };
+                return new BaseResponse(true);
 
             }
             catch (Exception ex)
@@ -94,15 +83,8 @@ namespace Course.BLL.Services.Implementations
                 var section = _mapper.Map<Section>(sectionRequest);
 
                 _sectionRepositoty.Update(section);
-
-                if (sectionRequest.LessonRequests.Count > 0)
-                {
-                    foreach (var lesionRequest in sectionRequest.LessonRequests)
-                    {
-                        await _lessonService.Update(lesionRequest);
-                    }
-                }
                 await _unitOfWork.SaveChangesAsync();
+
                 return new Response<SectionResponse>(
                     true,
                     _mapper.Map<SectionResponse>(section)
