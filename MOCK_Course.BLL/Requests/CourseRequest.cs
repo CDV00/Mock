@@ -29,7 +29,7 @@ namespace Course.BLL.Requests
         public Guid UserId { get; set; }
         public Guid CategoryId { get; set; }
 
-        public ICollection<SectionRequest> Sections { get; set; }
+        public ICollection<SectionRequest> SectionRequests { get; set; }
         public ICollection<AudioLanguageRequest> AudioLanguageRequests { get; set; }
         public ICollection<CloseCaptionRequest> CloseCaptionRequests { get; set; }
     }

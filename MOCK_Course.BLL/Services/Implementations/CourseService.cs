@@ -7,6 +7,7 @@ using Course.BLL.Requests;
 using Course.DAL.Models;
 using Course.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Course.BLL.Services.Implementations
 {
@@ -23,12 +24,15 @@ namespace Course.BLL.Services.Implementations
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
+
         public async Task<Responses<CoursesResponse>> GetAll()
         {
             try
             {
-                var result = await _cousesRepository.GetAll().Include(c=>c.User).Include(c=>c.Category).ToListAsync();
-                return new Responses<CoursesResponse>(true, _mapper.Map<IEnumerable<CoursesResponse>>(result));
+                var categories = await _cousesRepository.GetAll().Include(c=>c.User).Include(c=>c.Category).ToListAsync();
+
+                var courseResponse = _mapper.Map<List<CoursesResponse>>(categories);
+                return new Responses<CoursesResponse>(true, courseResponse);
             }
             catch (Exception ex)
             {

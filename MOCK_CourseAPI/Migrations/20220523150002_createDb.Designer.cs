@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CourseAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220523085534_seeddatacourse")]
-    partial class seeddatacourse
+    [Migration("20220523150002_createDb")]
+    partial class createDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -141,15 +141,15 @@ namespace CourseAPI.Migrations
                         {
                             Id = new Guid("9e59da69-3d3e-428d-a207-d53908752532"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f6c2702b-c720-4e94-9492-6ccf1f5cb7f8",
-                            CreatedAt = new DateTime(2022, 5, 23, 8, 55, 30, 279, DateTimeKind.Utc).AddTicks(5306),
+                            ConcurrencyStamp = "82456e9a-0db4-4e6e-b633-2b85b9fea339",
+                            CreatedAt = new DateTime(2022, 5, 23, 14, 59, 59, 741, DateTimeKind.Utc).AddTicks(3555),
                             Email = "admin123@gmail.com",
                             EmailConfirmed = true,
                             IsActive = true,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "admin123@gmail.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAECs6nfDI3qx0M0Uj+jiejZxzwG2YRgMeRH1Xfriex75a+ZlUhlSfTqHUZ+xnbEeHXA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGkTxvq95hLUSalkit21iCp/VxvJJnkRHaNOL+jZ12SOSbWe4xNR9snkAHAYPpPNgg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -207,113 +207,6 @@ namespace CourseAPI.Migrations
                     b.HasIndex("ParentId");
 
                     b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("9e47da69-3d3e-428d-a207-d53908753582"),
-                            CreatedAt = new DateTime(2022, 5, 23, 8, 55, 30, 175, DateTimeKind.Utc).AddTicks(817),
-                            IsActive = true,
-                            IsDeleted = false,
-                            Name = "Development"
-                        },
-                        new
-                        {
-                            Id = new Guid("f5232d4e-5c17-40b4-8658-dad8d7622868"),
-                            CreatedAt = new DateTime(2022, 5, 23, 8, 55, 30, 179, DateTimeKind.Utc).AddTicks(2659),
-                            IsActive = true,
-                            IsDeleted = false,
-                            Name = "Web Developer",
-                            ParentId = new Guid("9e47da69-3d3e-428d-a207-d53908753582")
-                        },
-                        new
-                        {
-                            Id = new Guid("56adab52-8f5d-4c8b-b51c-451dea4dd790"),
-                            CreatedAt = new DateTime(2022, 5, 23, 8, 55, 30, 179, DateTimeKind.Utc).AddTicks(2994),
-                            IsActive = true,
-                            IsDeleted = false,
-                            Name = "Data Science",
-                            ParentId = new Guid("9e47da69-3d3e-428d-a207-d53908753582")
-                        },
-                        new
-                        {
-                            Id = new Guid("058e6530-bd60-4592-bf71-fda31c6216f1"),
-                            CreatedAt = new DateTime(2022, 5, 23, 8, 55, 30, 179, DateTimeKind.Utc).AddTicks(3033),
-                            IsActive = true,
-                            IsDeleted = false,
-                            Name = "Mobile App",
-                            ParentId = new Guid("9e47da69-3d3e-428d-a207-d53908753582")
-                        },
-                        new
-                        {
-                            Id = new Guid("9e47da02-3d3e-428d-a207-d53908753582"),
-                            CreatedAt = new DateTime(2022, 5, 23, 8, 55, 30, 179, DateTimeKind.Utc).AddTicks(3058),
-                            IsActive = true,
-                            IsDeleted = false,
-                            Name = "Business"
-                        },
-                        new
-                        {
-                            Id = new Guid("33e1f8ca-cc29-4686-b9a7-52ba49bdda7d"),
-                            CreatedAt = new DateTime(2022, 5, 23, 8, 55, 30, 179, DateTimeKind.Utc).AddTicks(3106),
-                            IsActive = true,
-                            IsDeleted = false,
-                            Name = "Finace",
-                            ParentId = new Guid("9e47da02-3d3e-428d-a207-d53908753582")
-                        },
-                        new
-                        {
-                            Id = new Guid("b02d05e6-5ac6-4514-b622-a408f42691cd"),
-                            CreatedAt = new DateTime(2022, 5, 23, 8, 55, 30, 179, DateTimeKind.Utc).AddTicks(3136),
-                            IsActive = true,
-                            IsDeleted = false,
-                            Name = "Investor",
-                            ParentId = new Guid("9e47da02-3d3e-428d-a207-d53908753582")
-                        },
-                        new
-                        {
-                            Id = new Guid("e61e4bb9-ef99-43f0-b853-03c03608d371"),
-                            CreatedAt = new DateTime(2022, 5, 23, 8, 55, 30, 179, DateTimeKind.Utc).AddTicks(3186),
-                            IsActive = true,
-                            IsDeleted = false,
-                            Name = "Sale",
-                            ParentId = new Guid("9e47da02-3d3e-428d-a207-d53908753582")
-                        },
-                        new
-                        {
-                            Id = new Guid("9e47da02-3d3e-248d-a207-d53908753582"),
-                            CreatedAt = new DateTime(2022, 5, 23, 8, 55, 30, 179, DateTimeKind.Utc).AddTicks(3214),
-                            IsActive = true,
-                            IsDeleted = false,
-                            Name = "IT - SoftWare"
-                        },
-                        new
-                        {
-                            Id = new Guid("1ffd3243-9fc9-4b20-8743-3800cbec5e8c"),
-                            CreatedAt = new DateTime(2022, 5, 23, 8, 55, 30, 179, DateTimeKind.Utc).AddTicks(3247),
-                            IsActive = true,
-                            IsDeleted = false,
-                            Name = "IT Certification",
-                            ParentId = new Guid("9e47da02-3d3e-248d-a207-d53908753582")
-                        },
-                        new
-                        {
-                            Id = new Guid("bf316b76-007e-4553-84ef-f1ec2812fa12"),
-                            CreatedAt = new DateTime(2022, 5, 23, 8, 55, 30, 179, DateTimeKind.Utc).AddTicks(3274),
-                            IsActive = true,
-                            IsDeleted = false,
-                            Name = "Network & Security",
-                            ParentId = new Guid("9e47da02-3d3e-248d-a207-d53908753582")
-                        },
-                        new
-                        {
-                            Id = new Guid("01c6f561-5c40-405a-ac7d-9c19cbe8417f"),
-                            CreatedAt = new DateTime(2022, 5, 23, 8, 55, 30, 179, DateTimeKind.Utc).AddTicks(3301),
-                            IsActive = true,
-                            IsDeleted = false,
-                            Name = "Hard Ware",
-                            ParentId = new Guid("9e47da02-3d3e-248d-a207-d53908753582")
-                        });
                 });
 
             modelBuilder.Entity("Course.DAL.Models.CloseCaption", b =>
@@ -486,24 +379,6 @@ namespace CourseAPI.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Courses");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("7244ed41-a870-4451-b93b-40457d4de898"),
-                            CategoryId = new Guid("29304f68-b4b7-4e3c-8151-04b03ba03cd2"),
-                            CourseLevel = 0,
-                            CreatedAt = new DateTime(2022, 5, 23, 8, 55, 30, 202, DateTimeKind.Utc).AddTicks(8319),
-                            DiscountPrice = 0m,
-                            IsActive = true,
-                            IsDeleted = false,
-                            Price = 0m,
-                            RequireEnroll = false,
-                            RequireLogin = false,
-                            Title = "New Course",
-                            UserId = new Guid("9e59da69-3d3e-428d-a207-d53908752532"),
-                            View = 0
-                        });
                 });
 
             modelBuilder.Entity("Course.DAL.Models.Enrollment", b =>
@@ -731,6 +606,9 @@ namespace CourseAPI.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("TotalTime")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -848,19 +726,19 @@ namespace CourseAPI.Migrations
                         new
                         {
                             Id = new Guid("9e59da69-3d3e-428d-a207-d53908753582"),
-                            ConcurrencyStamp = "7d9bda57-5e31-41fe-af3c-9a9acdc3b7e8",
+                            ConcurrencyStamp = "13201d82-91eb-4949-b6e5-3e2b7f750069",
                             Name = "Student"
                         },
                         new
                         {
                             Id = new Guid("9e59da69-3d3e-428d-a207-d5390875f522"),
-                            ConcurrencyStamp = "1030ba48-8cee-4fec-9b78-e8b9612d67c1",
+                            ConcurrencyStamp = "17745af8-eee7-412d-ac92-787dff3f35fe",
                             Name = "Instructor"
                         },
                         new
                         {
                             Id = new Guid("9e59da69-3d3e-428d-a207-d5390875f582"),
-                            ConcurrencyStamp = "c2721e89-9de5-4bac-9360-7334d103633f",
+                            ConcurrencyStamp = "dee0c2be-3c0f-4a0d-b5c0-bb6980769c62",
                             Name = "Admin"
                         });
                 });
