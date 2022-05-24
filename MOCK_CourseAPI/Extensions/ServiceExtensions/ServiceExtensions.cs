@@ -154,7 +154,10 @@ b.MigrationsAssembly("CourseAPI"));
             services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
             services.AddScoped<ICousesRepository, CousesRepository>();
             services.AddScoped<ISectionRepositoty, SectionRepositoty>();
-
+            services.AddScoped<ILessonRepository, LessonRepository>();
+            services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
+            services.AddScoped<ICourseCompletionRepository, CourseCompletionRepository>();
+            services.AddScoped<ILessonCompletionRepository, LessonCompletionRepository>();
         }
         /// <summary>
         /// Configure Services
@@ -167,11 +170,15 @@ b.MigrationsAssembly("CourseAPI"));
             services.AddScoped<IShoppingCartService, ShoppingCartService>();
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<IAccountService, AccountService>();
+         
             //services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IShoppingCartService, ShoppingCartService>();
+    
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<ISectionService, SectionService>();
+            services.AddScoped<ILessonService, LessonService>();
+            services.AddScoped<IEnrollmentService, EnrollmentService>();
+            services.AddScoped<ICourseCompletionService, CourseCompletionService>();
+            services.AddScoped<ILessonCompletionService, LessonCompletionService>();
         }
     }
 }
