@@ -162,6 +162,10 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<ICloseCaptionRepository, CloseCaptionRepository>();
             services.AddScoped<ILanguageRepository, LanguageRepository>();
 
+            services.AddScoped<ILessonRepository, LessonRepository>();
+            services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
+            services.AddScoped<ICourseCompletionRepository, CourseCompletionRepository>();
+            services.AddScoped<ILessonCompletionRepository, LessonCompletionRepository>();
         }
         /// <summary>
         /// Configure Services
@@ -173,6 +177,9 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IShoppingCartService, ShoppingCartService>();
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<IAccountService, AccountService>();
+         
+            //services.AddScoped<IUserService, UserService>();
+    
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<ISectionService, SectionService>();
             services.AddScoped<ILessonService, LessonService>();
@@ -184,6 +191,10 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IAudioLanguageService, AudioLanguageService>();
             services.AddScoped<ICloseCaptionService, CloseCaptionService>();
             services.AddScoped<ILanguageService, LanguageService>();
+            services.AddScoped<ILessonService, LessonService>();
+            services.AddScoped<IEnrollmentService, EnrollmentService>();
+            services.AddScoped<ICourseCompletionService, CourseCompletionService>();
+            services.AddScoped<ILessonCompletionService, LessonCompletionService>();
         }
     }
 }
