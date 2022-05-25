@@ -17,28 +17,49 @@ namespace CourseAPI.Controllers
             _userService = userService;
         }
 
+        /// <summary>
+        /// Get profile of user
+        /// https://gambolthemes.net/html-items/cursus_main_demo/my_instructor_profile_view.html
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("Get-Profile/{id}")]
-        public async Task<ActionResult<BaseResponse>> GetProfile(Guid id)
+        public async Task<ActionResult<UserProfileResponse>> GetProfile(Guid id)
         {
             var result = await _userService.GetProfile(id);
             if (result.IsSuccess == false)
                 return BadRequest(result);
+
             return Ok(result);
         }
 
-        [HttpPut("Update-Profile")]
-        public async Task<ActionResult<BaseResponse>> UpdateProfile(UpdateProfileRequest updateProfileRequest)
+        /// <summary>
+        /// Update profile of user
+        /// https://gambolthemes.net/html-items/cursus_main_demo/setting.html
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="updateProfileRequest"></param>
+        /// <returns></returns>
+        [HttpPut("Update-Profile/{id:Guid}")]
+        public async Task<ActionResult<UserProfileResponse>> UpdateProfile(Guid id,[FromBody]UpdateProfileRequest updateProfileRequest)
         {
-            var result = await _userService.UpdateProfile(updateProfileRequest);
+            var result = await _userService.UpdateProfile(id, updateProfileRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
         }
 
-        [HttpPut("Change-Password")]
-        public async Task<ActionResult<BaseResponse>> ChagePassword(ChangePasswordRequest changePasswordRequest)
+        /// <summary>
+        /// Change passowrd by User Id
+        /// not Page UI yet!
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="changePasswordRequest"></param>
+        /// <returns></returns>
+        [HttpPut("Change-Password/{id:Guid}")]
+        public async Task<ActionResult<BaseResponse>> ChagePassword(Guid id, [FromBody]ChangePasswordRequest changePasswordRequest)
         {
-            var result = await _userService.ChangePassword(changePasswordRequest);
+            var result = await _userService.ChangePassword(id, changePasswordRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);

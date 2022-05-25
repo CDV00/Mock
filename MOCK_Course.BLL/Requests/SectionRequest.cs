@@ -7,11 +7,9 @@ namespace Course.BLL.Requests
     {
         [Required]
         public string Title { get; set; }
-        public Guid CourseId { get; set; }
     }
     public class SectionUpdateRequest 
     {
-        public Guid Id { get; set; }
         [Required]
         public string Title { get; set; }
 

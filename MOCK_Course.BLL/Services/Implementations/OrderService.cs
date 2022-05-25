@@ -8,8 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Course.BLL.Services.Implementations
@@ -17,52 +15,54 @@ namespace Course.BLL.Services.Implementations
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly ICousesRepository _cousesRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         public OrderService(IOrderRepository orderRepository,
             IMapper mapper,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            ICousesRepository cousesRepository)
         {
             _orderRepository = orderRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _cousesRepository = cousesRepository;
         }
         /// <summary>
         /// Get All Order
         /// </summary>
         /// <returns></returns>
-        public async Task<Responses<OrderResponse>> GetAll()
-        {
-            try
-            {
-                var result = await _orderRepository.GetAll().Where(c => c.IsDeleted == false).ToListAsync();
-                return new Responses<OrderResponse>(true, _mapper.Map<IEnumerable<OrderResponse>>(result));
+        //public async Task<Responses<OrderResponse>> GetAll()
+        //{
+        //    try
+        //    {
+        //        var result = await _orderRepository.GetAll().Where(c => c.IsDeleted == false).ToListAsync();
+        //        return new Responses<OrderResponse>(true, _mapper.Map<IEnumerable<OrderResponse>>(result));
 
-            }
-            catch (Exception ex)
-            {
-                return new Responses<OrderResponse>(false, ex.Message, null);
-            }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new Responses<OrderResponse>(false, ex.Message, null);
+        //    }
 
-        }
+        //}
         /// <summary>
         /// get order by id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<Response<OrderResponse>> GetById(Guid id)
+        public async Task<Responses<OrderResponse>> GetAll(Guid UserId)
         {
             try
             {
-                var result = await _orderRepository.GetByIdAsync(id);
-                return new Response<OrderResponse>(true, _mapper.Map<OrderResponse>(result));
+                var result = await _orderRepository.GetAll().Where(o=>o.UserId == UserId).ToListAsync();
 
+                return new Responses<OrderResponse>(true, _mapper.Map<List<OrderResponse>>(result));
             }
             catch (Exception ex)
             {
-                return new Response<OrderResponse>(false, ex.Message, null);
+                return new Responses<OrderResponse>(false, ex.Message, null);
             }
-
         }
 
         /// <summary>
@@ -75,7 +75,10 @@ namespace Course.BLL.Services.Implementations
             try
             {
                 var order = _mapper.Map<Order>(orderRequest);
-                order.Id = new Guid();
+
+                var course = await _cousesRepository.GetByIdAsync(order.CourseId);
+                order.Price = course.Price;
+
                 await _orderRepository.CreateAsync(order);
                 await _unitOfWork.SaveChangesAsync();
                 return new Response<OrderResponse>(
@@ -99,40 +102,40 @@ namespace Course.BLL.Services.Implementations
             try
             {
                 var order = await _orderRepository.GetByIdAsync(id);
-                order.IsDeleted = true;
+                _orderRepository.Remove(order);
+
                 await _unitOfWork.SaveChangesAsync();
-                return new BaseResponse(true,"Delete success",null);
+                return new BaseResponse(true);
             }
             catch (Exception ex)
             {
                 return new BaseResponse(false,ex.Message,null);
             }
-
         }
 
 
-        /// <summary>
-        /// update order
-        /// </summary>
-        /// <param name="orderUpdateRequest"></param>
-        /// <returns></returns>
-        public async Task<Response<OrderResponse>> Update(OrderUpdateRequest orderUpdateRequest)
-        {
-            try
-            {
-                var order = _mapper.Map<Order>(orderUpdateRequest);
+        ///// <summary>
+        ///// update order
+        ///// </summary>
+        ///// <param name="orderUpdateRequest"></param>
+        ///// <returns></returns>
+        //public async Task<Response<OrderResponse>> Update(OrderUpdateRequest orderUpdateRequest)
+        //{
+        //    try
+        //    {
+        //        var order = _mapper.Map<Order>(orderUpdateRequest);
 
-                _orderRepository.Update(order);
-                await _unitOfWork.SaveChangesAsync();
-                return new Response<OrderResponse>(
-                    true,
-                    _mapper.Map<OrderResponse>(order)
-                );
-            }
-            catch (Exception ex)
-            {
-                return new Response<OrderResponse>(false, ex.Message, null);
-            }
-        }
+        //        _orderRepository.Update(order);
+        //        await _unitOfWork.SaveChangesAsync();
+        //        return new Response<OrderResponse>(
+        //            true,
+        //            _mapper.Map<OrderResponse>(order)
+        //        );
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new Response<OrderResponse>(false, ex.Message, null);
+        //    }
+        //}
     }
 }

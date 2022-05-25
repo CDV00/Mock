@@ -9,11 +9,8 @@ namespace Course.BLL.Requests
         public string VideoPoster { get; set; }
         public bool IsPreview { get; set; }
         public int TotalTime { get; set; }
-
-        public Guid SectionId { get; set; }
     }
     public class LessonUpdateRequest : LessonCreateRequest
     {
-        public Guid Id { get; set; }
     }
 }

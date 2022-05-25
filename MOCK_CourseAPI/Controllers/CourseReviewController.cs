@@ -20,39 +20,57 @@ namespace CourseAPI.Controllers
         {
             _courseReviewService = courseReviewService;
         }
+
+        /// <summary>
+        /// Get all review of course
+        /// https://gambolthemes.net/html-items/cursus_main_demo/course_detail_view.html
+        /// </summary>
+        /// <param name="CourseId"></param>
+        /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<Responses<CourseReviewResponse>>> GetAll()
+        public async Task<ActionResult<Responses<CourseReviewResponse>>> GetAll([FromQuery]Guid CourseId)
         {
-            var result = await _courseReviewService.GetAll();
+            var result = await _courseReviewService.GetAll(CourseId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
         }
 
-        [HttpGet("GetById/{id}")]
-        public async Task<ActionResult<Responses<CourseReviewResponse>>> GetById(Guid id)
-        {
-            var result = await _courseReviewService.GetById(id);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
-            return Ok(result);
-        }
+        /// <summary>
+        /// Add new review
+        /// </summary>
+        /// <param name="EnrellmentId"></param>
+        /// <param name="courseReviewRequest"></param>
+        /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Responses<CourseReviewResponse>>> Add(CourseReviewRequest courseReviewRequest)
+        public async Task<ActionResult<Responses<CourseReviewResponse>>> Add([FromQuery]Guid EnrellmentId,CourseReviewRequest courseReviewRequest)
         {
-            var result = await _courseReviewService.Add(courseReviewRequest);
+            var result = await _courseReviewService.Add(EnrellmentId,courseReviewRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
         }
+
+        /// <summary>
+        /// update review
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="courseReviewUpdateRequest"></param>
+        /// <returns></returns>
         [HttpPut]
-        public async Task<ActionResult<BaseResponse>> Update(CourseReviewUpdateRequest courseReviewUpdateRequest)
+        public async Task<ActionResult<BaseResponse>> Update([FromQuery]Guid id,CourseReviewUpdateRequest courseReviewUpdateRequest)
         {
-            var result = await _courseReviewService.Update(courseReviewUpdateRequest);
+            var result = await _courseReviewService.Update(id, courseReviewUpdateRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
         }
+
+        /// <summary>
+        /// Delete review
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete]
         public async Task<ActionResult<BaseResponse>> Delete(Guid id)
         {

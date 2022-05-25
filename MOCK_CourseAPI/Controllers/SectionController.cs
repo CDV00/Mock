@@ -17,35 +17,52 @@ namespace CourseAPI.Controllers
             _sectionService = sectionService;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<Responses<SectionResponse>>> GetAll([FromForm]Guid courseId)
+        /// <summary>
+        /// Get all course section by course Id 
+        /// https://gambolthemes.net/html-items/cursus_main_demo/create_new_course.html
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id:guid}")]
+        public async Task<ActionResult<Responses<SectionResponse>>> GetAll(Guid id)
         {
-            var result = await _sectionService.GetAll(courseId);
+            var result = await _sectionService.GetAll(id);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<Response<SectionResponse>>> Create([FromForm]SectionCreateRequest sectionRequest)
+        /// <summary>
+        /// Create new course section
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <param name="sectionRequest"></param>
+        /// <returns></returns>
+        [HttpPost("{courseId:guid}")]
+        public async Task<ActionResult<Response<SectionResponse>>> Create(Guid courseId,[FromBody]SectionCreateRequest sectionRequest)
         {
-            var result = await _sectionService.Add(sectionRequest);
+            var result = await _sectionService.Add(courseId, sectionRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
         }
 
-        [HttpPut]
-        public async Task<ActionResult<Response<SectionResponse>>> Update([FromForm]SectionUpdateRequest sectionUpdateRequest)
+        [HttpPut("{id:guid}")]
+        public async Task<ActionResult<Response<SectionResponse>>> Update(Guid id, [FromBody]SectionUpdateRequest sectionUpdateRequest)
         {
-            var result = await _sectionService.Update(sectionUpdateRequest);
+            var result = await _sectionService.Update(id, sectionUpdateRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
         }
 
-        [HttpDelete]
-        public async Task<ActionResult<BaseResponse>> Remove([FromForm] Guid id)
+        /// <summary>
+        /// Remove course section
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete("{id:guid}")]
+        public async Task<ActionResult<BaseResponse>> Remove(Guid id)
         {
             var result = await _sectionService.Remove(id);
             if (result.IsSuccess == false)

@@ -4,11 +4,12 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Course.DAL.Data;
+using Course.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Course.DAL.Repositories.Implementations
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public class Repository<T,K> : IRepository<T,K> where T : BaseEntity<K>
     {
         protected DbSet<T> DbSet;
         private readonly AppDbContext _context;
@@ -35,7 +36,11 @@ namespace Course.DAL.Repositories.Implementations
         /// Implement Remove method
         /// </summary>
         /// <param name="_object"></param>
-        public virtual void Remove(T _object) => DbSet.Remove(_object);
+        public virtual void Remove(T _object)
+        {
+            _context.Entry(_object).State = EntityState.Modified;
+            _object.IsDeleted = true;
+        }
 
 
         /// <summary>
@@ -54,10 +59,11 @@ namespace Course.DAL.Repositories.Implementations
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        public T GetById(Guid Id)
+        public T GetById(K Id)
         {
             var data = DbSet.Find(Id);
-            _context.Entry(data).State = EntityState.Modified;
+            if (data == null) return null;
+            _context.Entry(data).State = EntityState.Detached;
             return data;
         }
 
@@ -66,10 +72,11 @@ namespace Course.DAL.Repositories.Implementations
         /// </summary>
         /// <param name="Id"></param>
         /// <returns>T</returns>
-        public async Task<T> GetByIdAsync(Guid Id)
+        public async Task<T> GetByIdAsync(K Id)
         {
             var data = await DbSet.FindAsync(Id);
-            _context.Entry(data).State = EntityState.Modified;
+            if(data==null) return null;
+            _context.Entry(data).State = EntityState.Detached;
             return data;
         }
 
@@ -78,13 +85,21 @@ namespace Course.DAL.Repositories.Implementations
         /// </summary>
         /// <param name="_object"></param>
         /// <returns></returns>
-        public bool Update(T _object)
+        public bool Update(K id, object _object)
         {
-            DbSet.Attach(_object);
-            _context.Entry(_object).State = EntityState.Modified;
+            //DbSet.Attach(_object);
+            //_context.Entry(_object).State = EntityState.Modified;
+            //return true;
+            var entity = DbSet.Find(id);
+            if (entity == null)
+            {
+                return false;
+            }
+
+            _context.Entry(entity).CurrentValues.SetValues(_object);
             return true;
         }
-
+        
         /// <summary>
         /// Find by Condition
         /// </summary>

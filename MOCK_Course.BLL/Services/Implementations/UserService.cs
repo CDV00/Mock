@@ -37,11 +37,11 @@ namespace Course.BLL.Services.Implementations
                 return new Response<UserProfileResponse>(false, ex.Message, null);
             }
         }
-        public async Task<Responsesnamespace.BaseResponse> ChangePassword(ChangePasswordRequest changePasswordRequest)
+        public async Task<BaseResponse> ChangePassword(Guid Id, ChangePasswordRequest changePasswordRequest)
         {
             try
             {
-                var user = await _userManager.FindByIdAsync(changePasswordRequest.Id.ToString());
+                var user = await _userManager.FindByIdAsync(Id.ToString());
 
                 if (user == null)
                     return new BaseResponse(false,null,"can't find user");
@@ -65,14 +65,14 @@ namespace Course.BLL.Services.Implementations
         }
 
 
-        public async Task<Response<UserProfileResponse>> UpdateProfile(UpdateProfileRequest updateProfileRequest)
+        public async Task<Response<UserProfileResponse>> UpdateProfile(Guid Id, UpdateProfileRequest updateProfileRequest)
         {
             try
             {
                 
                 //var user = _mapper.Map<AppUser>(updateProfileRequest);
 
-                var user = await _userManager.FindByIdAsync(updateProfileRequest.Id.ToString());
+                var user = await _userManager.FindByIdAsync(Id.ToString());
                 
                 user.Fullname = updateProfileRequest.FirstName + updateProfileRequest.LastName;
                 user.FirstName = updateProfileRequest.FirstName;
@@ -83,9 +83,8 @@ namespace Course.BLL.Services.Implementations
                 user.YoutubeLink = updateProfileRequest.YoutubeLink;
                 user.HeadLine = updateProfileRequest.HeadLine;
                 user.Description = updateProfileRequest.Description;
-                
                 await _userManager.UpdateAsync(user);
-                 
+
                 return new Response<UserProfileResponse>(
                     true,
                     _mapper.Map<UserProfileResponse>(user)

@@ -24,11 +24,12 @@ namespace Course.BLL.Services.Implementations
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
-        public async Task<Response<LessonResponse>> Add(LessonCreateRequest LessonRequest)
+        public async Task<Response<LessonResponse>> Add(Guid SectionId, LessonCreateRequest LessonRequest)
         {
             try
             {
                 var Lesson = _mapper.Map<Lesson>(LessonRequest);
+                Lesson.SectionId = SectionId;
 
                 await _LessonRepositoty.CreateAsync(Lesson);
                 await _unitOfWork.SaveChangesAsync();
@@ -56,7 +57,7 @@ namespace Course.BLL.Services.Implementations
             }
         }
 
-        public async Task<Responsesnamespace.BaseResponse> Remove(Guid idLesson)
+        public async Task<BaseResponse> Remove(Guid idLesson)
         {
             try
             {
@@ -67,20 +68,20 @@ namespace Course.BLL.Services.Implementations
             }
             catch (Exception ex)
             {
-                return new Responses<Responsesnamespace.BaseResponse>(false, ex.Message, null);
+                return new Responses<BaseResponse>(false, ex.Message, null);
             }
         }
 
-        public async Task<Response<LessonResponse>> Update(LessonUpdateRequest LessonRequest)
+        public async Task<Response<LessonResponse>> Update(Guid id,LessonUpdateRequest LessonRequest)
         {
             try
             {
-                if (_LessonRepositoty.GetById(LessonRequest.Id) == null)
+                if (_LessonRepositoty.GetById(id) == null)
                     return new Response<LessonResponse>(false, "can't find this lesson",null);
 
                 var Lesson = _mapper.Map<Lesson>(LessonRequest);
 
-                _LessonRepositoty.Update(Lesson);
+                _LessonRepositoty.Update(id, Lesson);
                 await _unitOfWork.SaveChangesAsync();
                 return new Response<LessonResponse>(
                     true,

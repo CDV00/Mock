@@ -27,15 +27,15 @@ namespace Course.BLL.Services.Implementations
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Response<BaseResponse>> Add(LessonCompletionRequest lessonCompletionRequest)
+        public async Task<BaseResponse> Add(LessonCompletionRequest lessonCompletionRequest)
         {
             try
             {
                 var lessoncompletion = _mapper.Map<LessonCompletion>(lessonCompletionRequest);
                 await _lessonCompletionRepository.CreateAsync(lessoncompletion);
                 await _unitOfWork.SaveChangesAsync();
-                return new Response<BaseResponse>(
-                    true, null);
+
+                return new BaseResponse(true);
             }
             catch (Exception ex)
             {
@@ -43,55 +43,64 @@ namespace Course.BLL.Services.Implementations
             }
         }
 
-        public async Task<Responses<LessonCompletionResponse>> GetAll(Guid userId)
+        public async Task<BaseResponse> IsSucceed(LessonCompletionRequest lessonCompletionRequest)
         {
-            try
+                if(await _lessonCompletionRepository.FindByCondition(l=>l.UserId == lessonCompletionRequest.UserId && l.LessonId == lessonCompletionRequest.LessonId).FirstOrDefaultAsync() == null)
             {
-                var result = await _lessonCompletionRepository.GetAll().Where(s => s.UserId == userId).Include(s => s.User).Include(s => s.Lesson).Include(s => s.User).ToListAsync();
-
-                return new Responses<LessonCompletionResponse>(true, _mapper.Map<IEnumerable<LessonCompletionResponse>>(result));
+                return new BaseResponse(false);
             }
-            catch (Exception ex)
-            {
-                return new Responses<LessonCompletionResponse>(false, ex.Message, null);
-            }
+            return new BaseResponse(true);
         }
 
-        public async Task<BaseResponse> Remove(Guid IdLessonCompletion)
-        {
-            try
-            {
-                var result = await _lessonCompletionRepository.GetByIdAsync(IdLessonCompletion);
+        //public async Task<Responses<LessonCompletionResponse>> GetAll(Guid userId)
+        //{
+        //    try
+        //    {
+        //        var result = await _lessonCompletionRepository.GetAll().Where(s => s.UserId == userId).Include(s => s.User).Include(s => s.Lesson).Include(s => s.User).ToListAsync();
 
-                _lessonCompletionRepository.Remove(result);
-                await _unitOfWork.SaveChangesAsync();
+        //        return new Responses<LessonCompletionResponse>(true, _mapper.Map<IEnumerable<LessonCompletionResponse>>(result));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new Responses<LessonCompletionResponse>(false, ex.Message, null);
+        //    }
+        //}
 
-                return new BaseResponse { IsSuccess = true };
+        //public async Task<BaseResponse> Remove(Guid IdLessonCompletion)
+        //{
+        //    try
+        //    {
+        //        var result = await _lessonCompletionRepository.GetByIdAsync(IdLessonCompletion);
 
-            }
-            catch (Exception ex)
-            {
-                return new Responses<BaseResponse>(false, ex.Message, null);
-            }
-        }
-        public async Task<Response<LessonCompletionResponse>> Update(LessonCompletionUpdateRequest LessonCompletionUpdateRequest)
-        {
-            try
-            {
-                var lessoncompletion = _mapper.Map<LessonCompletion>(LessonCompletionUpdateRequest);
+        //        _lessonCompletionRepository.Remove(result);
+        //        await _unitOfWork.SaveChangesAsync();
 
-                _lessonCompletionRepository.Update(lessoncompletion);
-                await _unitOfWork.SaveChangesAsync();
-                return new Response<LessonCompletionResponse>(
-                    true,
-                    _mapper.Map<LessonCompletionResponse>(lessoncompletion)
-                );
-            }
-            catch (Exception ex)
-            {
-                return new Response<LessonCompletionResponse>(false, ex.Message, null);
-            }
-        }
+        //        return new BaseResponse { IsSuccess = true };
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new Responses<BaseResponse>(false, ex.Message, null);
+        //    }
+        //}
+        //public async Task<Response<LessonCompletionResponse>> Update(LessonCompletionUpdateRequest LessonCompletionUpdateRequest)
+        //{
+        //    try
+        //    {
+        //        var lessoncompletion = _mapper.Map<LessonCompletion>(LessonCompletionUpdateRequest);
+
+        //        _lessonCompletionRepository.Update(lessoncompletion);
+        //        await _unitOfWork.SaveChangesAsync();
+        //        return new Response<LessonCompletionResponse>(
+        //            true,
+        //            _mapper.Map<LessonCompletionResponse>(lessoncompletion)
+        //        );
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new Response<LessonCompletionResponse>(false, ex.Message, null);
+        //    }
+        //}
 
     }
 }

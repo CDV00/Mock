@@ -36,10 +36,14 @@ namespace Course.BLL.Extensions
             //course
             CreateMap<Courses, CourseRequest>().ForMember(des=>des.AudioLanguages,opt=>opt.MapFrom(src=>src.AudioLanguages)).ForMember(des => des.CloseCaptions, opt => opt.MapFrom(src => src.CloseCaptions)).ReverseMap();
             CreateMap<Courses, UpdateCourseRequest>().ForMember(des => des.AudioLanguages, opt => opt.MapFrom(src => src.AudioLanguages)).ForMember(des => des.CloseCaptions, opt => opt.MapFrom(src => src.CloseCaptions)).ReverseMap();
+
             CreateMap<AppUser, UserCourseResponse>().ReverseMap();
             CreateMap<Category, CategoryCourseRespones>().ReverseMap();
-            CreateMap<Courses, CoursesCartResponse>().ForMember(des => des.UserResponse, opt => opt.MapFrom(src => src.User)).ForMember(des => des.CategoryResponse, opt => opt.MapFrom(src => src.Category)).ReverseMap();
-            CreateMap<CourseResponse, Courses>().ReverseMap();
+            CreateMap<Courses, CoursesCardResponse>().ForMember(des => des.UserResponse, opt => opt.MapFrom(src => src.User)).ForMember(des => des.CategoryResponse, opt => opt.MapFrom(src => src.Category)).ReverseMap();
+
+            CreateMap<AudioLanguageCreateResponse, AudioLanguage>().ReverseMap();
+            CreateMap<CloseCaptionCreateResponse,CloseCaption>().ReverseMap();
+            CreateMap<CourseResponse, Courses>().ForMember(des => des.AudioLanguages, opt => opt.MapFrom(src => src.AudioLanguages)).ForMember(des => des.CloseCaptions, opt => opt.MapFrom(src => src.CloseCaptions)).ReverseMap();
 
             // map cart
             CreateMap<CartRequest, CartResponse>().ReverseMap();
@@ -77,6 +81,7 @@ namespace Course.BLL.Extensions
 
             // map lesson completion
             CreateMap<LessonCompletionRequest, LessonCompletionResponse>().ReverseMap();
+            CreateMap<LessonCompletionRequest, LessonCompletion>().ReverseMap();
             CreateMap<LessonCompletionUser, AppUser>().ReverseMap();
             CreateMap<LessonCompletionLession, Lesson>().ReverseMap();
             CreateMap<LessonCompletion, LessonCompletionResponse>().ForMember(des => des.LessonCompUser, opt => opt.MapFrom(src => src.User)).ForMember(des => des.Lesson, opt => opt.MapFrom(src => src.Lesson)).ReverseMap();

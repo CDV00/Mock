@@ -17,41 +17,43 @@ namespace CourseAPI.Controllers
         {
             _orderService = orderService;
         }
-        [HttpGet]
-        public async Task<ActionResult<Responses<OrderResponse>>> GetAll()
+
+        /// <summary>
+        /// Get all purchased courses user
+        /// https://gambolthemes.net/html-items/cursus_main_demo/student_courses.html
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        [HttpGet("{UserId:guid}")]
+        public async Task<ActionResult<Responses<OrderResponse>>> GetAll(Guid UserId)
         {
-            var result = await _orderService.GetAll();
+            var result = await _orderService.GetAll(UserId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
         }
 
-        [HttpGet("GetById/{id}")]
-        public async Task<ActionResult<Responses<OrderResponse>>> GetById(Guid id)
-        {
-            var result = await _orderService.GetById(id);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
-            return Ok(result);
-        }
+        /// <summary>
+        /// this will call, when Payment success then it will create new order record
+        /// </summary>
+        /// <param name="orderRequest"></param>
+        /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Responses<OrderResponse>>> Add(OrderRequest orderRequest)
+        public async Task<ActionResult<Response<OrderResponse>>> Add([FromQuery] OrderRequest orderRequest)
         {
             var result = await _orderService.Add(orderRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
         }
-        [HttpPut]
-        public async Task<ActionResult<BaseResponse>> Update(OrderUpdateRequest orderUpdateRequest)
-        {
-            var result = await _orderService.Update(orderUpdateRequest);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
-            return Ok(result);
-        }
+
+        /// <summary>
+        /// Delete order 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete]
-        public async Task<ActionResult<BaseResponse>> Delete(Guid id)
+        public async Task<ActionResult<BaseResponse>> Delete([FromQuery] Guid id)
         {
             var result = await _orderService.Delete(id);
             if (result.IsSuccess == false)

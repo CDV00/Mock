@@ -1,17 +1,14 @@
 ﻿using Course.DAL.Data;
 using Course.DAL.Models;
+using System;
 
 namespace Course.DAL.Repositories.Implementations
 {
-    public class EnrollmentRepository : Repository<Enrollment>, IEnrollmentRepository
+    public class EnrollmentRepository : Repository<Enrollment, Guid>, IEnrollmentRepository
     {
         public EnrollmentRepository(AppDbContext context): base(context)
         {
 
-        }
-        public override void Remove(Enrollment _object)
-        {
-            _object.IsDeleted = true;
         }
     }
 }

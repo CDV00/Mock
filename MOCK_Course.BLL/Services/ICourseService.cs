@@ -8,9 +8,10 @@ namespace Course.BLL.Services
 {
     public interface ICourseService
     {
-        Task<Responses<CoursesCartResponse>> GetAll();
-        Task<Response<CourseResponse>> Add(CourseRequest courseRequest);
-        Task<Response<CourseResponse>> Update(UpdateCourseRequest courseRequest);
-        Task<BaseResponse> Remove(Guid idCourse);
+        Task<Responses<CoursesCardResponse>> GetAll();
+        Task<Response<CourseResponse>> Get(Guid id);
+        Task<Response<CourseResponse>> Add(Guid userId, CourseRequest courseRequest);
+        Task<Response<CourseResponse>> Update(Guid id,UpdateCourseRequest courseRequest);
+        Task<BaseResponse> Remove(Guid id);
     }
 }

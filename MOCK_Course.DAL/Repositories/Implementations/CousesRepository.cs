@@ -1,17 +1,15 @@
 ﻿using Course.DAL.Data;
 using Course.DAL.Models;
+using System;
 
 namespace Course.DAL.Repositories.Implementations
 {
-    public class CousesRepository : Repository<Courses>, ICousesRepository
+    public class CousesRepository : Repository<Courses, Guid>, ICousesRepository
     {
+        private AppDbContext _context;
         public CousesRepository(AppDbContext context): base(context)
         {
-
-        }
-        public override void Remove(Courses _object)
-        {
-            _object.IsDeleted = true;
+            _context = context;
         }
     }
 }

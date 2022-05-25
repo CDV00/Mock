@@ -12,6 +12,6 @@ namespace Course.BLL.Requests
     }
     public class CourseCompletionUpdateRequest : CourseCompletionRequest
     {
-        public Guid Id { get; set; }
+        //public Guid Id { get; set; }
     }
 }

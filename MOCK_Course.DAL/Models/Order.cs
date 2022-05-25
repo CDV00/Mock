@@ -6,7 +6,7 @@ namespace Course.DAL.Models
     {
         public Guid UserId { get; set; }
         public Guid CourseId { get; set; }
-        public float Price { get; set; }
+        public decimal Price { get; set; }
 
         public AppUser User { get; set; }
         public Courses Course { get; set; }

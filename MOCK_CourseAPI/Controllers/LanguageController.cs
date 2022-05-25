@@ -17,7 +17,8 @@ namespace CourseAPI.Controllers
             _LanguageService = LanguageService;
         }
         /// <summary>
-        /// Get All Language and sub-Language
+        /// Get All Language and sub-Language to create course
+        /// https://gambolthemes.net/html-items/cursus_main_demo/create_new_course.html
         /// </summary>
         /// <returns></returns>
         [HttpGet]

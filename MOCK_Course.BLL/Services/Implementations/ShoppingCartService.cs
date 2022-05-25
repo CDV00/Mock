@@ -26,19 +26,22 @@ namespace Course.BLL.Services.Implementations
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Response<Responsesnamespace.BaseResponse>> Add(CartRequest cartRequest)
+        public async Task<Response<CartResponse>> Add(Guid UserId,CartRequest cartRequest)
         {
             try
             {
                 var cart = _mapper.Map<ShoppingCart>(cartRequest);
+                cart.UserId = UserId;
                 await _shoppingCartRepository.CreateAsync(cart);
                 await _unitOfWork.SaveChangesAsync();
-                return new Response<Responsesnamespace.BaseResponse>(
-                    true, null);
+
+                var cartResponse = _mapper.Map<CartResponse>(cart);
+                return new Response<CartResponse>(
+                    true, cartResponse);
             }
             catch (Exception ex)
             {
-                return new Response<Responsesnamespace.BaseResponse>(false, ex.Message, null);
+                return new Response<CartResponse>(false, ex.Message, null);
             }
         }
 
@@ -56,7 +59,7 @@ namespace Course.BLL.Services.Implementations
             }
         }
 
-        public async Task<Responsesnamespace.BaseResponse> Remove(Guid IdShoppingCart)
+        public async Task<BaseResponse> Remove(Guid IdShoppingCart)
         {
             try
             {
@@ -65,12 +68,12 @@ namespace Course.BLL.Services.Implementations
                 _shoppingCartRepository.Remove(result);
                 await _unitOfWork.SaveChangesAsync();
 
-                return new Responsesnamespace.BaseResponse { IsSuccess = true };
+                return new BaseResponse { IsSuccess = true };
 
             }
             catch (Exception ex)
             {
-                return new Responses<Responsesnamespace.BaseResponse>(false, ex.Message, null);
+                return new Responses<BaseResponse>(false, ex.Message, null);
             }
         }
 

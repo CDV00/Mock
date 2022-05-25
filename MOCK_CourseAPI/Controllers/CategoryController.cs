@@ -31,6 +31,7 @@ namespace CourseAPI.Controllers
 
         /// <summary>
         /// Create new Category
+        /// don't have Page yet
         /// </summary>
         /// <param name="categoryRequest">CategoryResponse</param>
         /// <returns></returns>
@@ -45,13 +46,14 @@ namespace CourseAPI.Controllers
 
         /// <summary>
         /// Update an Category
+        /// don't have Page yet
         /// </summary>
         /// <param name="categoryUpdateRequest">CategoryUpdate</param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<ActionResult<Response<CategoryResponse>>> Update(CategoryUpdateRequest categoryUpdateRequest)
+        public async Task<ActionResult<Response<CategoryResponse>>> Update([FromQuery]Guid id, CategoryUpdateRequest categoryUpdateRequest)
         {
-            var result = await _categoryService.Update(categoryUpdateRequest);
+            var result = await _categoryService.Update(id, categoryUpdateRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
@@ -59,6 +61,7 @@ namespace CourseAPI.Controllers
 
         /// <summary>
         /// Delete an Category
+        /// don't have Page yet
         /// </summary>
         /// <param name="Id">Id Category</param>
         /// <returns></returns>

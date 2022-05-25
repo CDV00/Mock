@@ -17,61 +17,20 @@ namespace CourseAPI.Controllers
         {
             _enrollmentService = enrollmentService;
         }
-        /// <summary>
-        /// Get all Enrollment of user
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        [HttpGet]
-        public async Task<ActionResult<Responses<EnrollmentResponse>>> GetAll(Guid userId)
-        {
-            var result = await _enrollmentService.GetAll(userId);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
-            return Ok(result);
-        }
 
         /// <summary>
-        /// Add Enrollment of user
+        /// when user press enrellment one course
+        /// https://gambolthemes.net/html-items/cursus_main_demo/course_detail_view.html
         /// </summary>
         /// <param name="enrollmentRequest"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<BaseResponse>> Create([FromBody]EnrollmentRequest enrollmentRequest)
+        public async Task<ActionResult<BaseResponse>> Create([FromQuery]EnrollmentRequest enrollmentRequest)
         {
             var result = await _enrollmentService.Add(enrollmentRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
         }
-        /// <summary>
-        /// Update Enrollment
-        /// </summary>
-        /// <param name="enrollmentUpdateRequest"></param>
-        /// <returns></returns>
-        [HttpPut]
-        public async Task<ActionResult<EnrollmentResponse>> Update(EnrollmentUpdateRequest enrollmentUpdateRequest)
-        {
-            var result = await _enrollmentService.Update(enrollmentUpdateRequest);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
-            return Ok(result);
-        }
-
-        /// <summary>
-        /// Remove Enrollment
-        /// </summary>
-        /// <param name="errollmentId"></param>
-        /// <returns></returns>
-        [HttpDelete]
-        public async Task<ActionResult<BaseResponse>> Remove([FromForm] Guid errollmentId)
-        {
-            var result = await _enrollmentService.Remove(errollmentId);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
-            return Ok(result);
-        }
-
     }
 }

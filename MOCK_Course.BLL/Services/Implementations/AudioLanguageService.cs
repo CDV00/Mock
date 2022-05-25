@@ -4,7 +4,9 @@ using Course.BLL.Responses;
 using Course.BLL.Responsesnamespace;
 using Course.DAL.Models;
 using Course.DAL.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Course.BLL.Services.Implementations
@@ -40,6 +42,26 @@ namespace Course.BLL.Services.Implementations
             catch (Exception ex)
             {
                 return new Response<AudioLanguageCreateResponse>(false, ex.Message, null);
+            }
+        }
+
+        public async Task<BaseResponse> RemoveAll(Guid courseId)
+        {
+            try
+            {
+                var audioLanguages = await _AudioLanguageRepositoty.GetAll().Where(a => a.CourseId == courseId).ToListAsync();
+
+                foreach(var item in audioLanguages)
+                {
+                    _AudioLanguageRepositoty.Remove(item);
+                }
+
+                await _unitOfWork.SaveChangesAsync();
+                return new BaseResponse(true);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse(false, ex.Message, null);
             }
         }
     }

@@ -24,11 +24,7 @@ namespace Course.BLL.Services.Implementations
         /// <param name="courseReviewRepository"></param>
         /// <param name="unitOfWork"></param>
         /// <param name="mapper"></param>
-        public CourseReviewService(
-                                        ICourseReviewRepository courseReviewRepository,
-                                        IUnitOfWork unitOfWork,
-                                        IMapper mapper
-                                  )
+        public CourseReviewService(ICourseReviewRepository courseReviewRepository,IUnitOfWork unitOfWork,IMapper mapper)
         {
             _courseReviewRepository = courseReviewRepository;
             _unitOfWork = unitOfWork;
@@ -38,13 +34,13 @@ namespace Course.BLL.Services.Implementations
         /// get all course review
         /// </summary>
         /// <returns></returns>
-        public async Task<Responses<CourseReviewResponse>> GetAll()
+        public async Task<Responses<CourseReviewResponse>> GetAll(Guid courseId)
         {
             try
             {
-                var result = await _courseReviewRepository.GetAll().Where(c => c.IsActive == true && c.IsDeleted == false).ToListAsync();
-                return new Responses<CourseReviewResponse>(true, _mapper.Map<IEnumerable<CourseReviewResponse>>(result));
+                var result = await _courseReviewRepository.GetAll().Where(c=>c.Enrollment.CourseId == courseId).ToListAsync();
 
+                return new Responses<CourseReviewResponse>(true, _mapper.Map<IEnumerable<CourseReviewResponse>>(result));
             }
             catch (Exception ex)
             {
@@ -57,33 +53,34 @@ namespace Course.BLL.Services.Implementations
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<Response<CourseReviewResponse>> GetById(Guid id)
-        {
-            try
-            {
-                var result = await _courseReviewRepository.GetByIdAsync(id);
-                return new Response<CourseReviewResponse>(true, _mapper.Map<CourseReviewResponse>(result));
+        //public async Task<Response<CourseReviewResponse>> GetById(Guid id)
+        //{
+        //    try
+        //    {
+        //        var result = await _courseReviewRepository.GetByIdAsync(id);
+        //        return new Response<CourseReviewResponse>(true, _mapper.Map<CourseReviewResponse>(result));
 
-            }
-            catch (Exception ex)
-            {
-                return new Response<CourseReviewResponse>(false, ex.Message, null);
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new Response<CourseReviewResponse>(false, ex.Message, null);
+        //    }
+        //}
         /// <summary>
         /// create new course review
         /// </summary>
         /// <param name="courseReviewRequest"></param>
         /// <returns></returns>
-        public async Task<Response<CourseReviewResponse>> Add(CourseReviewRequest courseReviewRequest)
+        public async Task<Response<CourseReviewResponse>> Add(Guid EnrollmentId, CourseReviewRequest courseReviewRequest)
         {
             try
             {
                 var courseReview = _mapper.Map<CourseReview>(courseReviewRequest);
-                courseReview.Id = new Guid();
+
+                courseReview.EnrollmentId = EnrollmentId;
                 await _courseReviewRepository.CreateAsync(courseReview);
                 await _unitOfWork.SaveChangesAsync();
-                return new Response<CourseReviewResponse>( true, _mapper.Map<CourseReviewResponse>(courseReview) );
+                return new Response<CourseReviewResponse>(true, _mapper.Map<CourseReviewResponse>(courseReview));
             }
             catch (Exception ex)
             {
@@ -95,13 +92,13 @@ namespace Course.BLL.Services.Implementations
         /// </summary>
         /// <param name="courseReviewUpdateRequest"></param>
         /// <returns></returns>
-        public async Task<Response<CourseReviewResponse>> Update(CourseReviewUpdateRequest courseReviewUpdateRequest)
+        public async Task<Response<CourseReviewResponse>> Update(Guid id, CourseReviewUpdateRequest courseReviewUpdateRequest)
         {
             try
             {
                 var courseReview = _mapper.Map<CourseReview>(courseReviewUpdateRequest);
 
-                _courseReviewRepository.Update(courseReview);
+                _courseReviewRepository.Update(id, courseReview);
                 await _unitOfWork.SaveChangesAsync();
                 return new Response<CourseReviewResponse>(
                     true,
@@ -122,8 +119,9 @@ namespace Course.BLL.Services.Implementations
         {
             try
             {
-                var order = await _courseReviewRepository.GetByIdAsync(id);
-                order.IsDeleted = true;
+                var courseReview = await _courseReviewRepository.GetByIdAsync(id);
+
+                _courseReviewRepository.Remove(courseReview);
                 await _unitOfWork.SaveChangesAsync();
                 return new BaseResponse(true, "Delete success", null);
             }

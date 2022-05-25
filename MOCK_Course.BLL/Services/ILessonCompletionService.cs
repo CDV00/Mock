@@ -1,16 +1,14 @@
 ﻿using System.Threading.Tasks;
-using Course.BLL.Responses;
 using Course.BLL.Requests;
-using System;
 using Course.BLL.Responsesnamespace;
 
 namespace Course.BLL.Services
 {
     public interface ILessonCompletionService
     {
-        Task<Responses<LessonCompletionResponse>> GetAll(Guid userId);
-        Task<Response<BaseResponse>> Add(LessonCompletionRequest lessonCompletionRequest);
-        Task<BaseResponse> Remove(Guid userId);
-        Task<Response<LessonCompletionResponse>> Update(LessonCompletionUpdateRequest lessonCompletionUpdateRequest);
+        Task<BaseResponse> IsSucceed(LessonCompletionRequest lessonCompletionRequest);
+        Task<BaseResponse> Add(LessonCompletionRequest lessonCompletionRequest);
+        //Task<BaseResponse> Remove(Guid userId);
+        //Task<Response<LessonCompletionResponse>> Update(LessonCompletionUpdateRequest lessonCompletionUpdateRequest);
     }
 }

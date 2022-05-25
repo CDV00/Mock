@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Course.DAL.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Course.DAL.Repositories
 {
-    public interface IRepository<T> where T : class
+    public interface IRepository<T, K> where T : BaseEntity <K>
     {
         /// <summary>
         /// Get All
@@ -27,14 +28,14 @@ namespace Course.DAL.Repositories
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        T GetById(Guid Id);
+        T GetById(K Id);
 
         /// <summary>
         /// Get by Id Async
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        Task<T> GetByIdAsync(Guid Id);
+        Task<T> GetByIdAsync(K Id);
 
         /// <summary>
         /// Create new
@@ -54,7 +55,7 @@ namespace Course.DAL.Repositories
         /// Update record
         /// </summary>
         /// <param name="_object"></param>
-        bool Update(T _object);
+        bool Update(K id,object _object);
 
 
         /// <summary>

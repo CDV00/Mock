@@ -1,5 +1,4 @@
-﻿using Course.BLL.Requests;
-using Course.DAL.Models;
+﻿using Course.DAL.Models;
 using System;
 using System.Collections.Generic;
 
@@ -7,6 +6,7 @@ namespace Course.BLL.Responses
 {
     public class CourseResponse
     {
+        public Guid Id { get; set; }
         public string Title { get; set; }
         public string ShortDescription { get; set; }
         public string Description { get; set; }
@@ -31,7 +31,6 @@ namespace Course.BLL.Responses
 
         public Guid UserId { get; set; }
         public Guid CategoryId { get; set; }
-        public Guid Id { get; set; }
 
         public IList<AudioLanguageCreateResponse> AudioLanguages { get; set; }
         public IList<CloseCaptionCreateResponse> CloseCaptions { get; set; }

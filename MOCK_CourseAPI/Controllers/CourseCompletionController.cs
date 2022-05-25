@@ -18,62 +18,18 @@ namespace CourseAPI.Controllers
             _courseCompletionService = courseCompletionService;
         }
 
-
         /// <summary>
-        /// Get All Course Completion
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<ActionResult<Responses<CourseCompletionResponse>>> GetAll(Guid userId)
-        {
-            var result = await _courseCompletionService.GetAll(userId);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
-            return Ok(result);
-        }
-        
-        /// <summary>
-        /// Add Course Completion
+        /// User finished all lesson of course
         /// </summary>
         /// <param name="courseCompletionRequest"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<BaseResponse>> Create([FromBody]CourseCompletionRequest courseCompletionRequest)
+        public async Task<ActionResult<BaseResponse>> Create([FromQuery]CourseCompletionRequest courseCompletionRequest)
         {
             var result = await _courseCompletionService.Add(courseCompletionRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
         }
-
-        /// <summary>
-        /// Update Course Completion
-        /// </summary>
-        /// <param name="courseCompletionUpdateRequest"></param>
-        /// <returns></returns>
-        [HttpPut]
-        public async Task<ActionResult<CourseCompletionResponse>> Update(CourseCompletionUpdateRequest courseCompletionUpdateRequest)
-        {
-            var result = await _courseCompletionService.Update(courseCompletionUpdateRequest);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
-            return Ok(result);
-        }
-
-        /// <summary>
-        ///  Remove Course Completion
-        /// </summary>
-        /// <param name="IdcourseCompletion"></param>
-        /// <returns></returns>
-        [HttpDelete]
-        public async Task<ActionResult<BaseResponse>> Remove([FromForm]Guid IdcourseCompletion)
-        {
-            var result = await _courseCompletionService.Remove(IdcourseCompletion);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
-            return Ok(result);
-        }
-
     }
 }

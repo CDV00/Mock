@@ -14,7 +14,7 @@ namespace Course.BLL.Extensions
         /// <param name="services"></param>
         public static void ConfigureRepositories(IServiceCollection services)
         {
-            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ICousesRepository, CousesRepository>();

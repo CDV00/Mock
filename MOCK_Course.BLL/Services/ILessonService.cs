@@ -8,8 +8,8 @@ namespace Course.BLL.Services
     public interface ILessonService
     {
         Task<Responses<LessonResponse>> GetAll(Guid courseId);
-        Task<Response<LessonResponse>> Add(LessonCreateRequest LessonRequest);
+        Task<Response<LessonResponse>> Add(Guid SectionId, LessonCreateRequest LessonRequest);
         Task<BaseResponse> Remove(Guid idLesson);
-        Task<Response<LessonResponse>> Update(LessonUpdateRequest LessonRequest);
+        Task<Response<LessonResponse>> Update(Guid id,LessonUpdateRequest LessonRequest);
     }
 }

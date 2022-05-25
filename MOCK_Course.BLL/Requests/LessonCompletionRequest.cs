@@ -6,12 +6,11 @@ namespace Course.BLL.Requests
     public class LessonCompletionRequest
     {
         [Required]
-        public Guid CourseId { get; set; }
+        public Guid LessonId { get; set; }
         [Required]
         public Guid UserId { get; set; }
     }
     public class LessonCompletionUpdateRequest : LessonCompletionRequest
     {
-        public Guid Id { get; set; }
     } 
 }

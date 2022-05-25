@@ -19,6 +19,7 @@ namespace CourseAPI.Controllers
 
         /// <summary>
         /// Get all shoppingCart of user
+        /// https://gambolthemes.net/html-items/cursus_main_demo/shopping_cart.html
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
@@ -31,15 +32,17 @@ namespace CourseAPI.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
+
         /// <summary>
-        /// Add Shopping Cart of user
+        /// when user click "add cart", will create new cart
         /// </summary>
+        /// <param name="UserId"></param>
         /// <param name="cartRequest"></param>
         /// <returns></returns>
-        [HttpPost]
-        public async Task<ActionResult<BaseResponse>> Create([FromBody]CartRequest cartRequest)
+        [HttpPost("{UserId:guid}")]
+        public async Task<ActionResult<Responses<CartResponse>>> Create(Guid UserId,[FromBody]CartRequest cartRequest)
         {
-            var result = await _shoppingCartService.Add(cartRequest);
+            var result = await _shoppingCartService.Add(UserId, cartRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
@@ -47,13 +50,14 @@ namespace CourseAPI.Controllers
 
         /// <summary>
         /// Remove Shopping Cart
+        /// https://gambolthemes.net/html-items/cursus_main_demo/shopping_cart.html
         /// </summary>
-        /// <param name="IdShoppingCart"></param>
+        /// <param name="Id"></param>
         /// <returns></returns>
-        [HttpDelete]
-        public async Task<ActionResult<BaseResponse>> Remove([FromBody]Guid IdShoppingCart)
+        [HttpDelete("{UserId:guid}")]
+        public async Task<ActionResult<BaseResponse>> Remove([FromBody]Guid Id)
         {
-            var result = await _shoppingCartService.Remove(IdShoppingCart);
+            var result = await _shoppingCartService.Remove(Id);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
