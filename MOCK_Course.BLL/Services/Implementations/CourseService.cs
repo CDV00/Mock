@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using Course.BLL.Responses;
+using Course.BLL.Responsesnamespace;
 using Course.BLL.Requests;
 using Course.DAL.Models;
 using Course.DAL.Repositories;
@@ -88,7 +88,7 @@ namespace Course.BLL.Services.Implementations
             }
         }
 
-        public async Task<BaseResponse> Remove(Guid idCourse)
+        public async Task<Responsesnamespace.BaseResponse> Remove(Guid idCourse)
         {
             try
             {
@@ -102,7 +102,7 @@ namespace Course.BLL.Services.Implementations
             }
             catch (Exception ex)
             {
-                return new Responses<BaseResponse>(false, ex.Message, null);
+                return new Responses<Responsesnamespace.BaseResponse>(false, ex.Message, null);
             }
         }
 

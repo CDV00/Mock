@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
-using Course.BLL.Responses;
+using Course.BLL.Responsesnamespace;
 using Course.BLL.Requests;
 using Course.DAL.Models;
+using System.Collections.Generic;
+using System.Linq;
+using Course.BLL.Responses;
 
 namespace Course.BLL.Extensions
 {
@@ -47,6 +50,13 @@ namespace Course.BLL.Extensions
             CreateMap<CartCategory, Category>().ReverseMap();
             CreateMap<ShoppingCart, CartResponse>().ForMember(des=>des.CartUser,opt=>opt.MapFrom(src=>src.User)).ForMember(des => des.Course, opt => opt.MapFrom(src => src.Course)).ForPath(des=>des.Course.category,opt=>opt.MapFrom(src=>src.Course.Category)).ReverseMap();
             CreateMap<ShoppingCart, CartRequest>().ReverseMap();
+
+
+            CreateMap<CourseRequest, CoursesResponse>().ReverseMap();
+
+            CreateMap<Section, SectionRequest>().ReverseMap();
+            CreateMap<AudioLanguage, AudioLanguageRequest>().ReverseMap();
+            CreateMap<CloseCaption, CloseCaptionRequest>().ReverseMap();
         }
     }
 }

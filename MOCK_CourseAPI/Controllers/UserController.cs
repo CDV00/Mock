@@ -1,5 +1,5 @@
 ﻿using Course.BLL.Requests;
-using Course.BLL.Responses;
+using Course.BLL.Responsesnamespace;
 using Course.BLL.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -17,22 +17,31 @@ namespace CourseAPI.Controllers
             _userService = userService;
         }
 
-        [HttpGet("Get-Profile")]
-        public Task<Response<UserProfileResponse>> GetProfile()
+        [HttpGet("Get-Profile/{id}")]
+        public async Task<ActionResult<BaseResponse>> GetProfile(Guid id)
         {
-            throw new NotImplementedException();
+            var result = await _userService.GetProfile(id);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
         }
-        
+
         [HttpPut("Update-Profile")]
-        public Task<BaseResponse> UpdateProfile(UpdateProfileRequest updateProfileRequest)
+        public async Task<ActionResult<BaseResponse>> UpdateProfile(UpdateProfileRequest updateProfileRequest)
         {
-            throw new NotImplementedException();
+            var result = await _userService.UpdateProfile(updateProfileRequest);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
         }
 
         [HttpPut("Change-Password")]
-        public Task<BaseResponse> ChagePassword(ChangePasswordRequest changePasswordRequest)
+        public async Task<ActionResult<BaseResponse>> ChagePassword(ChangePasswordRequest changePasswordRequest)
         {
-            throw new NotImplementedException();
+            var result = await _userService.ChangePassword(changePasswordRequest);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
         }
     }
 }

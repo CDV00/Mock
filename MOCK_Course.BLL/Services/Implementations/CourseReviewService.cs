@@ -1,0 +1,136 @@
+﻿using AutoMapper;
+using Course.BLL.Requests;
+using Course.BLL.Responses;
+using Course.BLL.Responsesnamespace;
+using Course.DAL.Models;
+using Course.DAL.Repositories;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Course.BLL.Services.Implementations
+{
+    public class CourseReviewService : ICourseReviewService
+    {
+        private readonly ICourseReviewRepository _courseReviewRepository;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        /// <summary>
+        /// contructer CourseReviewService 
+        /// </summary>
+        /// <param name="courseReviewRepository"></param>
+        /// <param name="unitOfWork"></param>
+        /// <param name="mapper"></param>
+        public CourseReviewService(
+                                        ICourseReviewRepository courseReviewRepository,
+                                        IUnitOfWork unitOfWork,
+                                        IMapper mapper
+                                  )
+        {
+            _courseReviewRepository = courseReviewRepository;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+        }
+        /// <summary>
+        /// get all course review
+        /// </summary>
+        /// <returns></returns>
+        public async Task<Responses<CourseReviewResponse>> GetAll()
+        {
+            try
+            {
+                var result = await _courseReviewRepository.GetAll().Where(c => c.IsActive == true && c.IsDeleted == false).ToListAsync();
+                return new Responses<CourseReviewResponse>(true, _mapper.Map<IEnumerable<CourseReviewResponse>>(result));
+
+            }
+            catch (Exception ex)
+            {
+                return new Responses<CourseReviewResponse>(false, ex.Message, null);
+            }
+
+        }
+        /// <summary>
+        /// get course review by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<Response<CourseReviewResponse>> GetById(Guid id)
+        {
+            try
+            {
+                var result = await _courseReviewRepository.GetByIdAsync(id);
+                return new Response<CourseReviewResponse>(true, _mapper.Map<CourseReviewResponse>(result));
+
+            }
+            catch (Exception ex)
+            {
+                return new Response<CourseReviewResponse>(false, ex.Message, null);
+            }
+        }
+        /// <summary>
+        /// create new course review
+        /// </summary>
+        /// <param name="courseReviewRequest"></param>
+        /// <returns></returns>
+        public async Task<Response<CourseReviewResponse>> Add(CourseReviewRequest courseReviewRequest)
+        {
+            try
+            {
+                var courseReview = _mapper.Map<CourseReview>(courseReviewRequest);
+                courseReview.Id = new Guid();
+                await _courseReviewRepository.CreateAsync(courseReview);
+                await _unitOfWork.SaveChangesAsync();
+                return new Response<CourseReviewResponse>( true, _mapper.Map<CourseReviewResponse>(courseReview) );
+            }
+            catch (Exception ex)
+            {
+                return new Response<CourseReviewResponse>(false, ex.Message, null);
+            }
+        }
+        /// <summary>
+        /// update course review
+        /// </summary>
+        /// <param name="courseReviewUpdateRequest"></param>
+        /// <returns></returns>
+        public async Task<Response<CourseReviewResponse>> Update(CourseReviewUpdateRequest courseReviewUpdateRequest)
+        {
+            try
+            {
+                var courseReview = _mapper.Map<CourseReview>(courseReviewUpdateRequest);
+
+                _courseReviewRepository.Update(courseReview);
+                await _unitOfWork.SaveChangesAsync();
+                return new Response<CourseReviewResponse>(
+                    true,
+                    _mapper.Map<CourseReviewResponse>(courseReview)
+                );
+            }
+            catch (Exception ex)
+            {
+                return new Response<CourseReviewResponse>(false, ex.Message, null);
+            }
+        }
+        /// <summary>
+        /// delete course review
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<BaseResponse> Delete(Guid id)
+        {
+            try
+            {
+                var order = await _courseReviewRepository.GetByIdAsync(id);
+                order.IsDeleted = true;
+                await _unitOfWork.SaveChangesAsync();
+                return new BaseResponse(true, "Delete success", null);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse(false, ex.Message, null);
+            }
+        }
+    }
+}

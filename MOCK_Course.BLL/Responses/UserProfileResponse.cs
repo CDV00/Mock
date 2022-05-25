@@ -1,4 +1,4 @@
-﻿namespace Course.BLL.Responses
+﻿namespace Course.BLL.Responsesnamespace
 {
     public class UserProfileResponse
     {

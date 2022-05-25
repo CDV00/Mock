@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Course.BLL.Responses;
+using Course.BLL.Responsesnamespace;
 using Course.BLL.Requests;
 using Course.DAL.Models;
 using Course.DAL.Repositories;
@@ -26,19 +26,19 @@ namespace Course.BLL.Services.Implementations
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Response<BaseResponse>> Add(CartRequest cartRequest)
+        public async Task<Response<Responsesnamespace.BaseResponse>> Add(CartRequest cartRequest)
         {
             try
             {
                 var cart = _mapper.Map<ShoppingCart>(cartRequest);
                 await _shoppingCartRepository.CreateAsync(cart);
                 await _unitOfWork.SaveChangesAsync();
-                return new Response<BaseResponse>(
+                return new Response<Responsesnamespace.BaseResponse>(
                     true, null);
             }
             catch (Exception ex)
             {
-                return new Response<BaseResponse>(false, ex.Message, null);
+                return new Response<Responsesnamespace.BaseResponse>(false, ex.Message, null);
             }
         }
 
@@ -56,7 +56,7 @@ namespace Course.BLL.Services.Implementations
             }
         }
 
-        public async Task<BaseResponse> Remove(Guid IdShoppingCart)
+        public async Task<Responsesnamespace.BaseResponse> Remove(Guid IdShoppingCart)
         {
             try
             {
@@ -65,12 +65,12 @@ namespace Course.BLL.Services.Implementations
                 _shoppingCartRepository.Remove(result);
                 await _unitOfWork.SaveChangesAsync();
 
-                return new BaseResponse { IsSuccess = true };
+                return new Responsesnamespace.BaseResponse { IsSuccess = true };
 
             }
             catch (Exception ex)
             {
-                return new Responses<BaseResponse>(false, ex.Message, null);
+                return new Responses<Responsesnamespace.BaseResponse>(false, ex.Message, null);
             }
         }
 

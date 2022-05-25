@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Course.BLL.Requests;
-using Course.BLL.Responses;
+using Course.BLL.Responsesnamespace;
 using Course.DAL.Models;
 using Course.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -58,7 +58,7 @@ namespace Course.BLL.Services.Implementations
             }
         }
 
-        public async Task<BaseResponse> Remove(Guid idSection)
+        public async Task<Responsesnamespace.BaseResponse> Remove(Guid idSection)
         {
             try
             {
@@ -72,7 +72,7 @@ namespace Course.BLL.Services.Implementations
             }
             catch (Exception ex)
             {
-                return new Responses<BaseResponse>(false, ex.Message, null);
+                return new Responses<Responsesnamespace.BaseResponse>(false, ex.Message, null);
             }
         }
 

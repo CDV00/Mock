@@ -155,6 +155,9 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<ICousesRepository, CousesRepository>();
             services.AddScoped<ISectionRepositoty, SectionRepositoty>();
             services.AddScoped<ILessonRepository, LessonRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<ICourseReviewRepository, CourseReviewRepository>();
+            services.AddScoped<ILessonRepository, LessonRepository>();
             services.AddScoped<IAudioLanguageRepository, AudioLanguageRepository>();
             services.AddScoped<ICloseCaptionRepository, CloseCaptionRepository>();
             services.AddScoped<ILanguageRepository, LanguageRepository>();
@@ -171,6 +174,11 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<ISectionService, SectionService>();
+            services.AddScoped<ILessonService, LessonService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<ICourseReviewService, CourseReviewService>();
+
             services.AddScoped<ILessonService, LessonService>();
             services.AddScoped<IAudioLanguageService, AudioLanguageService>();
             services.AddScoped<ICloseCaptionService, CloseCaptionService>();

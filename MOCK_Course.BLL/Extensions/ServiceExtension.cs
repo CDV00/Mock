@@ -20,7 +20,9 @@ namespace Course.BLL.Extensions
             services.AddScoped<ICousesRepository, CousesRepository>();
             services.AddScoped<ISectionRepositoty, SectionRepositoty>();
             services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
-
+            services.AddScoped<ILessonRepository, LessonRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<ICourseReviewRepository, CourseReviewRepository>();
         }
         /// <summary>
         /// Configure Services
@@ -34,6 +36,10 @@ namespace Course.BLL.Extensions
             services.AddScoped<ICourseService, CourseService>();
             //.AddScoped<IUserService, UserService>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<ILessonService, LessonService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<ICourseReviewService, CourseReviewService>();
         }
     }
 }

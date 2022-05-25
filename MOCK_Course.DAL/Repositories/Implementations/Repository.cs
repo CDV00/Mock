@@ -69,7 +69,7 @@ namespace Course.DAL.Repositories.Implementations
         public async Task<T> GetByIdAsync(Guid Id)
         {
             var data = await DbSet.FindAsync(Id);
-            _context.Entry(data).State = EntityState.Detached;
+            _context.Entry(data).State = EntityState.Modified;
             return data;
         }
 
