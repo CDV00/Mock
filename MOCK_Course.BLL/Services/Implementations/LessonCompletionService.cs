@@ -8,8 +8,7 @@ using Course.BLL.Requests;
 using Course.DAL.Models;
 using Course.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Course.DAL.Data;
-using Course.DAL.Repositories.Implementations;
+using Course.BLL.Responsesnamespace;
 
 namespace Course.BLL.Services.Implementations
 {

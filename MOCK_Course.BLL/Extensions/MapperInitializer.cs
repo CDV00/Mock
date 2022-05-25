@@ -59,7 +59,6 @@ namespace Course.BLL.Extensions
             CreateMap<Order, OrderResponse>().ReverseMap();
             CreateMap<Order, OrderUpdateRequest>().ReverseMap();
 
-
             // map enrollment
             CreateMap<EnrollmentRequest, EnrollmentResponse>().ReverseMap();
             CreateMap<EnrollmentUser, AppUser>().ReverseMap();
@@ -83,10 +82,6 @@ namespace Course.BLL.Extensions
             CreateMap<LessonCompletion, LessonCompletionResponse>().ForMember(des => des.LessonCompUser, opt => opt.MapFrom(src => src.User)).ForMember(des => des.Lesson, opt => opt.MapFrom(src => src.Lesson)).ReverseMap();
             CreateMap<LessonCompletion, LessonCompletionRequest>().ReverseMap();
 
-
-            CreateMap<Section, SectionRequest>().ReverseMap();
-            CreateMap<AudioLanguage, AudioLanguageRequest>().ReverseMap();
-            CreateMap<CloseCaption, CloseCaptionRequest>().ReverseMap();
             //CourseReview
             CreateMap<CourseReview, CourseReviewRequest>().ReverseMap();
             CreateMap<CourseReview, CourseReviewUpdateRequest>().ReverseMap();
