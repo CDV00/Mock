@@ -161,6 +161,7 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IAudioLanguageRepository, AudioLanguageRepository>();
             services.AddScoped<ICloseCaptionRepository, CloseCaptionRepository>();
             services.AddScoped<ILanguageRepository, LanguageRepository>();
+
         }
         /// <summary>
         /// Configure Services
