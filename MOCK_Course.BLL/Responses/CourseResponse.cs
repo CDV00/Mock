@@ -29,7 +29,6 @@ namespace Course.BLL.Responses
         public decimal Price { get; set; }
         public decimal DiscountPrice { get; set; }
 
-        public Guid UserId { get; set; }
         public Guid CategoryId { get; set; }
 
         public IList<AudioLanguageCreateResponse> AudioLanguages { get; set; }

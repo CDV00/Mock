@@ -81,14 +81,16 @@ namespace Course.BLL.Services.Implementations
         {
             try
             {
-                var section = _mapper.Map<Section>(sectionRequest);
 
-                _sectionRepositoty.Update(id,section);
+                _sectionRepositoty.Update(id, sectionRequest);
                 await _unitOfWork.SaveChangesAsync();
+
+                var sectionResponse = _mapper.Map<SectionResponse>(sectionRequest);
+                sectionResponse.Id = id;
 
                 return new Response<SectionResponse>(
                     true,
-                    _mapper.Map<SectionResponse>(section)
+                    _mapper.Map<SectionResponse>(sectionResponse)
                 );
             }
             catch (Exception ex)

@@ -24,7 +24,7 @@ namespace CourseAPI.Controllers
         /// <param name="registerRequest"></param>
         /// <returns>token and User Information</returns>
         [HttpPost("register")]
-        public async Task<ActionResult<Response<RegisterResponse>>> Register(RegisterRequest registerRequest)
+        public async Task<ActionResult<Response<UserResponse>>> Register(RegisterRequest registerRequest)
         {
             var result = await _userService.Register(registerRequest);
             if (result.IsSuccess)

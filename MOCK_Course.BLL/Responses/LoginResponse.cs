@@ -19,10 +19,10 @@
         public string Id { get;set; }
         public string Role { get; set; } 
     }
-    public class RegisterResponse : LoginResponse
+    public class RegisterResponse 
     {
-        public RegisterResponse(string token, UserResponse userResponse) : base(token, userResponse)
-        {
-        }
+        //public RegisterResponse(string token, UserResponse userResponse) : base(token, userResponse)
+        //{
+        //}
     }
 }

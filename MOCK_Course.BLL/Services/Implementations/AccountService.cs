@@ -65,7 +65,7 @@ namespace Course.BLL.Services.Implementations
         /// </summary>
         /// <param name="registerRequest"></param>
         /// <returns></returns>
-        public async Task<Response<RegisterResponse>> Register(RegisterRequest registerRequest)
+        public async Task<Response<UserResponse>> Register(RegisterRequest registerRequest)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace Course.BLL.Services.Implementations
 
                 if (!result.Succeeded)
                 {
-                    return new Response<RegisterResponse>(false, result.Errors.ToList()[0].Description, null);
+                    return new Response<UserResponse>(false, result.Errors.ToList()[0].Description, null);
                 }
 
                 if (registerRequest.CategoryId == null)
@@ -90,16 +90,19 @@ namespace Course.BLL.Services.Implementations
                 }
 
                 var userResponse = _mapper.Map<UserResponse>(user);
+                
+                var roles = await _userManager.GetRolesAsync(user);
+                userResponse.Role = string.Join(",", roles);
 
-                List<Claim> authClaims = await GetClaims(user, userResponse);
-                var token = GenerateAccessToken(authClaims);
+                //List<Claim> authClaims = await GetClaims(user, userResponse);
+                //var token = GenerateAccessToken(authClaims);
 
-                return new Response<RegisterResponse>(true, new RegisterResponse(token, userResponse));
+                return new Response<UserResponse>(true, userResponse);
 
             }
             catch (Exception ex)
             {
-                return new Response<RegisterResponse>(false, ex.Message, null);
+                return new Response<UserResponse>(false, ex.Message, null);
             }
         }
         private string GenerateAccessToken(IEnumerable<Claim> claims)

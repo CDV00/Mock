@@ -39,7 +39,7 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("{id:guid}",Name = "Get")]
-        public async Task<ActionResult<Response<CoursesCardResponse>>> Get(Guid id)
+        public async Task<ActionResult<Response<CourseResponse>>> Get(Guid id)
         {
             var course = await _coursesService.Get(id);
             if (course.IsSuccess == false)
@@ -48,8 +48,9 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// Create new course
-        /// https://gambolthemes.net/html-items/cursus_main_demo/create_new_course.html
+        /// Create new course | 
+        /// https://gambolthemes.net/html-items/cursus_main_demo/create_new_course.html | 
+        /// UserId:9e47da69-3d3e-428d-a395-d53908753582
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="courseRequest"></param>

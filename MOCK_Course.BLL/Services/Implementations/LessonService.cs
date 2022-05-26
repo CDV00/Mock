@@ -76,16 +76,15 @@ namespace Course.BLL.Services.Implementations
         {
             try
             {
-                if (_LessonRepositoty.GetById(id) == null)
-                    return new Response<LessonResponse>(false, "can't find this lesson",null);
 
-                var Lesson = _mapper.Map<Lesson>(LessonRequest);
-
-                _LessonRepositoty.Update(id, Lesson);
+                _LessonRepositoty.Update(id,LessonRequest);
                 await _unitOfWork.SaveChangesAsync();
+                
+                var lessonResponse = _mapper.Map<LessonResponse>(LessonRequest);
+                lessonResponse.Id = id;
                 return new Response<LessonResponse>(
                     true,
-                    _mapper.Map<LessonResponse>(Lesson)
+                   lessonResponse
                 );
             }
             catch (Exception ex)

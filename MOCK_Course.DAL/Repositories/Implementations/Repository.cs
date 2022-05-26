@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Course.DAL.Repositories.Implementations
 {
-    public class Repository<T,K> : IRepository<T,K> where T : BaseEntity<K>
+    public class Repository<T, K> : IRepository<T, K> where T : BaseEntity<K>
     {
         protected DbSet<T> DbSet;
         private readonly AppDbContext _context;
@@ -47,7 +47,7 @@ namespace Course.DAL.Repositories.Implementations
         /// Implement GetAll method
         /// </summary>
         /// <returns></returns>
-        public  IQueryable<T> GetAll() => DbSet.AsNoTracking();
+        public IQueryable<T> GetAll() => DbSet.AsNoTracking();
         /// <summary>
         /// Implement GetAllAsync method
         /// </summary>
@@ -75,7 +75,7 @@ namespace Course.DAL.Repositories.Implementations
         public async Task<T> GetByIdAsync(K Id)
         {
             var data = await DbSet.FindAsync(Id);
-            if(data==null) return null;
+            if (data == null) return null;
             _context.Entry(data).State = EntityState.Detached;
             return data;
         }
@@ -99,7 +99,13 @@ namespace Course.DAL.Repositories.Implementations
             _context.Entry(entity).CurrentValues.SetValues(_object);
             return true;
         }
-        
+        public bool Update(T _object)
+        {
+            DbSet.Attach(_object);
+            _context.Entry(_object).State = EntityState.Modified;
+            return true;
+        }
+
         /// <summary>
         /// Find by Condition
         /// </summary>

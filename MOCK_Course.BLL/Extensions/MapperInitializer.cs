@@ -19,12 +19,15 @@ namespace Course.BLL.Extensions
 
             // lesion
             CreateMap<Lesson, LessonCreateRequest>().ReverseMap();
+            CreateMap<Lesson, LessonResponse>().ReverseMap();
             CreateMap<Lesson, LessonUpdateRequest>().ReverseMap();
+            CreateMap<LessonResponse, LessonUpdateRequest>().ReverseMap();
 
             // section
             CreateMap<Section, SectionResponse>().ReverseMap();
             CreateMap<Section, SectionCreateRequest>().ReverseMap();
             CreateMap<Section, SectionUpdateRequest>().ReverseMap();
+            CreateMap<SectionResponse, SectionUpdateRequest>().ReverseMap();
 
             // language
             CreateMap<AudioLanguage, AudioLanguageCreateRequest>().ReverseMap();

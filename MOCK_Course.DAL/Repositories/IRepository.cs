@@ -52,6 +52,13 @@ namespace Course.DAL.Repositories
         Task CreateAsync(T _object);
 
         /// <summary>
+        /// update record
+        /// </summary>
+        /// <param name="_object"></param>
+        /// <returns></returns>
+        public bool Update(T _object);
+
+        /// <summary>
         /// Update record
         /// </summary>
         /// <param name="_object"></param>

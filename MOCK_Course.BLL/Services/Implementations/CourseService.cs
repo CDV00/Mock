@@ -146,7 +146,7 @@ namespace Course.BLL.Services.Implementations
                 await _closeCaptionService.RemoveAll(courseId);
 
                 // add language 
-                var AudioLanguageLength = courseRequest.AudioLanguages.Count;
+                var AudioLanguageLength = courseRequest.AudioLanguages?.Count;
                 if (AudioLanguageLength > 0)
                 {
                   
@@ -156,7 +156,7 @@ namespace Course.BLL.Services.Implementations
                     }
                 }
 
-                var CloseCaptionLength = courseRequest.CloseCaptions.Count;
+                var CloseCaptionLength = courseRequest.CloseCaptions?.Count;
                 if (CloseCaptionLength > 0)
                 {
                     for (var i = 0; i < CloseCaptionLength; i++)
@@ -166,6 +166,7 @@ namespace Course.BLL.Services.Implementations
                 }
 
                 var CourseResponse = _mapper.Map<CourseResponse>(course);
+                CourseResponse.Id = id;
 
                 var result = _cousesRepository.Update(id,courseRequest);
                 if (!result)

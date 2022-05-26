@@ -24,9 +24,9 @@ namespace CourseAPI.Controllers
         /// <param name="courseId"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<Responses<LessonResponse>>> GetAll([FromBody]Guid courseId)
+        public async Task<ActionResult<Responses<LessonResponse>>> GetAll([FromQuery]Guid sectionId)
         {
-            var result = await _LessonService.GetAll(courseId);
+            var result = await _LessonService.GetAll(sectionId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
@@ -47,8 +47,8 @@ namespace CourseAPI.Controllers
         /// <param name="id"></param>
         /// <param name="LessonUpdateRequest"></param>
         /// <returns></returns>
-        [HttpPut("{UserId:guid}")]
-        public async Task<ActionResult<Response<LessonResponse>>> Update(Guid id,[FromBody]LessonUpdateRequest LessonUpdateRequest)
+        [HttpPut]
+        public async Task<ActionResult<Response<LessonResponse>>> Update([FromQuery]Guid id,[FromBody]LessonUpdateRequest LessonUpdateRequest)
         {
             var result = await _LessonService.Update(id, LessonUpdateRequest);
             if (result.IsSuccess == false)
@@ -61,8 +61,8 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete("{UserId:guid}")]
-        public async Task<ActionResult<BaseResponse>> Remove(Guid id)
+        [HttpDelete]
+        public async Task<ActionResult<BaseResponse>> Remove([FromQuery]Guid id)
         {
             var result = await _LessonService.Remove(id);
             if (result.IsSuccess == false)
