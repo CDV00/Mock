@@ -24,7 +24,7 @@ namespace CourseAPI.Controllers
         /// <param name="courseCompletionRequest"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<BaseResponse>> Create([FromQuery]CourseCompletionRequest courseCompletionRequest)
+        public async Task<ActionResult<BaseResponse>> Create([FromBody] CourseCompletionRequest courseCompletionRequest)
         {
             var result = await _courseCompletionService.Add(courseCompletionRequest);
             if (result.IsSuccess == false)

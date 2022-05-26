@@ -28,7 +28,7 @@ namespace CourseAPI.Controllers
         /// <param name="CourseId"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<Responses<CourseReviewResponse>>> GetAll([FromQuery]Guid CourseId)
+        public async Task<ActionResult<Responses<CourseReviewResponse>>> GetAll([FromQuery] Guid CourseId)
         {
             var result = await _courseReviewService.GetAll(CourseId);
             if (result.IsSuccess == false)
@@ -43,9 +43,9 @@ namespace CourseAPI.Controllers
         /// <param name="courseReviewRequest"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Responses<CourseReviewResponse>>> Add([FromQuery]Guid EnrellmentId,CourseReviewRequest courseReviewRequest)
+        public async Task<ActionResult<Responses<CourseReviewResponse>>> Add(CourseReviewRequest courseReviewRequest)
         {
-            var result = await _courseReviewService.Add(EnrellmentId,courseReviewRequest);
+            var result = await _courseReviewService.Add(courseReviewRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
@@ -58,9 +58,9 @@ namespace CourseAPI.Controllers
         /// <param name="courseReviewUpdateRequest"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<ActionResult<BaseResponse>> Update([FromQuery]Guid id,CourseReviewUpdateRequest courseReviewUpdateRequest)
+        public async Task<ActionResult<BaseResponse>> Update(CourseReviewUpdateRequest courseReviewUpdateRequest)
         {
-            var result = await _courseReviewService.Update(id, courseReviewUpdateRequest);
+            var result = await _courseReviewService.Update(courseReviewUpdateRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);

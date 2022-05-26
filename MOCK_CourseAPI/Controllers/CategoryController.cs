@@ -51,9 +51,9 @@ namespace CourseAPI.Controllers
         /// <param name="categoryUpdateRequest">CategoryUpdate</param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<ActionResult<Response<CategoryResponse>>> Update([FromQuery]Guid id, CategoryUpdateRequest categoryUpdateRequest)
+        public async Task<ActionResult<Response<CategoryResponse>>> Update(CategoryUpdateRequest categoryUpdateRequest)
         {
-            var result = await _categoryService.Update(id, categoryUpdateRequest);
+            var result = await _categoryService.Update(categoryUpdateRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);

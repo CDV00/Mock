@@ -37,14 +37,14 @@ namespace Course.BLL.Services.Implementations
                 return new Response<UserProfileResponse>(false, ex.Message, null);
             }
         }
-        public async Task<BaseResponse> ChangePassword(Guid Id, ChangePasswordRequest changePasswordRequest)
+        public async Task<BaseResponse> ChangePassword(ChangePasswordRequest changePasswordRequest)
         {
             try
             {
-                var user = await _userManager.FindByIdAsync(Id.ToString());
+                var user = await _userManager.FindByIdAsync(changePasswordRequest.Id.ToString());
 
                 if (user == null)
-                    return new BaseResponse(false,null,"can't find user");
+                    return new BaseResponse(false, null, "can't find user");
                 var checkPassword = _userManager.CheckPasswordAsync(user, changePasswordRequest.OldPassword);
 
                 if (!checkPassword.Result)
@@ -52,11 +52,11 @@ namespace Course.BLL.Services.Implementations
                     return new BaseResponse(false, null, "incorrect password!");
                 }
 
-                user.PasswordHash = _userManager.PasswordHasher.HashPassword(user,changePasswordRequest.NewPassword);
+                user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, changePasswordRequest.NewPassword);
                 //update user password
-               await _userManager.UpdateAsync(user);
+                await _userManager.UpdateAsync(user);
                 //return BadRequest("request is incorrect");
-                return new Response<UserProfileResponse>(true,null,null);
+                return new Response<UserProfileResponse>(true, null, null);
             }
             catch (Exception ex)
             {
@@ -65,15 +65,15 @@ namespace Course.BLL.Services.Implementations
         }
 
 
-        public async Task<Response<UserProfileResponse>> UpdateProfile(Guid Id, UpdateProfileRequest updateProfileRequest)
+        public async Task<Response<UserProfileResponse>> UpdateProfile(UpdateProfileRequest updateProfileRequest)
         {
             try
             {
-                
+
                 //var user = _mapper.Map<AppUser>(updateProfileRequest);
 
-                var user = await _userManager.FindByIdAsync(Id.ToString());
-                
+                var user = await _userManager.FindByIdAsync(updateProfileRequest.Id.ToString());
+
                 user.Fullname = updateProfileRequest.FirstName + updateProfileRequest.LastName;
                 user.FirstName = updateProfileRequest.FirstName;
                 user.LastName = updateProfileRequest.LastName;

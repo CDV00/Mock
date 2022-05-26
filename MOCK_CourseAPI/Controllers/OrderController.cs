@@ -39,7 +39,7 @@ namespace CourseAPI.Controllers
         /// <param name="orderRequest"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Response<OrderResponse>>> Add([FromQuery] OrderRequest orderRequest)
+        public async Task<ActionResult<Response<OrderResponse>>> Add([FromBody] OrderRequest orderRequest)
         {
             var result = await _orderService.Add(orderRequest);
             if (result.IsSuccess == false)

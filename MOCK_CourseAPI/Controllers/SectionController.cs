@@ -38,19 +38,19 @@ namespace CourseAPI.Controllers
         /// <param name="courseId"></param>
         /// <param name="sectionRequest"></param>
         /// <returns></returns>
-        [HttpPost("{courseId:guid}")]
-        public async Task<ActionResult<Response<SectionResponse>>> Create(Guid courseId,[FromBody]SectionCreateRequest sectionRequest)
+        [HttpPost]
+        public async Task<ActionResult<Response<SectionResponse>>> Create([FromBody] SectionCreateRequest sectionRequest)
         {
-            var result = await _sectionService.Add(courseId, sectionRequest);
+            var result = await _sectionService.Add(sectionRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
         }
 
-        [HttpPut("{id:guid}")]
-        public async Task<ActionResult<Response<SectionResponse>>> Update(Guid id, [FromBody]SectionUpdateRequest sectionUpdateRequest)
+        [HttpPut]
+        public async Task<ActionResult<Response<SectionResponse>>> Update([FromBody] SectionUpdateRequest sectionUpdateRequest)
         {
-            var result = await _sectionService.Update(id, sectionUpdateRequest);
+            var result = await _sectionService.Update(sectionUpdateRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);

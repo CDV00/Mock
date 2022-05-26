@@ -24,7 +24,7 @@ namespace Course.BLL.Services.Implementations
         /// <param name="courseReviewRepository"></param>
         /// <param name="unitOfWork"></param>
         /// <param name="mapper"></param>
-        public CourseReviewService(ICourseReviewRepository courseReviewRepository,IUnitOfWork unitOfWork,IMapper mapper)
+        public CourseReviewService(ICourseReviewRepository courseReviewRepository, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _courseReviewRepository = courseReviewRepository;
             _unitOfWork = unitOfWork;
@@ -38,7 +38,7 @@ namespace Course.BLL.Services.Implementations
         {
             try
             {
-                var result = await _courseReviewRepository.GetAll().Where(c=>c.Enrollment.CourseId == courseId).ToListAsync();
+                var result = await _courseReviewRepository.GetAll().Where(c => c.Enrollment.CourseId == courseId).ToListAsync();
 
                 return new Responses<CourseReviewResponse>(true, _mapper.Map<IEnumerable<CourseReviewResponse>>(result));
             }
@@ -71,13 +71,12 @@ namespace Course.BLL.Services.Implementations
         /// </summary>
         /// <param name="courseReviewRequest"></param>
         /// <returns></returns>
-        public async Task<Response<CourseReviewResponse>> Add(Guid EnrollmentId, CourseReviewRequest courseReviewRequest)
+        public async Task<Response<CourseReviewResponse>> Add(CourseReviewRequest courseReviewRequest)
         {
             try
             {
                 var courseReview = _mapper.Map<CourseReview>(courseReviewRequest);
 
-                courseReview.EnrollmentId = EnrollmentId;
                 await _courseReviewRepository.CreateAsync(courseReview);
                 await _unitOfWork.SaveChangesAsync();
                 return new Response<CourseReviewResponse>(true, _mapper.Map<CourseReviewResponse>(courseReview));
@@ -92,13 +91,13 @@ namespace Course.BLL.Services.Implementations
         /// </summary>
         /// <param name="courseReviewUpdateRequest"></param>
         /// <returns></returns>
-        public async Task<Response<CourseReviewResponse>> Update(Guid id, CourseReviewUpdateRequest courseReviewUpdateRequest)
+        public async Task<Response<CourseReviewResponse>> Update(CourseReviewUpdateRequest courseReviewUpdateRequest)
         {
             try
             {
                 var courseReview = _mapper.Map<CourseReview>(courseReviewUpdateRequest);
 
-                _courseReviewRepository.Update(id, courseReview);
+                _courseReviewRepository.Update(courseReview);
                 await _unitOfWork.SaveChangesAsync();
                 return new Response<CourseReviewResponse>(
                     true,

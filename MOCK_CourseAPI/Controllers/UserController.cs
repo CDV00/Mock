@@ -6,7 +6,7 @@ using System;
 using System.Threading.Tasks;
 
 namespace CourseAPI.Controllers
-{ 
+{
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -40,10 +40,10 @@ namespace CourseAPI.Controllers
         /// <param name="id"></param>
         /// <param name="updateProfileRequest"></param>
         /// <returns></returns>
-        [HttpPut("Update-Profile/{id:Guid}")]
-        public async Task<ActionResult<UserProfileResponse>> UpdateProfile(Guid id,[FromBody]UpdateProfileRequest updateProfileRequest)
+        [HttpPut("Update-Profile")]
+        public async Task<ActionResult<UserProfileResponse>> UpdateProfile([FromBody] UpdateProfileRequest updateProfileRequest)
         {
-            var result = await _userService.UpdateProfile(id, updateProfileRequest);
+            var result = await _userService.UpdateProfile(updateProfileRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
@@ -53,13 +53,12 @@ namespace CourseAPI.Controllers
         /// Change passowrd by User Id
         /// not Page UI yet!
         /// </summary>
-        /// <param name="id"></param>
         /// <param name="changePasswordRequest"></param>
         /// <returns></returns>
-        [HttpPut("Change-Password/{id:Guid}")]
-        public async Task<ActionResult<BaseResponse>> ChagePassword(Guid id, [FromBody]ChangePasswordRequest changePasswordRequest)
+        [HttpPut("Change-Password")]
+        public async Task<ActionResult<BaseResponse>> ChagePassword([FromBody] ChangePasswordRequest changePasswordRequest)
         {
-            var result = await _userService.ChangePassword(id, changePasswordRequest);
+            var result = await _userService.ChangePassword(changePasswordRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);

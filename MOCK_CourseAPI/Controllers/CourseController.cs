@@ -38,7 +38,7 @@ namespace CourseAPI.Controllers
         /// https://gambolthemes.net/html-items/cursus_main_demo/course_detail_view.html
         /// </summary>
         /// <returns></returns>
-        [HttpGet("{id:guid}",Name = "Get")]
+        [HttpGet("{id:guid}", Name = "Get")]
         public async Task<ActionResult<Response<CourseResponse>>> Get(Guid id)
         {
             var course = await _coursesService.Get(id);
@@ -55,10 +55,10 @@ namespace CourseAPI.Controllers
         /// <param name="userId"></param>
         /// <param name="courseRequest"></param>
         /// <returns></returns>
-        [HttpPost("{userId:guid}")]
-        public async Task<ActionResult<CourseResponse>> Create(Guid userId,[FromBody] CourseRequest courseRequest)
+        [HttpPost]
+        public async Task<ActionResult<CourseResponse>> Create([FromBody] CourseRequest courseRequest)
         {
-            var result = await _coursesService.Add(userId, courseRequest);
+            var result = await _coursesService.Add(courseRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
@@ -71,10 +71,10 @@ namespace CourseAPI.Controllers
         /// <param name="id"></param>
         /// <param name="CoursesUpdateRequest"></param>
         /// <returns></returns>
-        [HttpPut("{id:guid}")]
-        public async Task<ActionResult<Response<CourseResponse>>> Update(Guid id,UpdateCourseRequest CoursesUpdateRequest)
+        [HttpPut]
+        public async Task<ActionResult<Response<CourseResponse>>> Update(UpdateCourseRequest CoursesUpdateRequest)
         {
-            var result = await _coursesService.Update(id, CoursesUpdateRequest);
+            var result = await _coursesService.Update(CoursesUpdateRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
@@ -86,7 +86,7 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <param name="id">Id Courses</param>
         /// <returns></returns>
-        [HttpDelete("{id:guid}")]
+        [HttpDelete]
         public async Task<ActionResult<BaseResponse>> Delete(Guid id)
         {
             var result = await _coursesService.Remove(id);

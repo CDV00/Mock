@@ -25,7 +25,7 @@ namespace CourseAPI.Controllers
         /// <param name="enrollmentRequest"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<BaseResponse>> Create([FromQuery]EnrollmentRequest enrollmentRequest)
+        public async Task<ActionResult<BaseResponse>> Create([FromBody] EnrollmentRequest enrollmentRequest)
         {
             var result = await _enrollmentService.Add(enrollmentRequest);
             if (result.IsSuccess == false)

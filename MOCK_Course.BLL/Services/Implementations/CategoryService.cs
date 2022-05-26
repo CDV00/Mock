@@ -73,13 +73,13 @@ namespace Course.BLL.Services.Implementations
             }
         }
 
-        public async Task<Response<CategoryResponse>> Update(Guid id,CategoryUpdateRequest categoryUpdateRequest)
+        public async Task<Response<CategoryResponse>> Update(CategoryUpdateRequest categoryUpdateRequest)
         {
             try
             {
                 var category = _mapper.Map<Category>(categoryUpdateRequest);
 
-                _categoryRepository.Update(id, category);
+                _categoryRepository.Update(category);
                 await _unitOfWork.SaveChangesAsync();
                 return new Response<CategoryResponse>(
                     true,

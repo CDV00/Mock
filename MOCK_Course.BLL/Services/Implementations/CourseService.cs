@@ -38,7 +38,7 @@ namespace Course.BLL.Services.Implementations
         {
             try
             {
-                var courses = await _cousesRepository.GetAll().Include(c=>c.Category).Include(c=>c.User).ToListAsync();
+                var courses = await _cousesRepository.GetAll().Include(c => c.Category).Include(c => c.User).ToListAsync();
 
                 var courseResponse = _mapper.Map<List<CoursesCardResponse>>(courses);
                 return new Responses<CoursesCardResponse>(true, courseResponse);
@@ -53,7 +53,7 @@ namespace Course.BLL.Services.Implementations
         {
             try
             {
-                var courses = await _cousesRepository.FindByCondition(c => c.Id == id).Include(c=>c.AudioLanguages).Include(c=>c.CloseCaptions).FirstOrDefaultAsync();
+                var courses = await _cousesRepository.FindByCondition(c => c.Id == id).Include(c => c.AudioLanguages).Include(c => c.CloseCaptions).FirstOrDefaultAsync();
 
                 var courseResponse = _mapper.Map<CourseResponse>(courses);
                 return new Response<CourseResponse>(true, courseResponse);
@@ -64,12 +64,12 @@ namespace Course.BLL.Services.Implementations
             }
         }
 
-        public async Task<Response<CourseResponse>> Add(Guid userId, CourseRequest courseRequest)
+        public async Task<Response<CourseResponse>> Add(CourseRequest courseRequest)
         {
             try
             {
                 var course = _mapper.Map<Courses>(courseRequest);
-                course.UserId = userId;
+
                 await _cousesRepository.CreateAsync(course);
                 await _unitOfWork.SaveChangesAsync();
                 var CourseResponse = _mapper.Map<CourseResponse>(course);
@@ -90,7 +90,7 @@ namespace Course.BLL.Services.Implementations
                 {
                     for (var i = 0; i < CloseCaptionLength; i++)
                     {
-                        await _closeCaptionService.Add(courseRequest.CloseCaptions[i], courseId);
+                        await _closeCaptionService.Add(courseRequest.CloseCaptions[i]);
                     }
                 }
 
@@ -134,13 +134,13 @@ namespace Course.BLL.Services.Implementations
             return course;
         }
 
-        public async Task<Response<CourseResponse>> Update(Guid id, UpdateCourseRequest courseRequest)
+        public async Task<Response<CourseResponse>> Update(UpdateCourseRequest courseRequest)
         {
             try
             {
                 var course = _mapper.Map<Courses>(courseRequest);
 
-                var courseId = id;
+                var courseId = courseRequest.Id;
                 // remove language
                 await _audioLanguageService.RemoveAll(courseId);
                 await _closeCaptionService.RemoveAll(courseId);
@@ -149,7 +149,7 @@ namespace Course.BLL.Services.Implementations
                 var AudioLanguageLength = courseRequest.AudioLanguages?.Count;
                 if (AudioLanguageLength > 0)
                 {
-                  
+
                     for (var i = 0; i < AudioLanguageLength; i++)
                     {
                         await _audioLanguageService.Add(courseRequest.AudioLanguages[i], courseId);
@@ -161,14 +161,13 @@ namespace Course.BLL.Services.Implementations
                 {
                     for (var i = 0; i < CloseCaptionLength; i++)
                     {
-                        await _closeCaptionService.Add(courseRequest.CloseCaptions[i], courseId);
+                        await _closeCaptionService.Add(courseRequest.CloseCaptions[i]);
                     }
                 }
 
+                var result = _cousesRepository.Update(course);
                 var CourseResponse = _mapper.Map<CourseResponse>(course);
-                CourseResponse.Id = id;
 
-                var result = _cousesRepository.Update(id,courseRequest);
                 if (!result)
                 {
                     return new Response<CourseResponse>(false, "can't find coures", null);

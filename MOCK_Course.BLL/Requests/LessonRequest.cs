@@ -4,6 +4,7 @@ namespace Course.BLL.Requests
 {
     public class LessonCreateRequest
     {
+        public Guid SectionId { get; set; }
         public string Title { get; set; }
         public string VideoUrl { get; set; }
         public string VideoPoster { get; set; }
@@ -12,5 +13,6 @@ namespace Course.BLL.Requests
     }
     public class LessonUpdateRequest : LessonCreateRequest
     {
+        public Guid Id { get; set; }
     }
 }

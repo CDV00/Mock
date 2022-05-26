@@ -6,6 +6,7 @@ namespace Course.BLL.Requests
 {
     public class CourseRequest
     {
+        public Guid UserId { get; set; }
         public string Title { get; set; }
         public string ShortDescription { get; set; }
         public string Description { get; set; }
@@ -34,6 +35,7 @@ namespace Course.BLL.Requests
     }
     public class UpdateCourseRequest
     {
+        public Guid Id { get; set; }
         public string Title { get; set; }
         public string ShortDescription { get; set; }
         public string Description { get; set; }

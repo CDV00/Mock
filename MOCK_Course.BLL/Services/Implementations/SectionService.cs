@@ -24,12 +24,11 @@ namespace Course.BLL.Services.Implementations
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
-        public async Task<Response<SectionResponse>> Add(Guid CourseId,SectionCreateRequest sectionRequest)
+        public async Task<Response<SectionResponse>> Add(SectionCreateRequest sectionRequest)
         {
             try
             {
                 var section = _mapper.Map<Section>(sectionRequest);
-                section.CourseId = CourseId;
 
                 await _sectionRepositoty.CreateAsync(section);
                 await _unitOfWork.SaveChangesAsync();
@@ -77,16 +76,16 @@ namespace Course.BLL.Services.Implementations
             }
         }
 
-        public async Task<Response<SectionResponse>> Update(Guid id,SectionUpdateRequest sectionRequest)
+        public async Task<Response<SectionResponse>> Update(SectionUpdateRequest sectionRequest)
         {
             try
             {
 
-                _sectionRepositoty.Update(id, sectionRequest);
+                var section = _mapper.Map<Section>(sectionRequest);
+                _sectionRepositoty.Update(section);
                 await _unitOfWork.SaveChangesAsync();
 
-                var sectionResponse = _mapper.Map<SectionResponse>(sectionRequest);
-                sectionResponse.Id = id;
+                var sectionResponse = _mapper.Map<SectionResponse>(section);
 
                 return new Response<SectionResponse>(
                     true,

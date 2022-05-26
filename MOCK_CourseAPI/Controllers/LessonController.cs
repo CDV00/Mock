@@ -24,7 +24,7 @@ namespace CourseAPI.Controllers
         /// <param name="courseId"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<Responses<LessonResponse>>> GetAll([FromQuery]Guid sectionId)
+        public async Task<ActionResult<Responses<LessonResponse>>> GetAll([FromQuery] Guid sectionId)
         {
             var result = await _LessonService.GetAll(sectionId);
             if (result.IsSuccess == false)
@@ -32,10 +32,10 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
 
-        [HttpPost("{SectionId:guid}")]
-        public async Task<ActionResult<Response<LessonResponse>>> Create(Guid SectionId,[FromBody]LessonCreateRequest LessonRequest)
+        [HttpPost]
+        public async Task<ActionResult<Response<LessonResponse>>> Create([FromBody] LessonCreateRequest LessonRequest)
         {
-            var result = await _LessonService.Add(SectionId, LessonRequest);
+            var result = await _LessonService.Add(LessonRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
@@ -48,9 +48,9 @@ namespace CourseAPI.Controllers
         /// <param name="LessonUpdateRequest"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<ActionResult<Response<LessonResponse>>> Update([FromQuery]Guid id,[FromBody]LessonUpdateRequest LessonUpdateRequest)
+        public async Task<ActionResult<Response<LessonResponse>>> Update([FromBody] LessonUpdateRequest LessonUpdateRequest)
         {
-            var result = await _LessonService.Update(id, LessonUpdateRequest);
+            var result = await _LessonService.Update(LessonUpdateRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
@@ -62,7 +62,7 @@ namespace CourseAPI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<ActionResult<BaseResponse>> Remove([FromQuery]Guid id)
+        public async Task<ActionResult<BaseResponse>> Remove([FromQuery] Guid id)
         {
             var result = await _LessonService.Remove(id);
             if (result.IsSuccess == false)

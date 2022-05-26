@@ -5,7 +5,7 @@
     },
     "mssql1": {
       "secretStore": "LocalSecretsFile",
-      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/courseapidbserver/databases/CourseAPI_db",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/courseapidbserver/databases/CourseAPI_db",
       "type": "mssql.azure",
       "connectionId": "ConnectionStrings:MOCK_Course"
     }

@@ -13,7 +13,7 @@ namespace Course.BLL.Requests
     }
     public class CategoryUpdateRequest : CategoryRequest
     {
-        //[Required]
-        //public Guid Id { get; set; }
+        [Required]
+        public Guid Id { get; set; }
     }
 }
