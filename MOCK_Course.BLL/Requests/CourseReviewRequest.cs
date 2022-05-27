@@ -5,7 +5,6 @@ namespace Course.BLL.Requests
 {
     public class CourseReviewRequest
     {
-        public Guid id { get; set; }
         public Guid EnrollmentId { get; set; }
         public string Content { get; set; }
         [Required]
@@ -13,9 +12,11 @@ namespace Course.BLL.Requests
         //[Required]
         //public Guid EnrollmentId { get; set; }
     }
-    public class CourseReviewUpdateRequest : CourseReviewRequest
+    public class CourseReviewUpdateRequest
     {
         [Required]
-        public Guid Id { get; set; }
+        public string Content { get; set; }
+        [Required]
+        public int Rating { get; set; }
     }
 }

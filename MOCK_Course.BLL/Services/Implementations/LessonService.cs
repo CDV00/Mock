@@ -60,8 +60,12 @@ namespace Course.BLL.Services.Implementations
         {
             try
             {
-                var result = await _LessonRepositoty.GetByIdAsync(idLesson);
-                _LessonRepositoty.Remove(result);
+                var lesson = await _LessonRepositoty.GetByIdAsync(idLesson);
+                if (lesson is null)
+                {
+                    return new BaseResponse(false, null, "can't find lesson");
+                }
+                _LessonRepositoty.Remove(lesson);
                 await _unitOfWork.SaveChangesAsync();
                 return new BaseResponse(true);
             }
@@ -71,12 +75,16 @@ namespace Course.BLL.Services.Implementations
             }
         }
 
-        public async Task<Response<LessonResponse>> Update(LessonUpdateRequest LessonRequest)
+        public async Task<Response<LessonResponse>> Update(Guid id, LessonUpdateRequest LessonRequest)
         {
             try
             {
-                var lesson = _mapper.Map<Lesson>(LessonRequest);
-                _LessonRepositoty.Update(lesson);
+                var lesson = _LessonRepositoty.GetByIdAsync(id);
+                if (lesson is null)
+                {
+                    return new Response<LessonResponse>(false, null, "can't find lesson");
+                }
+                await _mapper.Map(LessonRequest, lesson);
                 await _unitOfWork.SaveChangesAsync();
 
                 var lessonResponse = _mapper.Map<LessonResponse>(LessonRequest);

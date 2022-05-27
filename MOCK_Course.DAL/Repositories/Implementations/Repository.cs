@@ -20,12 +20,6 @@ namespace Course.DAL.Repositories.Implementations
         }
 
         /// <summary>
-        /// Implement Create method
-        /// </summary>
-        /// <param name="_object"></param>
-        public void Create(T _object) => DbSet.Add(_object);
-
-        /// <summary>
         /// Create async
         /// </summary>
         /// <param name="_object"></param>
@@ -48,24 +42,6 @@ namespace Course.DAL.Repositories.Implementations
         /// </summary>
         /// <returns></returns>
         public IQueryable<T> GetAll() => DbSet.AsNoTracking();
-        /// <summary>
-        /// Implement GetAllAsync method
-        /// </summary>
-        /// <returns></returns>
-        public async Task<IEnumerable<T>> GetAllAsync() => await DbSet.AsNoTracking().ToListAsync();
-
-        /// <summary>
-        /// Implement GetId method
-        /// </summary>
-        /// <param name="Id"></param>
-        /// <returns></returns>
-        public T GetById(K Id)
-        {
-            var data = DbSet.Find(Id);
-            if (data == null) return null;
-            _context.Entry(data).State = EntityState.Detached;
-            return data;
-        }
 
         /// <summary>
         /// Get by Id async
@@ -76,29 +52,10 @@ namespace Course.DAL.Repositories.Implementations
         {
             var data = await DbSet.FindAsync(Id);
             if (data == null) return null;
-            _context.Entry(data).State = EntityState.Detached;
+            _context.Entry(data).State = EntityState.Modified;
             return data;
         }
 
-        /// <summary>
-        /// Implement Update method
-        /// </summary>
-        /// <param name="_object"></param>
-        /// <returns></returns>
-        public bool Update(K id, object _object)
-        {
-            //DbSet.Attach(_object);
-            //_context.Entry(_object).State = EntityState.Modified;
-            //return true;
-            var entity = DbSet.Find(id);
-            if (entity == null)
-            {
-                return false;
-            }
-
-            _context.Entry(entity).CurrentValues.SetValues(_object);
-            return true;
-        }
         public bool Update(T _object)
         {
             DbSet.Attach(_object);

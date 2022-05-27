@@ -23,7 +23,7 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("Get-Profile/{id}")]
+        [HttpGet("Get-Profile/{id:guid}")]
         public async Task<ActionResult<UserProfileResponse>> GetProfile(Guid id)
         {
             var result = await _userService.GetProfile(id);

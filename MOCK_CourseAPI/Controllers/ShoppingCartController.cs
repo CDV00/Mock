@@ -62,11 +62,5 @@ namespace CourseAPI.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
-
-        //[HttpGet("total-cart")]
-        //public async Task<ActionResult<Responses<int>>> TotalCart(Guid userId)
-        //{
-
-        //}
     }
 }

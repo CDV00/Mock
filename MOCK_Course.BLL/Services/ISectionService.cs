@@ -10,6 +10,6 @@ namespace Course.BLL.Services
         Task<Responses<SectionResponse>> GetAll(Guid courseId);
         Task<Response<SectionResponse>> Add(SectionCreateRequest sectionRequest);
         Task<BaseResponse> Remove(Guid idSection);
-        Task<Response<SectionResponse>> Update(SectionUpdateRequest sectionRequest);
+        Task<Response<SectionResponse>> Update(Guid id, SectionUpdateRequest sectionRequest);
     }
 }

@@ -2,10 +2,8 @@
 using Course.BLL.Responsesnamespace;
 using Course.BLL.Requests;
 using Course.DAL.Models;
-using Course.DAL.Repositories;
 using Microsoft.AspNetCore.Identity;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Course.BLL.Services.Implementations
@@ -73,16 +71,7 @@ namespace Course.BLL.Services.Implementations
                 //var user = _mapper.Map<AppUser>(updateProfileRequest);
 
                 var user = await _userManager.FindByIdAsync(updateProfileRequest.Id.ToString());
-
-                user.Fullname = updateProfileRequest.FirstName + updateProfileRequest.LastName;
-                user.FirstName = updateProfileRequest.FirstName;
-                user.LastName = updateProfileRequest.LastName;
-                user.ProfileLink = updateProfileRequest.ProfileLink;
-                user.FacebookLink = updateProfileRequest.FacebookLink;
-                user.LinkedlnLink = updateProfileRequest.LinkedlnLink;
-                user.YoutubeLink = updateProfileRequest.YoutubeLink;
-                user.HeadLine = updateProfileRequest.HeadLine;
-                user.Description = updateProfileRequest.Description;
+                _mapper.Map(updateProfileRequest, user);
                 await _userManager.UpdateAsync(user);
 
                 return new Response<UserProfileResponse>(

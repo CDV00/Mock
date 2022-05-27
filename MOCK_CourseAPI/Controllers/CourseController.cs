@@ -71,10 +71,10 @@ namespace CourseAPI.Controllers
         /// <param name="id"></param>
         /// <param name="CoursesUpdateRequest"></param>
         /// <returns></returns>
-        [HttpPut]
-        public async Task<ActionResult<Response<CourseResponse>>> Update(UpdateCourseRequest CoursesUpdateRequest)
+        [HttpPut("{id:guid}")]
+        public async Task<ActionResult<Response<CourseResponse>>> Update(Guid id, UpdateCourseRequest CoursesUpdateRequest)
         {
-            var result = await _coursesService.Update(CoursesUpdateRequest);
+            var result = await _coursesService.Update(id, CoursesUpdateRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
@@ -86,7 +86,7 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <param name="id">Id Courses</param>
         /// <returns></returns>
-        [HttpDelete]
+        [HttpDelete("{id:guid}")]
         public async Task<ActionResult<BaseResponse>> Delete(Guid id)
         {
             var result = await _coursesService.Remove(id);

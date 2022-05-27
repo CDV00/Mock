@@ -90,12 +90,9 @@ namespace Course.BLL.Services.Implementations
                 }
 
                 var userResponse = _mapper.Map<UserResponse>(user);
-                
+
                 var roles = await _userManager.GetRolesAsync(user);
                 userResponse.Role = string.Join(",", roles);
-
-                //List<Claim> authClaims = await GetClaims(user, userResponse);
-                //var token = GenerateAccessToken(authClaims);
 
                 return new Response<UserResponse>(true, userResponse);
 
@@ -126,7 +123,7 @@ namespace Course.BLL.Services.Implementations
         private async Task<List<Claim>> GetClaims(AppUser user, UserResponse userResponse)
         {
             var roles = await _userManager.GetRolesAsync(user);
-            userResponse.Role = string.Join(",", roles); 
+            userResponse.Role = string.Join(",", roles);
 
             var authClaims = new List<Claim>() {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),

@@ -24,12 +24,12 @@ namespace Course.BLL.Services.Implementations
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
-        public async Task<Response<AudioLanguageCreateResponse>> Add(AudioLanguageCreateRequest AudioLanguageRequest, Guid CourseId)
+        public async Task<Response<AudioLanguageCreateResponse>> Add(AudioLanguageCreateRequest AudioLanguageRequest, Guid courseId)
         {
             try
             {
                 var AudioLanguage = _mapper.Map<AudioLanguage>(AudioLanguageRequest);
-                AudioLanguage.CourseId = CourseId;
+                AudioLanguage.CourseId = courseId;
 
                 await _AudioLanguageRepositoty.CreateAsync(AudioLanguage);
                 await _unitOfWork.SaveChangesAsync();
@@ -51,7 +51,7 @@ namespace Course.BLL.Services.Implementations
             {
                 var audioLanguages = await _AudioLanguageRepositoty.GetAll().Where(a => a.CourseId == courseId).ToListAsync();
 
-                foreach(var item in audioLanguages)
+                foreach (var item in audioLanguages)
                 {
                     _AudioLanguageRepositoty.Remove(item);
                 }

@@ -24,11 +24,12 @@ namespace Course.BLL.Services.Implementations
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
-        public async Task<Response<CloseCaptionCreateResponse>> Add(CloseCaptionCreateRequest CloseCaptionRequest)
+        public async Task<Response<CloseCaptionCreateResponse>> Add(CloseCaptionCreateRequest CloseCaptionRequest, Guid courseId)
         {
             try
             {
                 var CloseCaption = _mapper.Map<CloseCaption>(CloseCaptionRequest);
+                CloseCaption.Id = courseId;
 
                 await _CloseCaptionRepositoty.CreateAsync(CloseCaption);
                 await _unitOfWork.SaveChangesAsync();

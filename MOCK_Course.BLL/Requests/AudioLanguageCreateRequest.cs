@@ -4,7 +4,7 @@ namespace Course.BLL.Requests
 {
     public class AudioLanguageCreateRequest
     {
-        public Guid courseId { get; set; }
+        //public Guid courseId { get; set; }
         public Guid LanguageId { get; set; }
     }
     public class CloseCaptionCreateRequest : AudioLanguageCreateRequest { }

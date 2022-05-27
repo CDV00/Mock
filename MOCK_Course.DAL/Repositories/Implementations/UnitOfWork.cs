@@ -17,14 +17,6 @@ namespace Course.DAL.Repositories.Implementations
 
         #region IUnitOfWork Members
         /// <summary>
-        /// Save all changes
-        /// </summary>
-        public void SaveChanges()
-        {
-            _context.SaveChanges();
-        }
-
-        /// <summary>
         /// Dispose
         /// </summary>
         public void Dispose()

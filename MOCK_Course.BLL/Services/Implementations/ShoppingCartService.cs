@@ -62,9 +62,13 @@ namespace Course.BLL.Services.Implementations
         {
             try
             {
-                var result = await _shoppingCartRepository.GetByIdAsync(IdShoppingCart);
+                var cart = await _shoppingCartRepository.GetByIdAsync(IdShoppingCart);
+                if (cart is null)
+                {
+                    return new BaseResponse(false, null, "can't find cart");
+                }
 
-                _shoppingCartRepository.Remove(result);
+                _shoppingCartRepository.Remove(cart);
                 await _unitOfWork.SaveChangesAsync();
 
                 return new BaseResponse { IsSuccess = true };

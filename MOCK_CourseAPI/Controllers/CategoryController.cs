@@ -50,10 +50,10 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <param name="categoryUpdateRequest">CategoryUpdate</param>
         /// <returns></returns>
-        [HttpPut]
-        public async Task<ActionResult<Response<CategoryResponse>>> Update(CategoryUpdateRequest categoryUpdateRequest)
+        [HttpPut("{id:guid}")]
+        public async Task<ActionResult<Response<CategoryResponse>>> Update(Guid id, CategoryUpdateRequest categoryUpdateRequest)
         {
-            var result = await _categoryService.Update(categoryUpdateRequest);
+            var result = await _categoryService.Update(id, categoryUpdateRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
@@ -65,7 +65,7 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <param name="Id">Id Category</param>
         /// <returns></returns>
-        [HttpDelete]
+        [HttpDelete("{id:guid}")]
         public async Task<ActionResult<BaseResponse>> Delete(Guid Id)
         {
             var result = await _categoryService.remove(Id);

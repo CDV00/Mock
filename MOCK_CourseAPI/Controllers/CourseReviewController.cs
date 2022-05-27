@@ -27,7 +27,7 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <param name="CourseId"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("{CourseId:guid}")]
         public async Task<ActionResult<Responses<CourseReviewResponse>>> GetAll([FromQuery] Guid CourseId)
         {
             var result = await _courseReviewService.GetAll(CourseId);
@@ -57,10 +57,10 @@ namespace CourseAPI.Controllers
         /// <param name="id"></param>
         /// <param name="courseReviewUpdateRequest"></param>
         /// <returns></returns>
-        [HttpPut]
-        public async Task<ActionResult<BaseResponse>> Update(CourseReviewUpdateRequest courseReviewUpdateRequest)
+        [HttpPut("{id:guid}")]
+        public async Task<ActionResult<BaseResponse>> Update(Guid id, CourseReviewUpdateRequest courseReviewUpdateRequest)
         {
-            var result = await _courseReviewService.Update(courseReviewUpdateRequest);
+            var result = await _courseReviewService.Update(id, courseReviewUpdateRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
@@ -71,7 +71,7 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete]
+        [HttpDelete("{id:guid}")]
         public async Task<ActionResult<BaseResponse>> Delete(Guid id)
         {
             var result = await _courseReviewService.Delete(id);

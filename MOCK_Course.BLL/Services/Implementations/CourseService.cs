@@ -86,11 +86,12 @@ namespace Course.BLL.Services.Implementations
                 }
 
                 var CloseCaptionLength = courseRequest.CloseCaptions.Count;
+
                 if (CloseCaptionLength > 0)
                 {
                     for (var i = 0; i < CloseCaptionLength; i++)
                     {
-                        await _closeCaptionService.Add(courseRequest.CloseCaptions[i]);
+                        await _closeCaptionService.Add(courseRequest.CloseCaptions[i], courseId);
                     }
                 }
 
@@ -109,10 +110,14 @@ namespace Course.BLL.Services.Implementations
         {
             try
             {
-                Courses course = await CheckCourseExist(idCourse);
+                var course = await _cousesRepository.GetByIdAsync(idCourse);
+                if (course == null)
+                {
+                    new Responses<BaseResponse>(false, "can't find course", null);
+                }
 
                 _cousesRepository.Remove(course);
-                _unitOfWork.SaveChanges();
+                await _unitOfWork.SaveChangesAsync();
 
                 return new BaseResponse(true);
 
@@ -123,27 +128,22 @@ namespace Course.BLL.Services.Implementations
             }
         }
 
-        private async Task<Courses> CheckCourseExist(Guid idCourse)
-        {
-            var course = await _cousesRepository.GetByIdAsync(idCourse);
-            if (course == null)
-            {
-                new Responses<BaseResponse>(false, "can't find course", null);
-            }
 
-            return course;
-        }
-
-        public async Task<Response<CourseResponse>> Update(UpdateCourseRequest courseRequest)
+        public async Task<Response<CourseResponse>> Update(Guid Id, UpdateCourseRequest courseRequest)
         {
             try
             {
-                var course = _mapper.Map<Courses>(courseRequest);
+                var course = await _cousesRepository.GetByIdAsync(Id);
+                if (course == null)
+                {
+                    new Responses<BaseResponse>(false, "can't find course", null);
+                }
 
-                var courseId = courseRequest.Id;
+                _mapper.Map(courseRequest, course);
+
                 // remove language
-                await _audioLanguageService.RemoveAll(courseId);
-                await _closeCaptionService.RemoveAll(courseId);
+                await _audioLanguageService.RemoveAll(Id);
+                await _closeCaptionService.RemoveAll(Id);
 
                 // add language 
                 var AudioLanguageLength = courseRequest.AudioLanguages?.Count;
@@ -152,7 +152,7 @@ namespace Course.BLL.Services.Implementations
 
                     for (var i = 0; i < AudioLanguageLength; i++)
                     {
-                        await _audioLanguageService.Add(courseRequest.AudioLanguages[i], courseId);
+                        await _audioLanguageService.Add(courseRequest.AudioLanguages[i], Id);
                     }
                 }
 
@@ -161,18 +161,13 @@ namespace Course.BLL.Services.Implementations
                 {
                     for (var i = 0; i < CloseCaptionLength; i++)
                     {
-                        await _closeCaptionService.Add(courseRequest.CloseCaptions[i]);
+                        await _closeCaptionService.Add(courseRequest.CloseCaptions[i], Id);
                     }
                 }
 
-                var result = _cousesRepository.Update(course);
-                var CourseResponse = _mapper.Map<CourseResponse>(course);
-
-                if (!result)
-                {
-                    return new Response<CourseResponse>(false, "can't find coures", null);
-                }
                 await _unitOfWork.SaveChangesAsync();
+
+                var CourseResponse = _mapper.Map<CourseResponse>(course);
 
                 return new Response<CourseResponse>(
                     true,

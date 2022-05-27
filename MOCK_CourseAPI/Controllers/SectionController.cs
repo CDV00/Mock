@@ -35,7 +35,6 @@ namespace CourseAPI.Controllers
         /// <summary>
         /// Create new course section
         /// </summary>
-        /// <param name="courseId"></param>
         /// <param name="sectionRequest"></param>
         /// <returns></returns>
         [HttpPost]
@@ -47,10 +46,10 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
 
-        [HttpPut]
-        public async Task<ActionResult<Response<SectionResponse>>> Update([FromBody] SectionUpdateRequest sectionUpdateRequest)
+        [HttpPut("{id:guid}")]
+        public async Task<ActionResult<Response<SectionResponse>>> Update(Guid id, [FromBody] SectionUpdateRequest sectionUpdateRequest)
         {
-            var result = await _sectionService.Update(sectionUpdateRequest);
+            var result = await _sectionService.Update(id, sectionUpdateRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);

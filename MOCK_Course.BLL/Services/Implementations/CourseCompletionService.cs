@@ -49,56 +49,5 @@ namespace Course.BLL.Services.Implementations
             }
             return new BaseResponse(true);
         }
-
-        //public async Task<Responses<CourseCompletionResponse>> GetAll(Guid userId)
-        //{
-        //    try
-        //    {
-        //        var result = await _courseCompletionRepository.GetAll().Where(s => s.UserId == userId).Include(s => s.User).Include(s => s.Course).Include(s => s.User).Include(s => s.Course.Category).ToListAsync();
-
-        //        return new Responses<CourseCompletionResponse>(true, _mapper.Map<IEnumerable<CourseCompletionResponse>>(result));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new Responses<CourseCompletionResponse>(false, ex.Message, null);
-        //    }
-        //}
-
-        //public async Task<BaseResponse> Remove(Guid IdCourseCompletion)
-        //{
-        //    try
-        //    {
-        //        var result = await _courseCompletionRepository.GetByIdAsync(IdCourseCompletion);
-
-        //        _courseCompletionRepository.Remove(result);
-        //        await _unitOfWork.SaveChangesAsync();
-
-        //        return new BaseResponse { IsSuccess = true };
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new Responses<BaseResponse>(false, ex.Message, null);
-        //    }
-        //}
-        //public async Task<Response<CourseCompletionResponse>> Update(CourseCompletionUpdateRequest courseCompletionUpdateRequest)
-        //{
-        //    try
-        //    {
-        //        var coursecompletion = _mapper.Map<CourseCompletion>(courseCompletionUpdateRequest);
-
-        //        _courseCompletionRepository.Update(coursecompletion);
-        //        await _unitOfWork.SaveChangesAsync();
-        //        return new Response<CourseCompletionResponse>(
-        //            true,
-        //            _mapper.Map<CourseCompletionResponse>(coursecompletion)
-        //        );
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new Response<CourseCompletionResponse>(false, ex.Message, null);
-        //    }
-        //}
-
     }
 }

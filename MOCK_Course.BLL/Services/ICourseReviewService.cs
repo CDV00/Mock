@@ -10,8 +10,8 @@ namespace Course.BLL.Services
     {
         //Task<Responses<CourseReviewResponse>> GetAll();
         Task<Responses<CourseReviewResponse>> GetAll(Guid courseId);
-        Task<Response<CourseReviewResponse>> Add( CourseReviewRequest courseReviewRequest);
-        Task<Response<CourseReviewResponse>> Update(CourseReviewUpdateRequest courseReviewUpdateRequest);
+        Task<Response<CourseReviewResponse>> Add(CourseReviewRequest courseReviewRequest);
+        Task<Response<CourseReviewResponse>> Update(Guid id, CourseReviewUpdateRequest courseReviewUpdateRequest);
         Task<BaseResponse> Delete(Guid id);
     }
 }

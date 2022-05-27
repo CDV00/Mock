@@ -23,7 +23,7 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <param name="courseId"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("{sectionId:guid}")]
         public async Task<ActionResult<Responses<LessonResponse>>> GetAll([FromQuery] Guid sectionId)
         {
             var result = await _LessonService.GetAll(sectionId);
@@ -47,10 +47,10 @@ namespace CourseAPI.Controllers
         /// <param name="id"></param>
         /// <param name="LessonUpdateRequest"></param>
         /// <returns></returns>
-        [HttpPut]
-        public async Task<ActionResult<Response<LessonResponse>>> Update([FromBody] LessonUpdateRequest LessonUpdateRequest)
+        [HttpPut("{id:guid}")]
+        public async Task<ActionResult<Response<LessonResponse>>> Update(Guid id, [FromBody] LessonUpdateRequest LessonUpdateRequest)
         {
-            var result = await _LessonService.Update(LessonUpdateRequest);
+            var result = await _LessonService.Update(id, LessonUpdateRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
@@ -61,7 +61,7 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete]
+        [HttpDelete("{id:guid}")]
         public async Task<ActionResult<BaseResponse>> Remove([FromQuery] Guid id)
         {
             var result = await _LessonService.Remove(id);

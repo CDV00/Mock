@@ -57,15 +57,16 @@ namespace Course.BLL.Services.Implementations
             }
         }
 
-        public async Task<Responsesnamespace.BaseResponse> remove(Guid id)
+        public async Task<BaseResponse> remove(Guid id)
         {
             try
             {
                 var category = await _categoryRepository.GetByIdAsync(id);
+                // Check category null 
 
                 _categoryRepository.Remove(category);
                 await _unitOfWork.SaveChangesAsync();
-                return new Responsesnamespace.BaseResponse(true, null, null);
+                return new BaseResponse(true, null, null);
             }
             catch (Exception ex)
             {
@@ -73,13 +74,15 @@ namespace Course.BLL.Services.Implementations
             }
         }
 
-        public async Task<Response<CategoryResponse>> Update(CategoryUpdateRequest categoryUpdateRequest)
+        public async Task<Response<CategoryResponse>> Update(Guid Id, CategoryUpdateRequest categoryUpdateRequest)
         {
             try
             {
-                var category = _mapper.Map<Category>(categoryUpdateRequest);
+                var category = await _categoryRepository.GetByIdAsync(Id);
+                // check category null
 
-                _categoryRepository.Update(category);
+                _mapper.Map(categoryUpdateRequest, category);
+
                 await _unitOfWork.SaveChangesAsync();
                 return new Response<CategoryResponse>(
                     true,

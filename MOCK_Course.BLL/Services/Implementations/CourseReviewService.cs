@@ -48,29 +48,7 @@ namespace Course.BLL.Services.Implementations
             }
 
         }
-        /// <summary>
-        /// get course review by id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        //public async Task<Response<CourseReviewResponse>> GetById(Guid id)
-        //{
-        //    try
-        //    {
-        //        var result = await _courseReviewRepository.GetByIdAsync(id);
-        //        return new Response<CourseReviewResponse>(true, _mapper.Map<CourseReviewResponse>(result));
 
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new Response<CourseReviewResponse>(false, ex.Message, null);
-        //    }
-        //}
-        /// <summary>
-        /// create new course review
-        /// </summary>
-        /// <param name="courseReviewRequest"></param>
-        /// <returns></returns>
         public async Task<Response<CourseReviewResponse>> Add(CourseReviewRequest courseReviewRequest)
         {
             try
@@ -91,13 +69,14 @@ namespace Course.BLL.Services.Implementations
         /// </summary>
         /// <param name="courseReviewUpdateRequest"></param>
         /// <returns></returns>
-        public async Task<Response<CourseReviewResponse>> Update(CourseReviewUpdateRequest courseReviewUpdateRequest)
+        public async Task<Response<CourseReviewResponse>> Update(Guid id, CourseReviewUpdateRequest courseReviewUpdateRequest)
         {
             try
             {
-                var courseReview = _mapper.Map<CourseReview>(courseReviewUpdateRequest);
+                var courseReview = await _courseReviewRepository.GetByIdAsync(id);
+                //check coursereview null
+                _mapper.Map(courseReviewUpdateRequest, courseReview);
 
-                _courseReviewRepository.Update(courseReview);
                 await _unitOfWork.SaveChangesAsync();
                 return new Response<CourseReviewResponse>(
                     true,
@@ -119,6 +98,7 @@ namespace Course.BLL.Services.Implementations
             try
             {
                 var courseReview = await _courseReviewRepository.GetByIdAsync(id);
+                // Check courseReview null
 
                 _courseReviewRepository.Remove(courseReview);
                 await _unitOfWork.SaveChangesAsync();

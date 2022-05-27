@@ -52,7 +52,7 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete]
+        [HttpDelete("{id:guid}")]
         public async Task<ActionResult<BaseResponse>> Delete([FromQuery] Guid id)
         {
             var result = await _orderService.Delete(id);
