@@ -104,13 +104,14 @@ namespace Course.BLL.Services.Implementations
         }
         private string GenerateAccessToken(IEnumerable<Claim> claims)
         {
+            var jwtSettings = _configuration.GetSection("AuthSettings");
 
-            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["AuthSettings:Secret"]));
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]));
             var signCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                issuer: _configuration["AuthSettings:ValidIssuer"],
-                audience: _configuration["AuthSettings:ValidAudience"],
+                issuer: jwtSettings["Issuer"],
+                audience: jwtSettings["Audience"],
                 claims: claims,
                 expires: DateTime.Now.AddHours(TokenExpires),
                 signingCredentials: signCredentials
@@ -118,7 +119,7 @@ namespace Course.BLL.Services.Implementations
 
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
-            return tokenString;
+            return "Bear " + tokenString;
         }
         private async Task<List<Claim>> GetClaims(AppUser user, UserResponse userResponse)
         {

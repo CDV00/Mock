@@ -86,24 +86,26 @@ namespace CourseAPI.Extensions.ServiceExtensions
             });
         }
 
-        public static void ConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
+        public static void ConfigureJwt(this IServiceCollection services, IConfiguration configuration)
         {
+            var jwtSettings = configuration.GetSection("AuthSettings");
             services.AddAuthentication(auth =>
             {
                 auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 auth.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(options =>
+            }).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidAudience = configuration["AuthSettings:Audience"],
-                    ValidIssuer = configuration["AuthSettings:Issuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["AuthSettings:Key"])),
                     ValidateIssuer = true,
                     ValidateAudience = true,
-                    RequireExpirationTime = true,
+                    ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSettings["Issuer"],
+                    ValidAudience = jwtSettings["Audience"],
+                    IssuerSigningKey = new
+                    SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]))
                 };
             });
         }
@@ -179,9 +181,9 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IShoppingCartService, ShoppingCartService>();
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<IAccountService, AccountService>();
-         
+
             //services.AddScoped<IUserService, UserService>();
-    
+
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<ISectionService, SectionService>();
             services.AddScoped<ILessonService, LessonService>();

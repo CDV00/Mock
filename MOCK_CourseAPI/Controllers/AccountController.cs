@@ -2,12 +2,14 @@
 using Course.BLL.Requests;
 using Course.BLL.Responsesnamespace;
 using Course.BLL.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CourseAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _userService;
@@ -24,7 +26,7 @@ namespace CourseAPI.Controllers
         /// <param name="registerRequest"></param>
         /// <returns>token and User Information</returns>
         [HttpPost("register")]
-        public async Task<ActionResult<Response<UserResponse>>> Register(RegisterRequest registerRequest)
+        public async Task<ActionResult<Response<UserResponse>>> Register([FromForm] RegisterRequest registerRequest)
         {
             var result = await _userService.Register(registerRequest);
             if (result.IsSuccess)
@@ -41,7 +43,8 @@ namespace CourseAPI.Controllers
         /// <param name="loginRequest"></param>
         /// <returns>Token and user Information</returns>
         [HttpPost("login")]
-        public async Task<ActionResult<LoginResponse>> Login(LoginRequest loginRequest)
+        [AllowAnonimos]
+        public async Task<ActionResult<LoginResponse>> Login([FromForm] LoginRequest loginRequest)
         {
             var result = await _userService.Login(loginRequest);
             if (result.IsSuccess)

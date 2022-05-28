@@ -5,11 +5,13 @@ using Course.BLL.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using Course.BLL.Responses;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CourseAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin,Instructor")]
     public class CourseController : ControllerBase
     {
         private readonly ICourseService _coursesService;

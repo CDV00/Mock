@@ -1,14 +1,15 @@
 ﻿using System.Threading.Tasks;
-using Course.BLL.Responses;
 using Course.BLL.Requests;
 using Course.BLL.Services;
 using Microsoft.AspNetCore.Mvc;
 using Course.BLL.Responsesnamespace;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CourseAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class LanguageController : ControllerBase
     {
         private readonly ILanguageService _LanguageService;
@@ -22,6 +23,7 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<Responses<LanguageResponse>>> GetAll()
         {
             var result = await _LanguageService.GetAll();

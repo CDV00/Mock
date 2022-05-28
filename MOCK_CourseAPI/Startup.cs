@@ -30,13 +30,13 @@ namespace CourseAPI
             services.ConfigureCos();
             services.ConfigureIISIntegration();
             services.ConfigureIdentity();
+            services.ConfigureJwt(Configuration);
             services.ConfigureSwagger();
             services.ConfigureLoggerService();
             services.ConfigureServices();
             services.ConfigureRepositories();
 
             services.ConfigureSqlContext(Configuration);
-            services.ConfigureAuthentication(Configuration);
             services.AddAutoMapper(typeof(MapperInitializer));
 
             services.AddControllers();
@@ -49,7 +49,7 @@ namespace CourseAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-  
+
             }
             else
             {
@@ -68,6 +68,8 @@ namespace CourseAPI
             {
                 ForwardedHeaders = ForwardedHeaders.All
             });
+
+            app.UseAuthentication();
 
             app.UseRouting();
 

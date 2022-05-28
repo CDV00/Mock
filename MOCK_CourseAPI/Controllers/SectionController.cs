@@ -1,6 +1,7 @@
 ﻿using Course.BLL.Requests;
 using Course.BLL.Responsesnamespace;
 using Course.BLL.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ namespace CourseAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin,Instructor")]
     public class SectionController : ControllerBase
     {
         private readonly ISectionService _sectionService;
