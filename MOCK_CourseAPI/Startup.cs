@@ -31,6 +31,7 @@ namespace CourseAPI
             services.ConfigureIISIntegration();
             services.ConfigureIdentity();
             services.ConfigureJwt(Configuration);
+            services.AddJwtConfiguration(Configuration);
             services.ConfigureSwagger();
             services.ConfigureLoggerService();
             services.ConfigureServices();

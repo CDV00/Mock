@@ -39,7 +39,7 @@ namespace Course.BLL.Extensions
             services.AddScoped<ISectionService, SectionService>();
             services.AddScoped<ICourseService, CourseService>();
             //.AddScoped<IUserService, UserService>();
-            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IEnrollmentService, EnrollmentService>();
             services.AddScoped<ICourseCompletionService, CourseCompletionService>();
             services.AddScoped<ILessonCompletionService, LessonCompletionService>();

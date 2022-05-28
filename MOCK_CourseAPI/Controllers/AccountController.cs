@@ -10,10 +10,10 @@ namespace CourseAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class AccountController : ControllerBase
+    public class AuthenticationController : ControllerBase
     {
-        private readonly IAccountService _userService;
-        public AccountController(IAccountService userService)
+        private readonly IAuthenticationService _userService;
+        public AuthenticationController(IAuthenticationService userService)
         {
             _userService = userService;
         }
@@ -26,6 +26,7 @@ namespace CourseAPI.Controllers
         /// <param name="registerRequest"></param>
         /// <returns>token and User Information</returns>
         [HttpPost("register")]
+        [AllowAnonymous]
         public async Task<ActionResult<Response<UserResponse>>> Register([FromForm] RegisterRequest registerRequest)
         {
             var result = await _userService.Register(registerRequest);
@@ -43,7 +44,7 @@ namespace CourseAPI.Controllers
         /// <param name="loginRequest"></param>
         /// <returns>Token and user Information</returns>
         [HttpPost("login")]
-        [AllowAnonimos]
+        [AllowAnonymous]
         public async Task<ActionResult<LoginResponse>> Login([FromForm] LoginRequest loginRequest)
         {
             var result = await _userService.Login(loginRequest);
