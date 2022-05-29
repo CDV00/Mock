@@ -1,6 +1,6 @@
 ﻿using Course.BLL.Requests;
 using Course.BLL.Responses;
-using Course.BLL.Responsesnamespace;
+using Course.BLL.DTO;
 using Course.BLL.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -38,7 +38,6 @@ namespace CourseAPI.Controllers
         /// <summary>
         /// Add new review
         /// </summary>
-        /// <param name="EnrellmentId"></param>
         /// <param name="courseReviewRequest"></param>
         /// <returns></returns>
         [HttpPost]

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Course.BLL.Requests;
 using Course.BLL.Responses;
-using Course.BLL.Responsesnamespace;
+using Course.BLL.DTO;
 using Course.DAL.Models;
 using Course.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +24,7 @@ namespace Course.BLL.Services.Implementations
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
-        public async Task<Response<AudioLanguageCreateResponse>> Add(AudioLanguageCreateRequest AudioLanguageRequest, Guid courseId)
+        public async Task<Response<AudioLanguageDTO>> Add(AudioLanguageForCreateRequest AudioLanguageRequest, Guid courseId)
         {
             try
             {
@@ -34,35 +34,16 @@ namespace Course.BLL.Services.Implementations
                 await _AudioLanguageRepositoty.CreateAsync(AudioLanguage);
                 await _unitOfWork.SaveChangesAsync();
 
-                return new Response<AudioLanguageCreateResponse>(
+                return new Response<AudioLanguageDTO>(
                     true,
-                    _mapper.Map<AudioLanguageCreateResponse>(AudioLanguage)
+                    _mapper.Map<AudioLanguageDTO>(AudioLanguage)
                 );
             }
             catch (Exception ex)
             {
-                return new Response<AudioLanguageCreateResponse>(false, ex.Message, null);
+                return new Response<AudioLanguageDTO>(false, ex.Message, null);
             }
         }
 
-        public async Task<BaseResponse> RemoveAll(Guid courseId)
-        {
-            try
-            {
-                var audioLanguages = await _AudioLanguageRepositoty.GetAll().Where(a => a.CourseId == courseId).ToListAsync();
-
-                foreach (var item in audioLanguages)
-                {
-                    _AudioLanguageRepositoty.Remove(item);
-                }
-
-                await _unitOfWork.SaveChangesAsync();
-                return new BaseResponse(true);
-            }
-            catch (Exception ex)
-            {
-                return new BaseResponse(false, ex.Message, null);
-            }
-        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Course.BLL.DataTransferObjects;
 
-namespace Course.BLL.Responsesnamespace
+namespace Course.BLL.DTO
 {
     public class LoginResponse
     {

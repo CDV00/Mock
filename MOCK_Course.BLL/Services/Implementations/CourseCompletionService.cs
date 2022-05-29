@@ -4,8 +4,7 @@ using AutoMapper;
 using Course.BLL.Requests;
 using Course.DAL.Models;
 using Course.DAL.Repositories;
-using Microsoft.EntityFrameworkCore;
-using Course.BLL.Responsesnamespace;
+using Course.BLL.DTO;
 
 namespace Course.BLL.Services.Implementations
 {
@@ -24,11 +23,12 @@ namespace Course.BLL.Services.Implementations
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<BaseResponse> Add(CourseCompletionRequest courseCompletionRequest)
+        public async Task<BaseResponse> Add(Guid userId, CourseCompletionRequest courseCompletionRequest)
         {
             try
             {
                 var coursecompletion = _mapper.Map<CourseCompletion>(courseCompletionRequest);
+                coursecompletion.UserId = userId;
 
                 await _courseCompletionRepository.CreateAsync(coursecompletion);
                 await _unitOfWork.SaveChangesAsync();
@@ -39,15 +39,6 @@ namespace Course.BLL.Services.Implementations
             {
                 return new BaseResponse(false, ex.Message, null);
             }
-        }
-
-        public async Task<BaseResponse> IsCompletion(CourseCompletionRequest courseCompletionRequest)
-        {
-            if (await _courseCompletionRepository.FindByCondition(l => l.CourseId == courseCompletionRequest.CourseId && l.UserId == courseCompletionRequest.UserId).FirstOrDefaultAsync() == null)
-            {
-                return new BaseResponse(false);
-            }
-            return new BaseResponse(true);
         }
     }
 }

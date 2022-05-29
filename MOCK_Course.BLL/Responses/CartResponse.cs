@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Course.BLL.Responsesnamespace
+namespace Course.BLL.DTO
 {
     public class CartResponse
     {

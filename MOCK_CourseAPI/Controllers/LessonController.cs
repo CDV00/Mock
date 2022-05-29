@@ -1,5 +1,5 @@
 ﻿using Course.BLL.Requests;
-using Course.BLL.Responsesnamespace;
+using Course.BLL.DTO;
 using Course.BLL.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +26,7 @@ namespace CourseAPI.Controllers
         /// <param name="courseId"></param>
         /// <returns></returns>
         [HttpGet("{sectionId:guid}")]
-        public async Task<ActionResult<Responses<LessonResponse>>> GetAll([FromQuery] Guid sectionId)
+        public async Task<ActionResult<Responses<LessonDTO>>> GetAll([FromQuery] Guid sectionId)
         {
             var result = await _LessonService.GetAll(sectionId);
             if (result.IsSuccess == false)
@@ -35,7 +35,7 @@ namespace CourseAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Response<LessonResponse>>> Create([FromBody] LessonCreateRequest LessonRequest)
+        public async Task<ActionResult<Response<LessonDTO>>> Create([FromBody] LessonForCreateRequest LessonRequest)
         {
             var result = await _LessonService.Add(LessonRequest);
             if (result.IsSuccess == false)
@@ -50,7 +50,7 @@ namespace CourseAPI.Controllers
         /// <param name="LessonUpdateRequest"></param>
         /// <returns></returns>
         [HttpPut("{id:guid}")]
-        public async Task<ActionResult<Response<LessonResponse>>> Update(Guid id, [FromBody] LessonUpdateRequest LessonUpdateRequest)
+        public async Task<ActionResult<Response<LessonDTO>>> Update(Guid id, [FromBody] LessonForUpdateRequest LessonUpdateRequest)
         {
             var result = await _LessonService.Update(id, LessonUpdateRequest);
             if (result.IsSuccess == false)

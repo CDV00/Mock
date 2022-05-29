@@ -19,6 +19,11 @@ namespace Course.DAL.Repositories.Implementations
             _context = context;
         }
 
+        public DbSet<T> Entity()
+        {
+            return DbSet;
+        }
+
         /// <summary>
         /// Create async
         /// </summary>
@@ -41,14 +46,14 @@ namespace Course.DAL.Repositories.Implementations
         /// Implement GetAll method
         /// </summary>
         /// <returns></returns>
-        public IQueryable<T> GetAll() => DbSet.AsNoTracking();
+        public virtual IQueryable<T> GetAll() => DbSet.AsNoTracking();
 
         /// <summary>
         /// Get by Id async
         /// </summary>
         /// <param name="Id"></param>
         /// <returns>T</returns>
-        public async Task<T> GetByIdAsync(K Id)
+        public virtual async Task<T> GetByIdAsync(K Id)
         {
             var data = await DbSet.FindAsync(Id);
             if (data == null) return null;
@@ -56,7 +61,7 @@ namespace Course.DAL.Repositories.Implementations
             return data;
         }
 
-        public bool Update(T _object)
+        public virtual bool Update(T _object)
         {
             DbSet.Attach(_object);
             _context.Entry(_object).State = EntityState.Modified;
@@ -68,7 +73,7 @@ namespace Course.DAL.Repositories.Implementations
         /// </summary>
         /// <param name="expression"></param>
         /// <returns></returns>
-        public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression) => DbSet.Where(expression).AsNoTracking();
+        public virtual IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression) => DbSet.Where(expression).AsNoTracking();
 
         /// <summary>
         /// Count all records

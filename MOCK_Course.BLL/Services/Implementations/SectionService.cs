@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Course.BLL.Requests;
-using Course.BLL.Responsesnamespace;
+using Course.BLL.DTO;
 using Course.DAL.Models;
 using Course.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -14,17 +14,19 @@ namespace Course.BLL.Services.Implementations
     public class SectionService : ISectionService
     {
         private readonly ISectionRepositoty _sectionRepositoty;
+        private readonly ILessonRepository _lessonRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         public SectionService(ISectionRepositoty sectionRepositoty,
             IMapper mapper,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork, ILessonRepository lessonRepository)
         {
             _sectionRepositoty = sectionRepositoty;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _lessonRepository = lessonRepository;
         }
-        public async Task<Response<SectionResponse>> Add(SectionCreateRequest sectionRequest)
+        public async Task<Response<SectionDTO>> Add(SectionCreateRequest sectionRequest)
         {
             try
             {
@@ -33,28 +35,28 @@ namespace Course.BLL.Services.Implementations
                 await _sectionRepositoty.CreateAsync(section);
                 await _unitOfWork.SaveChangesAsync();
 
-                return new Response<SectionResponse>(
+                return new Response<SectionDTO>(
                     true,
-                    _mapper.Map<SectionResponse>(section)
+                    _mapper.Map<SectionDTO>(section)
                 );
             }
             catch (Exception ex)
             {
-                return new Response<SectionResponse>(false, ex.Message, null);
+                return new Response<SectionDTO>(false, ex.Message, null);
             }
         }
 
-        public async Task<Responses<SectionResponse>> GetAll(Guid courseId)
+        public async Task<Responses<SectionDTO>> GetAll(Guid courseId)
         {
             try
             {
-                var result = await _sectionRepositoty.GetAll().Where(s => s.CourseId == courseId).ToListAsync();
+                var result = await _sectionRepositoty.GetAllByCourseId(courseId);
 
-                return new Responses<SectionResponse>(true, _mapper.Map<IEnumerable<SectionResponse>>(result));
+                return new Responses<SectionDTO>(true, _mapper.Map<IEnumerable<SectionDTO>>(result));
             }
             catch (Exception ex)
             {
-                return new Responses<SectionResponse>(false, ex.Message, null);
+                return new Responses<SectionDTO>(false, ex.Message, null);
             }
         }
 
@@ -68,6 +70,7 @@ namespace Course.BLL.Services.Implementations
                     return new BaseResponse(false, null, "can't find lesson");
                 }
 
+                await _lessonRepository.RemoveBySectionId(idSection);
                 _sectionRepositoty.Remove(section);
                 await _unitOfWork.SaveChangesAsync();
 
@@ -80,7 +83,7 @@ namespace Course.BLL.Services.Implementations
             }
         }
 
-        public async Task<Response<SectionResponse>> Update(Guid id, SectionUpdateRequest sectionRequest)
+        public async Task<Response<SectionDTO>> Update(Guid id, SectionUpdateRequest sectionRequest)
         {
             try
             {
@@ -89,22 +92,22 @@ namespace Course.BLL.Services.Implementations
 
                 if (section is null)
                 {
-                    return new Response<SectionResponse>(false, null, "can't find section");
+                    return new Response<SectionDTO>(false, null, "can't find section");
                 }
 
                 _mapper.Map(sectionRequest, section);
                 await _unitOfWork.SaveChangesAsync();
 
-                var sectionResponse = _mapper.Map<SectionResponse>(section);
+                var sectionResponse = _mapper.Map<SectionDTO>(section);
 
-                return new Response<SectionResponse>(
+                return new Response<SectionDTO>(
                     true,
-                    _mapper.Map<SectionResponse>(sectionResponse)
+                    _mapper.Map<SectionDTO>(sectionResponse)
                 );
             }
             catch (Exception ex)
             {
-                return new Response<SectionResponse>(false, ex.Message, null);
+                return new Response<SectionDTO>(false, ex.Message, null);
             }
         }
     }

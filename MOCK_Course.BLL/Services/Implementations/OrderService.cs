@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Course.BLL.Requests;
 using Course.BLL.Responses;
-using Course.BLL.Responsesnamespace;
+using Course.BLL.DTO;
 using Course.DAL.Models;
 using Course.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;

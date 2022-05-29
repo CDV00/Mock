@@ -1,12 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Course.BLL.Requests;
-using Course.BLL.Responsesnamespace;
+using Course.BLL.DTO;
 
 namespace Course.BLL.Services
 {
     public interface ICourseCompletionService
     {
-        Task<BaseResponse> IsCompletion(CourseCompletionRequest courseCompletionRequest); 
-        Task<BaseResponse> Add(CourseCompletionRequest courseCompletionRequest);
+        Task<BaseResponse> Add(Guid userId, CourseCompletionRequest courseCompletionRequest);
     }
 }

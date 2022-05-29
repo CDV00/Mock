@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Course.BLL.Responsesnamespace
+namespace Course.BLL.DTO
 {
-    public class SectionResponse
+    public class SectionDTO
     {
         public Guid Id { get; set; }
         public string Title { get; set; }

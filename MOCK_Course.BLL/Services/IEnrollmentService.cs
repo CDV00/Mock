@@ -2,7 +2,7 @@
 using Course.BLL.Responses;
 using Course.BLL.Requests;
 using System;
-using Course.BLL.Responsesnamespace;
+using Course.BLL.DTO;
 
 namespace Course.BLL.Services
 {

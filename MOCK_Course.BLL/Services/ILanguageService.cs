@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Course.BLL.Requests;
-using Course.BLL.Responsesnamespace;
+using Course.BLL.DTO;
 
 namespace Course.BLL.Services
 {

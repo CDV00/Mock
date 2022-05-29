@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Course.BLL.Responsesnamespace;
+using Course.BLL.DTO;
 using Course.BLL.Requests;
 using Course.DAL.Models;
 using Microsoft.AspNetCore.Identity;

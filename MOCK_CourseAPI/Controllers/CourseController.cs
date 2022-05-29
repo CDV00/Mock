@@ -1,11 +1,12 @@
 ﻿using System.Threading.Tasks;
-using Course.BLL.Responsesnamespace;
+using Course.BLL.DTO;
 using Course.BLL.Requests;
 using Course.BLL.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using Course.BLL.Responses;
 using Microsoft.AspNetCore.Authorization;
+using CourseAPI.Extensions.ControllerBase;
 
 namespace CourseAPI.Controllers
 {
@@ -26,7 +27,8 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("Get-all")]
-        public async Task<ActionResult<Responses<CoursesCardResponse>>> GetAll()
+        [AllowAnonymous]
+        public async Task<ActionResult<Responses<CoursesCardDTO>>> GetAll()
         {
             var result = await _coursesService.GetAll();
             if (result.IsSuccess == false)
@@ -40,10 +42,11 @@ namespace CourseAPI.Controllers
         /// https://gambolthemes.net/html-items/cursus_main_demo/course_detail_view.html
         /// </summary>
         /// <returns></returns>
-        [HttpGet("{id:guid}", Name = "Get")]
-        public async Task<ActionResult<Response<CourseResponse>>> Get(Guid id)
+        [HttpGet("{id:guid}", Name = "GetForPost")]
+        [AllowAnonymous]
+        public async Task<ActionResult<Response<CourseDTO>>> GetForPost(Guid id)
         {
-            var course = await _coursesService.Get(id);
+            var course = await _coursesService.GetForPost(id);
             if (course.IsSuccess == false)
                 return BadRequest(course);
             return Ok(course);
@@ -54,13 +57,13 @@ namespace CourseAPI.Controllers
         /// https://gambolthemes.net/html-items/cursus_main_demo/create_new_course.html | 
         /// UserId:9e47da69-3d3e-428d-a395-d53908753582
         /// </summary>
-        /// <param name="userId"></param>
         /// <param name="courseRequest"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<CourseResponse>> Create([FromBody] CourseRequest courseRequest)
+        public async Task<ActionResult<CourseDTO>> Create([FromBody] CourseForCreateRequest courseRequest)
         {
-            var result = await _coursesService.Add(courseRequest);
+            var userId = User.GetUserId();
+            var result = await _coursesService.Add(userId, courseRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
@@ -74,7 +77,7 @@ namespace CourseAPI.Controllers
         /// <param name="CoursesUpdateRequest"></param>
         /// <returns></returns>
         [HttpPut("{id:guid}")]
-        public async Task<ActionResult<Response<CourseResponse>>> Update(Guid id, UpdateCourseRequest CoursesUpdateRequest)
+        public async Task<ActionResult<Response<CourseDTO>>> Update(Guid id, CourseForUpdateRequest CoursesUpdateRequest)
         {
             var result = await _coursesService.Update(id, CoursesUpdateRequest);
             if (result.IsSuccess == false)

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Course.BLL.Responses
 {
-    public class CourseResponse
+    public class CourseDTO
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
@@ -31,7 +31,7 @@ namespace Course.BLL.Responses
 
         public Guid CategoryId { get; set; }
 
-        public IList<AudioLanguageCreateResponse> AudioLanguages { get; set; }
-        public IList<CloseCaptionCreateResponse> CloseCaptions { get; set; }
+        public IList<AudioLanguageDTO> AudioLanguages { get; set; }
+        public IList<CloseCaptionDTO> CloseCaptions { get; set; }
     }
 }

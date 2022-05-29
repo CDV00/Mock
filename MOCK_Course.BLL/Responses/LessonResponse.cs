@@ -1,9 +1,9 @@
 ﻿using Course.BLL.Requests;
 using System;
 
-namespace Course.BLL.Responsesnamespace
+namespace Course.BLL.DTO
 {
-    public class LessonResponse : LessonCreateRequest
+    public class LessonDTO : LessonForUpdateRequest
     {
         public Guid Id { get; set; }
     }

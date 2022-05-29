@@ -1,6 +1,7 @@
 ﻿using Course.BLL.Requests;
-using Course.BLL.Responsesnamespace;
+using Course.BLL.DTO;
 using Course.BLL.Services;
+using CourseAPI.Extensions.ControllerBase;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -26,7 +27,8 @@ namespace CourseAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<BaseResponse>> Create([FromBody] CourseCompletionRequest courseCompletionRequest)
         {
-            var result = await _courseCompletionService.Add(courseCompletionRequest);
+            var userId = User.GetUserId();
+            var result = await _courseCompletionService.Add(userId, courseCompletionRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);

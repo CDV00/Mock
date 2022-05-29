@@ -3,9 +3,9 @@ using System;
 
 namespace Course.BLL.Responses
 {
-    public class CloseCaptionCreateResponse : CloseCaptionCreateRequest
+    public class CloseCaptionDTO : CloseCaptionForCreateRequest
     {
     }
 
-    public class AudioLanguageCreateResponse : CloseCaptionCreateResponse { }
+    public class AudioLanguageDTO : CloseCaptionDTO { }
 }

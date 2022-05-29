@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Course.BLL.Responsesnamespace
+namespace Course.BLL.DTO
 {
     public class CategoryResponse
     {

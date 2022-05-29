@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Course.BLL.DataTransferObjects;
 using Course.BLL.Requests;
-using Course.BLL.Responsesnamespace;
+using Course.BLL.DTO;
 using Course.DAL.ConfigurationModels;
 using Course.DAL.Models;
 using Microsoft.AspNetCore.Identity;

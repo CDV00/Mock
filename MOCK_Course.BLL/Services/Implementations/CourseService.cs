@@ -2,107 +2,123 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using Course.BLL.Responsesnamespace;
+using Course.BLL.DTO;
 using Course.BLL.Requests;
 using Course.DAL.Models;
 using Course.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Course.BLL.Responses;
+using Course.DAL.Repositories.Implementations;
 
 namespace Course.BLL.Services.Implementations
 {
     public class CourseService : ICourseService
     {
         private readonly ICousesRepository _cousesRepository;
-        private readonly IAudioLanguageService _audioLanguageService;
-        private readonly ICloseCaptionService _closeCaptionService;
+        private readonly IAudioLanguageRepository _audioLanguageRepository;
+        private readonly ICloseCaptionRepository _closeCaptionRepository;
+        private readonly ISectionRepositoty _sectionRepositoty;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public CourseService(ICousesRepository cousesRepository,
             IMapper mapper,
-            IUnitOfWork unitOfWork, IAudioLanguageService audioLanguageService, ICloseCaptionService closeCaptionService)
+            IUnitOfWork unitOfWork, IAudioLanguageRepository audioLanguageRepository, ICloseCaptionRepository closeCaptionRepository, ISectionRepositoty sectionRepositoty)
         {
             _cousesRepository = cousesRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
-            _audioLanguageService = audioLanguageService;
-            _closeCaptionService = closeCaptionService;
+            _audioLanguageRepository = audioLanguageRepository;
+            _closeCaptionRepository = closeCaptionRepository;
+            _sectionRepositoty = sectionRepositoty;
         }
 
         /// <summary>
         /// làm thêm phân trang và filter ở đây
         /// </summary>
         /// <returns></returns>
-        public async Task<Responses<CoursesCardResponse>> GetAll()
+        public async Task<Responses<CoursesCardDTO>> GetAll()
         {
             try
             {
-                var courses = await _cousesRepository.GetAll().Include(c => c.Category).Include(c => c.User).ToListAsync();
+                var courses = await _cousesRepository.GetAllForCard();
 
-                var courseResponse = _mapper.Map<List<CoursesCardResponse>>(courses);
-                return new Responses<CoursesCardResponse>(true, courseResponse);
+                var courseResponse = _mapper.Map<List<CoursesCardDTO>>(courses);
+                return new Responses<CoursesCardDTO>(true, courseResponse);
             }
             catch (Exception ex)
             {
-                return new Responses<CoursesCardResponse>(false, ex.Message, null);
+                return new Responses<CoursesCardDTO>(false, ex.Message, null);
             }
         }
 
-        public async Task<Response<CourseResponse>> Get(Guid id)
+        public async Task<Response<CourseDTO>> GetForPost(Guid id)
         {
             try
             {
-                var courses = await _cousesRepository.FindByCondition(c => c.Id == id).Include(c => c.AudioLanguages).Include(c => c.CloseCaptions).FirstOrDefaultAsync();
+                var course = await _cousesRepository.GetForPost(id);
 
-                var courseResponse = _mapper.Map<CourseResponse>(courses);
-                return new Response<CourseResponse>(true, courseResponse);
+                var courseResponse = _mapper.Map<CourseDTO>(course);
+                return new Response<CourseDTO>(true, courseResponse);
             }
             catch (Exception ex)
             {
-                return new Response<CourseResponse>(false, ex.Message, null);
+                return new Response<CourseDTO>(false, ex.Message, null);
             }
         }
 
-        public async Task<Response<CourseResponse>> Add(CourseRequest courseRequest)
+        public async Task<Response<CourseDTO>> Add(Guid userId, CourseForCreateRequest courseRequest)
         {
             try
             {
                 var course = _mapper.Map<Courses>(courseRequest);
+                var courseId = Guid.NewGuid();
+                course.UserId = userId;
+                course.Id = courseId;
 
                 await _cousesRepository.CreateAsync(course);
-                await _unitOfWork.SaveChangesAsync();
-                var CourseResponse = _mapper.Map<CourseResponse>(course);
+
+                var CourseDTO = _mapper.Map<CourseDTO>(course);
 
                 // add language 
-                var AudioLanguageLength = courseRequest.AudioLanguages.Count;
-                var courseId = course.Id;
-                if (AudioLanguageLength > 0)
-                {
-                    for (var i = 0; i < AudioLanguageLength; i++)
-                    {
-                        await _audioLanguageService.Add(courseRequest.AudioLanguages[i], courseId);
-                    }
-                }
+                await AddLanguages(courseRequest, courseId);
 
-                var CloseCaptionLength = courseRequest.CloseCaptions.Count;
+                await _unitOfWork.SaveChangesAsync();
 
-                if (CloseCaptionLength > 0)
-                {
-                    for (var i = 0; i < CloseCaptionLength; i++)
-                    {
-                        await _closeCaptionService.Add(courseRequest.CloseCaptions[i], courseId);
-                    }
-                }
-
-                return new Response<CourseResponse>(
+                return new Response<CourseDTO>(
                     true,
-                    CourseResponse
+                    CourseDTO
                 );
             }
             catch (Exception ex)
             {
-                return new Response<CourseResponse>(false, ex.Message, null);
+                return new Response<CourseDTO>(false, ex.Message, null);
+            }
+        }
+
+        private async Task AddLanguages(CourseForCreateRequest courseRequest, Guid courseId)
+        {
+            var AudioLanguageLength = courseRequest.AudioLanguages.Count;
+            var CloseCaptionLength = courseRequest.CloseCaptions.Count;
+
+            if (AudioLanguageLength > 0)
+            {
+                for (var i = 0; i < AudioLanguageLength; i++)
+                {
+                    var audioLanguage = _mapper.Map<AudioLanguage>(courseRequest.AudioLanguages[i]);
+                    audioLanguage.CourseId = courseId;
+                    await _audioLanguageRepository.CreateAsync(audioLanguage);
+                }
+            }
+
+            if (CloseCaptionLength > 0)
+            {
+                for (var i = 0; i < CloseCaptionLength; i++)
+                {
+                    var closeCaption = _mapper.Map<CloseCaption>(courseRequest.CloseCaptions[i]);
+                    closeCaption.CourseId = courseId;
+                    await _closeCaptionRepository.CreateAsync(closeCaption);
+                }
             }
         }
 
@@ -117,6 +133,7 @@ namespace Course.BLL.Services.Implementations
                 }
 
                 _cousesRepository.Remove(course);
+                await _sectionRepositoty.RemoveByCourseId(idCourse);
                 await _unitOfWork.SaveChangesAsync();
 
                 return new BaseResponse(true);
@@ -129,7 +146,7 @@ namespace Course.BLL.Services.Implementations
         }
 
 
-        public async Task<Response<CourseResponse>> Update(Guid Id, UpdateCourseRequest courseRequest)
+        public async Task<Response<CourseDTO>> Update(Guid Id, CourseForUpdateRequest courseRequest)
         {
             try
             {
@@ -142,41 +159,23 @@ namespace Course.BLL.Services.Implementations
                 _mapper.Map(courseRequest, course);
 
                 // remove language
-                await _audioLanguageService.RemoveAll(Id);
-                await _closeCaptionService.RemoveAll(Id);
+                await _audioLanguageRepository.RemoveAll(Id);
+                await _closeCaptionRepository.RemoveAll(Id);
 
-                // add language 
-                var AudioLanguageLength = courseRequest.AudioLanguages?.Count;
-                if (AudioLanguageLength > 0)
-                {
-
-                    for (var i = 0; i < AudioLanguageLength; i++)
-                    {
-                        await _audioLanguageService.Add(courseRequest.AudioLanguages[i], Id);
-                    }
-                }
-
-                var CloseCaptionLength = courseRequest.CloseCaptions?.Count;
-                if (CloseCaptionLength > 0)
-                {
-                    for (var i = 0; i < CloseCaptionLength; i++)
-                    {
-                        await _closeCaptionService.Add(courseRequest.CloseCaptions[i], Id);
-                    }
-                }
+                await AddLanguages(courseRequest, Id);
 
                 await _unitOfWork.SaveChangesAsync();
 
-                var CourseResponse = _mapper.Map<CourseResponse>(course);
+                var CourseResponse = _mapper.Map<CourseDTO>(course);
 
-                return new Response<CourseResponse>(
+                return new Response<CourseDTO>(
                     true,
                     CourseResponse
                 );
             }
             catch (Exception ex)
             {
-                return new Response<CourseResponse>(false, ex.Message, null);
+                return new Response<CourseDTO>(false, ex.Message, null);
             }
         }
     }

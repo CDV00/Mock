@@ -1,5 +1,5 @@
 ﻿using Course.BLL.Requests;
-using Course.BLL.Responsesnamespace;
+using Course.BLL.DTO;
 using System;
 using System.Threading.Tasks;
 

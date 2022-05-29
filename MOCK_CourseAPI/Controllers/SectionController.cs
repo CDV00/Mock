@@ -1,5 +1,5 @@
 ﻿using Course.BLL.Requests;
-using Course.BLL.Responsesnamespace;
+using Course.BLL.DTO;
 using Course.BLL.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,12 +23,12 @@ namespace CourseAPI.Controllers
         /// Get all course section by course Id 
         /// https://gambolthemes.net/html-items/cursus_main_demo/create_new_course.html
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="courseId"></param>
         /// <returns></returns>
         [HttpGet("{id:guid}")]
-        public async Task<ActionResult<Responses<SectionResponse>>> GetAll(Guid id)
+        public async Task<ActionResult<Responses<SectionDTO>>> GetAll(Guid courseId)
         {
-            var result = await _sectionService.GetAll(id);
+            var result = await _sectionService.GetAll(courseId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
@@ -40,7 +40,7 @@ namespace CourseAPI.Controllers
         /// <param name="sectionRequest"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Response<SectionResponse>>> Create([FromBody] SectionCreateRequest sectionRequest)
+        public async Task<ActionResult<Response<SectionDTO>>> Create([FromBody] SectionCreateRequest sectionRequest)
         {
             var result = await _sectionService.Add(sectionRequest);
             if (result.IsSuccess == false)
@@ -48,8 +48,9 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
 
+
         [HttpPut("{id:guid}")]
-        public async Task<ActionResult<Response<SectionResponse>>> Update(Guid id, [FromBody] SectionUpdateRequest sectionUpdateRequest)
+        public async Task<ActionResult<Response<SectionDTO>>> Update(Guid id, [FromBody] SectionUpdateRequest sectionUpdateRequest)
         {
             var result = await _sectionService.Update(id, sectionUpdateRequest);
             if (result.IsSuccess == false)

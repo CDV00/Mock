@@ -2,7 +2,7 @@
 
 namespace Course.BLL.Requests
 {
-    public class LessonCreateRequest
+    public class LessonForCreateRequest
     {
         public Guid SectionId { get; set; }
         public string Title { get; set; }
@@ -11,7 +11,7 @@ namespace Course.BLL.Requests
         public bool IsPreview { get; set; }
         public int TotalTime { get; set; }
     }
-    public class LessonUpdateRequest : LessonCreateRequest
+    public class LessonForUpdateRequest
     {
         public string Title { get; set; }
         public string VideoUrl { get; set; }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Course.BLL.Responsesnamespace
+namespace Course.BLL.DTO
 {
     public class Response<T> : BaseResponse
     {

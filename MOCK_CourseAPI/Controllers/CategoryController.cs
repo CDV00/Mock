@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Course.BLL.Responsesnamespace;
+using Course.BLL.DTO;
 using Course.BLL.Requests;
 using Course.BLL.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -51,6 +51,7 @@ namespace CourseAPI.Controllers
         /// Update an Category
         /// don't have Page yet
         /// </summary>
+        /// <param name="id"></param>
         /// <param name="categoryUpdateRequest">CategoryUpdate</param>
         /// <returns></returns>
         [HttpPut("{id:guid}")]
