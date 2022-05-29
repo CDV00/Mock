@@ -18,12 +18,13 @@ namespace Course.BLL.Services.Implementations
         private readonly IAudioLanguageRepository _audioLanguageRepository;
         private readonly ICloseCaptionRepository _closeCaptionRepository;
         private readonly ISectionRepositoty _sectionRepositoty;
+        private readonly ILessonRepository _lessonRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public CourseService(ICousesRepository cousesRepository,
             IMapper mapper,
-            IUnitOfWork unitOfWork, IAudioLanguageRepository audioLanguageRepository, ICloseCaptionRepository closeCaptionRepository, ISectionRepositoty sectionRepositoty)
+            IUnitOfWork unitOfWork, IAudioLanguageRepository audioLanguageRepository, ICloseCaptionRepository closeCaptionRepository, ISectionRepositoty sectionRepositoty, ILessonRepository lessonRepository)
         {
             _cousesRepository = cousesRepository;
             _mapper = mapper;
@@ -31,6 +32,7 @@ namespace Course.BLL.Services.Implementations
             _audioLanguageRepository = audioLanguageRepository;
             _closeCaptionRepository = closeCaptionRepository;
             _sectionRepositoty = sectionRepositoty;
+            _lessonRepository = lessonRepository;
         }
 
         /// <summary>
@@ -72,19 +74,12 @@ namespace Course.BLL.Services.Implementations
             try
             {
                 var course = _mapper.Map<Courses>(courseRequest);
-                var courseId = Guid.NewGuid();
-                course.UserId = userId;
-                course.Id = courseId;
 
                 await _cousesRepository.CreateAsync(course);
 
+                var result = await _unitOfWork.SaveChangesAsync();
+
                 var CourseDTO = _mapper.Map<CourseDTO>(course);
-
-                // add language 
-                await AddLanguages(courseRequest, courseId);
-
-                await _unitOfWork.SaveChangesAsync();
-
                 return new Response<CourseDTO>(
                     true,
                     CourseDTO
@@ -93,32 +88,6 @@ namespace Course.BLL.Services.Implementations
             catch (Exception ex)
             {
                 return new Response<CourseDTO>(false, ex.Message, null);
-            }
-        }
-
-        private async Task AddLanguages(CourseForCreateRequest courseRequest, Guid courseId)
-        {
-            var AudioLanguageLength = courseRequest.AudioLanguages.Count;
-            var CloseCaptionLength = courseRequest.CloseCaptions.Count;
-
-            if (AudioLanguageLength > 0)
-            {
-                for (var i = 0; i < AudioLanguageLength; i++)
-                {
-                    var audioLanguage = _mapper.Map<AudioLanguage>(courseRequest.AudioLanguages[i]);
-                    audioLanguage.CourseId = courseId;
-                    await _audioLanguageRepository.CreateAsync(audioLanguage);
-                }
-            }
-
-            if (CloseCaptionLength > 0)
-            {
-                for (var i = 0; i < CloseCaptionLength; i++)
-                {
-                    var closeCaption = _mapper.Map<CloseCaption>(courseRequest.CloseCaptions[i]);
-                    closeCaption.CourseId = courseId;
-                    await _closeCaptionRepository.CreateAsync(closeCaption);
-                }
             }
         }
 
@@ -145,7 +114,6 @@ namespace Course.BLL.Services.Implementations
             }
         }
 
-
         public async Task<Response<CourseDTO>> Update(Guid Id, CourseForUpdateRequest courseRequest)
         {
             try
@@ -161,8 +129,6 @@ namespace Course.BLL.Services.Implementations
                 // remove language
                 await _audioLanguageRepository.RemoveAll(Id);
                 await _closeCaptionRepository.RemoveAll(Id);
-
-                await AddLanguages(courseRequest, Id);
 
                 await _unitOfWork.SaveChangesAsync();
 

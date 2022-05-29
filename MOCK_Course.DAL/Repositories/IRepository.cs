@@ -13,6 +13,7 @@ namespace Course.DAL.Repositories
         IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression);
         Task<T> GetByIdAsync(K Id);
         Task CreateAsync(T _object);
+        Task CreateRangeAsync(List<T> _object);
         public bool Update(T _object);
         void Remove(T _object);
     }

@@ -25,8 +25,8 @@ namespace Course.BLL.Extensions
 
             // section
             CreateMap<Section, SectionDTO>().ReverseMap();
-            CreateMap<Section, SectionCreateRequest>().ReverseMap();
-            CreateMap<Section, SectionUpdateRequest>().ReverseMap();
+            CreateMap<Section, SectionCreateRequest>().ForMember(des => des.Lesson, src => src.MapFrom(opt => opt.Lessons)).ReverseMap();
+            CreateMap<Section, SectionUpdateRequest>().ReverseMap().ForMember(des => des.Lessons, src => src.MapFrom(opt => opt.Lesson)).ReverseMap();
             CreateMap<SectionDTO, SectionUpdateRequest>().ReverseMap();
 
             // language

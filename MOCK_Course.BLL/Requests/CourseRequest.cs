@@ -10,7 +10,7 @@ namespace Course.BLL.Requests
         public string ShortDescription { get; set; }
         public string Description { get; set; }
         /// <summary>
-        /// What will students learn in your course?*
+        /// What will students learn in your course?
         /// </summary>
         public string Learn { get; set; }
         public string Requirement { get; set; }
@@ -31,6 +31,8 @@ namespace Course.BLL.Requests
         public Guid CategoryId { get; set; }
         public IList<AudioLanguageForCreateRequest> AudioLanguages { get; set; }
         public IList<CloseCaptionForCreateRequest> CloseCaptions { get; set; }
+
+        public IList<SectionCreateRequest> Sections { get; set; }
     }
     public class CourseForUpdateRequest : CourseForCreateRequest
     {

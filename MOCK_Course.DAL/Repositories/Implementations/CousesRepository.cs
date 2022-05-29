@@ -15,6 +15,12 @@ namespace Course.DAL.Repositories.Implementations
             _context = context;
         }
 
+        public override Task CreateAsync(Courses _object)
+        {
+
+            return base.CreateAsync(_object);
+        }
+
         public async Task<IEnumerable<Courses>> GetAllForCard()
         {
 

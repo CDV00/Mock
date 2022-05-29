@@ -36,7 +36,6 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
 
-
         /// <summary>
         /// Get Detail course by course id
         /// https://gambolthemes.net/html-items/cursus_main_demo/course_detail_view.html

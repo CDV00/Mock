@@ -11,6 +11,6 @@ namespace Course.DAL.Models
         public Guid CourseId { get; set; }
         public Courses Course { get; set; }
 
-        public ICollection<Lesson> Lessons { get; set; }
+        public List<Lesson> Lessons { get; set; }
     }
 }

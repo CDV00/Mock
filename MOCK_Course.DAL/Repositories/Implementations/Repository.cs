@@ -24,17 +24,10 @@ namespace Course.DAL.Repositories.Implementations
             return DbSet;
         }
 
-        /// <summary>
-        /// Create async
-        /// </summary>
-        /// <param name="_object"></param>
-        /// <returns></returns>
-        public async Task CreateAsync(T _object) => await DbSet.AddAsync(_object);
+        public virtual async Task CreateAsync(T _object) => await DbSet.AddAsync(_object);
 
-        /// <summary>
-        /// Implement Remove method
-        /// </summary>
-        /// <param name="_object"></param>
+        public virtual async Task CreateRangeAsync(List<T> _object) => await DbSet.AddRangeAsync(_object);
+
         public virtual void Remove(T _object)
         {
             _context.Entry(_object).State = EntityState.Modified;
@@ -42,17 +35,8 @@ namespace Course.DAL.Repositories.Implementations
         }
 
 
-        /// <summary>
-        /// Implement GetAll method
-        /// </summary>
-        /// <returns></returns>
         public virtual IQueryable<T> GetAll() => DbSet.AsNoTracking();
 
-        /// <summary>
-        /// Get by Id async
-        /// </summary>
-        /// <param name="Id"></param>
-        /// <returns>T</returns>
         public virtual async Task<T> GetByIdAsync(K Id)
         {
             var data = await DbSet.FindAsync(Id);
@@ -68,17 +52,8 @@ namespace Course.DAL.Repositories.Implementations
             return true;
         }
 
-        /// <summary>
-        /// Find by Condition
-        /// </summary>
-        /// <param name="expression"></param>
-        /// <returns></returns>
         public virtual IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression) => DbSet.Where(expression).AsNoTracking();
 
-        /// <summary>
-        /// Count all records
-        /// </summary>
-        /// <returns></returns>
-        public async Task<int> CountAsync() => await DbSet.CountAsync().ConfigureAwait(false);
+        public virtual async Task<int> CountAsync() => await DbSet.CountAsync().ConfigureAwait(false);
     }
 }
