@@ -35,11 +35,11 @@ namespace Course.BLL.Services.Implementations
                 return new Response<UserProfileResponse>(false, ex.Message, null);
             }
         }
-        public async Task<BaseResponse> ChangePassword(ChangePasswordRequest changePasswordRequest)
+        public async Task<BaseResponse> ChangePassword(Guid userId, ChangePasswordRequest changePasswordRequest)
         {
             try
             {
-                var user = await _userManager.FindByIdAsync(changePasswordRequest.Id.ToString());
+                var user = await _userManager.FindByIdAsync(userId.ToString());
 
                 if (user == null)
                     return new BaseResponse(false, null, "can't find user");
@@ -63,14 +63,14 @@ namespace Course.BLL.Services.Implementations
         }
 
 
-        public async Task<Response<UserProfileResponse>> UpdateProfile(UpdateProfileRequest updateProfileRequest)
+        public async Task<Response<UserProfileResponse>> UpdateProfile(Guid id, UpdateProfileRequest updateProfileRequest)
         {
             try
             {
 
                 //var user = _mapper.Map<AppUser>(updateProfileRequest);
 
-                var user = await _userManager.FindByIdAsync(updateProfileRequest.Id.ToString());
+                var user = await _userManager.FindByIdAsync(id.ToString());
                 _mapper.Map(updateProfileRequest, user);
                 await _userManager.UpdateAsync(user);
 
@@ -85,6 +85,5 @@ namespace Course.BLL.Services.Implementations
                 return new Response<UserProfileResponse>(false, ex.Message, null);
             }
         }
-
     }
 }

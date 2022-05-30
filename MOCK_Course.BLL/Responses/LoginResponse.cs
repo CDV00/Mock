@@ -2,12 +2,12 @@
 
 namespace Course.BLL.DTO
 {
-    public class LoginResponse
+    public class LoginDTO
     {
         public TokenDto Token { get; set; }
         public UserResponse UserResponse { get; set; }
 
-        public LoginResponse(TokenDto token, UserResponse userResponse)
+        public LoginDTO(TokenDto token, UserResponse userResponse)
         {
             Token = token;
             UserResponse = userResponse;
@@ -18,7 +18,6 @@ namespace Course.BLL.DTO
     {
         public string FullName { get; set; }
         public string Email { get; set; }
-        public string Id { get; set; }
         public string Role { get; set; }
     }
     public class RegisterResponse
@@ -26,5 +25,6 @@ namespace Course.BLL.DTO
         //public RegisterResponse(string token, UserResponse userResponse) : base(token, userResponse)
         //{
         //}
+
     }
 }

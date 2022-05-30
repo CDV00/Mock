@@ -4,7 +4,6 @@ namespace Course.BLL.Requests
 {
     public class UpdateProfileRequest
     {
-        public Guid Id { get; set; }
         public string LastName { get; set; }
         public string FirstName { get; set; }
         public string ProfileLink { get; set; }

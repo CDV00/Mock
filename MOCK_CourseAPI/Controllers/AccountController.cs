@@ -4,6 +4,7 @@ using Course.BLL.DTO;
 using Course.BLL.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Course.BLL.DataTransferObjects;
 
 namespace CourseAPI.Controllers
 {
@@ -27,7 +28,7 @@ namespace CourseAPI.Controllers
         /// <returns>token and User Information</returns>
         [HttpPost("register")]
         [AllowAnonymous]
-        public async Task<ActionResult<Response<UserResponse>>> Register([FromForm] RegisterRequest registerRequest)
+        public async Task<ActionResult<BaseResponse>> Register([FromBody] RegisterRequest registerRequest)
         {
             var result = await _userService.Register(registerRequest);
             if (result.IsSuccess)
@@ -45,7 +46,7 @@ namespace CourseAPI.Controllers
         /// <returns>Token and user Information</returns>
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<ActionResult<LoginResponse>> Login([FromForm] LoginRequest loginRequest)
+        public async Task<ActionResult<LoginDTO>> Login([FromBody] LoginRequest loginRequest)
         {
             var result = await _userService.Login(loginRequest);
             if (result.IsSuccess)

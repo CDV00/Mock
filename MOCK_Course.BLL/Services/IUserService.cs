@@ -8,7 +8,7 @@ namespace Course.BLL.Services
     public interface IUserService
     {
         Task<Response<UserProfileResponse>> GetProfile(Guid id);
-        Task<Response<UserProfileResponse>> UpdateProfile(UpdateProfileRequest updateProfileRequest);
-        Task<BaseResponse> ChangePassword(ChangePasswordRequest changePasswordRequest);
+        Task<Response<UserProfileResponse>> UpdateProfile(Guid userId, UpdateProfileRequest updateProfileRequest);
+        Task<BaseResponse> ChangePassword(Guid userId, ChangePasswordRequest changePasswordRequest);
     }
 }

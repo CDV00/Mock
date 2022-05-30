@@ -31,6 +31,7 @@ namespace Course.BLL.Services.Implementations
         private readonly JwtConfiguration _jwtConfiguration;
         private readonly IOptions<JwtConfiguration> _configuration;
         private AppUser _user;
+        private UserResponse _userResponse = new UserResponse();
         public AuthenticationService(UserManager<AppUser> userManager, IMapper mapper, SignInManager<AppUser> signInManager, RoleManager<IdentityRole<Guid>> roleManager, ILogger<AuthenticationService> logger, IOptions<JwtConfiguration> configuration)
         {
             _mapper = mapper;
@@ -41,24 +42,27 @@ namespace Course.BLL.Services.Implementations
             _configuration = configuration;
             _jwtConfiguration = _configuration.Value;
         }
-        public async Task<Response<LoginResponse>> Login(LoginRequest loginRequest)
+        public async Task<Response<LoginDTO>> Login(LoginRequest loginRequest)
         {
             try
             {
                 if (!await ValidateUser(loginRequest))
                 {
-                    return new Response<LoginResponse>(false, "Email don't exist", null);
+                    return new Response<LoginDTO>(false, "Email don't exist", null);
                 }
 
+                _mapper.Map(_user, _userResponse);
                 var token = await CreateToken(populateExp: true);
 
-                var userResponse = _mapper.Map<UserResponse>(_user);
+                //var userResponse = _mapper.Map<UserResponse>(_user);
 
-                return new Response<LoginResponse>(true, new LoginResponse(token, userResponse));
+                //var roles = await _userManager.GetRolesAsync(_user);
+
+                return new Response<LoginDTO>(true, new LoginDTO(token, _userResponse));
             }
             catch (Exception ex)
             {
-                return new Response<LoginResponse>(false, ex.Message, null);
+                return new Response<LoginDTO>(false, ex.Message, null);
             }
         }
 
@@ -67,7 +71,7 @@ namespace Course.BLL.Services.Implementations
         /// </summary>
         /// <param name="registerRequest"></param>
         /// <returns></returns>
-        public async Task<Response<UserResponse>> Register(RegisterRequest registerRequest)
+        public async Task<BaseResponse> Register(RegisterRequest registerRequest)
         {
             try
             {
@@ -78,7 +82,7 @@ namespace Course.BLL.Services.Implementations
 
                 if (!result.Succeeded)
                 {
-                    return new Response<UserResponse>(false, result.Errors.ToList()[0].Description, null);
+                    return new BaseResponse(false, result.Errors.ToList()[0].Description, null);
                 }
 
                 if (registerRequest.CategoryId == null)
@@ -96,12 +100,12 @@ namespace Course.BLL.Services.Implementations
                 var roles = await _userManager.GetRolesAsync(user);
                 userResponse.Role = string.Join(",", roles);
 
-                return new Response<UserResponse>(true, userResponse);
+                return new BaseResponse(true);
 
             }
             catch (Exception ex)
             {
-                return new Response<UserResponse>(false, ex.Message, null);
+                return new BaseResponse(false, ex.Message, null);
             }
         }
 
@@ -225,6 +229,7 @@ namespace Course.BLL.Services.Implementations
                 new Claim(ClaimTypes.Name, _user.UserName),
             };
             var roles = await _userManager.GetRolesAsync(_user);
+            _userResponse.Role = roles[0].ToString();
             foreach (var role in roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));

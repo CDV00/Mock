@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using CourseAPI.Extensions.ControllerBase;
 
 namespace CourseAPI.Controllers
 {
@@ -19,16 +20,18 @@ namespace CourseAPI.Controllers
             _userService = userService;
         }
 
+
         /// <summary>
         /// Get profile of user
         /// https://gambolthemes.net/html-items/cursus_main_demo/my_instructor_profile_view.html
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("Get-Profile/{id:guid}")]
-        public async Task<ActionResult<UserProfileResponse>> GetProfile(Guid id)
+        [HttpGet("Get-Profile")]
+        public async Task<ActionResult<UserProfileResponse>> GetProfile()
         {
-            var result = await _userService.GetProfile(id);
+            var userId = User.GetUserId();
+            var result = await _userService.GetProfile(userId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
 
@@ -45,7 +48,8 @@ namespace CourseAPI.Controllers
         [HttpPut("Update-Profile")]
         public async Task<ActionResult<UserProfileResponse>> UpdateProfile([FromBody] UpdateProfileRequest updateProfileRequest)
         {
-            var result = await _userService.UpdateProfile(updateProfileRequest);
+            var userId = User.GetUserId();
+            var result = await _userService.UpdateProfile(userId, updateProfileRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
@@ -60,7 +64,9 @@ namespace CourseAPI.Controllers
         [HttpPut("Change-Password")]
         public async Task<ActionResult<BaseResponse>> ChagePassword([FromBody] ChangePasswordRequest changePasswordRequest)
         {
-            var result = await _userService.ChangePassword(changePasswordRequest);
+            var userId = User.GetUserId();
+
+            var result = await _userService.ChangePassword(userId, changePasswordRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
