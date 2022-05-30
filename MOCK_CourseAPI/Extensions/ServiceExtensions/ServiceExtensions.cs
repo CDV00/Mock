@@ -208,6 +208,8 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IEnrollmentService, EnrollmentService>();
             services.AddScoped<ICourseCompletionService, CourseCompletionService>();
             services.AddScoped<ILessonCompletionService, LessonCompletionService>();
+
+            services.AddScoped<IUploadService, UploadService>();
         }
     }
 }
