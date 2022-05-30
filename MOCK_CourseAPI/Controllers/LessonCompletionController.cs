@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using CourseAPI.Extensions.ControllerBase;
 
 namespace CourseAPI.Controllers
 {
@@ -29,7 +30,8 @@ namespace CourseAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<BaseResponse>> Create([FromBody] LessonCompletionRequest lessonCompletionRequest)
         {
-            var result = await _lessonCompletionService.Add(lessonCompletionRequest);
+            var userId = User.GetUserId();
+            var result = await _lessonCompletionService.Add(userId,lessonCompletionRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);

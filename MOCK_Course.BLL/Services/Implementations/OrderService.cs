@@ -47,11 +47,12 @@ namespace Course.BLL.Services.Implementations
         /// </summary>
         /// <param name="orderRequest"></param>
         /// <returns></returns>
-        public async Task<Response<OrderResponse>> Add(OrderRequest orderRequest)
+        public async Task<Response<OrderResponse>> Add(Guid userId, OrderRequest orderRequest)
         {
             try
             {
                 var order = _mapper.Map<Order>(orderRequest);
+                order.UserId = userId;
 
                 var course = await _cousesRepository.GetByIdAsync(order.CourseId);
                 order.Price = course.Price;

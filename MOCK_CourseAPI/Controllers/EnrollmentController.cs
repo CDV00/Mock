@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using CourseAPI.Extensions.ControllerBase;
 
 namespace CourseAPI.Controllers
 {
@@ -29,7 +30,8 @@ namespace CourseAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<BaseResponse>> Create([FromBody] EnrollmentRequest enrollmentRequest)
         {
-            var result = await _enrollmentService.Add(enrollmentRequest);
+            var userId = User.GetUserId();
+            var result = await _enrollmentService.Add(userId, enrollmentRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);

@@ -7,8 +7,6 @@ namespace Course.BLL.Requests
     {
         [Required]
         public Guid CourseId { get; set; }
-        [Required]
-        public Guid UserId { get; set; }
     }
     public class EnrollmentUpdateRequest : EnrollmentRequest
     {

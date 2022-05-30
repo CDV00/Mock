@@ -8,10 +8,6 @@ namespace Course.BLL.Services
 {
     public interface IEnrollmentService
     {
-        //Task<Responses<EnrollmentResponse>> GetAll(Guid userId);
-        Task<BaseResponse> IsEnrollmented(EnrollmentRequest enrollmentRequest);
-        Task<BaseResponse> Add(EnrollmentRequest enrollmentRequest);
-        //Task<BaseResponse> Remove(Guid userId);
-        //Task<Response<EnrollmentResponse>> Update(EnrollmentUpdateRequest enrollmentUpdateRequest);
+        Task<BaseResponse> Add(Guid userId, EnrollmentRequest enrollmentRequest);
     }
 }

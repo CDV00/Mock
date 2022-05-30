@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using CourseAPI.Extensions.ControllerBase;
 
 namespace CourseAPI.Controllers
 {
@@ -27,9 +28,10 @@ namespace CourseAPI.Controllers
         /// <param name="UserId"></param>
         /// <returns></returns>
         [HttpGet("{UserId:guid}")]
-        public async Task<ActionResult<Responses<OrderResponse>>> GetAll(Guid UserId)
+        public async Task<ActionResult<Responses<OrderResponse>>> GetAll()
         {
-            var result = await _orderService.GetAll(UserId);
+            var userId = User.GetUserId();
+            var result = await _orderService.GetAll(userId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
@@ -43,7 +45,8 @@ namespace CourseAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Response<OrderResponse>>> Add([FromBody] OrderRequest orderRequest)
         {
-            var result = await _orderService.Add(orderRequest);
+            var userId = User.GetUserId();
+            var result = await _orderService.Add(userId, orderRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
