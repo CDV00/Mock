@@ -8,9 +8,10 @@ namespace Course.BLL.DTO
         public string Title { get; set; }
         public decimal Price { get; set; }
         public decimal DiscountPrice { get; set; } = 0;
+        public string ThumbnailUrl { get; set; }
         public DateTime CreatedAt { get; set; }
-        public CategoryDTO CategoryResponse { get; set; }
-        public UserDTO UserResponse { get; set; }
+        public CategoryDTO Category { get; set; }
+        public UserDTO User { get; set; }
     }
 
     public class CategoryDTO

@@ -16,5 +16,6 @@ namespace Course.DAL.Repositories
         Task CreateRangeAsync(List<T> _object);
         public bool Update(T _object);
         void Remove(T _object);
+        void RemoveRange(List<T> _object);
     }
 }

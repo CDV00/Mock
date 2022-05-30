@@ -42,7 +42,7 @@ namespace Course.BLL.Extensions
 
             CreateMap<AppUser, UserDTO>().ReverseMap();
             CreateMap<Category, CategoryDTO>().ReverseMap();
-            CreateMap<Courses, CoursesCardDTO>().ForMember(des => des.UserResponse, opt => opt.MapFrom(src => src.User)).ForMember(des => des.CategoryResponse, opt => opt.MapFrom(src => src.Category)).ReverseMap();
+            CreateMap<Courses, CoursesCardDTO>().ForMember(des => des.User, opt => opt.MapFrom(src => src.User)).ForMember(des => des.Category, opt => opt.MapFrom(src => src.Category)).ReverseMap();
 
             CreateMap<AudioLanguageDTO, AudioLanguage>().ReverseMap();
             CreateMap<CloseCaptionDTO, CloseCaption>().ReverseMap();

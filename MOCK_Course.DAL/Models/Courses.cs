@@ -29,7 +29,7 @@ namespace Course.DAL.Models
 
         public Guid CategoryId { get; set; }
         public Category Category { get; set; }
-        public Guid? UserId { get; set; }
+        public Guid UserId { get; set; }
         public AppUser User { get; set; }
 
         public ICollection<Section> Sections { get; set; }

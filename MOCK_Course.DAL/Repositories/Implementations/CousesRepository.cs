@@ -24,12 +24,12 @@ namespace Course.DAL.Repositories.Implementations
         public async Task<IEnumerable<Courses>> GetAllForCard()
         {
 
-            return await GetAll().Include(c => c.Category).Include(c => c.User).ToListAsync();
+            return await GetAll().Include(c => c.Category).Include(c=>c.User).ToListAsync();
         }
 
         public async Task<Courses> GetForPost(Guid id)
         {
-            return await FindByCondition(c => c.Id == id).Include(c => c.AudioLanguages).Include(c => c.CloseCaptions).FirstOrDefaultAsync();
+            return await FindByCondition(c => c.Id == id).Include(c => c.AudioLanguages).Include(c => c.CloseCaptions).Include(c=>c.Sections).ThenInclude(s=>s.Lessons).FirstOrDefaultAsync();
         }
     }
 }

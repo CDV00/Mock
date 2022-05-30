@@ -6,9 +6,7 @@ using Course.BLL.DTO;
 using Course.BLL.Requests;
 using Course.DAL.Models;
 using Course.DAL.Repositories;
-using Microsoft.EntityFrameworkCore;
 using Course.BLL.Responses;
-using Course.DAL.Repositories.Implementations;
 
 namespace Course.BLL.Services.Implementations
 {
@@ -74,6 +72,7 @@ namespace Course.BLL.Services.Implementations
             try
             {
                 var course = _mapper.Map<Courses>(courseRequest);
+                course.UserId = userId;
 
                 await _cousesRepository.CreateAsync(course);
 
@@ -102,7 +101,6 @@ namespace Course.BLL.Services.Implementations
                 }
 
                 _cousesRepository.Remove(course);
-                await _sectionRepositoty.RemoveByCourseId(idCourse);
                 await _unitOfWork.SaveChangesAsync();
 
                 return new BaseResponse(true);
@@ -124,11 +122,11 @@ namespace Course.BLL.Services.Implementations
                     new Responses<BaseResponse>(false, "can't find course", null);
                 }
 
-                _mapper.Map(courseRequest, course);
-
                 // remove language
                 await _audioLanguageRepository.RemoveAll(Id);
                 await _closeCaptionRepository.RemoveAll(Id);
+
+                _mapper.Map(courseRequest, course);
 
                 await _unitOfWork.SaveChangesAsync();
 

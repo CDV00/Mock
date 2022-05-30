@@ -34,6 +34,15 @@ namespace Course.DAL.Repositories.Implementations
             _object.IsDeleted = true;
         }
 
+        public virtual void RemoveRange(List<T> _object)
+        {
+            _context.Entry(_object).State = EntityState.Modified;
+            for (var i = 0; i < _object.Count; i++)
+            {
+                _object[0].IsDeleted = true;
+            }
+        }
+
 
         public virtual IQueryable<T> GetAll() => DbSet.AsNoTracking();
 

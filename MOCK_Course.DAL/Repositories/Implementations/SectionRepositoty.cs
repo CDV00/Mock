@@ -20,17 +20,17 @@ namespace Course.DAL.Repositories.Implementations
             return await GetAll().Where(s => s.CourseId == courseId).ToListAsync();
         }
 
-        public async Task<bool> RemoveByCourseId(Guid courseId)
-        {
-            var sections = await GetAll().Where(s => s.CourseId == courseId).ToListAsync();
+        //public async Task<bool> RemoveByCourseId(Guid courseId)
+        //{
+        //    var sections = await GetAll().Where(s => s.CourseId == courseId).ToListAsync();
 
-            for (var i = 0; i < sections.Count; i++)
-            {
-                Remove(sections[i]);
-            }
+        //    for (var i = 0; i < sections.Count; i++)
+        //    {
+        //        Remove(sections[i]);
+        //    }
 
-            return true;
-        }
+        //    return true;
+        //}
     }
 }
 

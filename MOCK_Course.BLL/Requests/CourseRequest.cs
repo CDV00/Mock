@@ -4,6 +4,10 @@ using System.Collections.Generic;
 
 namespace Course.BLL.Requests
 {
+    public class CourseBaseRequest
+    {
+
+    }
     public class CourseForCreateRequest
     {
         public string Title { get; set; }
