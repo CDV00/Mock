@@ -26,11 +26,12 @@ namespace Course.BLL.Services.Implementations
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Response<CartResponse>> Add(CartRequest cartRequest)
+        public async Task<Response<CartResponse>> Add(Guid userId, CartRequest cartRequest)
         {
             try
             {
                 var cart = _mapper.Map<ShoppingCart>(cartRequest);
+                cart.UserId = userId;
                 await _shoppingCartRepository.CreateAsync(cart);
                 await _unitOfWork.SaveChangesAsync();
 

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using CourseAPI.Extensions.ControllerBase;
 
 namespace CourseAPI.Controllers
 {
@@ -27,8 +28,9 @@ namespace CourseAPI.Controllers
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
         [HttpGet]
-        public async Task<ActionResult<Responses<CartResponse>>> GetAll(Guid userId)
+        public async Task<ActionResult<Responses<CartResponse>>> GetAll()
         {
+            var userId = User.GetUserId();
             var result = await _shoppingCartService.GetAll(userId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
@@ -38,13 +40,13 @@ namespace CourseAPI.Controllers
         /// <summary>
         /// when user click "add cart", will create new cart
         /// </summary>
-        /// <param name="UserId"></param>
         /// <param name="cartRequest"></param>
         /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<Responses<CartResponse>>> Create([FromBody] CartRequest cartRequest)
         {
-            var result = await _shoppingCartService.Add(cartRequest);
+            var userId = User.GetUserId();
+            var result = await _shoppingCartService.Add(userId, cartRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
