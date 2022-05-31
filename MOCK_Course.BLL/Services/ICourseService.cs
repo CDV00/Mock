@@ -3,6 +3,7 @@ using Course.BLL.DTO;
 using Course.BLL.Requests;
 using System;
 using Course.BLL.Responses;
+using Course.DAL.DTOs;
 
 namespace Course.BLL.Services
 {
@@ -14,5 +15,6 @@ namespace Course.BLL.Services
         Task<Response<CourseDTO>> Update(Guid id, CourseForUpdateRequest courseRequest);
         Task<BaseResponse> Remove(Guid id);
         Task<Response<int>> GetTotal(Guid userId);
+        Task<Responses<PurchaseDTO>> GetAllMyPurchase(Guid id);
     }
 }
