@@ -154,5 +154,11 @@ namespace Course.BLL.Services.Implementations
                 return new Response<int>(false, ex.Message, null);
             }
         }
+
+        public Task<Responses<CoursesCardDTO>> GetMyPurchase(Guid id)
+        {
+
+            throw new NotImplementedException();
+        }
     }
 }

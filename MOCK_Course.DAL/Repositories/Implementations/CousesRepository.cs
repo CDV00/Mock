@@ -36,5 +36,22 @@ namespace Course.DAL.Repositories.Implementations
         {
             return await GetAll().Where(s => s.UserId == userId).GroupBy(s => s.UserId).CountAsync();
         }
+
+        public async Task<List<PurchaseDTO>> GetAllPurchase()
+        {
+            var purchases = await (from course in _context.Courses
+                            join user in _context.Users
+                                on course.UserId equals user.Id
+                            select new PurchaseDTO { FullName= user.Fullname, Title = course.Title }).ToListAsync();
+
+            return purchases;
+        }
+
+    }
+
+    public class PurchaseDTO
+    {
+        public string FullName { get; set; }
+        public string Title { get; set; }
     }
 }

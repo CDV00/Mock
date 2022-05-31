@@ -49,9 +49,9 @@ namespace Course.BLL.Services.Implementations
         {
             try
             {
-                var result = await _shoppingCartRepository.GetAll().Where(s => s.UserId == userId).Include(s => s.User).Include(s => s.Course).Include(s => s.User).Include(s => s.Course.Category).ToListAsync();
+                var ShoppingCart = await _shoppingCartRepository.GetAll().Where(s => s.UserId == userId).Include(s => s.User).Include(s => s.Course).ThenInclude(c => c.Category).ToListAsync();
 
-                return new Responses<CartResponse>(true, _mapper.Map<IEnumerable<CartResponse>>(result));
+                return new Responses<CartResponse>(true, _mapper.Map<IEnumerable<CartResponse>>(ShoppingCart));
             }
             catch (Exception ex)
             {

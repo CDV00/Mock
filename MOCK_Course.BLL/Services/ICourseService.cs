@@ -9,6 +9,7 @@ namespace Course.BLL.Services
     public interface ICourseService
     {
         Task<Responses<CoursesCardDTO>> GetAll();
+        Task<Responses<CoursesCardDTO>> GetMyPurchase(Guid id);
         Task<Response<CourseDTO>> GetForPost(Guid id);
         Task<Response<CourseDTO>> Add(Guid userId, CourseForCreateRequest courseRequest);
         Task<Response<CourseDTO>> Update(Guid id, CourseForUpdateRequest courseRequest);
