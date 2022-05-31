@@ -9,5 +9,6 @@ namespace Course.DAL.Repositories
     {
         Task<IEnumerable<Courses>> GetAllForCard();
         Task<Courses> GetForPost(Guid id);
+        Task<int> GetTotal(Guid userId);
     }
 }
