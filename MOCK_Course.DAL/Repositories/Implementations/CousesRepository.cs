@@ -3,6 +3,7 @@ using Course.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Course.DAL.Repositories.Implementations
@@ -30,6 +31,10 @@ namespace Course.DAL.Repositories.Implementations
         public async Task<Courses> GetForPost(Guid id)
         {
             return await FindByCondition(c => c.Id == id).Include(c => c.AudioLanguages).Include(c => c.CloseCaptions).Include(c => c.Sections).ThenInclude(s => s.Lessons).FirstOrDefaultAsync();
+        }
+        public async Task<int> GetTotal(Guid userId)
+        {
+            return await GetAll().Where(s => s.UserId == userId).GroupBy(s => s.UserId).CountAsync();
         }
     }
 }

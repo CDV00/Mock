@@ -109,5 +109,22 @@ namespace Course.BLL.Services.Implementations
                 return new BaseResponse(false, ex.Message, null);
             }
         }
+        /// <summary>
+        /// Get total review of course
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async Task<Response<int>> GetTotal(Guid userId)
+        {
+            try
+            {
+                var courses = await _courseReviewRepository.GetTotal(userId);
+                return new Response<int>(true, courses);
+            }
+            catch (Exception ex)
+            {
+                return new Response<int>(false, ex.Message, null);
+            }
+        }
     }
 }
