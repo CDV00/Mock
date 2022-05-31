@@ -47,6 +47,7 @@ namespace Course.BLL.Extensions
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<ICourseReviewService, CourseReviewService>();
+            services.AddScoped<IEmailService, EmailService>();
         }
     }
 }

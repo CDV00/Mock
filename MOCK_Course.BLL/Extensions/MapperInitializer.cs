@@ -60,6 +60,7 @@ namespace Course.BLL.Extensions
             CreateMap<AppUser, UpdateProfileRequest>().ReverseMap();
             CreateMap<AppUser, ChangePasswordRequest>().ReverseMap();
             CreateMap<AppUser, UserProfileResponse>().ReverseMap();
+            CreateMap<AppUser, ResetPasswordRequest>().ReverseMap();
 
             //Order
             CreateMap<Order, OrderRequest>().ReverseMap();

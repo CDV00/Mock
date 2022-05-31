@@ -55,5 +55,53 @@ namespace CourseAPI.Controllers
             }
             return BadRequest(result);
         }
+        /// <summary>
+        /// forget Password
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        [HttpPost("ForgetPassword")]
+        [AllowAnonymous]
+        public async Task<ActionResult<BaseResponse>> ForgetPassword(string email)
+        {
+            var result = await _userService.ForgetPassWord(email);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        /// <summary>
+        /// reset password
+        /// </summary>
+        /// <param name="resetPasswordRequest"></param>
+        /// <returns></returns>
+        [HttpPost("ResetPassword")]
+        [AllowAnonymous]
+        public async Task<ActionResult<BaseResponse>> ResetPassword(ResetPasswordRequest resetPasswordRequest)
+        {
+            var result = await _userService.ResetPassWord(resetPasswordRequest);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        /// <summary>
+        /// login with google or facebook
+        /// </summary>
+        /// <param name="externalLoginResquest">Provider(google or facebook) and token</param>
+        /// <returns></returns>
+        [HttpPost("ExternalLogin")]
+        [AllowAnonymous]
+        public async Task<ActionResult<LoginDTO>> ExternalLogin(ExternalLoginResquest externalLoginResquest)
+        {
+            var result = await _userService.ExternalLogin(externalLoginResquest);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
     }
 }
