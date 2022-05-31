@@ -2,6 +2,7 @@
 using Course.BLL.DTO;
 using Course.BLL.Requests;
 using Course.DAL.Models;
+using Course.DAL.Repositories;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Threading.Tasks;
@@ -12,22 +13,33 @@ namespace Course.BLL.Services.Implementations
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
+        private readonly IEnrollmentRepository _enrollmentRepository;
+        private readonly ICousesRepository _cousesRepository;
+        private readonly ICourseReviewRepository _courseReviewRepository;
         public UserService(UserManager<AppUser> userManager,
-            IMapper mapper)
+            IMapper mapper, IEnrollmentRepository enrollmentRepository, ICousesRepository cousesRepository, ICourseReviewRepository courseReviewRepository)
         {
             _userManager = userManager;
             _mapper = mapper;
+            _enrollmentRepository = enrollmentRepository;
+            _cousesRepository = cousesRepository;
+            _courseReviewRepository = courseReviewRepository;
+
         }
         public async Task<Response<UserProfileResponse>> GetProfile(Guid id)
         {
             try
             {
-
                 var userProfile = await _userManager.FindByIdAsync(id.ToString());
+                var userProfileResponse = _mapper.Map<UserProfileResponse>(userProfile);
+
+                userProfileResponse.TotalEnrollment = await _enrollmentRepository.GetTotal(id);
+                userProfileResponse.TotalCourse = await _cousesRepository.GetTotal(id);
+                userProfileResponse.TotalReviewCourse = await _courseReviewRepository.GetTotal(id);
 
                 return new Response<UserProfileResponse>(
                     true,
-                    _mapper.Map<UserProfileResponse>(userProfile)
+                    userProfileResponse
                 );
             }
             catch (Exception ex)
