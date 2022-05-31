@@ -14,12 +14,12 @@ namespace Course.BLL.Services.Implementations
     public class SectionService : ISectionService
     {
         private readonly ISectionRepositoty _sectionRepositoty;
-        private readonly ILessonRepository _lessonRepository;
+        private readonly ILectureRepository _lessonRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         public SectionService(ISectionRepositoty sectionRepositoty,
             IMapper mapper,
-            IUnitOfWork unitOfWork, ILessonRepository lessonRepository)
+            IUnitOfWork unitOfWork, ILectureRepository lessonRepository)
         {
             _sectionRepositoty = sectionRepositoty;
             _mapper = mapper;

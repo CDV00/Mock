@@ -30,7 +30,7 @@ namespace Course.DAL.Repositories.Implementations
 
         public async Task<Courses> GetForPost(Guid id)
         {
-            return await FindByCondition(c => c.Id == id).Include(c => c.AudioLanguages).Include(c => c.CloseCaptions).Include(c => c.Sections).ThenInclude(s => s.Lessons).FirstOrDefaultAsync();
+            return await FindByCondition(c => c.Id == id).Include(c => c.AudioLanguages).Include(c => c.CloseCaptions).Include(c => c.Sections).ThenInclude(s => s.Lecture).FirstOrDefaultAsync();
         }
         public async Task<int> GetTotal(Guid userId)
         {

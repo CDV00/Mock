@@ -97,5 +97,17 @@ namespace Course.BLL.Services.Implementations
                 return new Response<UserProfileResponse>(false, ex.Message, null);
             }
         }
+
+        public async Task<BaseResponse> CheckExistEmail(string Email)
+        {
+            var user = await _userManager.FindByEmailAsync(Email);
+
+            if (user == null)
+            {
+                return new BaseResponse(false);
+            }
+
+            return new BaseResponse(true);
+        }
     }
 }

@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace Course.DAL.Repositories.Implementations
 {
-    public class LessonRepository : Repository<Lesson, Guid>, ILessonRepository
+    public class LectureRepository : Repository<Lecture, Guid>, ILectureRepository
     {
-        public LessonRepository(AppDbContext context) : base(context)
+        public LectureRepository(AppDbContext context) : base(context)
         {
 
         }
-        public async Task<IEnumerable<Lesson>> GetAllBySectionId(Guid sectionId)
+        public async Task<IEnumerable<Lecture>> GetAllBySectionId(Guid sectionId)
         {
             return await GetAll().Where(s => s.SectionId == sectionId).ToListAsync();
         }

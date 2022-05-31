@@ -46,7 +46,7 @@ namespace CourseAPI.Controllers
         /// <param name="updateProfileRequest"></param>
         /// <returns></returns>
         [HttpPut("Update-Profile")]
-        public async Task<ActionResult<UserProfileResponse>> UpdateProfile([FromBody] UpdateProfileRequest updateProfileRequest)
+        public async Task<ActionResult<Response<UserProfileResponse>>> UpdateProfile([FromBody] UpdateProfileRequest updateProfileRequest)
         {
             var userId = User.GetUserId();
             var result = await _userService.UpdateProfile(userId, updateProfileRequest);
@@ -69,6 +69,18 @@ namespace CourseAPI.Controllers
             var result = await _userService.ChangePassword(userId, changePasswordRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
+            return Ok(result);
+        }
+
+
+        [HttpGet("Check-Exist-Email")]
+        [AllowAnonymous]
+        public async Task<ActionResult<BaseResponse>> CheckExistEmail(string Email)
+        {
+            var result = await _userService.CheckExistEmail(Email);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+
             return Ok(result);
         }
     }

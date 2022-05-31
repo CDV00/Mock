@@ -78,11 +78,11 @@ namespace Course.BLL.Services.Implementations
 
                         uploadRequest = await vimeoClient.UploadEntireFileAsync(binaryContent, chunkSize, null);
 
-                        var duration = uploadRequest.Ticket.Video.Duration;
+                        var duration = uploadRequest.Ticket.Video?.Duration;
 
                         var urlVideo = string.Concat("https://player.vimeo.com/video/", uploadRequest.ClipId.Value.ToString());
 
-                        return new Response<UploadVideoDTO>(true, new UploadVideoDTO() { Url = urlVideo });
+                        return new Response<UploadVideoDTO>(true, new UploadVideoDTO() { Url = urlVideo, Duration = duration });
                     }
                 }
                 return new Response<UploadVideoDTO>(false, "file null", null);

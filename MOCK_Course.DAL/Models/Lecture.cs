@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Course.DAL.Models
 {
-    public class Lesson : BaseEntity<Guid>
+    public class Lecture : BaseEntity<Guid>
     {
         public string Title { get; set; }
         public string VideoUrl { get; set; }
@@ -14,6 +14,6 @@ namespace Course.DAL.Models
         public Guid SectionId { get; set; }
         public Section Section { get; set; }
 
-        public ICollection<LessonCompletion> LessonCompletions { get; set; }
+        public ICollection<LectureCompletion> LectureCompletions { get; set; }
     }
 }

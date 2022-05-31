@@ -22,9 +22,9 @@ namespace Course.BLL.Extensions
             services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
             services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
             services.AddScoped<ICourseCompletionRepository, CourseCompletionRepository>();
-            services.AddScoped<ILessonCompletionRepository, LessonCompletionRepository>();
+            services.AddScoped<ILectureCompletionRepository, LectureCompletionRepository>();
 
-            services.AddScoped<ILessonRepository, LessonRepository>();
+            services.AddScoped<ILectureRepository, LectureRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<ICourseReviewRepository, CourseReviewRepository>();
         }
@@ -42,8 +42,8 @@ namespace Course.BLL.Extensions
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IEnrollmentService, EnrollmentService>();
             services.AddScoped<ICourseCompletionService, CourseCompletionService>();
-            services.AddScoped<ILessonCompletionService, LessonCompletionService>();
-            services.AddScoped<ILessonService, LessonService>();
+            services.AddScoped<ILectureCompletionService, LectureCompletionService>();
+            services.AddScoped<ILectureService, LectureService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<ICourseReviewService, CourseReviewService>();

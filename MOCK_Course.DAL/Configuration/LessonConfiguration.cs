@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Course.DAL.Configuration
 {
-    internal class LessonConfiguration : IEntityTypeConfiguration<Lesson>
+    internal class LectureConfiguration : IEntityTypeConfiguration<Lecture>
     {
-        public void Configure(EntityTypeBuilder<Lesson> builder)
+        public void Configure(EntityTypeBuilder<Lecture> builder)
         {
             // 1-n:section-lession
             builder.HasOne(l => l.Section)
-                .WithMany(s => s.Lessons)
+                .WithMany(s => s.Lecture)
                 .HasForeignKey(l => l.SectionId).OnDelete(DeleteBehavior.Cascade);
 
             builder.HasQueryFilter(u => !u.IsDeleted);

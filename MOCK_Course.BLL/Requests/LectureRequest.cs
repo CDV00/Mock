@@ -2,7 +2,7 @@
 
 namespace Course.BLL.Requests
 {
-    public class LessonForCreateRequest
+    public class LectureForCreateRequest
     {
         //public Guid? SectionId { get; set; }
         public string Title { get; set; }
@@ -11,12 +11,12 @@ namespace Course.BLL.Requests
         public bool IsPreview { get; set; }
         public int TotalTime { get; set; }
     }
-    public class LessonForUpdateRequest : LessonForCreateRequest
+    public class LectureForUpdateRequest : LectureForCreateRequest
     {
         public Guid Id { get; set; }
     }
 
-    public class LessonDTO
+    public class LectureDTO
     {
         public Guid Id { get; set; }
         public string Title { get; set; }

@@ -26,7 +26,7 @@ namespace Course.DAL.Models
         public ICollection<CourseCompletion> CourseCompletions { get; set; }
         public ICollection<Courses> Courses { get; set; }
         public ICollection<Subscription> Subscriptions { get; set; }
-        public ICollection<LessonCompletion> LessonCompletions { get; set; }
+        public ICollection<LectureCompletion> LectureCompletions { get; set; }
         public ICollection<Order> Orders { get; set; }
         public ICollection<ShoppingCart> Carts { get; set; }
     }

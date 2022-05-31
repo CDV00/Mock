@@ -167,18 +167,18 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
             services.AddScoped<ICousesRepository, CousesRepository>();
             services.AddScoped<ISectionRepositoty, SectionRepositoty>();
-            services.AddScoped<ILessonRepository, LessonRepository>();
+            services.AddScoped<ILectureRepository, LectureRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<ICourseReviewRepository, CourseReviewRepository>();
-            services.AddScoped<ILessonRepository, LessonRepository>();
+            services.AddScoped<ILectureRepository, LectureRepository>();
             services.AddScoped<IAudioLanguageRepository, AudioLanguageRepository>();
             services.AddScoped<ICloseCaptionRepository, CloseCaptionRepository>();
             services.AddScoped<ILanguageRepository, LanguageRepository>();
 
-            services.AddScoped<ILessonRepository, LessonRepository>();
+            services.AddScoped<ILectureRepository, LectureRepository>();
             services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
             services.AddScoped<ICourseCompletionRepository, CourseCompletionRepository>();
-            services.AddScoped<ILessonCompletionRepository, LessonCompletionRepository>();
+            services.AddScoped<ILectureCompletionRepository, LectureCompletionRepository>();
         }
         /// <summary>
         /// Configure Services
@@ -195,19 +195,19 @@ namespace CourseAPI.Extensions.ServiceExtensions
 
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<ISectionService, SectionService>();
-            services.AddScoped<ILessonService, LessonService>();
+            services.AddScoped<ILectureService, LectureService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<ICourseReviewService, CourseReviewService>();
 
-            services.AddScoped<ILessonService, LessonService>();
+            services.AddScoped<ILectureService, LectureService>();
             services.AddScoped<IAudioLanguageService, AudioLanguageService>();
             services.AddScoped<ICloseCaptionService, CloseCaptionService>();
             services.AddScoped<ILanguageService, LanguageService>();
-            services.AddScoped<ILessonService, LessonService>();
+            services.AddScoped<ILectureService, LectureService>();
             services.AddScoped<IEnrollmentService, EnrollmentService>();
             services.AddScoped<ICourseCompletionService, CourseCompletionService>();
-            services.AddScoped<ILessonCompletionService, LessonCompletionService>();
+            services.AddScoped<ILectureCompletionService, LectureCompletionService>();
 
             services.AddScoped<IUploadService, UploadService>();
         }

@@ -16,11 +16,11 @@ namespace Course.DAL.Data
         public DbSet<CourseCompletion> CourseCompletions { get; set; }
         public DbSet<Enrollment> Enrollment { get; set; }
         public DbSet<Subscription> Subscriptions { get; set; }
-        public DbSet<LessonCompletion> LessonCompletions { get; set; }
+        public DbSet<LectureCompletion> LectureCompletions { get; set; }
         public DbSet<ShoppingCart> Carts { get; set; }
         public DbSet<Section> Sections { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<Lesson> Lessons { get; set; }
+        public DbSet<Lecture> Lectures { get; set; }
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<Language> Languages { get; set; }
@@ -30,7 +30,7 @@ namespace Course.DAL.Data
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-            
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -43,8 +43,8 @@ namespace Course.DAL.Data
             modelBuilder.ApplyConfiguration(new CourseReviewConfiguration());
             modelBuilder.ApplyConfiguration(new CoursesConfiguration());
             modelBuilder.ApplyConfiguration(new EnrollmentConfiguration());
-            modelBuilder.ApplyConfiguration(new LessonCompletionConfiguration());
-            modelBuilder.ApplyConfiguration(new LessonConfiguration());
+            modelBuilder.ApplyConfiguration(new LectureCompletionConfiguration());
+            modelBuilder.ApplyConfiguration(new LectureConfiguration());
             modelBuilder.ApplyConfiguration(new OrderConfiguration());
             modelBuilder.ApplyConfiguration(new SectionConfiguration());
             modelBuilder.ApplyConfiguration(new ShoppingCartConfiguration());

@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace Course.DAL.Repositories.Implementations
 {
-    public class LessonCompletionRepository : Repository<LessonCompletion, Guid>, ILessonCompletionRepository
+    public class LectureCompletionRepository : Repository<LectureCompletion, Guid>, ILectureCompletionRepository
     {
-        public LessonCompletionRepository(AppDbContext context) : base(context)
+        public LectureCompletionRepository(AppDbContext context) : base(context)
         {
 
         }
 
-        public async Task<bool> IsCompletion(LessonCompletion lessonCompletion)
+        public async Task<bool> IsCompletion(LectureCompletion lessonCompletion)
         {
-            if (await FindByCondition(l => l.UserId == lessonCompletion.UserId && l.LessonId == lessonCompletion.LessonId).FirstOrDefaultAsync() == null)
+            if (await FindByCondition(l => l.UserId == lessonCompletion.UserId && l.LectureId == lessonCompletion.LectureId).FirstOrDefaultAsync() == null)
             {
                 return false;
             }

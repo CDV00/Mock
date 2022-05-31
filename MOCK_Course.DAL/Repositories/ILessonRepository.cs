@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace Course.DAL.Repositories
 {
-    public interface ILessonRepository : IRepository<Lesson, Guid>
+    public interface ILectureRepository : IRepository<Lecture, Guid>
     {
-        Task<IEnumerable<Lesson>> GetAllBySectionId(Guid sectionId);
+        Task<IEnumerable<Lecture>> GetAllBySectionId(Guid sectionId);
         Task<bool> RemoveBySectionId(Guid sectionId);
     }
 }

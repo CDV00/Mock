@@ -4,20 +4,20 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Course.DAL.Configuration
 {
-    internal class LessonCompletionConfiguration : IEntityTypeConfiguration<LessonCompletion>
+    internal class LectureCompletionConfiguration : IEntityTypeConfiguration<LectureCompletion>
     {
-        public void Configure(EntityTypeBuilder<LessonCompletion> builder)
+        public void Configure(EntityTypeBuilder<LectureCompletion> builder)
         {
             // 1-n:user-lessonCompletion
             builder.HasOne(l => l.User)
-                .WithMany(u => u.LessonCompletions)
+                .WithMany(u => u.LectureCompletions)
                 .HasForeignKey(l => l.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             // 1-n:lession-lessionCompletion
-            builder.HasOne(lc => lc.Lesson)
-                .WithMany(l => l.LessonCompletions)
-                .HasForeignKey(lc => lc.LessonId)
+            builder.HasOne(lc => lc.Lecture)
+                .WithMany(l => l.LectureCompletions)
+                .HasForeignKey(lc => lc.LectureId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasQueryFilter(u => !u.IsDeleted);

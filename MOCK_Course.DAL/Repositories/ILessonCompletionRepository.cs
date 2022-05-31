@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 
 namespace Course.DAL.Repositories
 {
-    public interface ILessonCompletionRepository : IRepository<LessonCompletion, Guid>
+    public interface ILectureCompletionRepository : IRepository<LectureCompletion, Guid>
     {
-        Task<bool> IsCompletion(LessonCompletion lessonCompletion);
+        Task<bool> IsCompletion(LectureCompletion lessonCompletion);
     }
 }

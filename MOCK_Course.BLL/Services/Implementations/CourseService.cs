@@ -16,13 +16,13 @@ namespace Course.BLL.Services.Implementations
         private readonly IAudioLanguageRepository _audioLanguageRepository;
         private readonly ICloseCaptionRepository _closeCaptionRepository;
         private readonly ISectionRepositoty _sectionRepositoty;
-        private readonly ILessonRepository _lessonRepository;
+        private readonly ILectureRepository _lessonRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public CourseService(ICousesRepository cousesRepository,
             IMapper mapper,
-            IUnitOfWork unitOfWork, IAudioLanguageRepository audioLanguageRepository, ICloseCaptionRepository closeCaptionRepository, ISectionRepositoty sectionRepositoty, ILessonRepository lessonRepository)
+            IUnitOfWork unitOfWork, IAudioLanguageRepository audioLanguageRepository, ICloseCaptionRepository closeCaptionRepository, ISectionRepositoty sectionRepositoty, ILectureRepository lessonRepository)
         {
             _cousesRepository = cousesRepository;
             _mapper = mapper;

@@ -18,15 +18,15 @@ namespace Course.BLL.Extensions
             CreateMap<AppUser, UserResponse>().ForMember(des => des.FullName, src => src.MapFrom(opt => opt.FirstName + opt.Fullname)).ReverseMap();
 
             // lesion
-            CreateMap<Lesson, LessonForCreateRequest>().ReverseMap();
-            CreateMap<Lesson, LessonForUpdateRequest>().ReverseMap();
-            CreateMap<Lesson, LessonDTO>().ReverseMap();
+            CreateMap<Lecture, LectureForCreateRequest>().ReverseMap();
+            CreateMap<Lecture, LectureForUpdateRequest>().ReverseMap();
+            CreateMap<Lecture, LectureDTO>().ReverseMap();
             //CreateMap<LessonDTO, LessonForUpdateRequest>().ReverseMap();
 
             // section
-            CreateMap<Section, SectionCreateRequest>().ForMember(des => des.Lesson, src => src.MapFrom(opt => opt.Lessons)).ReverseMap();
-            CreateMap<Section, SectionUpdateRequest>().ReverseMap().ForMember(des => des.Lessons, src => src.MapFrom(opt => opt.Lesson)).ReverseMap();
-            CreateMap<Section, SectionDTO>().ForMember(des => des.Lesson, src => src.MapFrom(opt => opt.Lessons)).ReverseMap();
+            CreateMap<Section, SectionCreateRequest>().ForMember(des => des.Lecture, src => src.MapFrom(opt => opt.Lecture)).ReverseMap();
+            CreateMap<Section, SectionUpdateRequest>().ReverseMap().ForMember(des => des.Lecture, src => src.MapFrom(opt => opt.Lesson)).ReverseMap();
+            CreateMap<Section, SectionDTO>().ForMember(des => des.Lesson, src => src.MapFrom(opt => opt.Lecture)).ReverseMap();
             //CreateMap<SectionDTO, SectionUpdateRequest>().ReverseMap();
 
             // language
@@ -83,12 +83,12 @@ namespace Course.BLL.Extensions
             CreateMap<CourseCompletion, CourseCompletionRequest>().ReverseMap();
 
             // map lesson completion
-            CreateMap<LessonCompletionRequest, LessonCompletionResponse>().ReverseMap();
-            CreateMap<LessonCompletionRequest, LessonCompletion>().ReverseMap();
-            CreateMap<LessonCompletionUser, AppUser>().ReverseMap();
-            CreateMap<LessonCompletionLession, Lesson>().ReverseMap();
-            CreateMap<LessonCompletion, LessonCompletionResponse>().ForMember(des => des.LessonCompUser, opt => opt.MapFrom(src => src.User)).ForMember(des => des.Lesson, opt => opt.MapFrom(src => src.Lesson)).ReverseMap();
-            CreateMap<LessonCompletion, LessonCompletionRequest>().ReverseMap();
+            CreateMap<LectureCompletionRequest, LectureCompletionResponse>().ReverseMap();
+            CreateMap<LectureCompletionRequest, LectureCompletion>().ReverseMap();
+            CreateMap<LectureCompletionUser, AppUser>().ReverseMap();
+            CreateMap<LectureCompletionLession, Lecture>().ReverseMap();
+            CreateMap<LectureCompletion, LectureCompletionResponse>().ForMember(des => des.LectureCompUser, opt => opt.MapFrom(src => src.User)).ForMember(des => des.Lecture, opt => opt.MapFrom(src => src.Lecture)).ReverseMap();
+            CreateMap<LectureCompletion, LectureCompletionRequest>().ReverseMap();
 
             //CourseReview
             CreateMap<CourseReview, CourseReviewRequest>().ReverseMap();

@@ -12,13 +12,13 @@ using Course.BLL.DTO;
 
 namespace Course.BLL.Services.Implementations
 {
-    public class LessonCompletionService : ILessonCompletionService
+    public class LectureCompletionService : ILectureCompletionService
     {
-        private readonly ILessonCompletionRepository _lessonCompletionRepository;
+        private readonly ILectureCompletionRepository _lessonCompletionRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public LessonCompletionService(ILessonCompletionRepository lessonCompletionRepository,
+        public LectureCompletionService(ILectureCompletionRepository lessonCompletionRepository,
             IMapper mapper,
             IUnitOfWork unitOfWork)
         {
@@ -27,11 +27,11 @@ namespace Course.BLL.Services.Implementations
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<BaseResponse> Add(Guid userId, LessonCompletionRequest lessonCompletionRequest)
+        public async Task<BaseResponse> Add(Guid userId, LectureCompletionRequest lessonCompletionRequest)
         {
             try
             {
-                var lessoncompletion = _mapper.Map<LessonCompletion>(lessonCompletionRequest);
+                var lessoncompletion = _mapper.Map<LectureCompletion>(lessonCompletionRequest);
 
                 lessoncompletion.UserId = userId;
                 await _lessonCompletionRepository.CreateAsync(lessoncompletion);

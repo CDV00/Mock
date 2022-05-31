@@ -10,5 +10,6 @@ namespace Course.BLL.Services
         Task<Response<UserProfileResponse>> GetProfile(Guid id);
         Task<Response<UserProfileResponse>> UpdateProfile(Guid userId, UpdateProfileRequest updateProfileRequest);
         Task<BaseResponse> ChangePassword(Guid userId, ChangePasswordRequest changePasswordRequest);
+        Task<BaseResponse> CheckExistEmail(string Email);
     }
 }
