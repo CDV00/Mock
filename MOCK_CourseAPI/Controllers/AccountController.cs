@@ -55,5 +55,29 @@ namespace CourseAPI.Controllers
             }
             return BadRequest(result);
         }
+
+        [HttpPost("ForgetPassword")]
+        [AllowAnonymous]
+        public async Task<ActionResult<BaseResponse>> ForgetPassword(string email)
+        {
+            var result = await _userService.ForgetPassWord(email);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        [HttpPost("ResetPassword")]
+        [AllowAnonymous]
+        public async Task<ActionResult<BaseResponse>> ResetPassword(ResetPasswordRequest resetPasswordRequest)
+        {
+            var result = await _userService.ResetPassWord(resetPasswordRequest);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
     }
 }

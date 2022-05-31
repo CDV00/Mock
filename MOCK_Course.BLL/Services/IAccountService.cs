@@ -13,5 +13,7 @@ namespace Course.BLL.Services
         Task<bool> ValidateUser(LoginRequest userForAuth);
         Task<string> CreateToken();
         Task<Response<TokenDto>> RefreshToken(TokenDto tokenDto);
+        Task<Response<BaseResponse>> ForgetPassWord(string email);
+        Task<Response<BaseResponse>> ResetPassWord(ResetPasswordRequest resetPasswordRequest);
     }
 }
