@@ -9,5 +9,11 @@
         public string YoutubeLink { get; set; }
         public string HeadLine { get; set; }
         public string Description { get; set; }
+
+        public int TotalEnrollment { get; set; }
+        public int TotalCourse { get; set; }
+        public int TotalReviewCourse { get; set; }
+
+
     }
 }

@@ -13,5 +13,6 @@ namespace Course.BLL.Services
         Task<Response<CourseDTO>> Add(Guid userId, CourseForCreateRequest courseRequest);
         Task<Response<CourseDTO>> Update(Guid id, CourseForUpdateRequest courseRequest);
         Task<BaseResponse> Remove(Guid id);
+        Task<Response<int>> GetTotal(Guid userId);
     }
 }

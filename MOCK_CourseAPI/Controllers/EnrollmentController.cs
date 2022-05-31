@@ -36,5 +36,18 @@ namespace CourseAPI.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
+        /// <summary>
+        /// Get Errollment of User
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        //[HttpGet("Get-total/{userId}")]
+        //public async Task<ActionResult<Response<int>>> GetTotal(Guid userId)
+        //{
+        //    var result = await _enrollmentService.GetTotal(userId);
+        //    if (result.IsSuccess == false)
+        //        return BadRequest(result);
+        //    return Ok(result);
+        //}
     }
 }

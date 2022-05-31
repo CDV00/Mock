@@ -9,5 +9,6 @@ namespace Course.BLL.Services
     public interface IEnrollmentService
     {
         Task<BaseResponse> Add(Guid userId, EnrollmentRequest enrollmentRequest);
+        Task<Response<int>> GetTotal(Guid userId);
     }
 }

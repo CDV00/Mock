@@ -43,5 +43,17 @@ namespace Course.BLL.Services.Implementations
                 return new Response<BaseResponse>(false, ex.Message, null);
             }
         }
+        public async Task<Response<int>> GetTotal(Guid userId)
+        {
+            try
+            {
+                var courses = await _enrollmentRepository.GetTotal(userId);
+                return new Response<int>(true, courses);
+            }
+            catch (Exception ex)
+            {
+                return new Response<int>(false, ex.Message, null);
+            }
+        }
     }
 }
