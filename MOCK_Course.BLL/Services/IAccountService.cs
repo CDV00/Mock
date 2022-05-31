@@ -15,5 +15,6 @@ namespace Course.BLL.Services
         Task<Response<TokenDto>> RefreshToken(TokenDto tokenDto);
         Task<Response<BaseResponse>> ForgetPassWord(string email);
         Task<Response<BaseResponse>> ResetPassWord(ResetPasswordRequest resetPasswordRequest);
+        Task<Response<LoginDTO>> ExternalLogin(ExternalLoginResquest externalLoginResquest);
     }
 }

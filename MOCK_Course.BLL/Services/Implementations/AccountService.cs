@@ -19,6 +19,10 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Google.Apis.Auth;
 using System.Net.Http;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc;
+using static Course.BLL.Responses.FacebookApiResponse;
+
 
 namespace Course.BLL.Services.Implementations
 {
@@ -273,7 +277,6 @@ namespace Course.BLL.Services.Implementations
             var token = await CreateToken(populateExp: false);
             return new Response<TokenDto>(true, token);
         }
-        ////////////////////////////////////////////////////////////////////
         /// <summary>
         /// Forgot Passworrd
         /// </summary>
@@ -297,7 +300,7 @@ namespace Course.BLL.Services.Implementations
                 //string url = $"{_configurations["AppUrl"]}/ResetPassword?email={email}&token={validToken}";
                 string url = $"http://localhost:3000/reset-pass?email={email}&token={token}";
                 await _emailService.SendEmailAsync(senderEmail, user.Email, "FORGET PASSWORD", "<h1>Follow the instruction to reset your password</h1>" + $"<p>To reset your password <a href={url}> click here.</a></p>");
-                //EmailService.SendEmailAsync()
+      
                 return new Response<BaseResponse>(true, null, null);
             }
             catch (Exception ex)
@@ -315,12 +318,10 @@ namespace Course.BLL.Services.Implementations
                 {
                     return new Response<BaseResponse>(false, "No user associated with email", null);
                 }
-                //var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                 if (resetPasswordRequest.newPassword != resetPasswordRequest.comfirmPassword)
                 {
                     return new Response<BaseResponse>(false, "Password doesn't match its confirmation", null);
                 }
-                //_userManager.token
                 var Result = await _userManager.ResetPasswordAsync(user, resetPasswordRequest.token, resetPasswordRequest.newPassword);
                 if (!Result.Succeeded)
                 {
@@ -334,29 +335,6 @@ namespace Course.BLL.Services.Implementations
             }
         }
 
-
-        ///
-        /*public async Task<Response<UserResponse>> LoginSevice(string provider, string returnUrl = null)
-        {
-            // Kiểm tra yêu cầu dịch vụ provider tồn tại
-            var listprovider = (await _userManager.GetExternalAuthenticationSchemesAsync()).ToList();
-            var provider_process = listprovider.Find((m) => m.Name == provider);
-            if (provider_process == null)
-            {
-                return NotFound("Dịch vụ không chính xác: " + provider);
-            }
-
-            // redirectUrl - là Url sẽ chuyển hướng đến - sau khi CallbackPath (/dang-nhap-tu-google) thi hành xong
-            // nó bằng identity/account/externallogin?handler=Callback
-            // tức là gọi OnGetCallbackAsync
-            var redirectUrl = Url.Page("./ExternalLogin", pageHandler: "Callback", values: new { returnUrl });
-
-            // Cấu hình
-            var properties = _userService.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
-
-            // Chuyển hướng đến dịch vụ ngoài (Googe, Facebook)
-            return new ChallengeResult(provider, properties);
-        }*/
         /// <summary>
         /// Login Google, Facebook, ... 
         /// </summary>
@@ -369,9 +347,9 @@ namespace Course.BLL.Services.Implementations
                 switch (externalLoginResquest.Provider.ToUpper())
                 {
                     case "GOOGLE":
-                        return await GoogleLogin(externalLoginResquest);
+                        return new Response<LoginDTO>(true, await GoogleLogin(externalLoginResquest));
                     case "FACEBOOK":
-                        return await FacebookLogin(externalLoginResquest);
+                        return new Response<LoginDTO>(true, await FacebookLogin(externalLoginResquest));
                     default: throw new Exception("Provider cannot find out");
                 }
             }
@@ -391,7 +369,7 @@ namespace Course.BLL.Services.Implementations
         private async Task<LoginDTO> FacebookLogin(ExternalLoginResquest externalLoginResquest)
         {
             // 1.generate an app access token
-            var appAccessTokenResponse = await Client.GetStringAsync($"https://graph.facebook.com/oauth/access_token?client_id={_configuration["AuthSettings:Facebook:AppId"]}&client_secret={_configuration["AuthSettings:Facebook:AppSecret"]}&grant_type=client_credentials");
+            var appAccessTokenResponse = await Client.GetStringAsync($"https://graph.facebook.com/oauth/access_token?client_id={_configurations["AuthSettings:Facebook:AppId"]}&client_secret={_configurations["AuthSettings:Facebook:AppSecret"]}&grant_type=client_credentials");
             var appAccessToken = JsonConvert.DeserializeObject<FacebookAppAccessToken>(appAccessTokenResponse);
             // 2. validate the user access token
             var userAccessTokenValidationResponse = await Client.GetStringAsync($"https://graph.facebook.com/debug_token?input_token={externalLoginResquest.Token}&access_token={appAccessToken.AccessToken}");
@@ -416,65 +394,36 @@ namespace Course.BLL.Services.Implementations
                 {
                     FirstName = userInfo.FirstName,
                     LastName = userInfo.LastName,
-                    FullName = userInfo.Name,
+                    Fullname = userInfo.Name,
                     FacebookLink = userInfo.Id,
                     Email = userInfo.Email,
-                    UserName = userInfo.Email,
-                    Image = userInfo.Picture.Data.Url
+                    UserName = userInfo.Email
+                    //Image = userInfo.Picture.Data.Url
                 };
 
                 var result = await _userManager.CreateAsync(appUser, Convert.ToBase64String(Guid.NewGuid().ToByteArray())[..8]);
 
                 if (!result.Succeeded)
                     throw new Exception();
-                return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
-
-                //await _userManager.CreateAsync(new AppUser
-                //{ Id = appUser.Id, Email = userInfo.Email, FullName = userInfo.Name, Image = userInfo.Picture.Data.Url });
                 await _userManager.AddToRoleAsync(appUser, UserRoles.Student);
             }
-
             // generate the jwt for the local user...
             user = await _userManager.FindByNameAsync(userInfo.Email);
-            user.FullName = userInfo.Name;
+            user.Fullname = userInfo.Name;
             var userRole = await _userManager.GetRolesAsync(user);
-            var authClaims = new List<Claim>() {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Role, userRole.FirstOrDefault())
-                };
-
-            var token = _tokenService.GenerateAccessToken(authClaims);
-            var refreshToken = _tokenService.GenerateRefreshToken();
-            user.RefreshToken = refreshToken;
-            user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+            var token = await CreateToken(populateExp: true);
             user.UpdatedAt = DateTime.Now;
             await _userManager.UpdateAsync(user);
             UserDTO userWithRole = _mapper.Map<UserDTO>(user);
             userWithRole.Role = userRole.FirstOrDefault();
-
-            var tokenUser = new TokenDTO
-            {
-                Access = new AccessTokenDTO
-                {
-                    Token = new JwtSecurityTokenHandler().WriteToken(token),
-                    Expired = token.ValidTo
-                },
-                Refresh = new RefreshTokenDTO
-                {
-                    Token = refreshToken,
-                    Expired = user.RefreshTokenExpiryTime
-                }
-            };
-
-            return new LoginResponse
-            {
-                IsSuccess = true,
-                Data = new LoginDTO
-                {
-                    Token = tokenUser,
-                    User = userWithRole,
-                }
-            };
+            return new LoginDTO(
+               token,
+               new UserResponse()
+               {
+                   FullName = user.Fullname,
+                   Email = user.Email,
+                   Role = UserRoles.Student
+               });
         }
 
         /// <summary>
@@ -491,9 +440,7 @@ namespace Course.BLL.Services.Implementations
                 throw new Exception("Payload is null");
             }
             var user = await _userManager.FindByEmailAsync(payload.Email);
-            //var a = _userManager.FindByEmailAsync("a@gmail.com");
-            //AppUser a = await _userManager.FindByEmailAsync("a@gmail.com");
-            
+
             if (user is null)
             {
                 user = new AppUser()
@@ -509,21 +456,17 @@ namespace Course.BLL.Services.Implementations
             }
             user = await _userManager.FindByEmailAsync(payload.Email);
             var userRoles = await _userManager.GetRolesAsync(user);
-            /*var authClaims = new List<Claim>() {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Role, userRoles.FirstOrDefault())
-                };*/
-
-            //var token = _generateTokenService.GenerateAccessToken(authClaims);
+            // create token
             var token = await CreateToken(populateExp: true);
             return new LoginDTO(
                 token,
-                new UserResponse() {
+                new UserResponse()
+                {
                     FullName = user.Fullname,
                     Email = user.Email,
                     Role = UserRoles.Student
                 });
-            
+
         }
         /// <summary>
         /// Verify Google Token
@@ -549,81 +492,5 @@ namespace Course.BLL.Services.Implementations
                 throw new Exception(ex.Message);
             }
         }
-
-        /// <summary>
-        /// General Login 
-        /// </summary>
-        /// <param name="loginRequest"></param>
-        /// <returns></returns>
-        /*public async Task<LoginDTO> InternalLogin(LoginRequest loginRequest)
-        {
-            try
-            {
-                var user = await _userManager.FindByEmailAsync(loginRequest.Email);
-                if (user is null)
-                {
-                    return new LoginResponse()
-                    {
-                        IsSuccess = false,
-                        Message = "Email don't exist"
-                    };
-                }
-                var checkPassword = await _userManager.CheckPasswordAsync(user, loginRequest.Password);
-
-                //check password
-                if (!checkPassword)
-                {
-                    return new LoginResponse()
-                    {
-                        IsSuccess = false,
-                        Message = "Password don't match"
-                    };
-                }
-
-                //check Verify
-                if (!user.EmailConfirmed)
-                {
-                    return new LoginResponse()
-                    {
-                        IsSuccess = false,
-                        Message = "Email don't verify"
-                    };
-                }
-
-                //Get role
-                var userRole = await _userManager.GetRolesAsync(user);
-
-                var authClaims = new List<Claim>() {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Role, userRole.FirstOrDefault())
-                };
-
-
-                var token = _generateTokenService.GenerateAccessToken(authClaims);
-                return new LoginResponse()
-                {
-                    IsSuccess = true,
-                    Data = new LoginDTO()
-                    {
-                        Token = new JwtSecurityTokenHandler().WriteToken(token),
-                        User = user,
-                        Expired = token.ValidTo
-                    }
-                };
-            }
-            catch (Exception ex)
-            {
-                return new LoginResponse()
-                {
-                    IsSuccess = false,
-                    Message = ex.Message
-                };
-
-            }
-
-        }*/
-
-
-
     }
 }
