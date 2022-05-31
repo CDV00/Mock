@@ -210,6 +210,8 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<ILectureCompletionService, LectureCompletionService>();
 
             services.AddScoped<IUploadService, UploadService>();
+
+            services.AddScoped<IEmailService, EmailService>();
         }
     }
 }

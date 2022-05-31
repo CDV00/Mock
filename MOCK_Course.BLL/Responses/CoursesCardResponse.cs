@@ -23,5 +23,6 @@ namespace Course.BLL.DTO
     {
         public Guid Id { get; set; }
         public string Fullname { get; set; }
+        public string Role { get; set; }
     }
 }
