@@ -7,6 +7,7 @@ using System;
 using Course.BLL.Responses;
 using Microsoft.AspNetCore.Authorization;
 using CourseAPI.Extensions.ControllerBase;
+using Course.DAL.DTOs;
 
 namespace CourseAPI.Controllers
 {
@@ -111,5 +112,24 @@ namespace CourseAPI.Controllers
         //        return BadRequest(result);
         //    return Ok(result);
         //}
+
+        /// <summary>
+        /// Get all My Purchase
+        /// 
+        /// </summary>
+        ///<param name="userId"> User Id Courses</param>
+        /// <returns></returns>
+        /// 9e47da69-3d3e-428d-a395-d53908753582
+        /// aefdc572-85cc-462e-5021-08da42af3f1a
+        [HttpGet("Get-all-my-purchse")]
+        [AllowAnonymous]
+        public async Task<ActionResult<Responses<PurchaseDTO>>> GetAllMyPurchase()
+        {
+            var userId = User.GetUserId();
+            var result = await _coursesService.GetAllMyPurchase(userId);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
     }
 }

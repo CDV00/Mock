@@ -7,6 +7,8 @@ using Course.BLL.Requests;
 using Course.DAL.Models;
 using Course.DAL.Repositories;
 using Course.BLL.Responses;
+using Course.DAL.DTOs;
+using Microsoft.AspNetCore.Identity;
 
 namespace Course.BLL.Services.Implementations
 {
@@ -155,10 +157,17 @@ namespace Course.BLL.Services.Implementations
             }
         }
 
-        public Task<Responses<CoursesCardDTO>> GetMyPurchase(Guid id)
+        public async Task<Responses<PurchaseDTO>> GetAllMyPurchase(Guid userId)
         {
-
-            throw new NotImplementedException();
+            try
+            {
+                var myPurchase = await _cousesRepository.GetAllMyPurchase(userId);
+                return new Responses<PurchaseDTO>(true,myPurchase);
+            }
+            catch(Exception ex)
+            {
+                return new Responses<PurchaseDTO>(false, ex.Message, null);
+            }
         }
     }
 }
