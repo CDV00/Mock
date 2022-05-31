@@ -19,15 +19,15 @@ namespace Course.BLL.Extensions
 
             // lesion
             CreateMap<Lesson, LessonForCreateRequest>().ReverseMap();
-            CreateMap<Lesson, LessonDTO>().ReverseMap();
             CreateMap<Lesson, LessonForUpdateRequest>().ReverseMap();
-            CreateMap<LessonDTO, LessonForUpdateRequest>().ReverseMap();
+            CreateMap<Lesson, LessonDTO>().ReverseMap();
+            //CreateMap<LessonDTO, LessonForUpdateRequest>().ReverseMap();
 
             // section
-            CreateMap<Section, SectionDTO>().ReverseMap();
             CreateMap<Section, SectionCreateRequest>().ForMember(des => des.Lesson, src => src.MapFrom(opt => opt.Lessons)).ReverseMap();
             CreateMap<Section, SectionUpdateRequest>().ReverseMap().ForMember(des => des.Lessons, src => src.MapFrom(opt => opt.Lesson)).ReverseMap();
-            CreateMap<SectionDTO, SectionUpdateRequest>().ReverseMap();
+            CreateMap<Section, SectionDTO>().ForMember(des => des.Lesson, src => src.MapFrom(opt => opt.Lessons)).ReverseMap();
+            //CreateMap<SectionDTO, SectionUpdateRequest>().ReverseMap();
 
             // language
             CreateMap<AudioLanguage, AudioLanguageForCreateRequest>().ReverseMap();
