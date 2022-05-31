@@ -1,4 +1,5 @@
 ﻿using Course.DAL.Data;
+using Course.DAL.DTOs;
 using Course.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -47,11 +48,5 @@ namespace Course.DAL.Repositories.Implementations
             return purchases;
         }
 
-    }
-
-    public class PurchaseDTO
-    {
-        public string FullName { get; set; }
-        public string Title { get; set; }
     }
 }
