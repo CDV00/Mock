@@ -7,5 +7,6 @@ namespace Course.DAL.Repositories
     public interface IEnrollmentRepository : IRepository<Enrollment, Guid>
     {
         Task<bool> IsEnrollmented(Enrollment enrollment);
+        Task<int> GetTotal(Guid userId);
     }
 }
