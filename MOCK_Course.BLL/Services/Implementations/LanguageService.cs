@@ -23,17 +23,17 @@ namespace Course.BLL.Services.Implementations
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
-        public async Task<Responses<LanguageResponse>> GetAll()
+        public async Task<Responses<LanguageDTO>> GetAll()
         {
             try
             {
                 var result = await _LanguageRepository.GetAll().ToListAsync();
 
-                return new Responses<LanguageResponse>(true, _mapper.Map<IEnumerable<LanguageResponse>>(result));
+                return new Responses<LanguageDTO>(true, _mapper.Map<IEnumerable<LanguageDTO>>(result));
             }
             catch (Exception ex)
             {
-                return new Responses<LanguageResponse>(false, ex.Message, null);
+                return new Responses<LanguageDTO>(false, ex.Message, null);
             }
         }
     }

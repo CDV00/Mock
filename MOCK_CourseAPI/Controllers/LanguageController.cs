@@ -4,6 +4,7 @@ using Course.BLL.Services;
 using Microsoft.AspNetCore.Mvc;
 using Course.BLL.DTO;
 using Microsoft.AspNetCore.Authorization;
+using Course.BLL.Responses;
 
 namespace CourseAPI.Controllers
 {
@@ -24,7 +25,7 @@ namespace CourseAPI.Controllers
         /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<Responses<LanguageResponse>>> GetAll()
+        public async Task<ActionResult<Responses<LanguageDTO>>> GetAll()
         {
             var result = await _LanguageService.GetAll();
             if (result.IsSuccess == false)

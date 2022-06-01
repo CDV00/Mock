@@ -1,4 +1,4 @@
-﻿namespace Course.BLL.DataTransferObjects
+﻿namespace Course.BLL.DTO
 {
     public class UploadVideoDTO
     {

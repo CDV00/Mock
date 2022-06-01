@@ -15,14 +15,4 @@ namespace Course.BLL.Requests
     {
         public Guid Id { get; set; }
     }
-
-    public class LectureDTO
-    {
-        public Guid Id { get; set; }
-        public string Title { get; set; }
-        public string VideoUrl { get; set; }
-        public string VideoPoster { get; set; }
-        public bool IsPreview { get; set; }
-        public int TotalTime { get; set; }
-    }
 }

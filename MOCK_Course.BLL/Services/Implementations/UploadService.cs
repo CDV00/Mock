@@ -1,6 +1,6 @@
 ﻿using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
-using Course.BLL.DataTransferObjects;
+using Course.BLL.DTO;
 using Course.BLL.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;

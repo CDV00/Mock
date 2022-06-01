@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 
-namespace Course.BLL.DataTransferObjects
+namespace Course.BLL.DTO
 {
     public class AllowedExtensionsAttribute : ValidationAttribute
     {

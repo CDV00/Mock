@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
-using Course.BLL.DataTransferObjects;
+using Course.BLL.DTO;
 using Course.BLL.Requests;
 using Course.BLL.DTO;
 using Course.DAL.ConfigurationModels;

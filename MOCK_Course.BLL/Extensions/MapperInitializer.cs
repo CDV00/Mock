@@ -38,7 +38,7 @@ namespace Course.BLL.Extensions
             CreateMap<AudioLanguage, AudioLanguageDTO>().ReverseMap();
             CreateMap<CloseCaption, CloseCaptionForCreateRequest>().ReverseMap();
             CreateMap<CloseCaption, CloseCaptionDTO>().ReverseMap();
-            CreateMap<Language, LanguageResponse>().ReverseMap();
+            CreateMap<Language, LanguageDTO>().ReverseMap();
 
             //course
             CreateMap<Courses, CourseForCreateRequest>().ForMember(des => des.AudioLanguages, opt => opt.MapFrom(src => src.AudioLanguages)).ForMember(des => des.CloseCaptions, opt => opt.MapFrom(src => src.CloseCaptions)).ForMember(des => des.CourseLevels, opt => opt.MapFrom(src => src.CourseLevels)).ReverseMap();

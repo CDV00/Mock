@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Course.BLL.DataTransferObjects;
+using Course.BLL.DTO;
 using Course.BLL.Requests;
 using Course.BLL.DTO;
 

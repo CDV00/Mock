@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace Course.BLL.DataTransferObjects
+namespace Course.BLL.DTO
 {
     public class UploadImageDTO
     {

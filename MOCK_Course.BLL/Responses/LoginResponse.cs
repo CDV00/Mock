@@ -1,4 +1,4 @@
-﻿using Course.BLL.DataTransferObjects;
+﻿using Course.BLL.DTO;
 
 namespace Course.BLL.DTO
 {

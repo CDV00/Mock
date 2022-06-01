@@ -10,7 +10,5 @@ namespace Course.BLL.Requests
     }
     public class EnrollmentUpdateRequest : EnrollmentRequest
     {
-        //[Required]
-        //public Guid Id { get; set; }
     }
 }

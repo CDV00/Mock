@@ -4,7 +4,7 @@ using Course.BLL.DTO;
 using Course.BLL.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Course.BLL.DataTransferObjects;
+using Course.BLL.DTO;
 
 namespace CourseAPI.Controllers
 {

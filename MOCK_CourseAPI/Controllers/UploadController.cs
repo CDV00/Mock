@@ -1,4 +1,4 @@
-﻿using Course.BLL.DataTransferObjects;
+﻿using Course.BLL.DTO;
 using Course.BLL.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
