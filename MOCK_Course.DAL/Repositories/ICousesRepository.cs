@@ -11,6 +11,8 @@ namespace Course.DAL.Repositories
         Task<IEnumerable<Courses>> GetAllForCard();
         Task<Courses> GetForPost(Guid id);
         Task<int> GetTotal(Guid userId);
+        Task<List<MyCoursesDTO>> GetAllMyCoures(Guid id);
+        Task<List<UpcommingCourseDTO>> GetAllUpcomingCourses(Guid id);
         Task<List<PurchaseDTO>> GetAllMyPurchase(Guid id);
     }
 }
