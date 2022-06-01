@@ -20,4 +20,8 @@
     <ProjectReference Include="..\MOCK_Course.DAL\Course.DAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DataTransferObjects\" />
+  </ItemGroup>
+
 </Project>

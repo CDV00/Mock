@@ -1,6 +1,4 @@
-﻿using Course.BLL.Requests;
-using Course.DAL.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Course.BLL.Responses
