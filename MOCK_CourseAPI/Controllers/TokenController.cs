@@ -20,7 +20,7 @@ namespace CourseAPI.Controllers
         }
 
         [HttpPost("refresh")]
-        public async Task<ActionResult<Response<TokenDto>>> Refresh([FromBody] TokenDto tokenDto)
+        public async Task<ActionResult<Response<TokenDTO>>> Refresh([FromBody] TokenDTO tokenDto)
         {
             var tokenDtoToReturn = await
             _authenticationService.RefreshToken(tokenDto);

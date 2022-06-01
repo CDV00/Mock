@@ -3,25 +3,25 @@ using System;
 
 namespace Course.BLL.Responses
 {
-    public class EnrollmentResponse
+    public class CourseCompletionDTO
     {
         public Guid Id { get; set; }
-        public EnrollmentUser EnrollmentUser { get; set; }
-        public EnrollmentCourse Course { get; set; }
+        public CourseCompletionUserDTO User { get; set; }
+        public CourseCompletionCourseDTO Course { get; set; }
     }
-    public class EnrollmentUser
+    public class CourseCompletionUserDTO
     {
         public Guid Id { get; set; }
         public string Fullname { get; set; }
     }
-    public class EnrollmentCourse
+    public class CourseCompletionCourseDTO
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
         public decimal Price { get; set; }
-        public EnrollmentCategory category {get;set;}
+        public CourseCompletionCategoryDTO Category {get;set;}
     }
-    public  class EnrollmentCategory
+    public  class CourseCompletionCategoryDTO
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

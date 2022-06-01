@@ -8,9 +8,9 @@ namespace Course.BLL.Services
 {
     public interface ICourseReviewService
     {
-        Task<Responses<CourseReviewResponse>> GetAll(Guid courseId);
-        Task<Response<CourseReviewResponse>> Add(CourseReviewRequest courseReviewRequest);
-        Task<Response<CourseReviewResponse>> Update(Guid id, CourseReviewUpdateRequest courseReviewUpdateRequest);
+        Task<Responses<CourseReviewDTO>> GetAll(Guid courseId);
+        Task<Response<CourseReviewDTO>> Add(CourseReviewRequest courseReviewRequest);
+        Task<Response<CourseReviewDTO>> Update(Guid id, CourseReviewUpdateRequest courseReviewUpdateRequest);
         Task<BaseResponse> Delete(Guid id);
         Task<Response<int>> GetTotal(Guid userId);
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Course.BLL.Responses
 {
-    public class CourseReviewResponse
+    public class CourseReviewDTO
     {
         public Guid Id;
         public string Content { get; set; }

@@ -9,10 +9,10 @@ namespace Course.BLL.Services
     {
         Task<BaseResponse> Register(RegisterRequest registerRequest);
         Task<Response<LoginDTO>> Login(LoginRequest loginRequest);
-        Task<TokenDto> CreateToken(bool populateExp);
+        Task<TokenDTO> CreateToken(bool populateExp);
         Task<bool> ValidateUser(LoginRequest userForAuth);
         Task<string> CreateToken();
-        Task<Response<TokenDto>> RefreshToken(TokenDto tokenDto);
+        Task<Response<TokenDTO>> RefreshToken(TokenDTO tokenDto);
         Task<Response<BaseResponse>> ForgetPassWord(string email);
         Task<Response<BaseResponse>> ResetPassWord(ResetPasswordRequest resetPasswordRequest);
         Task<Response<LoginDTO>> ExternalLogin(ExternalLoginResquest externalLoginResquest);

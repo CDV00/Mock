@@ -9,8 +9,8 @@ namespace Course.BLL.Services
     public interface IOrderService
     {
         //Task<Responses<OrderResponse>> GetAll();
-        Task<Responses<OrderResponse>> GetAll(Guid UserId);
-        Task<Response<OrderResponse>> Add(Guid userId, OrderRequest orderRequest);
+        Task<Responses<OrderDTO>> GetAll(Guid UserId);
+        Task<Response<OrderDTO>> Add(Guid userId, OrderRequest orderRequest);
         //Task<Response<OrderResponse>> Update(OrderUpdateRequest orderUpdateRequest);
         Task<BaseResponse> Delete(Guid id);
     }

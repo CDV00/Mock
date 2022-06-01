@@ -1,15 +1,10 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Course.BLL.Responses
 {
-    public class FacebookApiResponse
+    public class FacebookApiDTO
     {
-        internal class FacebookUserData
+        public class FacebookUserData
         {
             public string Id { get; set; }
             public string Email { get; set; }
@@ -26,12 +21,12 @@ namespace Course.BLL.Responses
             public FacebookPictureData Picture { get; set; }
         }
 
-        internal class FacebookPictureData
+        public class FacebookPictureData
         {
             public FacebookPicture Data { get; set; }
         }
 
-        internal class FacebookPicture
+        public class FacebookPicture
         {
             public int Height { get; set; }
             public int Width { get; set; }
@@ -42,7 +37,7 @@ namespace Course.BLL.Responses
             public string Url { get; set; }
         }
 
-        internal class FacebookUserAccessTokenData
+        public class FacebookUserAccessTokenData
         {
             [JsonProperty("app_id")]
             public long AppId { get; set; }
@@ -60,12 +55,12 @@ namespace Course.BLL.Responses
             public string UserId { get; set; }
         }
 
-        internal class FacebookUserAccessTokenValidation
+        public class FacebookUserAccessTokenValidation
         {
             public FacebookUserAccessTokenData Data { get; set; }
         }
 
-        internal class FacebookAppAccessToken
+        public class FacebookAppAccessToken
         {
             [JsonProperty("token_type")]
             public string TokenType { get; set; }

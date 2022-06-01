@@ -26,25 +26,25 @@ namespace Course.BLL.Services.Implementations
             _courseReviewRepository = courseReviewRepository;
 
         }
-        public async Task<Response<UserProfileResponse>> GetProfile(Guid id)
+        public async Task<Response<UserProfileDTO>> GetProfile(Guid id)
         {
             try
             {
                 var userProfile = await _userManager.FindByIdAsync(id.ToString());
-                var userProfileResponse = _mapper.Map<UserProfileResponse>(userProfile);
+                var userProfileResponse = _mapper.Map<UserProfileDTO>(userProfile);
 
                 userProfileResponse.TotalEnrollment = await _enrollmentRepository.GetTotal(id);
                 userProfileResponse.TotalCourse = await _cousesRepository.GetTotal(id);
                 userProfileResponse.TotalReviewCourse = await _courseReviewRepository.GetTotal(id);
 
-                return new Response<UserProfileResponse>(
+                return new Response<UserProfileDTO>(
                     true,
                     userProfileResponse
                 );
             }
             catch (Exception ex)
             {
-                return new Response<UserProfileResponse>(false, ex.Message, null);
+                return new Response<UserProfileDTO>(false, ex.Message, null);
             }
         }
         public async Task<BaseResponse> ChangePassword(Guid userId, ChangePasswordRequest changePasswordRequest)
@@ -66,16 +66,16 @@ namespace Course.BLL.Services.Implementations
                 //update user password
                 await _userManager.UpdateAsync(user);
                 //return BadRequest("request is incorrect");
-                return new Response<UserProfileResponse>(true, null, null);
+                return new Response<UserProfileDTO>(true, null, null);
             }
             catch (Exception ex)
             {
-                return new Responses<UserProfileResponse>(false, ex.Message, null);
+                return new Responses<UserProfileDTO>(false, ex.Message, null);
             }
         }
 
 
-        public async Task<Response<UserProfileResponse>> UpdateProfile(Guid id, UpdateProfileRequest updateProfileRequest)
+        public async Task<Response<UserProfileDTO>> UpdateProfile(Guid id, UpdateProfileRequest updateProfileRequest)
         {
             try
             {
@@ -86,15 +86,15 @@ namespace Course.BLL.Services.Implementations
                 _mapper.Map(updateProfileRequest, user);
                 await _userManager.UpdateAsync(user);
 
-                return new Response<UserProfileResponse>(
+                return new Response<UserProfileDTO>(
                     true,
-                    _mapper.Map<UserProfileResponse>(user)
+                    _mapper.Map<UserProfileDTO>(user)
                 );
 
             }
             catch (Exception ex)
             {
-                return new Response<UserProfileResponse>(false, ex.Message, null);
+                return new Response<UserProfileDTO>(false, ex.Message, null);
             }
         }
 

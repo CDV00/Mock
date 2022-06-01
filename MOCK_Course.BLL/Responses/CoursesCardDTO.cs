@@ -10,19 +10,13 @@ namespace Course.BLL.DTO
         public decimal DiscountPrice { get; set; } = 0;
         public string ThumbnailUrl { get; set; }
         public DateTime CreatedAt { get; set; }
-        public CategoryDTO Category { get; set; }
+        public CourseCategoryDTO Category { get; set; }
         public UserDTO User { get; set; }
     }
 
-    public class CategoryDTO
+    public class CourseCategoryDTO
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-    }
-    public class UserDTO
-    {
-        public Guid Id { get; set; }
-        public string Fullname { get; set; }
-        public string Role { get; set; }
     }
 }

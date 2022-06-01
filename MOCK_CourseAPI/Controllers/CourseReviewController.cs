@@ -27,7 +27,7 @@ namespace CourseAPI.Controllers
         /// <param name="CourseId"></param>
         /// <returns></returns>
         [HttpGet("{CourseId:guid}")]
-        public async Task<ActionResult<Responses<CourseReviewResponse>>> GetAll([FromQuery] Guid CourseId)
+        public async Task<ActionResult<Responses<CourseReviewDTO>>> GetAll([FromQuery] Guid CourseId)
         {
             var result = await _courseReviewService.GetAll(CourseId);
             if (result.IsSuccess == false)
@@ -41,7 +41,7 @@ namespace CourseAPI.Controllers
         /// <param name="courseReviewRequest"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Responses<CourseReviewResponse>>> Add(CourseReviewRequest courseReviewRequest)
+        public async Task<ActionResult<Responses<CourseReviewDTO>>> Add(CourseReviewRequest courseReviewRequest)
         {
             var result = await _courseReviewService.Add(courseReviewRequest);
             if (result.IsSuccess == false)

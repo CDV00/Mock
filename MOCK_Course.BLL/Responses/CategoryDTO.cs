@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace Course.BLL.DTO
 {
-    public class CategoryResponse
+    public class CategoryDTO
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
         public Guid? ParentId { get; set; }
 
-        public ICollection<CategoryResponse> SubCategories { get; set; }
+        public ICollection<CategoryDTO> SubCategories { get; set; }
     }
 
 

@@ -2,25 +2,25 @@
 
 namespace Course.BLL.DTO
 {
-    public class CartResponse
+    public class CartDTO
     {
         public Guid Id { get; set; }
-        public CartUserResponse CartUser { get; set; }
-        public CartCourseResponse Course { get; set; }
+        public CartUserDTO Cart { get; set; }
+        public CartCourseDTO Course { get; set; }
     }
-    public class CartUserResponse
+    public class CartUserDTO
     {
         public Guid Id { get; set; }
         public string Fullname { get; set; }
     }
-    public class CartCourseResponse
+    public class CartCourseDTO
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
         public decimal Price { get; set; }
-        public CartCategory category {get;set;}
+        public CartCategoryDTO Category { get; set; }
     }
-    public  class CartCategory
+    public class CartCategoryDTO
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

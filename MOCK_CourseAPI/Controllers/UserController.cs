@@ -28,7 +28,7 @@ namespace CourseAPI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("Get-Profile")]
-        public async Task<ActionResult<UserProfileResponse>> GetProfile()
+        public async Task<ActionResult<UserProfileDTO>> GetProfile()
         {
             var userId = User.GetUserId();
             var result = await _userService.GetProfile(userId);
@@ -46,7 +46,7 @@ namespace CourseAPI.Controllers
         /// <param name="updateProfileRequest"></param>
         /// <returns></returns>
         [HttpPut("Update-Profile")]
-        public async Task<ActionResult<Response<UserProfileResponse>>> UpdateProfile([FromBody] UpdateProfileRequest updateProfileRequest)
+        public async Task<ActionResult<Response<UserProfileDTO>>> UpdateProfile([FromBody] UpdateProfileRequest updateProfileRequest)
         {
             var userId = User.GetUserId();
             var result = await _userService.UpdateProfile(userId, updateProfileRequest);

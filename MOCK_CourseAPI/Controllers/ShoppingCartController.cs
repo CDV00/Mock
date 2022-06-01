@@ -28,7 +28,7 @@ namespace CourseAPI.Controllers
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
         [HttpGet]
-        public async Task<ActionResult<Responses<CartResponse>>> GetAll()
+        public async Task<ActionResult<Responses<CartDTO>>> GetAll()
         {
             var userId = User.GetUserId();
             var result = await _shoppingCartService.GetAll(userId);
@@ -43,7 +43,7 @@ namespace CourseAPI.Controllers
         /// <param name="cartRequest"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Responses<CartResponse>>> Create([FromBody] CartRequest cartRequest)
+        public async Task<ActionResult<Responses<CartDTO>>> Create([FromBody] CartRequest cartRequest)
         {
             var userId = User.GetUserId();
             var result = await _shoppingCartService.Add(userId, cartRequest);

@@ -10,12 +10,12 @@ namespace Course.BLL.Extensions
     {
         public MapperInitializer()
         {
-            CreateMap<Category, CategoryResponse>().ReverseMap();
+            CreateMap<Category, CategoryDTO>().ReverseMap();
             CreateMap<Category, CategoryRequest>().ReverseMap();
             CreateMap<Category, CategoryUpdateRequest>().ReverseMap();
 
             CreateMap<RegisterRequest, AppUser>().ForMember(x => x.UserName, opt => opt.MapFrom(x => x.Email)).ReverseMap();
-            CreateMap<AppUser, UserResponse>().ForMember(des => des.FullName, src => src.MapFrom(opt => opt.FirstName + opt.Fullname)).ReverseMap();
+            CreateMap<AppUser, UserDTO>().ForMember(des => des.FullName, src => src.MapFrom(opt => opt.FirstName + opt.Fullname)).ReverseMap();
 
             // level
             //CreateMap<Level, CourseLevelDTO>().ReverseMap();
@@ -53,52 +53,52 @@ namespace Course.BLL.Extensions
             CreateMap<CourseDTO, Courses>().ForMember(des => des.AudioLanguages, opt => opt.MapFrom(src => src.AudioLanguages)).ForMember(des => des.CloseCaptions, opt => opt.MapFrom(src => src.CloseCaptions)).ForMember(des => des.CourseLevels, opt => opt.MapFrom(src => src.CourseLevels)).ReverseMap();
 
             // map cart
-            CreateMap<CartRequest, CartResponse>().ReverseMap();
-            CreateMap<CartUserResponse, AppUser>().ReverseMap();
-            CreateMap<CartCourseResponse, Courses>().ReverseMap();
-            CreateMap<CartCategory, Category>().ReverseMap();
-            CreateMap<ShoppingCart, CartResponse>().ForMember(des => des.CartUser, opt => opt.MapFrom(src => src.User)).ForMember(des => des.Course, opt => opt.MapFrom(src => src.Course)).ForPath(des => des.Course.category, opt => opt.MapFrom(src => src.Course.Category)).ReverseMap();
+            CreateMap<CartRequest, CartDTO>().ReverseMap();
+            CreateMap<CartUserDTO, AppUser>().ReverseMap();
+            CreateMap<CartCourseDTO, Courses>().ReverseMap();
+            CreateMap<CartCategoryDTO, Category>().ReverseMap();
+            CreateMap<ShoppingCart, CartDTO>().ForMember(des => des.Cart, opt => opt.MapFrom(src => src.User)).ForMember(des => des.Course, opt => opt.MapFrom(src => src.Course)).ForPath(des => des.Course.Category, opt => opt.MapFrom(src => src.Course.Category)).ReverseMap();
             CreateMap<ShoppingCart, CartRequest>().ReverseMap();
 
             // AppUser
             CreateMap<AppUser, UpdateProfileRequest>().ReverseMap();
             CreateMap<AppUser, ChangePasswordRequest>().ReverseMap();
-            CreateMap<AppUser, UserProfileResponse>().ReverseMap();
+            CreateMap<AppUser, UserProfileDTO>().ReverseMap();
             CreateMap<AppUser, ResetPasswordRequest>().ReverseMap();
 
             //Order
             CreateMap<Order, OrderRequest>().ReverseMap();
-            CreateMap<Order, OrderResponse>().ReverseMap();
+            CreateMap<Order, OrderDTO>().ReverseMap();
             CreateMap<Order, OrderUpdateRequest>().ReverseMap();
 
             // map enrollment
-            CreateMap<EnrollmentRequest, EnrollmentResponse>().ReverseMap();
-            CreateMap<EnrollmentUser, AppUser>().ReverseMap();
-            CreateMap<EnrollmentCourse, Courses>().ReverseMap();
-            CreateMap<EnrollmentCategory, Category>().ReverseMap();
-            CreateMap<Enrollment, EnrollmentResponse>().ForMember(des => des.EnrollmentUser, opt => opt.MapFrom(src => src.User)).ForMember(des => des.Course, opt => opt.MapFrom(src => src.Courses)).ForPath(des => des.Course.category, opt => opt.MapFrom(src => src.Courses.Category)).ReverseMap();
+            CreateMap<EnrollmentRequest, EnrollmentDTO>().ReverseMap();
+            CreateMap<EnrollmentUserDTO, AppUser>().ReverseMap();
+            CreateMap<EnrollmentCourseDTO, Courses>().ReverseMap();
+            CreateMap<EnrollmentCategoryDTO, Category>().ReverseMap();
+            CreateMap<Enrollment, EnrollmentDTO>().ForMember(des => des.User, opt => opt.MapFrom(src => src.User)).ForMember(des => des.Course, opt => opt.MapFrom(src => src.Courses)).ForPath(des => des.Course.Category, opt => opt.MapFrom(src => src.Courses.Category)).ReverseMap();
             CreateMap<Enrollment, EnrollmentRequest>().ReverseMap();
 
             // map course completion
-            CreateMap<CourseCompletionRequest, CourseCompletionResponse>().ReverseMap();
-            CreateMap<CourseCompletionUser, AppUser>().ReverseMap();
-            CreateMap<CourseCompletionCourse, Courses>().ReverseMap();
-            CreateMap<CourseCompletionCategory, Category>().ReverseMap();
-            CreateMap<CourseCompletion, CourseCompletionResponse>().ForMember(des => des.CourseCompUser, opt => opt.MapFrom(src => src.User)).ForMember(des => des.Course, opt => opt.MapFrom(src => src.Course)).ForPath(des => des.Course.category, opt => opt.MapFrom(src => src.Course.Category)).ReverseMap();
+            CreateMap<CourseCompletionRequest, CourseCompletionDTO>().ReverseMap();
+            CreateMap<CourseCompletionUserDTO, AppUser>().ReverseMap();
+            CreateMap<CourseCompletionCourseDTO, Courses>().ReverseMap();
+            CreateMap<CourseCompletionCategoryDTO, Category>().ReverseMap();
+            CreateMap<CourseCompletion, CourseCompletionDTO>().ForMember(des => des.User, opt => opt.MapFrom(src => src.User)).ForMember(des => des.Course, opt => opt.MapFrom(src => src.Course)).ForPath(des => des.Course.Category, opt => opt.MapFrom(src => src.Course.Category)).ReverseMap();
             CreateMap<CourseCompletion, CourseCompletionRequest>().ReverseMap();
 
             // map lesson completion
-            CreateMap<LectureCompletionRequest, LectureCompletionResponse>().ReverseMap();
+            CreateMap<LectureCompletionRequest, LectureCompletionDTO>().ReverseMap();
             CreateMap<LectureCompletionRequest, LectureCompletion>().ReverseMap();
-            CreateMap<LectureCompletionUser, AppUser>().ReverseMap();
-            CreateMap<LectureCompletionLession, Lecture>().ReverseMap();
-            CreateMap<LectureCompletion, LectureCompletionResponse>().ForMember(des => des.LectureCompUser, opt => opt.MapFrom(src => src.User)).ForMember(des => des.Lecture, opt => opt.MapFrom(src => src.Lecture)).ReverseMap();
+            CreateMap<LectureCompletionUserDTO, AppUser>().ReverseMap();
+            CreateMap<LectureCompletionLessionDTO, Lecture>().ReverseMap();
+            CreateMap<LectureCompletion, LectureCompletionDTO>().ForMember(des => des.User, opt => opt.MapFrom(src => src.User)).ForMember(des => des.Lecture, opt => opt.MapFrom(src => src.Lecture)).ReverseMap();
             CreateMap<LectureCompletion, LectureCompletionRequest>().ReverseMap();
 
             //CourseReview
             CreateMap<CourseReview, CourseReviewRequest>().ReverseMap();
             CreateMap<CourseReview, CourseReviewUpdateRequest>().ReverseMap();
-            CreateMap<CourseReview, CourseReviewResponse>().ReverseMap();
+            CreateMap<CourseReview, CourseReviewDTO>().ReverseMap();
         }
     }
 }

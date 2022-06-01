@@ -21,7 +21,7 @@ using Google.Apis.Auth;
 using System.Net.Http;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc;
-using static Course.BLL.Responses.FacebookApiResponse;
+using static Course.BLL.Responses.FacebookApiDTO;
 
 
 namespace Course.BLL.Services.Implementations
@@ -39,7 +39,7 @@ namespace Course.BLL.Services.Implementations
         private readonly IOptions<JwtConfiguration> _configuration;
         private readonly IConfiguration _configurations;
         private AppUser _user;
-        private UserResponse _userResponse = new UserResponse();
+        private UserDTO _userResponse = new UserDTO();
         private static readonly HttpClient Client = new();
         public AuthenticationService(UserManager<AppUser> userManager, IMapper mapper, SignInManager<AppUser> signInManager, RoleManager<IdentityRole<Guid>> roleManager, ILogger<AuthenticationService> logger, IOptions<JwtConfiguration> configuration, IEmailService emailService, IConfiguration configurations)
         {
@@ -106,7 +106,7 @@ namespace Course.BLL.Services.Implementations
                     await AddInstructorRole(user);
                 }
 
-                var userResponse = _mapper.Map<UserResponse>(user);
+                var userResponse = _mapper.Map<UserDTO>(user);
 
                 var roles = await _userManager.GetRolesAsync(user);
                 userResponse.Role = string.Join(",", roles);
@@ -151,7 +151,7 @@ namespace Course.BLL.Services.Implementations
             await _userManager.AddToRoleAsync(user, InstructorRole);
         }
 
-        public async Task<TokenDto> CreateToken(bool populateExp)
+        public async Task<TokenDTO> CreateToken(bool populateExp)
         {
             var signingCredentials = GetSigningCredentials();
 
@@ -167,7 +167,7 @@ namespace Course.BLL.Services.Implementations
 
             await _userManager.UpdateAsync(_user);
             var accessToken = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-            return new TokenDto(accessToken, refreshToken);
+            return new TokenDTO(accessToken, refreshToken);
         }
 
         private string GenerateRefreshToken()
@@ -263,19 +263,19 @@ namespace Course.BLL.Services.Implementations
             return tokenOptions;
         }
 
-        public async Task<Response<TokenDto>> RefreshToken(TokenDto tokenDto)
+        public async Task<Response<TokenDTO>> RefreshToken(TokenDTO tokenDto)
         {
             var principal = GetPrincipalFromExpiredToken(tokenDto.AccessToken);
             var user = await _userManager.FindByNameAsync(principal.Identity.Name);
 
             if (user == null || user.RefreshToken != tokenDto.RefreshToken ||
             user.RefreshTokenExpiryTime <= DateTime.Now)
-                new Response<TokenDto>(false, "can't reset token", null);
+                new Response<TokenDTO>(false, "can't reset token", null);
 
             _user = user;
 
             var token = await CreateToken(populateExp: false);
-            return new Response<TokenDto>(true, token);
+            return new Response<TokenDTO>(true, token);
         }
         /// <summary>
         /// Forgot Passworrd
@@ -417,7 +417,7 @@ namespace Course.BLL.Services.Implementations
             userWithRole.Role = userRole.FirstOrDefault();
             return new LoginDTO(
                token,
-               new UserResponse()
+               new UserDTO()
                {
                    FullName = user.Fullname,
                    Email = user.Email,
@@ -459,7 +459,7 @@ namespace Course.BLL.Services.Implementations
             var token = await CreateToken(populateExp: true);
             return new LoginDTO(
                 token,
-                new UserResponse()
+                new UserDTO()
                 {
                     FullName = user.Fullname,
                     Email = user.Email,

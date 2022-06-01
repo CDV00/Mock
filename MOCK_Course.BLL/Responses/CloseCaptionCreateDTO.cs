@@ -3,8 +3,9 @@ using System;
 
 namespace Course.BLL.Responses
 {
-    public class CloseCaptionDTO : CloseCaptionForCreateRequest
+    public class CloseCaptionDTO
     {
+        public Guid LanguageId { get; set; }
     }
 
     public class AudioLanguageDTO : CloseCaptionDTO { }

@@ -26,7 +26,7 @@ namespace Course.BLL.Services.Implementations
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Response<CartResponse>> Add(Guid userId, CartRequest cartRequest)
+        public async Task<Response<CartDTO>> Add(Guid userId, CartRequest cartRequest)
         {
             try
             {
@@ -35,27 +35,27 @@ namespace Course.BLL.Services.Implementations
                 await _shoppingCartRepository.CreateAsync(cart);
                 await _unitOfWork.SaveChangesAsync();
 
-                var cartResponse = _mapper.Map<CartResponse>(cart);
-                return new Response<CartResponse>(
+                var cartResponse = _mapper.Map<CartDTO>(cart);
+                return new Response<CartDTO>(
                     true, cartResponse);
             }
             catch (Exception ex)
             {
-                return new Response<CartResponse>(false, ex.Message, null);
+                return new Response<CartDTO>(false, ex.Message, null);
             }
         }
 
-        public async Task<Responses<CartResponse>> GetAll(Guid userId)
+        public async Task<Responses<CartDTO>> GetAll(Guid userId)
         {
             try
             {
                 var ShoppingCart = await _shoppingCartRepository.GetAll().Where(s => s.UserId == userId).Include(s => s.User).Include(s => s.Course).ThenInclude(c => c.Category).ToListAsync();
 
-                return new Responses<CartResponse>(true, _mapper.Map<IEnumerable<CartResponse>>(ShoppingCart));
+                return new Responses<CartDTO>(true, _mapper.Map<IEnumerable<CartDTO>>(ShoppingCart));
             }
             catch (Exception ex)
             {
-                return new Responses<CartResponse>(false, ex.Message, null);
+                return new Responses<CartDTO>(false, ex.Message, null);
             }
         }
 

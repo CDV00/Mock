@@ -28,17 +28,17 @@ namespace Course.BLL.Services.Implementations
             _unitOfWork = unitOfWork;
             _cousesRepository = cousesRepository;
         }
-        public async Task<Responses<OrderResponse>> GetAll(Guid UserId)
+        public async Task<Responses<OrderDTO>> GetAll(Guid UserId)
         {
             try
             {
                 var result = await _orderRepository.GetAll().Where(o => o.UserId == UserId).ToListAsync();
 
-                return new Responses<OrderResponse>(true, _mapper.Map<List<OrderResponse>>(result));
+                return new Responses<OrderDTO>(true, _mapper.Map<List<OrderDTO>>(result));
             }
             catch (Exception ex)
             {
-                return new Responses<OrderResponse>(false, ex.Message, null);
+                return new Responses<OrderDTO>(false, ex.Message, null);
             }
         }
 
@@ -47,7 +47,7 @@ namespace Course.BLL.Services.Implementations
         /// </summary>
         /// <param name="orderRequest"></param>
         /// <returns></returns>
-        public async Task<Response<OrderResponse>> Add(Guid userId, OrderRequest orderRequest)
+        public async Task<Response<OrderDTO>> Add(Guid userId, OrderRequest orderRequest)
         {
             try
             {
@@ -59,14 +59,14 @@ namespace Course.BLL.Services.Implementations
 
                 await _orderRepository.CreateAsync(order);
                 await _unitOfWork.SaveChangesAsync();
-                return new Response<OrderResponse>(
+                return new Response<OrderDTO>(
                     true,
-                    _mapper.Map<OrderResponse>(order)
+                    _mapper.Map<OrderDTO>(order)
                 );
             }
             catch (Exception ex)
             {
-                return new Response<OrderResponse>(false, ex.Message, null);
+                return new Response<OrderDTO>(false, ex.Message, null);
             }
         }
 

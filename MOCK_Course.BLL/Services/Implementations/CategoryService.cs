@@ -24,21 +24,21 @@ namespace Course.BLL.Services.Implementations
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
-        public async Task<Responses<CategoryResponse>> GetAll()
+        public async Task<Responses<CategoryDTO>> GetAll()
         {
             try
             {
                 var result = await _categoryRepository.GetAll().Where(c => c.ParentId == null).Include("SubCategories").ToListAsync();
 
-                return new Responses<CategoryResponse>(true, _mapper.Map<IEnumerable<CategoryResponse>>(result));
+                return new Responses<CategoryDTO>(true, _mapper.Map<IEnumerable<CategoryDTO>>(result));
             }
             catch (Exception ex)
             {
-                return new Responses<CategoryResponse>(false, ex.Message, null);
+                return new Responses<CategoryDTO>(false, ex.Message, null);
             }
         }
 
-        public async Task<Response<CategoryResponse>> Add(CategoryRequest categoryRequest)
+        public async Task<Response<CategoryDTO>> Add(CategoryRequest categoryRequest)
         {
             try
             {
@@ -46,14 +46,14 @@ namespace Course.BLL.Services.Implementations
 
                 await _categoryRepository.CreateAsync(category);
                 await _unitOfWork.SaveChangesAsync();
-                return new Response<CategoryResponse>(
+                return new Response<CategoryDTO>(
                     true,
-                    _mapper.Map<CategoryResponse>(category)
+                    _mapper.Map<CategoryDTO>(category)
                 );
             }
             catch (Exception ex)
             {
-                return new Response<CategoryResponse>(false, ex.Message, null);
+                return new Response<CategoryDTO>(false, ex.Message, null);
             }
         }
 
@@ -70,11 +70,11 @@ namespace Course.BLL.Services.Implementations
             }
             catch (Exception ex)
             {
-                return new Response<CategoryResponse>(false, ex.Message, null);
+                return new Response<CategoryDTO>(false, ex.Message, null);
             }
         }
 
-        public async Task<Response<CategoryResponse>> Update(Guid Id, CategoryUpdateRequest categoryUpdateRequest)
+        public async Task<Response<CategoryDTO>> Update(Guid Id, CategoryUpdateRequest categoryUpdateRequest)
         {
             try
             {
@@ -84,14 +84,14 @@ namespace Course.BLL.Services.Implementations
                 _mapper.Map(categoryUpdateRequest, category);
 
                 await _unitOfWork.SaveChangesAsync();
-                return new Response<CategoryResponse>(
+                return new Response<CategoryDTO>(
                     true,
-                    _mapper.Map<CategoryResponse>(category)
+                    _mapper.Map<CategoryDTO>(category)
                 );
             }
             catch (Exception ex)
             {
-                return new Response<CategoryResponse>(false, ex.Message, null);
+                return new Response<CategoryDTO>(false, ex.Message, null);
             }
         }
     }

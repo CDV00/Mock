@@ -22,7 +22,7 @@ namespace CourseAPI.Controllers
         /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<Responses<CategoryResponse>>> GetAll()
+        public async Task<ActionResult<Responses<CategoryDTO>>> GetAll()
         {
             var result = await _categoryService.GetAll();
             if (result.IsSuccess == false)

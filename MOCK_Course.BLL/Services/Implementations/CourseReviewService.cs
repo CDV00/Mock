@@ -34,22 +34,22 @@ namespace Course.BLL.Services.Implementations
         /// get all course review
         /// </summary>
         /// <returns></returns>
-        public async Task<Responses<CourseReviewResponse>> GetAll(Guid courseId)
+        public async Task<Responses<CourseReviewDTO>> GetAll(Guid courseId)
         {
             try
             {
                 var result = await _courseReviewRepository.GetAll().Where(c => c.Enrollment.CourseId == courseId).ToListAsync();
 
-                return new Responses<CourseReviewResponse>(true, _mapper.Map<IEnumerable<CourseReviewResponse>>(result));
+                return new Responses<CourseReviewDTO>(true, _mapper.Map<IEnumerable<CourseReviewDTO>>(result));
             }
             catch (Exception ex)
             {
-                return new Responses<CourseReviewResponse>(false, ex.Message, null);
+                return new Responses<CourseReviewDTO>(false, ex.Message, null);
             }
 
         }
 
-        public async Task<Response<CourseReviewResponse>> Add(CourseReviewRequest courseReviewRequest)
+        public async Task<Response<CourseReviewDTO>> Add(CourseReviewRequest courseReviewRequest)
         {
             try
             {
@@ -57,11 +57,11 @@ namespace Course.BLL.Services.Implementations
 
                 await _courseReviewRepository.CreateAsync(courseReview);
                 await _unitOfWork.SaveChangesAsync();
-                return new Response<CourseReviewResponse>(true, _mapper.Map<CourseReviewResponse>(courseReview));
+                return new Response<CourseReviewDTO>(true, _mapper.Map<CourseReviewDTO>(courseReview));
             }
             catch (Exception ex)
             {
-                return new Response<CourseReviewResponse>(false, ex.Message, null);
+                return new Response<CourseReviewDTO>(false, ex.Message, null);
             }
         }
         /// <summary>
@@ -69,7 +69,7 @@ namespace Course.BLL.Services.Implementations
         /// </summary>
         /// <param name="courseReviewUpdateRequest"></param>
         /// <returns></returns>
-        public async Task<Response<CourseReviewResponse>> Update(Guid id, CourseReviewUpdateRequest courseReviewUpdateRequest)
+        public async Task<Response<CourseReviewDTO>> Update(Guid id, CourseReviewUpdateRequest courseReviewUpdateRequest)
         {
             try
             {
@@ -78,14 +78,14 @@ namespace Course.BLL.Services.Implementations
                 _mapper.Map(courseReviewUpdateRequest, courseReview);
 
                 await _unitOfWork.SaveChangesAsync();
-                return new Response<CourseReviewResponse>(
+                return new Response<CourseReviewDTO>(
                     true,
-                    _mapper.Map<CourseReviewResponse>(courseReview)
+                    _mapper.Map<CourseReviewDTO>(courseReview)
                 );
             }
             catch (Exception ex)
             {
-                return new Response<CourseReviewResponse>(false, ex.Message, null);
+                return new Response<CourseReviewDTO>(false, ex.Message, null);
             }
         }
         /// <summary>

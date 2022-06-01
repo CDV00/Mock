@@ -28,7 +28,7 @@ namespace CourseAPI.Controllers
         /// <param name="UserId"></param>
         /// <returns></returns>
         [HttpGet("{UserId:guid}")]
-        public async Task<ActionResult<Responses<OrderResponse>>> GetAll()
+        public async Task<ActionResult<Responses<OrderDTO>>> GetAll()
         {
             var userId = User.GetUserId();
             var result = await _orderService.GetAll(userId);
@@ -43,7 +43,7 @@ namespace CourseAPI.Controllers
         /// <param name="orderRequest"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Response<OrderResponse>>> Add([FromBody] OrderRequest orderRequest)
+        public async Task<ActionResult<Response<OrderDTO>>> Add([FromBody] OrderRequest orderRequest)
         {
             var userId = User.GetUserId();
             var result = await _orderService.Add(userId, orderRequest);

@@ -3,18 +3,18 @@ using System;
 
 namespace Course.BLL.Responses
 {
-    public class LectureCompletionResponse
+    public class LectureCompletionDTO
     {
         public Guid Id { get; set; }
-        public LectureCompletionUser LectureCompUser { get; set; }
-        public LectureCompletionLession Lecture { get; set; }
+        public LectureCompletionUserDTO User { get; set; }
+        public LectureCompletionLessionDTO Lecture { get; set; }
     }
-    public class LectureCompletionUser
+    public class LectureCompletionUserDTO
     {
         public Guid Id { get; set; }
         public string Fullname { get; set; }
     }
-    public class LectureCompletionLession
+    public class LectureCompletionLessionDTO
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
