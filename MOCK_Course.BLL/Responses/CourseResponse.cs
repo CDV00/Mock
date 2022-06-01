@@ -16,7 +16,6 @@ namespace Course.BLL.Responses
         /// </summary>
         public string Learn { get; set; }
         public string Requirement { get; set; }
-        public Level CourseLevel { get; set; }
 
         public string ThumbnailUrl { get; set; }
         /// <summary>
