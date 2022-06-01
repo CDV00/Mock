@@ -40,19 +40,73 @@ namespace Course.DAL.Repositories.Implementations
 
         public async Task<List<PurchaseDTO>> GetAllMyPurchase(Guid userId)
         {
-            var purchases = await (from order in _context.Orders join course in _context.Courses on order.CourseId equals course.Id
-                                    join user in _context.Users on course.UserId equals user.Id
-                                    join category in _context.Categories on course.CategoryId equals category.Id
-                                    where(order.UserId == userId)
-                                    select new PurchaseDTO { 
-                                        FullName= user.Fullname, 
-                                        Title = course.Title,
-                                        Category = category.Name,
-                                        Price = order.Price,
-                                        CreatedAt = order.CreatedAt
-                                    }).ToListAsync();
+            var purchases = await (from order in _context.Orders
+                                   join course in _context.Courses on order.CourseId equals course.Id
+                                   join user in _context.Users on course.UserId equals user.Id
+                                   join category in _context.Categories on course.CategoryId equals category.Id
+                                   where (order.UserId == userId)
+                                   select new PurchaseDTO
+                                   {
+                                       FullName = user.Fullname,
+                                       Title = course.Title,
+                                       Category = category.Name,
+                                       Price = order.Price,
+                                       CreatedAt = order.CreatedAt
+                                   }).ToListAsync();
 
             return purchases;
+        }
+        public async Task<List<MyCoursesDTO>> GetAllMyCoures(Guid userId)
+        {
+            var course = await (from courses in _context.Courses
+                                join category in _context.Categories on courses.CategoryId equals category.Id
+                                let salecount =
+                                (
+                                  from order in _context.Orders
+                                  where courses.Id == order.CourseId
+                                  select order
+                                ).Count()
+                                let partscount =
+                                (
+                                  from enrollment in _context.Enrollment
+                                  where courses.Id == enrollment.CourseId
+                                  select enrollment
+                                ).Count()
+                                where (courses.UserId == userId && courses.IsActive == true)
+
+                                select new MyCoursesDTO
+                                {
+                                    Id = courses.Id,
+                                    Title = courses.Title,
+                                    CreatedAt = courses.CreatedAt,
+                                    Category = category.Name,
+                                    Sale = salecount,
+                                    Parts = partscount,
+                                    Status = courses.IsActive
+
+                                }).ToListAsync();
+
+            return course;
+        }
+        public async Task<List<UpcommingCourseDTO>> GetAllUpcomingCourses(Guid userId)
+        {
+            var upcommingcourse = await (
+                                from courses in _context.Courses
+                                join category in _context.Categories on courses.CategoryId equals category.Id
+                                where (courses.UserId == userId && courses.IsActive == false)
+                                select new UpcommingCourseDTO
+                                {
+                                    Id = courses.Id,
+                                    Title = courses.Title,
+                                    Thumbnail = courses.ThumbnailUrl,
+                                    Category = category.Name,
+                                    Price = courses.Price,
+                                    CreatedAt = courses.CreatedAt,
+                                    Status = courses.IsActive
+
+                                }).ToListAsync();
+
+            return upcommingcourse;
         }
 
     }

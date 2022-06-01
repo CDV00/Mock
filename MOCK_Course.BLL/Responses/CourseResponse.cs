@@ -37,4 +37,4 @@ namespace Course.BLL.Responses
 
         public IList<SectionDTO> Sections { get; set; }
     }
-}
+ }

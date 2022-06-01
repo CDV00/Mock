@@ -156,6 +156,30 @@ namespace Course.BLL.Services.Implementations
                 return new Response<int>(false, ex.Message, null);
             }
         }
+        public async Task<Responses<MyCoursesDTO>> GetAllMyCoures(Guid userId)
+        {
+            try
+            {
+                var myCourse = await _cousesRepository.GetAllMyCoures(userId);
+                return new Responses<MyCoursesDTO>(true, myCourse);
+            }
+            catch (Exception ex)
+            {
+                return new Responses<MyCoursesDTO>(false, ex.Message, null);
+            }
+        }
+        public async Task<Responses<UpcommingCourseDTO>> GetAllUpcomingCourses(Guid userId)
+        {
+            try
+            {
+                var myCourse = await _cousesRepository.GetAllUpcomingCourses(userId);
+                return new Responses<UpcommingCourseDTO>(true, myCourse);
+            }
+            catch (Exception ex)
+            {
+                return new Responses<UpcommingCourseDTO>(false, ex.Message, null);
+            }
+        }
 
         public async Task<Responses<PurchaseDTO>> GetAllMyPurchase(Guid userId)
         {
