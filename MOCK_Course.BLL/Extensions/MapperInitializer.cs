@@ -18,20 +18,17 @@ namespace Course.BLL.Extensions
             CreateMap<AppUser, UserDTO>().ForMember(des => des.FullName, src => src.MapFrom(opt => opt.FirstName + opt.Fullname)).ReverseMap();
 
             // level
-            //CreateMap<Level, CourseLevelDTO>().ReverseMap();
             CreateMap<CourseLevel, CourseLevelDTO>().ReverseMap();
 
             // lesion
             CreateMap<Lecture, LectureForCreateRequest>().ReverseMap();
             CreateMap<Lecture, LectureForUpdateRequest>().ReverseMap();
             CreateMap<Lecture, LectureDTO>().ReverseMap();
-            //CreateMap<LessonDTO, LessonForUpdateRequest>().ReverseMap();
 
             // section
             CreateMap<Section, SectionCreateRequest>().ForMember(des => des.Lecture, src => src.MapFrom(opt => opt.Lecture)).ReverseMap();
             CreateMap<Section, SectionUpdateRequest>().ReverseMap().ForMember(des => des.Lecture, src => src.MapFrom(opt => opt.Lesson)).ReverseMap();
             CreateMap<Section, SectionDTO>().ForMember(des => des.Lesson, src => src.MapFrom(opt => opt.Lecture)).ReverseMap();
-            //CreateMap<SectionDTO, SectionUpdateRequest>().ReverseMap();
 
             // language
             CreateMap<AudioLanguage, AudioLanguageForCreateRequest>().ReverseMap();
@@ -45,7 +42,7 @@ namespace Course.BLL.Extensions
             CreateMap<Courses, CourseForUpdateRequest>().ForMember(des => des.AudioLanguages, opt => opt.MapFrom(src => src.AudioLanguages)).ForMember(des => des.CloseCaptions, opt => opt.MapFrom(src => src.CloseCaptions)).ForMember(des => des.CourseLevels, opt => opt.MapFrom(src => src.CourseLevels)).ReverseMap();
 
             CreateMap<AppUser, UserDTO>().ReverseMap();
-            CreateMap<Category, CategoryDTO>().ReverseMap();
+            CreateMap<Category, CourseCategoryDTO>().ReverseMap();
             CreateMap<Courses, CoursesCardDTO>().ForMember(des => des.User, opt => opt.MapFrom(src => src.User)).ForMember(des => des.Category, opt => opt.MapFrom(src => src.Category)).ReverseMap();
 
             CreateMap<AudioLanguageDTO, AudioLanguage>().ReverseMap();
