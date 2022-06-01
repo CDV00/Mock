@@ -114,6 +114,41 @@ namespace CourseAPI.Controllers
         //}
 
         /// <summary>
+        /// Get all My Course
+        /// 
+        /// </summary>
+        ///<param name="userId"> User Id Courses</param>
+        /// <returns></returns>
+        [HttpGet("Get-all-my-course")]
+        [AllowAnonymous]
+        public async Task<ActionResult<Responses<MyCoursesDTO>>> GetAllMyCoures()
+        {
+            var userId = User.GetUserId();
+            var result = await _coursesService.GetAllMyCoures(userId);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
+       
+        /// <summary>
+        /// Get all Upcomming Course
+        /// 
+        /// </summary>
+        ///<param name="userId"> User Id Courses</param>
+        /// <returns></returns>
+        [HttpGet("Get-all-upcoming-courses")]
+        [AllowAnonymous]
+        public async Task<ActionResult<Responses<UpcommingCourseDTO>>> GetAllUpcomingCourses()
+        {
+            var userId = User.GetUserId();
+            var result = await _coursesService.GetAllUpcomingCourses(userId);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
+        /// <summary>
         /// Get all My Purchase
         /// 
         /// </summary>
