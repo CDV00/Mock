@@ -82,7 +82,7 @@ namespace CourseAPI.Data
                     Title = "New Course",
                     UserId = adminId,
                     CategoryId = Guid.Parse("9e47da02-3d3e-248d-a207-d53908753582"),
-                    CourseLevel = Level.Beginer
+                    //CourseLevel = Level.Beginer
                 });
             }
 
@@ -100,6 +100,24 @@ namespace CourseAPI.Data
                 {
                     Name = "Japan",
                 });
+            }
+
+
+            if (!await appContext.Levels.AnyAsync())
+            {
+                await appContext.Levels.AddAsync(new Level
+                {
+                    Name = "Beginner",
+                });
+                await appContext.Levels.AddAsync(new Level
+                {
+                    Name = "Intermediate",
+                });
+                await appContext.Levels.AddAsync(new Level
+                {
+                    Name = "Expert",
+                });
+
             }
 
             await appContext.SaveChangesAsync();

@@ -30,6 +30,10 @@ namespace CourseAPI.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<BaseResponse>> Register([FromBody] RegisterRequest registerRequest)
         {
+            if (ModelState.IsValid)
+            {
+
+            }
             var result = await _userService.Register(registerRequest);
             if (result.IsSuccess)
             {

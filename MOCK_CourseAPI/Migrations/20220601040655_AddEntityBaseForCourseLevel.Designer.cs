@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CourseAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220524143824_createDb")]
-    partial class createDb
+    [Migration("20220601040655_AddEntityBaseForCourseLevel")]
+    partial class AddEntityBaseForCourseLevel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -103,6 +103,12 @@ namespace CourseAPI.Migrations
                     b.Property<string>("ProfileLink")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RefreshTokenExpiryTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -144,6 +150,27 @@ namespace CourseAPI.Migrations
 
                     b.Property<Guid>("LanguageId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CourseId", "LanguageId");
 
@@ -197,6 +224,27 @@ namespace CourseAPI.Migrations
                     b.Property<Guid>("LanguageId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("CourseId", "LanguageId");
 
                     b.HasIndex("LanguageId");
@@ -241,6 +289,42 @@ namespace CourseAPI.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("CourseCompletions");
+                });
+
+            modelBuilder.Entity("Course.DAL.Models.CourseLevel", b =>
+                {
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("LevelId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CourseId", "LevelId");
+
+                    b.HasIndex("LevelId");
+
+                    b.ToTable("CourseLevels");
                 });
 
             modelBuilder.Entity("Course.DAL.Models.CourseReview", b =>
@@ -291,9 +375,6 @@ namespace CourseAPI.Migrations
 
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("CourseLevel")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -429,10 +510,10 @@ namespace CourseAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Language");
+                    b.ToTable("Languages");
                 });
 
-            modelBuilder.Entity("Course.DAL.Models.Lesson", b =>
+            modelBuilder.Entity("Course.DAL.Models.Lecture", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -478,10 +559,10 @@ namespace CourseAPI.Migrations
 
                     b.HasIndex("SectionId");
 
-                    b.ToTable("Lessons");
+                    b.ToTable("Lectures");
                 });
 
-            modelBuilder.Entity("Course.DAL.Models.LessonCompletion", b =>
+            modelBuilder.Entity("Course.DAL.Models.LectureCompletion", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -499,7 +580,7 @@ namespace CourseAPI.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("LessonId")
+                    b.Property<Guid>("LectureId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -513,11 +594,43 @@ namespace CourseAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LessonId");
+                    b.HasIndex("LectureId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("LessonCompletions");
+                    b.ToTable("LectureCompletions");
+                });
+
+            modelBuilder.Entity("Course.DAL.Models.Level", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Levels");
                 });
 
             modelBuilder.Entity("Course.DAL.Models.Order", b =>
@@ -876,6 +989,25 @@ namespace CourseAPI.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Course.DAL.Models.CourseLevel", b =>
+                {
+                    b.HasOne("Course.DAL.Models.Courses", "Course")
+                        .WithMany("CourseLevels")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Course.DAL.Models.Level", "Level")
+                        .WithMany("CourseLevels")
+                        .HasForeignKey("LevelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Level");
+                });
+
             modelBuilder.Entity("Course.DAL.Models.CourseReview", b =>
                 {
                     b.HasOne("Course.DAL.Models.Enrollment", "Enrollment")
@@ -925,10 +1057,10 @@ namespace CourseAPI.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Course.DAL.Models.Lesson", b =>
+            modelBuilder.Entity("Course.DAL.Models.Lecture", b =>
                 {
                     b.HasOne("Course.DAL.Models.Section", "Section")
-                        .WithMany("Lessons")
+                        .WithMany("Lecture")
                         .HasForeignKey("SectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -936,21 +1068,21 @@ namespace CourseAPI.Migrations
                     b.Navigation("Section");
                 });
 
-            modelBuilder.Entity("Course.DAL.Models.LessonCompletion", b =>
+            modelBuilder.Entity("Course.DAL.Models.LectureCompletion", b =>
                 {
-                    b.HasOne("Course.DAL.Models.Lesson", "Lesson")
-                        .WithMany("LessonCompletions")
-                        .HasForeignKey("LessonId")
+                    b.HasOne("Course.DAL.Models.Lecture", "Lecture")
+                        .WithMany("LectureCompletions")
+                        .HasForeignKey("LectureId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Course.DAL.Models.AppUser", "User")
-                        .WithMany("LessonCompletions")
+                        .WithMany("LectureCompletions")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Lesson");
+                    b.Navigation("Lecture");
 
                     b.Navigation("User");
                 });
@@ -1076,7 +1208,7 @@ namespace CourseAPI.Migrations
 
                     b.Navigation("Enrollments");
 
-                    b.Navigation("LessonCompletions");
+                    b.Navigation("LectureCompletions");
 
                     b.Navigation("Orders");
 
@@ -1102,6 +1234,8 @@ namespace CourseAPI.Migrations
 
                     b.Navigation("CourseCompletions");
 
+                    b.Navigation("CourseLevels");
+
                     b.Navigation("Enrollments");
 
                     b.Navigation("Orders");
@@ -1121,14 +1255,19 @@ namespace CourseAPI.Migrations
                     b.Navigation("CloseCaptions");
                 });
 
-            modelBuilder.Entity("Course.DAL.Models.Lesson", b =>
+            modelBuilder.Entity("Course.DAL.Models.Lecture", b =>
                 {
-                    b.Navigation("LessonCompletions");
+                    b.Navigation("LectureCompletions");
+                });
+
+            modelBuilder.Entity("Course.DAL.Models.Level", b =>
+                {
+                    b.Navigation("CourseLevels");
                 });
 
             modelBuilder.Entity("Course.DAL.Models.Section", b =>
                 {
-                    b.Navigation("Lessons");
+                    b.Navigation("Lecture");
                 });
 #pragma warning restore 612, 618
         }

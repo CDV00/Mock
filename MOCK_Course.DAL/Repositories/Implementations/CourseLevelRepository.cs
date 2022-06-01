@@ -7,24 +7,23 @@ using System.Threading.Tasks;
 
 namespace Course.DAL.Repositories.Implementations
 {
-    public class CloseCaptionRepository : Repository<CloseCaption, Guid>, ICloseCaptionRepository
+    public class CourseLevelRepository : Repository<CourseLevel, Guid>, ICourseLevelRepository
     {
         private AppDbContext _context;
-        public CloseCaptionRepository(AppDbContext context) : base(context)
+        public CourseLevelRepository(AppDbContext context) : base(context)
         {
             _context = context;
         }
-        public override void Remove(CloseCaption _object)
+        public override void Remove(CourseLevel _object)
         {
             if (_object == null)
                 return;
-            _context.CloseCaptions.Remove(_object);
+            _context.CourseLevels.Remove(_object);
         }
 
         public async Task<bool> RemoveAll(Guid courseId)
         {
             Entity().RemoveRange(GetAll().Where(a => a.CourseId == courseId));
-
             return true;
         }
     }

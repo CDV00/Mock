@@ -93,7 +93,7 @@ namespace Course.BLL.Services.Implementations
 
                 if (!result.Succeeded)
                 {
-                    return new BaseResponse(false, result.Errors.ToList()[0].Description, null);
+                    return new BaseResponse(false, result.Errors.ToList()[0].Description, result.Errors.ToList()[0].Code);
                 }
 
                 if (registerRequest.CategoryId == null)
@@ -300,7 +300,7 @@ namespace Course.BLL.Services.Implementations
                 //string url = $"{_configurations["AppUrl"]}/ResetPassword?email={email}&token={validToken}";
                 string url = $"http://localhost:3000/reset-pass?email={email}&token={token}";
                 await _emailService.SendEmailAsync(senderEmail, user.Email, "FORGET PASSWORD", "<h1>Follow the instruction to reset your password</h1>" + $"<p>To reset your password <a href={url}> click here.</a></p>");
-      
+
                 return new Response<BaseResponse>(true, null, null);
             }
             catch (Exception ex)
@@ -398,7 +398,6 @@ namespace Course.BLL.Services.Implementations
                     FacebookLink = userInfo.Id,
                     Email = userInfo.Email,
                     UserName = userInfo.Email
-                    //Image = userInfo.Picture.Data.Url
                 };
 
                 var result = await _userManager.CreateAsync(appUser, Convert.ToBase64String(Guid.NewGuid().ToByteArray())[..8]);

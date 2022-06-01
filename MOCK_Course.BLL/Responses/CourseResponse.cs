@@ -34,6 +34,7 @@ namespace Course.BLL.Responses
 
         public IList<AudioLanguageDTO> AudioLanguages { get; set; }
         public IList<CloseCaptionDTO> CloseCaptions { get; set; }
+        public IList<CourseLevelDTO> CourseLevels { get; set; }
 
         public IList<SectionDTO> Sections { get; set; }
     }

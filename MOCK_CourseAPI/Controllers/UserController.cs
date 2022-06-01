@@ -78,9 +78,6 @@ namespace CourseAPI.Controllers
         public async Task<ActionResult<BaseResponse>> CheckExistEmail(string Email)
         {
             var result = await _userService.CheckExistEmail(Email);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
-
             return Ok(result);
         }
     }

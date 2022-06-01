@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using Course.DAL.Configuration;
 using Course.DAL.Extensions;
 using Course.DAL.Models;
@@ -26,6 +27,8 @@ namespace Course.DAL.Data
         public DbSet<Language> Languages { get; set; }
         public DbSet<AudioLanguage> AudioLanguages { get; set; }
         public DbSet<CloseCaption> CloseCaptions { get; set; }
+        public DbSet<Level> Levels { get; set; }
+        public DbSet<CourseLevel> CourseLevels { get; set; }
         #endregion
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
@@ -51,6 +54,7 @@ namespace Course.DAL.Data
             modelBuilder.ApplyConfiguration(new SubscriptionConfiguration());
             modelBuilder.ApplyConfiguration(new AudioLanguageConfiguration());
             modelBuilder.ApplyConfiguration(new CloseCaptionConfiguration());
+            modelBuilder.ApplyConfiguration(new CourseLevelConfiguration());
 
             modelBuilder.ConfigTablesOfIdentity();
             //modelBuilder.SeedData();

@@ -23,16 +23,7 @@ namespace Course.DAL.Repositories.Implementations
 
         public async Task<bool> RemoveAll(Guid courseId)
         {
-            var audioLanguages = await GetAll().Where(a => a.CourseId == courseId).ToListAsync();
-
-            if (audioLanguages.Count == 0)
-                return false;
-
-            foreach (var item in audioLanguages)
-            {
-                Remove(item);
-            }
-
+            Entity().RemoveRange(GetAll().Where(a => a.CourseId == courseId));
             return true;
         }
     }

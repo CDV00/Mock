@@ -12,6 +12,7 @@ using Course.DAL.Data;
 using Course.DAL.Models;
 using Course.DAL.Repositories;
 using Course.DAL.Repositories.Implementations;
+using DAL.Repositories.Implementations;
 using LoggerService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -52,7 +53,7 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>
             {
                 //Configure Password
-                options.Password.RequireDigit = false; // Not mandatory digit
+                options.Password.RequireDigit = true; // Not mandatory digit
                 options.Password.RequireLowercase = false; // Not mandatory lowercase
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
@@ -174,6 +175,8 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IAudioLanguageRepository, AudioLanguageRepository>();
             services.AddScoped<ICloseCaptionRepository, CloseCaptionRepository>();
             services.AddScoped<ILanguageRepository, LanguageRepository>();
+            services.AddScoped<ICourseLevelRepository, CourseLevelRepository>();
+            services.AddScoped<ILevelRepository, LevelRepository>();
 
             services.AddScoped<ILectureRepository, LectureRepository>();
             services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
@@ -208,6 +211,7 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IEnrollmentService, EnrollmentService>();
             services.AddScoped<ICourseCompletionService, CourseCompletionService>();
             services.AddScoped<ILectureCompletionService, LectureCompletionService>();
+            services.AddScoped<ILevelService, LevelService>();
 
             services.AddScoped<IUploadService, UploadService>();
 

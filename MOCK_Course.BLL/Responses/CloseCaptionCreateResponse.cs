@@ -8,4 +8,9 @@ namespace Course.BLL.Responses
     }
 
     public class AudioLanguageDTO : CloseCaptionDTO { }
+    public class CourseLevelDTO
+    {
+        public Guid LevelId { get; set; }
+    }
+
 }

@@ -17,22 +17,20 @@ namespace Course.BLL.Services.Implementations
         private readonly ICousesRepository _cousesRepository;
         private readonly IAudioLanguageRepository _audioLanguageRepository;
         private readonly ICloseCaptionRepository _closeCaptionRepository;
-        private readonly ISectionRepositoty _sectionRepositoty;
-        private readonly ILectureRepository _lessonRepository;
+        private readonly ICourseLevelRepository _courseLevelRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public CourseService(ICousesRepository cousesRepository,
             IMapper mapper,
-            IUnitOfWork unitOfWork, IAudioLanguageRepository audioLanguageRepository, ICloseCaptionRepository closeCaptionRepository, ISectionRepositoty sectionRepositoty, ILectureRepository lessonRepository)
+            IUnitOfWork unitOfWork, IAudioLanguageRepository audioLanguageRepository, ICloseCaptionRepository closeCaptionRepository, ICourseLevelRepository courseLevelRepository)
         {
             _cousesRepository = cousesRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _audioLanguageRepository = audioLanguageRepository;
             _closeCaptionRepository = closeCaptionRepository;
-            _sectionRepositoty = sectionRepositoty;
-            _lessonRepository = lessonRepository;
+            _courseLevelRepository = courseLevelRepository;
         }
 
         /// <summary>
@@ -127,6 +125,7 @@ namespace Course.BLL.Services.Implementations
                 // remove language
                 await _audioLanguageRepository.RemoveAll(Id);
                 await _closeCaptionRepository.RemoveAll(Id);
+                await _courseLevelRepository.RemoveAll(Id);
 
                 _mapper.Map(courseRequest, course);
 
@@ -162,9 +161,9 @@ namespace Course.BLL.Services.Implementations
             try
             {
                 var myPurchase = await _cousesRepository.GetAllMyPurchase(userId);
-                return new Responses<PurchaseDTO>(true,myPurchase);
+                return new Responses<PurchaseDTO>(true, myPurchase);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new Responses<PurchaseDTO>(false, ex.Message, null);
             }

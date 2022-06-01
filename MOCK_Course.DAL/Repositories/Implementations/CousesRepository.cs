@@ -31,7 +31,7 @@ namespace Course.DAL.Repositories.Implementations
 
         public async Task<Courses> GetForPost(Guid id)
         {
-            return await FindByCondition(c => c.Id == id).Include(c => c.AudioLanguages).Include(c => c.CloseCaptions).Include(c => c.Sections).ThenInclude(s => s.Lecture).FirstOrDefaultAsync();
+            return await FindByCondition(c => c.Id == id).Include(c => c.AudioLanguages).Include(c => c.CloseCaptions).Include(c => c.Sections).ThenInclude(s => s.Lecture).Include(c => c.CourseLevels).FirstOrDefaultAsync();
         }
         public async Task<int> GetTotal(Guid userId)
         {
@@ -40,17 +40,19 @@ namespace Course.DAL.Repositories.Implementations
 
         public async Task<List<PurchaseDTO>> GetAllMyPurchase(Guid userId)
         {
-            var purchases = await (from order in _context.Orders join course in _context.Courses on order.CourseId equals course.Id
-                                    join user in _context.Users on course.UserId equals user.Id
-                                    join category in _context.Categories on course.CategoryId equals category.Id
-                                    where(order.UserId == userId)
-                                    select new PurchaseDTO { 
-                                        FullName= user.Fullname, 
-                                        Title = course.Title,
-                                        Category = category.Name,
-                                        Price = order.Price,
-                                        CreatedAt = order.CreatedAt
-                                    }).ToListAsync();
+            var purchases = await (from order in _context.Orders
+                                   join course in _context.Courses on order.CourseId equals course.Id
+                                   join user in _context.Users on course.UserId equals user.Id
+                                   join category in _context.Categories on course.CategoryId equals category.Id
+                                   where (order.UserId == userId)
+                                   select new PurchaseDTO
+                                   {
+                                       FullName = user.Fullname,
+                                       Title = course.Title,
+                                       Category = category.Name,
+                                       Price = order.Price,
+                                       CreatedAt = order.CreatedAt
+                                   }).ToListAsync();
 
             return purchases;
         }

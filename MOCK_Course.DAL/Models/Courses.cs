@@ -13,7 +13,7 @@ namespace Course.DAL.Models
         /// </summary>
         public string Learn { get; set; }
         public string Requirement { get; set; }
-        public Level CourseLevel { get; set; }
+        //public Level CourseLevel { get; set; }
         public string ThumbnailUrl { get; set; }
         /// <summary>
         /// Intro Course overview provider type. (
@@ -37,13 +37,14 @@ namespace Course.DAL.Models
         public ICollection<Enrollment> Enrollments { get; set; }
         public ICollection<ShoppingCart> Carts { get; set; }
         public ICollection<Order> Orders { get; set; }
+        public ICollection<CourseLevel> CourseLevels { get; set; }
         public ICollection<AudioLanguage> AudioLanguages { get; set; }
         public ICollection<CloseCaption> CloseCaptions { get; set; }
     }
-    public enum Level
-    {
-        Beginer,
-        Intermedia,
-        Expert
-    }
+    //public enum Level
+    //{
+    //    Beginer,
+    //    Intermedia,
+    //    Expert
+    //}
 }

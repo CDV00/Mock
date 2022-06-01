@@ -1,4 +1,5 @@
-﻿using Course.DAL.Models;
+﻿using Course.BLL.Responses;
+using Course.DAL.Models;
 using System;
 using System.Collections.Generic;
 
@@ -18,8 +19,6 @@ namespace Course.BLL.Requests
         /// </summary>
         public string Learn { get; set; }
         public string Requirement { get; set; }
-        public Level CourseLevel { get; set; }
-
         public string ThumbnailUrl { get; set; }
         /// <summary>
         /// Intro Course overview provider type. (
@@ -35,6 +34,7 @@ namespace Course.BLL.Requests
         public Guid CategoryId { get; set; }
         public IList<AudioLanguageForCreateRequest> AudioLanguages { get; set; }
         public IList<CloseCaptionForCreateRequest> CloseCaptions { get; set; }
+        public IList<CourseLevelDTO> CourseLevels { get; set; }
 
         public IList<SectionCreateRequest> Sections { get; set; }
     }
@@ -65,6 +65,7 @@ namespace Course.BLL.Requests
         public Guid CategoryId { get; set; }
         public IList<AudioLanguageForCreateRequest> AudioLanguages { get; set; }
         public IList<CloseCaptionForCreateRequest> CloseCaptions { get; set; }
+        public IList<CourseLevelDTO> CourseLevels { get; set; }
         public IList<SectionUpdateRequest> Sections { get; set; }
     }
 }

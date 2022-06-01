@@ -11,4 +11,6 @@ namespace Course.BLL.DTO
 
         public ICollection<CategoryResponse> SubCategories { get; set; }
     }
+
+
 }

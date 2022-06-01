@@ -17,6 +17,10 @@ namespace Course.BLL.Extensions
             CreateMap<RegisterRequest, AppUser>().ForMember(x => x.UserName, opt => opt.MapFrom(x => x.Email)).ReverseMap();
             CreateMap<AppUser, UserResponse>().ForMember(des => des.FullName, src => src.MapFrom(opt => opt.FirstName + opt.Fullname)).ReverseMap();
 
+            // level
+            //CreateMap<Level, CourseLevelDTO>().ReverseMap();
+            CreateMap<CourseLevel, CourseLevelDTO>().ReverseMap();
+
             // lesion
             CreateMap<Lecture, LectureForCreateRequest>().ReverseMap();
             CreateMap<Lecture, LectureForUpdateRequest>().ReverseMap();
@@ -37,8 +41,8 @@ namespace Course.BLL.Extensions
             CreateMap<Language, LanguageResponse>().ReverseMap();
 
             //course
-            CreateMap<Courses, CourseForCreateRequest>().ForMember(des => des.AudioLanguages, opt => opt.MapFrom(src => src.AudioLanguages)).ForMember(des => des.CloseCaptions, opt => opt.MapFrom(src => src.CloseCaptions)).ReverseMap();
-            CreateMap<Courses, CourseForUpdateRequest>().ForMember(des => des.AudioLanguages, opt => opt.MapFrom(src => src.AudioLanguages)).ForMember(des => des.CloseCaptions, opt => opt.MapFrom(src => src.CloseCaptions)).ReverseMap();
+            CreateMap<Courses, CourseForCreateRequest>().ForMember(des => des.AudioLanguages, opt => opt.MapFrom(src => src.AudioLanguages)).ForMember(des => des.CloseCaptions, opt => opt.MapFrom(src => src.CloseCaptions)).ForMember(des => des.CourseLevels, opt => opt.MapFrom(src => src.CourseLevels)).ReverseMap();
+            CreateMap<Courses, CourseForUpdateRequest>().ForMember(des => des.AudioLanguages, opt => opt.MapFrom(src => src.AudioLanguages)).ForMember(des => des.CloseCaptions, opt => opt.MapFrom(src => src.CloseCaptions)).ForMember(des => des.CourseLevels, opt => opt.MapFrom(src => src.CourseLevels)).ReverseMap();
 
             CreateMap<AppUser, UserDTO>().ReverseMap();
             CreateMap<Category, CategoryDTO>().ReverseMap();
@@ -46,7 +50,7 @@ namespace Course.BLL.Extensions
 
             CreateMap<AudioLanguageDTO, AudioLanguage>().ReverseMap();
             CreateMap<CloseCaptionDTO, CloseCaption>().ReverseMap();
-            CreateMap<CourseDTO, Courses>().ForMember(des => des.AudioLanguages, opt => opt.MapFrom(src => src.AudioLanguages)).ForMember(des => des.CloseCaptions, opt => opt.MapFrom(src => src.CloseCaptions)).ReverseMap();
+            CreateMap<CourseDTO, Courses>().ForMember(des => des.AudioLanguages, opt => opt.MapFrom(src => src.AudioLanguages)).ForMember(des => des.CloseCaptions, opt => opt.MapFrom(src => src.CloseCaptions)).ForMember(des => des.CourseLevels, opt => opt.MapFrom(src => src.CourseLevels)).ReverseMap();
 
             // map cart
             CreateMap<CartRequest, CartResponse>().ReverseMap();
