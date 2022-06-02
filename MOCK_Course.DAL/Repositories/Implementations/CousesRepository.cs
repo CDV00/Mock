@@ -29,8 +29,10 @@ namespace Course.DAL.Repositories.Implementations
 
         public async Task<Courses> GetForUpdate(Guid id)
         {
+            var course = await GetAll().Where(c => c.Id == id).FirstOrDefaultAsync();
+            //_context.Entry(course).State = EntityState.Modified;
 
-            return await GetAll().Where(c => c.Id == id).Include(c => c.Category).Include(c => c.AudioLanguages).Include(c => c.CloseCaptions).Include(c => c.Levels).FirstOrDefaultAsync();
+            return course;
         }
 
         public async Task<IEnumerable<Courses>> GetAllForCard()

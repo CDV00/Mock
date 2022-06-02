@@ -160,8 +160,10 @@ namespace Course.BLL.Services.Implementations
 
                 if (course == null)
                 {
-                    new Responses<BaseResponse>(false, "can't find course", null);
+                    return new Response<CourseDTO>(false, "can't find course", null);
                 }
+               _mapper.Map(courseRequest, course);
+
 
                 course.UpdatedAt = DateTime.Now;
 
@@ -192,11 +194,11 @@ namespace Course.BLL.Services.Implementations
                 //course.Levels.Clear();
                 course.Levels = levels;
 
-                _mapper.Map(courseRequest, course);
+                _cousesRepository.Update(course);
+                var CourseResponse = _mapper.Map<CourseDTO>(course);
 
                 await _unitOfWork.SaveChangesAsync();
 
-                var CourseResponse = _mapper.Map<CourseDTO>(course);
 
                 return new Response<CourseDTO>(
                     true,

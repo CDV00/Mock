@@ -11,7 +11,7 @@ namespace Course.BLL.DTO
         public string ThumbnailUrl { get; set; }
         public DateTime CreatedAt { get; set; }
         public CourseCategoryDTO Category { get; set; }
-        public UserDTO User { get; set; }
+        public CartUserDTO User { get; set; }
     }
 
     public class CourseCategoryDTO

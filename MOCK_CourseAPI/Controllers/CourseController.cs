@@ -23,7 +23,7 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// Get all course
+        /// Get all course for Page:
         /// https://gambolthemes.net/html-items/cursus_main_demo/explore.html
         /// </summary>
         /// <returns></returns>
@@ -37,6 +37,11 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Get Detail of course to render page: https://gambolthemes.net/html-items/cursus_main_demo/course_detail_view.html
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("Get-Detail-Course")]
         [AllowAnonymous]
         public async Task<ActionResult<Responses<CourseForDetailDTO>>> GetDetail(Guid id)
@@ -48,7 +53,7 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// Get Detail course by course id
+        /// Get Detail course For Update Course
         /// https://gambolthemes.net/html-items/cursus_main_demo/course_detail_view.html
         /// </summary>
         /// <returns></returns>
