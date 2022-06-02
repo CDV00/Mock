@@ -16,15 +16,16 @@ namespace Course.BLL.Services.Implementations
         private readonly IEnrollmentRepository _enrollmentRepository;
         private readonly ICousesRepository _cousesRepository;
         private readonly ICourseReviewRepository _courseReviewRepository;
+        private readonly ISubscriptionRepository _subscriptionRepository;
         public UserService(UserManager<AppUser> userManager,
-            IMapper mapper, IEnrollmentRepository enrollmentRepository, ICousesRepository cousesRepository, ICourseReviewRepository courseReviewRepository)
+           IMapper mapper, IEnrollmentRepository enrollmentRepository, ICousesRepository cousesRepository, ICourseReviewRepository courseReviewRepository, ISubscriptionRepository subscriptionRepository)
         {
             _userManager = userManager;
             _mapper = mapper;
             _enrollmentRepository = enrollmentRepository;
             _cousesRepository = cousesRepository;
             _courseReviewRepository = courseReviewRepository;
-
+            _subscriptionRepository = subscriptionRepository;
         }
         public async Task<Response<UserProfileDTO>> GetProfile(Guid id)
         {
@@ -36,6 +37,7 @@ namespace Course.BLL.Services.Implementations
                 userProfileResponse.TotalEnrollment = await _enrollmentRepository.GetTotal(id);
                 userProfileResponse.TotalCourse = await _cousesRepository.GetTotal(id);
                 userProfileResponse.TotalReviewCourse = await _courseReviewRepository.GetTotal(id);
+                userProfileResponse.TotalSubscription = await _subscriptionRepository.GetTotal(id);
 
                 return new Response<UserProfileDTO>(
                     true,
