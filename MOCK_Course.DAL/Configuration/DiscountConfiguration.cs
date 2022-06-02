@@ -11,7 +11,7 @@ namespace Course.DAL.Configuration
 
             builder.Property(c => c.DiscountPercent).HasColumnType("decimal(5,2)");
 
-            builder.HasQueryFilter(u => !u.IsDeleted);
+            //builder.HasQueryFilter(u => !u.IsDeleted);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Course.DAL.Configuration
                    .HasForeignKey(l => l.LanguageId);
 
 
-            builder.HasQueryFilter(u => !u.IsDeleted);
+            //builder.HasQueryFilter(u => !u.IsDeleted);
         }
     }
 }

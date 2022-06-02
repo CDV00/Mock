@@ -383,7 +383,7 @@ namespace CourseAPI.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("DiscountId")
+                    b.Property<Guid?>("DiscountId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("DiscountPrice")
@@ -689,7 +689,7 @@ namespace CourseAPI.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("DiscountId")
+                    b.Property<Guid?>("DiscountId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsActive")
@@ -1076,8 +1076,7 @@ namespace CourseAPI.Migrations
                     b.HasOne("Course.DAL.Models.Discount", "Discount")
                         .WithMany("Courses")
                         .HasForeignKey("DiscountId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Course.DAL.Models.AppUser", "User")
                         .WithMany("Courses")
@@ -1152,8 +1151,7 @@ namespace CourseAPI.Migrations
                     b.HasOne("Course.DAL.Models.Discount", "Discount")
                         .WithMany("Orders")
                         .HasForeignKey("DiscountId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Course.DAL.Models.AppUser", "User")
                         .WithMany("Orders")

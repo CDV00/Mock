@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CourseAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220601025700_InitDb")]
+    [Migration("20220602023309_InitDb")]
     partial class InitDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -299,6 +299,27 @@ namespace CourseAPI.Migrations
                     b.Property<Guid>("LevelId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("CourseId", "LevelId");
 
                     b.HasIndex("LevelId");
@@ -364,6 +385,9 @@ namespace CourseAPI.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("DiscountId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<decimal>("DiscountPrice")
                         .HasColumnType("money");
 
@@ -416,9 +440,49 @@ namespace CourseAPI.Migrations
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("DiscountId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("Course.DAL.Models.Discount", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("DiscountPercent")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Discounts");
                 });
 
             modelBuilder.Entity("Course.DAL.Models.Enrollment", b =>
@@ -627,6 +691,9 @@ namespace CourseAPI.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("DiscountId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -648,6 +715,8 @@ namespace CourseAPI.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
+
+                    b.HasIndex("DiscountId");
 
                     b.HasIndex("UserId");
 
@@ -1006,6 +1075,11 @@ namespace CourseAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Course.DAL.Models.Discount", "Discount")
+                        .WithMany("Courses")
+                        .HasForeignKey("DiscountId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.HasOne("Course.DAL.Models.AppUser", "User")
                         .WithMany("Courses")
                         .HasForeignKey("UserId")
@@ -1013,6 +1087,8 @@ namespace CourseAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+
+                    b.Navigation("Discount");
 
                     b.Navigation("User");
                 });
@@ -1074,6 +1150,11 @@ namespace CourseAPI.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("Course.DAL.Models.Discount", "Discount")
+                        .WithMany("Orders")
+                        .HasForeignKey("DiscountId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.HasOne("Course.DAL.Models.AppUser", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId")
@@ -1081,6 +1162,8 @@ namespace CourseAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Course");
+
+                    b.Navigation("Discount");
 
                     b.Navigation("User");
                 });
@@ -1220,6 +1303,13 @@ namespace CourseAPI.Migrations
                     b.Navigation("Orders");
 
                     b.Navigation("Sections");
+                });
+
+            modelBuilder.Entity("Course.DAL.Models.Discount", b =>
+                {
+                    b.Navigation("Courses");
+
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("Course.DAL.Models.Enrollment", b =>

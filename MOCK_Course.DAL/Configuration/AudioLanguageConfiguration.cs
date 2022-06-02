@@ -10,17 +10,17 @@ namespace Course.DAL.Configuration
         {
             builder.HasKey(al => new { al.CourseId, al.LanguageId });
 
-            builder.HasOne<Courses>(c => c.Course)
+            builder.HasOne(c => c.Course)
     .WithMany(al => al.AudioLanguages)
     .HasForeignKey(c => c.CourseId);
 
 
-            builder.HasOne<Language>(l => l.Language)
+            builder.HasOne(l => l.Language)
                 .WithMany(al => al.AudioLanguages)
                 .HasForeignKey(l => l.LanguageId);
 
 
-            builder.HasQueryFilter(u => !u.IsDeleted);
+            //builder.HasQueryFilter(u => !u.IsDeleted);
         }
     }
 }
