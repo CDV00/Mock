@@ -24,11 +24,13 @@ namespace Course.BLL.Extensions
             CreateMap<Lecture, LectureForCreateRequest>().ReverseMap();
             CreateMap<Lecture, LectureForUpdateRequest>().ReverseMap();
             CreateMap<Lecture, LectureDTO>().ReverseMap();
+            CreateMap<Lecture, LectureForDetailDTO>().ReverseMap();
 
             // section
-            CreateMap<Section, SectionCreateRequest>().ForMember(des => des.Lecture, src => src.MapFrom(opt => opt.Lecture)).ReverseMap();
-            CreateMap<Section, SectionUpdateRequest>().ReverseMap().ForMember(des => des.Lecture, src => src.MapFrom(opt => opt.Lesson)).ReverseMap();
-            CreateMap<Section, SectionDTO>().ForMember(des => des.Lesson, src => src.MapFrom(opt => opt.Lecture)).ReverseMap();
+            CreateMap<Section, SectionCreateRequest>().ForMember(des => des.Lecture, src => src.MapFrom(opt => opt.Lectures)).ReverseMap();
+            CreateMap<Section, SectionUpdateRequest>().ReverseMap().ForMember(des => des.Lectures, src => src.MapFrom(opt => opt.Lesson)).ReverseMap();
+            CreateMap<Section, SectionDTO>().ForMember(des => des.Lectures, src => src.MapFrom(opt => opt.Lectures)).ReverseMap();
+            CreateMap<Section, SectionForDetailDTO>().ForMember(des => des.Lectures, src => src.MapFrom(opt => opt.Lectures)).ReverseMap().ReverseMap();
 
             // language
             CreateMap<AudioLanguage, AudioLanguageForCreateRequest>().ReverseMap();
@@ -48,6 +50,8 @@ namespace Course.BLL.Extensions
             CreateMap<AudioLanguageDTO, AudioLanguage>().ReverseMap();
             CreateMap<CloseCaptionDTO, CloseCaption>().ReverseMap();
             CreateMap<CourseDTO, Courses>().ForMember(des => des.AudioLanguages, opt => opt.MapFrom(src => src.AudioLanguages)).ForMember(des => des.CloseCaptions, opt => opt.MapFrom(src => src.CloseCaptions)).ForMember(des => des.CourseLevels, opt => opt.MapFrom(src => src.CourseLevels)).ReverseMap();
+            CreateMap<AppUser, CourseDetailUserDTO>().ReverseMap();
+            CreateMap<CourseForDetailDTO, Courses>().ReverseMap();
 
             // map cart
             CreateMap<CartRequest, CartDTO>().ReverseMap();
@@ -67,6 +71,7 @@ namespace Course.BLL.Extensions
             CreateMap<Order, OrderRequest>().ReverseMap();
             CreateMap<Order, OrderDTO>().ReverseMap();
             CreateMap<Order, OrderUpdateRequest>().ReverseMap();
+
 
             // map enrollment
             CreateMap<EnrollmentRequest, EnrollmentDTO>().ReverseMap();

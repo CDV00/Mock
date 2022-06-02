@@ -1,4 +1,5 @@
-﻿using Course.DAL.DTOs;
+﻿using Course.BLL.Responses;
+using Course.DAL.DTOs;
 using Course.DAL.Models;
 using System;
 using System.Collections.Generic;
@@ -14,5 +15,6 @@ namespace Course.DAL.Repositories
         Task<List<MyCoursesDTO>> GetAllMyCoures(Guid id);
         Task<List<UpcommingCourseDTO>> GetAllUpcomingCourses(Guid id);
         Task<List<PurchaseDTO>> GetAllMyPurchase(Guid id);
+        Task<CourseForDetailDTO> GetDetail(Guid id);
     }
 }

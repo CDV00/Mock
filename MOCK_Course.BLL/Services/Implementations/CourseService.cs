@@ -52,6 +52,20 @@ namespace Course.BLL.Services.Implementations
             }
         }
 
+        public async Task<Response<CourseForDetailDTO>> GetDetail(Guid id)
+        {
+            try
+            {
+                var courses = await _cousesRepository.GetDetail(id);
+
+                return new Response<CourseForDetailDTO>(true, courses);
+            }
+            catch (Exception ex)
+            {
+                return new Response<CourseForDetailDTO>(false, ex.Message, null);
+            }
+        }
+
         public async Task<Response<CourseDTO>> GetForPost(Guid id)
         {
             try

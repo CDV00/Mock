@@ -1,13 +1,10 @@
 {
   "dependencies": {
     "secrets1": {
-      "type": "secrets.user"
-    },
-    "mssql1": {
-      "secretStore": "LocalSecretsFile",
-      "type": "mssql.local",
-      "connectionId": "ConnectionStrings:MOCK_Course",
-      "dynamicId": null
+      "secretStore": null,
+      "resourceId": null,
+      "type": "secrets.user",
+      "connectionId": null
     }
   }
 }

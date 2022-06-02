@@ -1,4 +1,6 @@
-﻿using Course.DAL.Data;
+﻿using AutoMapper;
+using Course.BLL.Responses;
+using Course.DAL.Data;
 using Course.DAL.DTOs;
 using Course.DAL.Models;
 using Microsoft.EntityFrameworkCore;
@@ -12,9 +14,11 @@ namespace Course.DAL.Repositories.Implementations
     public class CousesRepository : Repository<Courses, Guid>, ICousesRepository
     {
         private AppDbContext _context;
-        public CousesRepository(AppDbContext context) : base(context)
+        private IMapper _mapper;
+        public CousesRepository(AppDbContext context, IMapper mapper) : base(context)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public override Task CreateAsync(Courses _object)
@@ -29,9 +33,16 @@ namespace Course.DAL.Repositories.Implementations
             return await GetAll().Include(c => c.Category).Include(c => c.User).ToListAsync();
         }
 
+        public async Task<CourseForDetailDTO> GetDetail(Guid id)
+        {
+            var courseDetail = Entity().Include(c => c.User).Include(c => c.Category).Include(c => c.Sections).ThenInclude(s => s.Lectures).Where(c => c.Id == id).Select(c => _mapper.Map<CourseForDetailDTO>(c)).FirstOrDefault();
+            //var courseDetail = Entity().Where(c => c.Id == id).Select(c => new CourseForDetailDTO() {Title = c.ca }).FirstOrDefault();
+            return courseDetail;
+        }
+
         public async Task<Courses> GetForPost(Guid id)
         {
-            return await FindByCondition(c => c.Id == id).Include(c => c.AudioLanguages).Include(c => c.CloseCaptions).Include(c => c.Sections).ThenInclude(s => s.Lecture).Include(c => c.CourseLevels).FirstOrDefaultAsync();
+            return await FindByCondition(c => c.Id == id).Include(c => c.AudioLanguages).Include(c => c.CloseCaptions).Include(c => c.Sections).ThenInclude(s => s.Lectures).Include(c => c.CourseLevels).FirstOrDefaultAsync();
         }
         public async Task<int> GetTotal(Guid userId)
         {
@@ -79,7 +90,7 @@ namespace Course.DAL.Repositories.Implementations
                                     Id = courses.Id,
                                     Title = courses.Title,
                                     CreatedAt = courses.CreatedAt,
-                                    Category = new BLL.DTO.CourseCategoryDTO() { Name = category.Name,Id = category.Id},
+                                    Category = new BLL.DTO.CourseCategoryDTO() { Name = category.Name, Id = category.Id },
                                     Sale = salecount,
                                     Parts = partscount,
                                     Status = courses.IsActive

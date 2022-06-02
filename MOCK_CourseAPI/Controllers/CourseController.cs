@@ -37,6 +37,16 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
 
+        [HttpGet("Get-Detail-Course")]
+        [AllowAnonymous]
+        public async Task<ActionResult<Responses<CourseForDetailDTO>>> GetDetail(Guid id)
+        {
+            var result = await _coursesService.GetDetail(id);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
         /// <summary>
         /// Get Detail course by course id
         /// https://gambolthemes.net/html-items/cursus_main_demo/course_detail_view.html
@@ -130,7 +140,7 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
 
-       
+
         /// <summary>
         /// Get all Upcomming Course
         /// 

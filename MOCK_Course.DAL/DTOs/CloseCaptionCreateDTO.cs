@@ -4,7 +4,8 @@ namespace Course.BLL.Responses
 {
     public class CloseCaptionDTO
     {
-        public Guid LanguageId { get; set; }
+        //public Guid LanguageId { get; set; }
+        public LanguageDTO Language { get; set; }
     }
 
     public class AudioLanguageDTO : CloseCaptionDTO { }

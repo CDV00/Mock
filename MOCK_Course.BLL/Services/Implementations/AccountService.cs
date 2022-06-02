@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Course.BLL.DTO;
 using Course.BLL.Requests;
-using Course.BLL.DTO;
 using Course.DAL.ConfigurationModels;
 using Course.DAL.Models;
 using Microsoft.AspNetCore.Identity;
@@ -20,7 +19,6 @@ using Microsoft.IdentityModel.Tokens;
 using Google.Apis.Auth;
 using System.Net.Http;
 using Newtonsoft.Json;
-using Microsoft.AspNetCore.Mvc;
 using static Course.BLL.Responses.FacebookApiDTO;
 
 

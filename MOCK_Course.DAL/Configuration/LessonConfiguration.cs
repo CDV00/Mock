@@ -10,7 +10,7 @@ namespace Course.DAL.Configuration
         {
             // 1-n:section-lession
             builder.HasOne(l => l.Section)
-                .WithMany(s => s.Lecture)
+                .WithMany(s => s.Lectures)
                 .HasForeignKey(l => l.SectionId).OnDelete(DeleteBehavior.Cascade);
 
             builder.HasQueryFilter(u => !u.IsDeleted);

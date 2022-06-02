@@ -18,6 +18,6 @@ namespace Course.BLL.Services
         Task<Responses<MyCoursesDTO>> GetAllMyCoures(Guid id);
         Task<Responses<UpcommingCourseDTO>> GetAllUpcomingCourses(Guid id);
         Task<Responses<PurchaseDTO>> GetAllMyPurchase(Guid id);
-        
+        Task<Response<CourseForDetailDTO>> GetDetail(Guid id);
     }
 }
