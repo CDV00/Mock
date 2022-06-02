@@ -27,6 +27,12 @@ namespace Course.DAL.Repositories.Implementations
             return base.CreateAsync(_object);
         }
 
+        public async Task<Courses> GetForUpdate(Guid id)
+        {
+
+            return await GetAll().Where(c => c.Id == id).Include(c => c.Category).Include(c => c.AudioLanguages).Include(c => c.CloseCaptions).Include(c => c.Levels).FirstOrDefaultAsync();
+        }
+
         public async Task<IEnumerable<Courses>> GetAllForCard()
         {
 
@@ -35,14 +41,14 @@ namespace Course.DAL.Repositories.Implementations
 
         public async Task<CourseForDetailDTO> GetDetail(Guid id)
         {
-            var courseDetail = Entity().Include(c => c.User).Include(c => c.Category).Include(c => c.Sections).ThenInclude(s => s.Lectures).Where(c => c.Id == id).Select(c => _mapper.Map<CourseForDetailDTO>(c)).FirstOrDefault();
+            var courseDetail = Entity().Include(c => c.User).Include(c => c.AudioLanguages).Include(c => c.CloseCaptions).Include(c => c.Category).Include(c => c.Sections).ThenInclude(s => s.Lectures).Where(c => c.Id == id).Select(c => _mapper.Map<CourseForDetailDTO>(c)).FirstOrDefault();
             //var courseDetail = Entity().Where(c => c.Id == id).Select(c => new CourseForDetailDTO() {Title = c.ca }).FirstOrDefault();
             return courseDetail;
         }
 
         public async Task<Courses> GetForPost(Guid id)
         {
-            return await FindByCondition(c => c.Id == id).Include(c => c.AudioLanguages).Include(c => c.CloseCaptions).Include(c => c.Sections).ThenInclude(s => s.Lectures).Include(c => c.CourseLevels).FirstOrDefaultAsync();
+            return await FindByCondition(c => c.Id == id).Include(c => c.Category).Include(c => c.AudioLanguages).Include(c => c.CloseCaptions).Include(c => c.Sections).ThenInclude(s => s.Lectures).Include(c => c.Levels).FirstOrDefaultAsync();
         }
         public async Task<int> GetTotal(Guid userId)
         {

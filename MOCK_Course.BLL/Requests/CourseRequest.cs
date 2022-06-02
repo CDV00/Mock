@@ -32,9 +32,10 @@ namespace Course.BLL.Requests
         public decimal DiscountPrice { get; set; }
 
         public Guid CategoryId { get; set; }
-        public IList<AudioLanguageForCreateRequest> AudioLanguages { get; set; }
-        public IList<CloseCaptionForCreateRequest> CloseCaptions { get; set; }
-        public IList<CourseLevelDTO> CourseLevels { get; set; }
+
+        public IList<Guid> AudioLanguageIds { get; set; }
+        public IList<Guid> CloseCaptionIds { get; set; }
+        public IList<Guid> LevelIds { get; set; }
 
         public IList<SectionCreateRequest> Sections { get; set; }
     }
@@ -62,9 +63,10 @@ namespace Course.BLL.Requests
         public decimal DiscountPrice { get; set; }
 
         public Guid CategoryId { get; set; }
-        public IList<AudioLanguageForCreateRequest> AudioLanguages { get; set; }
-        public IList<CloseCaptionForCreateRequest> CloseCaptions { get; set; }
-        public IList<CourseLevelDTO> CourseLevels { get; set; }
+        public IList<Guid> AudioLanguageIds { get; set; }
+        public IList<Guid> CloseCaptionIds { get; set; }
+        public IList<Guid> LevelIds { get; set; }
+
         public IList<SectionUpdateRequest> Sections { get; set; }
     }
 }

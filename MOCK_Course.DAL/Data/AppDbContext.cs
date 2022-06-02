@@ -25,11 +25,9 @@ namespace Course.DAL.Data
         public DbSet<Lecture> Lectures { get; set; }
         public DbSet<Category> Categories { get; set; }
 
-        public DbSet<Language> Languages { get; set; }
         public DbSet<AudioLanguage> AudioLanguages { get; set; }
         public DbSet<CloseCaption> CloseCaptions { get; set; }
         public DbSet<Level> Levels { get; set; }
-        public DbSet<CourseLevel> CourseLevels { get; set; }
         #endregion
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)

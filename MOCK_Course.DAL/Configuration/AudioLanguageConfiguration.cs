@@ -8,17 +8,10 @@ namespace Course.DAL.Configuration
     {
         public void Configure(EntityTypeBuilder<AudioLanguage> builder)
         {
-            builder.HasKey(al => new { al.CourseId, al.LanguageId });
 
-            builder.HasOne(c => c.Course)
-    .WithMany(al => al.AudioLanguages)
-    .HasForeignKey(c => c.CourseId);
-
-
-            builder.HasOne(l => l.Language)
-                .WithMany(al => al.AudioLanguages)
-                .HasForeignKey(l => l.LanguageId);
-
+            //        builder.HasMany(c => c.Courses)
+            //.WithMany(al => al.AudioLanguages)
+            //.ToTable("CourseAudioLanguage");
 
             //builder.HasQueryFilter(u => !u.IsDeleted);
         }

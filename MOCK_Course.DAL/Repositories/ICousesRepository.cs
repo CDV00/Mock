@@ -16,5 +16,6 @@ namespace Course.DAL.Repositories
         Task<List<UpcommingCourseDTO>> GetAllUpcomingCourses(Guid id);
         Task<List<PurchaseDTO>> GetAllMyPurchase(Guid id);
         Task<CourseForDetailDTO> GetDetail(Guid id);
+        Task<Courses> GetForUpdate(Guid id);
     }
 }

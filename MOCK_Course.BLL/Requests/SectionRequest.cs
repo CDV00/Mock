@@ -8,7 +8,7 @@ namespace Course.BLL.Requests
     {
         public string Title { get; set; }
 
-        public IList<LectureForCreateRequest> Lecture { get; set; }
+        public IList<LectureForCreateRequest> Lectures { get; set; }
     }
     public class SectionUpdateRequest
     {
@@ -16,6 +16,6 @@ namespace Course.BLL.Requests
         [Required]
         public string Title { get; set; }
 
-        public IList<LectureForUpdateRequest> Lesson { get; set; }
+        public IList<LectureForUpdateRequest> Lectures { get; set; }
     }
 }

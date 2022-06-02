@@ -3,11 +3,17 @@ using System.Collections.Generic;
 
 namespace Course.DAL.Models
 {
-    public class Language : BaseEntity<Guid>
+    public class AudioLanguage : BaseEntity<Guid>
     {
         public string Name { get; set; }
 
-        public ICollection<AudioLanguage> AudioLanguages { get; set; }
-        public ICollection<CloseCaption> CloseCaptions { get; set; }
+        public ICollection<Courses> Courses { get; set; }
+    }
+
+    public class CloseCaption : BaseEntity<Guid>
+    {
+        public string Name { get; set; }
+
+        public ICollection<Courses> Courses { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using System;
 
 namespace Course.DAL.Repositories
 {
-    public interface ILanguageRepository : IRepository<Language, Guid>
+    public interface ILanguageRepository : IRepository<AudioLanguage, Guid>
     {
     }
 }

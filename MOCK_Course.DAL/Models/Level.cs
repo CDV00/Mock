@@ -7,6 +7,6 @@ namespace Course.DAL.Models
     {
         public string Name { get; set; }
 
-        public ICollection<CourseLevel> CourseLevels { get; set; }
+        public ICollection<Courses> Courses { get; set; }
     }
 }

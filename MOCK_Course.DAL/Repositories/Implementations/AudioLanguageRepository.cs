@@ -14,17 +14,5 @@ namespace Course.DAL.Repositories.Implementations
         {
             _context = context;
         }
-        public override void Remove(AudioLanguage _object)
-        {
-            if (_object == null)
-                return;
-            _context.AudioLanguages.Remove(_object);
-        }
-
-        public async Task<bool> RemoveAll(Guid courseId)
-        {
-            Entity().RemoveRange(GetAll().Where(a => a.CourseId == courseId));
-            return true;
-        }
     }
 }

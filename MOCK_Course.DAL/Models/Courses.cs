@@ -39,14 +39,8 @@ namespace Course.DAL.Models
         public ICollection<Enrollment> Enrollments { get; set; }
         public ICollection<ShoppingCart> Carts { get; set; }
         public ICollection<Order> Orders { get; set; }
-        public ICollection<CourseLevel> CourseLevels { get; set; }
+        public ICollection<Level> Levels { get; set; }
         public ICollection<AudioLanguage> AudioLanguages { get; set; }
         public ICollection<CloseCaption> CloseCaptions { get; set; }
     }
-    //public enum Level
-    //{
-    //    Beginer,
-    //    Intermedia,
-    //    Expert
-    //}
 }

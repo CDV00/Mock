@@ -86,17 +86,33 @@ namespace CourseAPI.Data
                 });
             }
 
-            if (!await appContext.Languages.AnyAsync())
+            if (!await appContext.AudioLanguages.AnyAsync())
             {
-                await appContext.Languages.AddAsync(new Language
+                await appContext.AudioLanguages.AddAsync(new AudioLanguage
                 {
                     Name = "English",
                 });
-                await appContext.Languages.AddAsync(new Language
+                await appContext.AudioLanguages.AddAsync(new AudioLanguage
                 {
                     Name = "Vietnamese",
                 });
-                await appContext.Languages.AddAsync(new Language
+                await appContext.AudioLanguages.AddAsync(new AudioLanguage
+                {
+                    Name = "Japan",
+                });
+            }
+
+            if (!await appContext.CloseCaptions.AnyAsync())
+            {
+                await appContext.CloseCaptions.AddAsync(new CloseCaption
+                {
+                    Name = "English",
+                });
+                await appContext.CloseCaptions.AddAsync(new CloseCaption
+                {
+                    Name = "Vietnamese",
+                });
+                await appContext.CloseCaptions.AddAsync(new CloseCaption
                 {
                     Name = "Japan",
                 });

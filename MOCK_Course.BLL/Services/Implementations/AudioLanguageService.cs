@@ -29,7 +29,7 @@ namespace Course.BLL.Services.Implementations
             try
             {
                 var AudioLanguage = _mapper.Map<AudioLanguage>(AudioLanguageRequest);
-                AudioLanguage.CourseId = courseId;
+                //AudioLanguage.CourseId = courseId;
 
                 await _AudioLanguageRepositoty.CreateAsync(AudioLanguage);
                 await _unitOfWork.SaveChangesAsync();

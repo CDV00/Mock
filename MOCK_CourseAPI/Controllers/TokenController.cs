@@ -20,6 +20,7 @@ namespace CourseAPI.Controllers
         }
 
         [HttpPost("refresh")]
+        [AllowAnonymous]
         public async Task<ActionResult<Response<TokenDTO>>> Refresh([FromBody] TokenDTO tokenDto)
         {
             var tokenDtoToReturn = await

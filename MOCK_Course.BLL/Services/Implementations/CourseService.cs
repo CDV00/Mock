@@ -17,20 +17,21 @@ namespace Course.BLL.Services.Implementations
         private readonly ICousesRepository _cousesRepository;
         private readonly IAudioLanguageRepository _audioLanguageRepository;
         private readonly ICloseCaptionRepository _closeCaptionRepository;
-        private readonly ICourseLevelRepository _courseLevelRepository;
+        private readonly ILevelRepository _levelRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public CourseService(ICousesRepository cousesRepository,
             IMapper mapper,
-            IUnitOfWork unitOfWork, IAudioLanguageRepository audioLanguageRepository, ICloseCaptionRepository closeCaptionRepository, ICourseLevelRepository courseLevelRepository)
+            IUnitOfWork unitOfWork, IAudioLanguageRepository audioLanguageRepository,
+            ICloseCaptionRepository closeCaptionRepository, ILevelRepository levelRepository)
         {
             _cousesRepository = cousesRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _audioLanguageRepository = audioLanguageRepository;
             _closeCaptionRepository = closeCaptionRepository;
-            _courseLevelRepository = courseLevelRepository;
+            _levelRepository = levelRepository;
         }
 
         /// <summary>
@@ -90,6 +91,30 @@ namespace Course.BLL.Services.Implementations
 
                 await _cousesRepository.CreateAsync(course);
 
+                List<AudioLanguage> audioLanguages = new();
+                foreach (var id in courseRequest.AudioLanguageIds)
+                {
+                    var audioLanguage = await _audioLanguageRepository.GetByIdAsync(id);
+                    audioLanguages.Add(audioLanguage);
+                }
+                course.AudioLanguages = audioLanguages;
+
+                List<CloseCaption> closeCaptions = new();
+                foreach (var id in courseRequest.CloseCaptionIds)
+                {
+                    var closeCaption = await _closeCaptionRepository.GetByIdAsync(id);
+                    closeCaptions.Add(closeCaption);
+                }
+                course.CloseCaptions = closeCaptions;
+
+                List<Level> levels = new();
+                foreach (var id in courseRequest.LevelIds)
+                {
+                    var level = await _levelRepository.GetByIdAsync(id);
+                    levels.Add(level);
+                }
+                course.Levels = levels;
+
                 var result = await _unitOfWork.SaveChangesAsync();
 
                 var CourseDTO = _mapper.Map<CourseDTO>(course);
@@ -103,6 +128,7 @@ namespace Course.BLL.Services.Implementations
                 return new Response<CourseDTO>(false, ex.Message, null);
             }
         }
+
 
         public async Task<BaseResponse> Remove(Guid idCourse)
         {
@@ -130,16 +156,41 @@ namespace Course.BLL.Services.Implementations
         {
             try
             {
-                var course = await _cousesRepository.GetByIdAsync(Id);
+                var course = await _cousesRepository.GetForUpdate(Id);
+
                 if (course == null)
                 {
                     new Responses<BaseResponse>(false, "can't find course", null);
                 }
 
-                // remove language
-                await _audioLanguageRepository.RemoveAll(Id);
-                await _closeCaptionRepository.RemoveAll(Id);
-                await _courseLevelRepository.RemoveAll(Id);
+                course.UpdatedAt = DateTime.Now;
+
+                List<AudioLanguage> audioLanguages = new();
+                foreach (var id in courseRequest.AudioLanguageIds)
+                {
+                    var audioLanguage = await _audioLanguageRepository.GetByIdAsync(id);
+                    audioLanguages.Add(audioLanguage);
+                }
+                //course.AudioLanguages.Clear();
+                course.AudioLanguages = audioLanguages;
+
+                List<CloseCaption> closeCaptions = new();
+                foreach (var id in courseRequest.CloseCaptionIds)
+                {
+                    var closeCaption = await _closeCaptionRepository.GetByIdAsync(id);
+                    closeCaptions.Add(closeCaption);
+                }
+                //course.CloseCaptions.Clear();
+                course.CloseCaptions = closeCaptions;
+
+                List<Level> levels = new();
+                foreach (var id in courseRequest.LevelIds)
+                {
+                    var level = await _levelRepository.GetByIdAsync(id);
+                    levels.Add(level);
+                }
+                //course.Levels.Clear();
+                course.Levels = levels;
 
                 _mapper.Map(courseRequest, course);
 
