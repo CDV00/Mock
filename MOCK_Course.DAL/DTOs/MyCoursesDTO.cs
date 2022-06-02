@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Course.BLL.DTO;
+using System;
 
 namespace Course.DAL.DTOs
 {
@@ -13,7 +10,7 @@ namespace Course.DAL.DTOs
       public DateTime CreatedAt { get; set; }
       public int Sale { get; set; }
       public int Parts { get; set; }
-      public string Category { get; set; }
+      public CourseCategoryDTO Category { get; set; }
       public bool Status { get; set; }
     }
 }

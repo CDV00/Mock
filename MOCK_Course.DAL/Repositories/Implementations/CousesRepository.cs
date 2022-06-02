@@ -49,7 +49,7 @@ namespace Course.DAL.Repositories.Implementations
                                    {
                                        FullName = user.Fullname,
                                        Title = course.Title,
-                                       Category = category.Name,
+                                       Category = new BLL.DTO.CourseCategoryDTO() { Name = category.Name, Id = category.Id },
                                        Price = order.Price,
                                        CreatedAt = order.CreatedAt
                                    }).ToListAsync();
@@ -79,7 +79,7 @@ namespace Course.DAL.Repositories.Implementations
                                     Id = courses.Id,
                                     Title = courses.Title,
                                     CreatedAt = courses.CreatedAt,
-                                    Category = category.Name,
+                                    Category = new BLL.DTO.CourseCategoryDTO() { Name = category.Name,Id = category.Id},
                                     Sale = salecount,
                                     Parts = partscount,
                                     Status = courses.IsActive
@@ -99,7 +99,7 @@ namespace Course.DAL.Repositories.Implementations
                                     Id = courses.Id,
                                     Title = courses.Title,
                                     Thumbnail = courses.ThumbnailUrl,
-                                    Category = category.Name,
+                                    Category = new BLL.DTO.CourseCategoryDTO() { Name = category.Name, Id = category.Id },
                                     Price = courses.Price,
                                     CreatedAt = courses.CreatedAt,
                                     Status = courses.IsActive

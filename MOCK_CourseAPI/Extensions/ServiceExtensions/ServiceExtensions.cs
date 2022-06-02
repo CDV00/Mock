@@ -182,6 +182,7 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
             services.AddScoped<ICourseCompletionRepository, CourseCompletionRepository>();
             services.AddScoped<ILectureCompletionRepository, LectureCompletionRepository>();
+            services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
         }
         /// <summary>
         /// Configure Services
@@ -216,6 +217,7 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IUploadService, UploadService>();
 
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<ISubscriptionService, SubscriptionService>();
         }
     }
 }
