@@ -18,6 +18,9 @@ namespace Course.DAL.Configuration
             builder.HasOne<Language>(l => l.Language)
                 .WithMany(al => al.AudioLanguages)
                 .HasForeignKey(l => l.LanguageId);
+
+
+            builder.HasQueryFilter(u => !u.IsDeleted);
         }
     }
 }

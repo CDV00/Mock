@@ -1,7 +1,6 @@
 ﻿using Course.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Course.DAL.Configuration
 {
@@ -12,14 +11,17 @@ namespace Course.DAL.Configuration
 
             builder.HasKey(al => new { al.CourseId, al.LanguageId });
 
-            builder.HasOne<Courses>(c => c.Course)
+            builder.HasOne(c => c.Course)
                    .WithMany(al => al.CloseCaptions)
                    .HasForeignKey(c => c.CourseId);
 
 
-            builder.HasOne<Language>(l => l.Language)
+            builder.HasOne(l => l.Language)
                    .WithMany(al => al.CloseCaptions)
                    .HasForeignKey(l => l.LanguageId);
+
+
+            builder.HasQueryFilter(u => !u.IsDeleted);
         }
     }
 }

@@ -17,6 +17,9 @@ namespace Course.DAL.Configuration
             builder.HasOne(cl => cl.Level)
                 .WithMany(l => l.CourseLevels)
                 .HasForeignKey(l => l.LevelId);
+
+
+            builder.HasQueryFilter(u => !u.IsDeleted);
         }
     }
 }

@@ -22,6 +22,12 @@ namespace Course.DAL.Configuration
 
             builder.Property(o => o.Price).HasColumnType("money");
 
+            //1-n:discount-order
+            builder.HasOne(o => o.Discount)
+                .WithMany(c => c.Orders)
+                .HasForeignKey(o => o.DiscountId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             builder.HasQueryFilter(u => !u.IsDeleted);
         }
     }

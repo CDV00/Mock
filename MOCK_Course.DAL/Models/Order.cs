@@ -10,5 +10,8 @@ namespace Course.DAL.Models
 
         public AppUser User { get; set; }
         public Courses Course { get; set; }
+
+        public Guid DiscountId { get; set; }
+        public Discount Discount { get; set; }
     }
 }

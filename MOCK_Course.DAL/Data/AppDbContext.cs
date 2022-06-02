@@ -21,6 +21,7 @@ namespace Course.DAL.Data
         public DbSet<ShoppingCart> Carts { get; set; }
         public DbSet<Section> Sections { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<Discount> Discounts { get; set; }
         public DbSet<Lecture> Lectures { get; set; }
         public DbSet<Category> Categories { get; set; }
 
@@ -55,6 +56,7 @@ namespace Course.DAL.Data
             modelBuilder.ApplyConfiguration(new AudioLanguageConfiguration());
             modelBuilder.ApplyConfiguration(new CloseCaptionConfiguration());
             modelBuilder.ApplyConfiguration(new CourseLevelConfiguration());
+            modelBuilder.ApplyConfiguration(new DiscountConfiguration());
 
             modelBuilder.ConfigTablesOfIdentity();
             //modelBuilder.SeedData();
