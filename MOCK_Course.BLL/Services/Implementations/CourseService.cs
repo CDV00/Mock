@@ -92,7 +92,7 @@ namespace Course.BLL.Services.Implementations
                 await _cousesRepository.CreateAsync(course);
 
                 List<AudioLanguage> audioLanguages = new();
-                if (course.AudioLanguages != null)
+                if (courseRequest.AudioLanguageIds != null)
                 {
                     foreach (var id in courseRequest.AudioLanguageIds)
                     {
@@ -102,27 +102,29 @@ namespace Course.BLL.Services.Implementations
                     course.AudioLanguages = audioLanguages;
                 }
 
+                //course.AudioLanguages.Clear();
 
                 List<CloseCaption> closeCaptions = new();
-                if (course.AudioLanguages != null)
+                if (courseRequest.CloseCaptionIds != null)
                 {
                     foreach (var id in courseRequest.CloseCaptionIds)
                     {
                         var closeCaption = await _closeCaptionRepository.GetByIdAsync(id);
                         closeCaptions.Add(closeCaption);
                     }
+                    //course.CloseCaptions.Clear();
                     course.CloseCaptions = closeCaptions;
                 }
 
-
                 List<Level> levels = new();
-                if (course.Levels != null)
+                if (courseRequest.LevelIds != null)
                 {
                     foreach (var id in courseRequest.LevelIds)
                     {
                         var level = await _levelRepository.GetByIdAsync(id);
                         levels.Add(level);
                     }
+                    //course.Levels.Clear();
                     course.Levels = levels;
                 }
 
