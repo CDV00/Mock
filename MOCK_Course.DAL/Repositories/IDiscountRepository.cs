@@ -8,5 +8,6 @@ namespace Course.DAL.Repositories
 {
     public interface IDiscountRepository : IRepository<Discount, Guid>
     {
+        Task<List<DiscountDTO>> GetAllDiscount();
     }
 }
