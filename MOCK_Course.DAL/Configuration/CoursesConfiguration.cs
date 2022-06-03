@@ -19,11 +19,7 @@ namespace Course.DAL.Configuration
                 .WithMany(u => u.Courses)
                 .HasForeignKey(c => c.UserId);
 
-            // 1-n:discount-course
-            builder.HasOne(c => c.Discount)
-                .WithMany(u => u.Courses)
-                .HasForeignKey(c => c.DiscountId)
-                .OnDelete(DeleteBehavior.NoAction);
+           
 
             builder.Property(c => c.Price).HasColumnType("money");
             builder.Property(c => c.DiscountPrice).HasColumnType("money");

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Course.BLL.Services.Implementations
 {
@@ -45,5 +46,22 @@ namespace Course.BLL.Services.Implementations
             }
         }
 
+        public async Task<Responses<AudioLanguageDTO>> GetAll()
+        {
+            try
+            {
+
+                var audioLaguanges = await _AudioLanguageRepositoty.GetAll().ToListAsync();
+
+                return new Responses<AudioLanguageDTO>(
+                    true,
+                    _mapper.Map<IList<AudioLanguageDTO>>(audioLaguanges)
+                );
+            }
+            catch (Exception ex)
+            {
+                return new Responses<AudioLanguageDTO>(false, ex.Message, null);
+            }
+        }
     }
 }

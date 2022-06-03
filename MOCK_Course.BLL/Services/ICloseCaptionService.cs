@@ -8,6 +8,7 @@ namespace Course.BLL.Services
 {
     public interface ICloseCaptionService
     {
+        Task<Responses<CloseCaptionDTO>> GetAll();
         Task<Response<CloseCaptionDTO>> Add(CloseCaptionForCreateRequest closeCaptionCreateRequest, Guid courseId);
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace CourseAPI.Data
@@ -26,7 +27,8 @@ namespace CourseAPI.Data
                 //var users = JsonSerializer.Deserialize<List<AppUser>>(userData);
                 //if (users == null) return;
 
-                var userAdmin = new AppUser
+
+                var user = new AppUser
                 {
                     Id = adminId,
                     UserName = "admin123",
