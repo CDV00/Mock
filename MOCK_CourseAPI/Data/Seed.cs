@@ -28,7 +28,7 @@ namespace CourseAPI.Data
                 //if (users == null) return;
 
 
-                var user = new AppUser
+                var userAdmin = new AppUser
                 {
                     Id = adminId,
                     UserName = "admin123",
@@ -549,7 +549,7 @@ namespace CourseAPI.Data
                     Title = "Understanding APIs and RESTful APIs Crash Course",
                     ShortDescription = "An introduction to how APIs and RESTful APIs work. No coding in this course, it's all conceptual.",
                     Description = "In this course you will learn about APIs and RESTful APIs, and how they work. There is no coding in this course. By the end of this course you will completely understand how APIs work, and how computers talk to each other. You'll also be familiar with RESTful APIs which make use of the HTTP protocol. If that sounded confusing, scary, or overly technical — it's not — it's just a fancy way of saying.",
-                    Requirement= "You should probably be an intermediate developer by now OR be a junior developer who's trying to level up their skills. OR You should be interested in learning more about communication between computers(you don't need to be a coder if you fit into this category)",
+                    Requirement = "You should probably be an intermediate developer by now OR be a junior developer who's trying to level up their skills. OR You should be interested in learning more about communication between computers(you don't need to be a coder if you fit into this category)",
                     Learn = "What APIs are How APIs work What a RESTful API is What JSON is How computers talk to each other CRUD Operations The 5 main request methods (GET, POST, PUT/PATCH, DELETE) HTTP status codes How to understand APIs as if they were real people HTTP Requests and Responses",
                     ThumbnailUrl = "https://img-c.udemycdn.com/course/240x135/2425522_6d25.jpg",
                     PreviewVideoUrl = "https://youtu.be/8ztq9fQT6Kc?list=PLWKjhJtqVAbmqFs83T4W-FZQ9kK983tZC",
@@ -818,7 +818,7 @@ namespace CourseAPI.Data
                         //
                     },
                 });
-                
+
                 ///////////////////////////////////////////////////////////////////////////////////////
             }
 

@@ -11,7 +11,7 @@ namespace CourseAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Instructor")]
     public class DiscountController : ControllerBase
     {
         private readonly IDiscountService _discountService;
@@ -19,6 +19,7 @@ namespace CourseAPI.Controllers
         {
             _discountService = discountService;
         }
+
         /// <summary>
         /// Get All Category and sub-category
         /// </summary>
@@ -33,6 +34,11 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Add Discount
+        /// </summary>
+        /// <param name="discountCreateRequest"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<Response<DiscountForCreateDTO>>> Add(DiscountForCreateRequest discountCreateRequest)
         {
@@ -46,8 +52,6 @@ namespace CourseAPI.Controllers
         /// update Discount by id
         /// don't have Page UI yet!
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="DiscountUpdateRequest"></param>
         /// <returns></returns>
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<Response<DiscountForUpdateDTO>>> Update(Guid id, DiscountForUpdateRequest discountUpdateRequest)

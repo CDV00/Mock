@@ -180,13 +180,14 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
         /// <summary>
-        /// 
+        /// Erroring
+        /// Comming soon...
         /// </summary>
         /// <param name="cousrsePagingRequest"></param>
         /// <returns></returns>
         [HttpGet("Get-course-paing")]
         [AllowAnonymous]
-        public async Task<ActionResult<Responses<CousrsePagingDTO>>> GetCoursePaings([FromQuery]CousrsePagingRequest cousrsePagingRequest)
+        public async Task<ActionResult<Responses<CousrsePagingDTO>>> GetCoursePaings([FromQuery] CousrsePagingRequest cousrsePagingRequest)
         {
             var result = await _coursesService.GetCoursePaing(cousrsePagingRequest);
             if (result.IsSuccess == false)
@@ -195,7 +196,8 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// research with title course, tutors, category name 
+        /// Erroring
+        /// Comming soon...
         /// </summary>
         /// <param name="cousrsePagingRequest"></param>
         /// <returns></returns>

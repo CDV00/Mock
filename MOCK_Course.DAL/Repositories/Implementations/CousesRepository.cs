@@ -134,7 +134,7 @@ namespace Course.DAL.Repositories.Implementations
             /*if (totalRow < pageSize)
                 return query;*/
             sortBy.ToUpper();
-            if (sortBy == "FEATURED")
+            if (sortBy == "VIEW")
                 return query.OrderByDescending(x => x.View).Skip((page - 1) * pageSize).Take(pageSize).ToList();
             return query.OrderByDescending(x => x.CreateAt).Skip((page - 1) * pageSize).Take(pageSize).ToList();
         }

@@ -27,7 +27,7 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <param name="UserId"></param>
         /// <returns></returns>
-        [HttpGet("{UserId:guid}")]
+        [HttpGet()]
         public async Task<ActionResult<Responses<OrderDTO>>> GetAll()
         {
             var userId = User.GetUserId();
