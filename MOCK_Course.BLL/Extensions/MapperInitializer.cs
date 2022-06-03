@@ -62,7 +62,7 @@ namespace Course.BLL.Extensions
             CreateMap<ShoppingCart, CartRequest>().ReverseMap();
 
             // AppUser
-            CreateMap<AppUser, UpdateProfileRequest>().ReverseMap();
+            CreateMap<UpdateProfileRequest, AppUser>().ForMember(des => des.Fullname, opt => opt.MapFrom(src => src.FirstName + src.LastName)).ReverseMap();
             CreateMap<AppUser, ChangePasswordRequest>().ReverseMap();
             CreateMap<AppUser, UserProfileDTO>().ReverseMap();
             CreateMap<AppUser, ResetPasswordRequest>().ReverseMap();

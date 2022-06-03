@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Course.BLL.Requests
+﻿namespace Course.BLL.Requests
 {
     public class UpdateProfileRequest
     {
