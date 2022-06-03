@@ -96,6 +96,14 @@ namespace Course.BLL.Extensions
             CreateMap<CourseReview, CourseReviewRequest>().ReverseMap();
             CreateMap<CourseReview, CourseReviewUpdateRequest>().ReverseMap();
             CreateMap<CourseReview, CourseReviewDTO>().ReverseMap();
+
+
+             CreateMap<Discount, DiscountDTO>().ReverseMap();
+            CreateMap<Discount, DiscountForCreateRequest>().ReverseMap();
+            CreateMap<Discount, DiscountForUpdateRequest>().ReverseMap();
+            CreateMap<Discount, DiscountForCreateDTO>().ReverseMap();
+            CreateMap<Discount, DiscountForUpdateDTO>().ReverseMap();
+
         }
     }
 }
