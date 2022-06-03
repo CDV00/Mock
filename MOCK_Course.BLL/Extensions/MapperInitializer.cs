@@ -103,7 +103,7 @@ namespace Course.BLL.Extensions
             CreateMap<CourseReview, CourseReviewDTO>().ReverseMap();
 
 
-             CreateMap<Discount, DiscountDTO>().ReverseMap();
+            CreateMap<Discount, DiscountDTO>().ReverseMap();
             CreateMap<Discount, DiscountForCreateRequest>().ReverseMap();
             CreateMap<Discount, DiscountForUpdateRequest>().ReverseMap();
             CreateMap<Discount, DiscountForCreateDTO>().ReverseMap();
@@ -116,10 +116,9 @@ namespace Course.BLL.Extensions
             CreateMap<Subscription, SubscriptionDTO>().ForMember(des => des.SubscriptionUser, opt => opt.MapFrom(src => src.User)).ReverseMap();
             CreateMap<Subscription, SubscriptionRequest>().ReverseMap();
 
-            CreateMap<Discount, DiscountDTO>().ReverseMap();
-            CreateMap<Discount, DiscountRequest>().ReverseMap();
-            CreateMap<Discount, DiscountUpdateRequest>().ReverseMap();
-
+            //CreateMap<Discount, DiscountDTO>().ReverseMap();
+            CreateMap<Discount, DiscounRequest>().ReverseMap();
+            //CreateMap<Discount, DiscountForUpdateRequest>().ReverseMap();
         }
     }
 }

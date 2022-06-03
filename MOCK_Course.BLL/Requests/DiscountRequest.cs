@@ -1,8 +1,4 @@
-﻿using Course.BLL.Responses;
-using Course.DAL.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
 
 namespace Course.BLL.Requests
 {
