@@ -126,5 +126,55 @@ namespace Course.DAL.Repositories.Implementations
             return upcommingcourse;
         }
 
+        public async Task<List<CousrsePagingDTO>> GetPagingCourses(int page, int pageSize, string sortBy)
+        {
+            var query = await JoinTableAndGetCourset();
+
+            int totalRow = query.Count();
+            /*if (totalRow < pageSize)
+                return query;*/
+            sortBy.ToUpper();
+            if (sortBy == "FEATURED")
+                return query.OrderByDescending(x => x.View).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            return query.OrderByDescending(x => x.CreateAt).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+        }
+        //
+        public async Task<List<CousrsePagingDTO>> GetByFilteringCousrse(string key)
+        {
+            var query =await JoinTableAndGetCourset();
+            query.Where(m => m.Title.Contains(key) || m.FullName.Contains(key) || m.CategoryName.Contains(key)).ToList();
+            return query;
+        }
+        // join table(course)->(user) && (course)->(category) && (enrollment)->(course) && (section)->(course) && (enrollment)->(courseReview) && (lecture)->(section)
+        // and get CousrsePagingDTO
+        private async Task<List<CousrsePagingDTO>> JoinTableAndGetCourset()
+        {
+            var query = await (from course in _context.Courses
+                               join user in _context.Users on course.UserId equals user.Id
+                               join category in _context.Categories on course.CategoryId equals category.Id
+                               join enrollment in _context.Enrollment on course.Id equals enrollment.CourseId
+                               join courseReview in _context.CourseReviews on enrollment.Id equals courseReview.EnrollmentId
+                               join section in _context.Sections on course.Id equals section.CourseId
+                               join lecture in _context.Lectures on section.Id equals lecture.SectionId
+                               //where(course.Title.Contains(key))
+                               //.GroupBy(p => p.course.Id)
+                               //group course by course.Id into g
+                               select new CousrsePagingDTO
+                               {
+                                   CousrseId = course.Id,
+                                   FullName = user.Fullname,
+                                   Title = course.Title,
+                                   CategoryName = category.Name,
+                                   ThumbnailUrl = course.ThumbnailUrl,
+                                   Price = course.Price,
+                                   Rating = courseReview.Rating,
+                                   View = course.View,
+                                   CreateAt = course.CreatedAt
+                                   //TotalTime = lecture.TotalTime.
+                               }).ToListAsync();
+
+            //int totalRow = query.Count();
+            return query;
+        }
     }
 }

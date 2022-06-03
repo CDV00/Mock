@@ -15,6 +15,8 @@ namespace Course.DAL.Repositories
         Task<List<MyCoursesDTO>> GetAllMyCoures(Guid id);
         Task<List<UpcommingCourseDTO>> GetAllUpcomingCourses(Guid id);
         Task<List<PurchaseDTO>> GetAllMyPurchase(Guid id);
+        Task<List<CousrsePagingDTO>> GetPagingCourses(int page, int pageSize, string sortType);
+        Task<List<CousrsePagingDTO>> GetByFilteringCousrse(string key);
         Task<CourseForDetailDTO> GetDetail(Guid id);
         Task<Courses> GetForUpdate(Guid id);
     }
