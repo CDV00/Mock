@@ -6,21 +6,21 @@ using Course.DAL.Models;
 using Course.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Course.BLL.Services.Implementations
 {
     public class CloseCaptionService : ICloseCaptionService
     {
-        private readonly ICloseCaptionRepository _CloseCaptionRepositoty;
+        private readonly ICloseCaptionRepository _closeCaptionRepositoty;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         public CloseCaptionService(ICloseCaptionRepository CloseCaptionRepositoty,
             IMapper mapper,
             IUnitOfWork unitOfWork)
         {
-            _CloseCaptionRepositoty = CloseCaptionRepositoty;
+            _closeCaptionRepositoty = CloseCaptionRepositoty;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
@@ -31,7 +31,7 @@ namespace Course.BLL.Services.Implementations
                 var CloseCaption = _mapper.Map<CloseCaption>(CloseCaptionRequest);
                 CloseCaption.Id = courseId;
 
-                await _CloseCaptionRepositoty.CreateAsync(CloseCaption);
+                await _closeCaptionRepositoty.CreateAsync(CloseCaption);
                 await _unitOfWork.SaveChangesAsync();
 
                 return new Response<CloseCaptionDTO>(
@@ -45,5 +45,22 @@ namespace Course.BLL.Services.Implementations
             }
         }
 
+        public async Task<Responses<CloseCaptionDTO>> GetAll()
+        {
+            try
+            {
+
+                var closeCaption = await _closeCaptionRepositoty.GetAll().ToListAsync();
+
+                return new Responses<CloseCaptionDTO>(
+                    true,
+                    _mapper.Map<IList<CloseCaptionDTO>>(closeCaption)
+                );
+            }
+            catch (Exception ex)
+            {
+                return new Responses<CloseCaptionDTO>(false, ex.Message, null);
+            }
+        }
     }
 }

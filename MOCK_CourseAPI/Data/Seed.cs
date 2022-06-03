@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace CourseAPI.Data
@@ -25,6 +26,7 @@ namespace CourseAPI.Data
                 //var userData = await System.IO.File.ReadAllTextAsync("Data/UserSeedData.json");
                 //var users = JsonSerializer.Deserialize<List<AppUser>>(userData);
                 //if (users == null) return;
+
 
                 var user = new AppUser
                 {

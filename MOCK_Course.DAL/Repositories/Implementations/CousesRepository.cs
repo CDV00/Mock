@@ -102,7 +102,6 @@ namespace Course.DAL.Repositories.Implementations
                                     Sale = salecount,
                                     Parts = partscount,
                                     Status = courses.IsActive
-
                                 }).ToListAsync();
 
             return course;
@@ -122,7 +121,6 @@ namespace Course.DAL.Repositories.Implementations
                                     Price = courses.Price,
                                     CreatedAt = courses.CreatedAt,
                                     Status = courses.IsActive
-
                                 }).ToListAsync();
 
             return upcommingcourse;
