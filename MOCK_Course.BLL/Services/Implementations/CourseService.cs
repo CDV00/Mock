@@ -259,5 +259,29 @@ namespace Course.BLL.Services.Implementations
                 return new Responses<PurchaseDTO>(false, ex.Message, null);
             }
         }
+        public async Task<Responses<CousrsePagingDTO>> GetCoursePaing(CousrsePagingRequest cousrsePagingRequest)
+        {
+            try
+            {
+                var cousrsePaging = await _cousesRepository.GetPagingCourses(cousrsePagingRequest.page,cousrsePagingRequest.pageSize,cousrsePagingRequest.sortBy);
+                return new Responses<CousrsePagingDTO>(true, cousrsePaging);
+            }
+            catch (Exception ex)
+            {
+                return new Responses<CousrsePagingDTO>(false, ex.Message, null);
+            }
+        }
+        public async Task<Responses<CousrsePagingDTO>> GetByFilteringCousrse(string key)
+        {
+            try
+            {
+                var cousrsePaging = await _cousesRepository.GetByFilteringCousrse(key);
+                return new Responses<CousrsePagingDTO>(true, cousrsePaging);
+            }
+            catch (Exception ex)
+            {
+                return new Responses<CousrsePagingDTO>(false, ex.Message, null);
+            }
+        }
     }
 }

@@ -169,14 +169,41 @@ namespace CourseAPI.Controllers
         /// </summary>
         ///<param name="userId"> User Id Courses</param>
         /// <returns></returns>
-        /// 9e47da69-3d3e-428d-a395-d53908753582
-        /// aefdc572-85cc-462e-5021-08da42af3f1a
         [HttpGet("Get-all-my-purchse")]
         [AllowAnonymous]
         public async Task<ActionResult<Responses<PurchaseDTO>>> GetAllMyPurchase()
         {
             var userId = User.GetUserId();
             var result = await _coursesService.GetAllMyPurchase(userId);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cousrsePagingRequest"></param>
+        /// <returns></returns>
+        [HttpGet("Get-course-paing")]
+        [AllowAnonymous]
+        public async Task<ActionResult<Responses<CousrsePagingDTO>>> GetCoursePaings([FromQuery]CousrsePagingRequest cousrsePagingRequest)
+        {
+            var result = await _coursesService.GetCoursePaing(cousrsePagingRequest);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// research with title course, tutors, category name 
+        /// </summary>
+        /// <param name="cousrsePagingRequest"></param>
+        /// <returns></returns>
+        [HttpPost("Search/{key}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<Responses<CousrsePagingDTO>>> GetByFilteringCousrse(string key)
+        {
+            var result = await _coursesService.GetByFilteringCousrse(key);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
