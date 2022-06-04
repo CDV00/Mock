@@ -9,17 +9,17 @@ namespace Course.BLL.Services
 {
     public interface ICourseService
     {
-        Task<Responses<CoursesCardDTO>> GetAll();
-        Task<Response<CourseDTO>> GetForPost(Guid id);
+        Task<Responses<CourseDTO>> GetAll();
+        Task<Response<CourseDTO>> Get(Guid id);
         Task<Response<CourseDTO>> Add(Guid userId, CourseForCreateRequest courseRequest);
         Task<Response<CourseDTO>> Update(Guid id, CourseForUpdateRequest courseRequest);
         Task<BaseResponse> Remove(Guid id);
         Task<Response<int>> GetTotal(Guid userId);
-        Task<Responses<MyCoursesDTO>> GetAllMyCoures(Guid id);
-        Task<Responses<UpcommingCourseDTO>> GetAllUpcomingCourses(Guid id);
-        Task<Responses<PurchaseDTO>> GetAllMyPurchase(Guid id);
-        Task<Responses<CousrsePagingDTO>> GetCoursePaing(CousrsePagingRequest cousrsePagingRequest);
-        Task<Responses<CousrsePagingDTO>> GetByFilteringCousrse(string key);
-        Task<Response<CourseForDetailDTO>> GetDetail(Guid id);
+        Task<Responses<CourseDTO>> GetAllMyCoures(Guid userId);
+        //Task<Responses<UpcommingCourseDTO>> GetAllUpcomingCourses(Guid id);
+        Task<Responses<CourseDTO>> GetAllMyPurchase(Guid userId);
+        //Task<Responses<CousrsePagingDTO>> GetCoursePaing(CousrsePagingRequest cousrsePagingRequest);
+        //Task<Responses<CousrsePagingDTO>> GetByFilteringCousrse(string key);
+        //Task<Response<CourseForDetailDTO>> GetDetail(Guid id);
     }
 }

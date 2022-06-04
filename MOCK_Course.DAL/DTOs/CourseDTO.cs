@@ -27,8 +27,11 @@ namespace Course.BLL.Responses
 
         public decimal Price { get; set; }
         public decimal DiscountPrice { get; set; }
-
-        public CourseCategoryDTO Category { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+        public bool IsActive { get; set; }
+        public UserDTO User { get; set; }
+        public CategoryDTO Category { get; set; }
 
         public IList<AudioLanguageDTO> AudioLanguages { get; set; }
         public IList<CloseCaptionDTO> CloseCaptions { get; set; }

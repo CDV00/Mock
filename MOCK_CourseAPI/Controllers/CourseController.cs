@@ -7,7 +7,6 @@ using System;
 using Course.BLL.Responses;
 using Microsoft.AspNetCore.Authorization;
 using CourseAPI.Extensions.ControllerBase;
-using Course.DAL.DTOs;
 
 namespace CourseAPI.Controllers
 {
@@ -29,7 +28,7 @@ namespace CourseAPI.Controllers
         /// <returns></returns>
         [HttpGet("Get-all")]
         [AllowAnonymous]
-        public async Task<ActionResult<Responses<CoursesCardDTO>>> GetAll()
+        public async Task<ActionResult<Responses<CourseDTO>>> GetAll()
         {
             var result = await _coursesService.GetAll();
             if (result.IsSuccess == false)
@@ -42,26 +41,26 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("Get-Detail-Course")]
-        [AllowAnonymous]
-        public async Task<ActionResult<Responses<CourseForDetailDTO>>> GetDetail(Guid id)
-        {
-            var result = await _coursesService.GetDetail(id);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
-            return Ok(result);
-        }
+        //[HttpGet("Get-Detail-Course")]
+        //[AllowAnonymous]
+        //public async Task<ActionResult<Responses<CourseForDetailDTO>>> GetDetail(Guid id)
+        //{
+        //    var result = await _coursesService.GetDetail(id);
+        //    if (result.IsSuccess == false)
+        //        return BadRequest(result);
+        //    return Ok(result);
+        //}
 
         /// <summary>
         /// Get Detail course For Update Course
         /// https://gambolthemes.net/html-items/cursus_main_demo/course_detail_view.html
         /// </summary>
         /// <returns></returns>
-        [HttpGet("{id:guid}", Name = "GetForPost")]
+        [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<Response<CourseDTO>>> GetForPost(Guid id)
+        public async Task<ActionResult<Response<CourseDTO>>> Get(Guid id)
         {
-            var course = await _coursesService.GetForPost(id);
+            var course = await _coursesService.Get(id);
             if (course.IsSuccess == false)
                 return BadRequest(course);
             return Ok(course);
@@ -136,7 +135,7 @@ namespace CourseAPI.Controllers
         /// <returns></returns>
         [HttpGet("Get-all-my-course")]
         [AllowAnonymous]
-        public async Task<ActionResult<Responses<MyCoursesDTO>>> GetAllMyCoures()
+        public async Task<ActionResult<Responses<CourseDTO>>> GetAllMyCoures()
         {
             var userId = User.GetUserId();
             var result = await _coursesService.GetAllMyCoures(userId);
@@ -152,16 +151,16 @@ namespace CourseAPI.Controllers
         /// </summary>
         ///<param name="userId"> User Id Courses</param>
         /// <returns></returns>
-        [HttpGet("Get-all-upcoming-courses")]
-        [AllowAnonymous]
-        public async Task<ActionResult<Responses<UpcommingCourseDTO>>> GetAllUpcomingCourses()
-        {
-            var userId = User.GetUserId();
-            var result = await _coursesService.GetAllUpcomingCourses(userId);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
-            return Ok(result);
-        }
+        //[HttpGet("Get-all-upcoming-courses")]
+        //[AllowAnonymous]
+        //public async Task<ActionResult<Responses<UpcommingCourseDTO>>> GetAllUpcomingCourses()
+        //{
+        //    var userId = User.GetUserId();
+        //    var result = await _coursesService.GetAllUpcomingCourses(userId);
+        //    if (result.IsSuccess == false)
+        //        return BadRequest(result);
+        //    return Ok(result);
+        //}
 
         /// <summary>
         /// Get all My Purchase
@@ -171,7 +170,7 @@ namespace CourseAPI.Controllers
         /// <returns></returns>
         [HttpGet("Get-all-my-purchse")]
         [AllowAnonymous]
-        public async Task<ActionResult<Responses<PurchaseDTO>>> GetAllMyPurchase()
+        public async Task<ActionResult<Responses<CourseDTO>>> GetAllMyPurchase()
         {
             var userId = User.GetUserId();
             var result = await _coursesService.GetAllMyPurchase(userId);
@@ -185,15 +184,15 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <param name="cousrsePagingRequest"></param>
         /// <returns></returns>
-        [HttpGet("Get-course-paing")]
-        [AllowAnonymous]
-        public async Task<ActionResult<Responses<CousrsePagingDTO>>> GetCoursePaings([FromQuery] CousrsePagingRequest cousrsePagingRequest)
-        {
-            var result = await _coursesService.GetCoursePaing(cousrsePagingRequest);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
-            return Ok(result);
-        }
+        //[HttpGet("Get-course-paing")]
+        //[AllowAnonymous]
+        //public async Task<ActionResult<Responses<CousrsePagingDTO>>> GetCoursePaings([FromQuery] CousrsePagingRequest cousrsePagingRequest)
+        //{
+        //    var result = await _coursesService.GetCoursePaing(cousrsePagingRequest);
+        //    if (result.IsSuccess == false)
+        //        return BadRequest(result);
+        //    return Ok(result);
+        //}
 
         /// <summary>
         /// Erroring
@@ -201,14 +200,14 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <param name="cousrsePagingRequest"></param>
         /// <returns></returns>
-        [HttpPost("Search/{key}")]
-        [AllowAnonymous]
-        public async Task<ActionResult<Responses<CousrsePagingDTO>>> GetByFilteringCousrse(string key)
-        {
-            var result = await _coursesService.GetByFilteringCousrse(key);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
-            return Ok(result);
-        }
+        //[HttpPost("Search/{key}")]
+        //[AllowAnonymous]
+        //public async Task<ActionResult<Responses<CousrsePagingDTO>>> GetByFilteringCousrse(string key)
+        //{
+        //    var result = await _coursesService.GetByFilteringCousrse(key);
+        //    if (result.IsSuccess == false)
+        //        return BadRequest(result);
+        //    return Ok(result);
+        //}
     }
 }

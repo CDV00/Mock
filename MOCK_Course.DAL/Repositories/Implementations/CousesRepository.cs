@@ -3,7 +3,10 @@ using Course.BLL.Responses;
 using Course.DAL.Data;
 using Course.DAL.DTOs;
 using Course.DAL.Models;
+using Course.DAL.Queries;
+using Course.DAL.Queries.Abstraction;
 using Microsoft.EntityFrameworkCore;
+using SES.HomeServices.Data.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,10 +18,16 @@ namespace Course.DAL.Repositories.Implementations
     {
         private AppDbContext _context;
         private IMapper _mapper;
+
         public CousesRepository(AppDbContext context, IMapper mapper) : base(context)
         {
             _context = context;
             _mapper = mapper;
+        }
+
+        public ICourseQuery BuildQuery()
+        {
+            return new CourseQuery(_context.Courses.AsQueryable(), _context);
         }
 
         public override Task CreateAsync(Courses _object)
@@ -73,37 +82,37 @@ namespace Course.DAL.Repositories.Implementations
 
             return purchases;
         }
-        public async Task<List<MyCoursesDTO>> GetAllMyCoures(Guid userId)
-        {
-            var course = await (from courses in _context.Courses
-                                join category in _context.Categories on courses.CategoryId equals category.Id
-                                let salecount =
-                                (
-                                  from order in _context.Orders
-                                  where courses.Id == order.CourseId
-                                  select order
-                                ).Count()
-                                let partscount =
-                                (
-                                  from enrollment in _context.Enrollment
-                                  where courses.Id == enrollment.CourseId
-                                  select enrollment
-                                ).Count()
-                                where (courses.UserId == userId && courses.IsActive == true)
+        //public async Task<List<MyCoursesDTO>> GetAllMyCoures(Guid userId)
+        //{
+        //    var course = await (from courses in _context.Courses
+        //                        join category in _context.Categories on courses.CategoryId equals category.Id
+        //                        let salecount =
+        //                        (
+        //                          from order in _context.Orders
+        //                          where courses.Id == order.CourseId
+        //                          select order
+        //                        ).Count()
+        //                        let partscount =
+        //                        (
+        //                          from enrollment in _context.Enrollment
+        //                          where courses.Id == enrollment.CourseId
+        //                          select enrollment
+        //                        ).Count()
+        //                        where (courses.UserId == userId && courses.IsActive == true)
 
-                                select new MyCoursesDTO
-                                {
-                                    Id = courses.Id,
-                                    Title = courses.Title,
-                                    CreatedAt = courses.CreatedAt,
-                                    Category = new BLL.DTO.CourseCategoryDTO() { Name = category.Name, Id = category.Id },
-                                    Sale = salecount,
-                                    Parts = partscount,
-                                    Status = courses.IsActive
-                                }).ToListAsync();
+        //                        select new MyCoursesDTO
+        //                        {
+        //                            Id = courses.Id,
+        //                            Title = courses.Title,
+        //                            CreatedAt = courses.CreatedAt,
+        //                            Category = new BLL.DTO.CourseCategoryDTO() { Name = category.Name, Id = category.Id },
+        //                            Sale = salecount,
+        //                            Parts = partscount,
+        //                            Status = courses.IsActive
+        //                        }).ToListAsync();
 
-            return course;
-        }
+        //    return course;
+        //}
         public async Task<List<UpcommingCourseDTO>> GetAllUpcomingCourses(Guid userId)
         {
             var upcommingcourse = await (

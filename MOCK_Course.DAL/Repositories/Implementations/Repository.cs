@@ -64,5 +64,7 @@ namespace Course.DAL.Repositories.Implementations
         public virtual IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression) => DbSet.Where(expression).AsNoTracking();
 
         public virtual async Task<int> CountAsync() => await DbSet.CountAsync().ConfigureAwait(false);
+
+        public virtual async Task<bool> IsExists() => await DbSet.AnyAsync();
     }
 }

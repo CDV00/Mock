@@ -5,12 +5,12 @@ namespace Course.DAL.DTOs
 {
     public class MyCoursesDTO
     {
-      public Guid Id { get; set; }
-      public string Title { get; set; }
-      public DateTime CreatedAt { get; set; }
-      public int Sale { get; set; }
-      public int Parts { get; set; }
-      public CourseCategoryDTO Category { get; set; }
-      public bool Status { get; set; }
+        public Guid Id { get; set; }
+        public string Title { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public int Sale { get; set; }
+        public int Parts { get; set; }
+        public CategoryDTO Category { get; set; }
+        public bool IsActive { get; set; }
     }
 }
