@@ -59,5 +59,10 @@ namespace Course.DAL.Data
             modelBuilder.ConfigTablesOfIdentity();
             //modelBuilder.SeedData();
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+            => optionsBuilder
+                .LogTo(Console.WriteLine)
+                .EnableDetailedErrors();
     }
 }

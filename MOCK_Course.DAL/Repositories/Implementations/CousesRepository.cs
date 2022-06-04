@@ -30,8 +30,6 @@ namespace Course.DAL.Repositories.Implementations
         public async Task<Courses> GetForUpdate(Guid id)
         {
             var course = await GetAll().Where(c => c.Id == id).FirstOrDefaultAsync();
-            //_context.Entry(course).State = EntityState.Modified;
-
             return course;
         }
 
@@ -44,7 +42,7 @@ namespace Course.DAL.Repositories.Implementations
         public async Task<CourseForDetailDTO> GetDetail(Guid id)
         {
             var courseDetail = Entity().Include(c => c.User).Include(c => c.AudioLanguages).Include(c => c.CloseCaptions).Include(c => c.Category).Include(c => c.Sections).ThenInclude(s => s.Lectures).Where(c => c.Id == id).Select(c => _mapper.Map<CourseForDetailDTO>(c)).FirstOrDefault();
-            //var courseDetail = Entity().Where(c => c.Id == id).Select(c => new CourseForDetailDTO() {Title = c.ca }).FirstOrDefault();
+
             return courseDetail;
         }
 
@@ -141,7 +139,7 @@ namespace Course.DAL.Repositories.Implementations
         //
         public async Task<List<CousrsePagingDTO>> GetByFilteringCousrse(string key)
         {
-            var query =await JoinTableAndGetCourset();
+            var query = await JoinTableAndGetCourset();
             query.Where(m => m.Title.Contains(key) || m.FullName.Contains(key) || m.CategoryName.Contains(key)).ToList();
             return query;
         }
