@@ -229,7 +229,6 @@ namespace Course.BLL.Services.Implementations
 
                 course.UpdatedAt = DateTime.Now;
 
-
                 #region
                 List<AudioLanguage> audioLanguages = new();
                 if (courseRequest.AudioLanguageIds != null)

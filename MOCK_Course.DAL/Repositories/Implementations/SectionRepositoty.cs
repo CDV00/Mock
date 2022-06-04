@@ -1,5 +1,7 @@
 ﻿using Course.DAL.Data;
 using Course.DAL.Models;
+using Course.DAL.Queries;
+using Course.DAL.Queries.Abstraction;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,9 +12,15 @@ namespace Course.DAL.Repositories.Implementations
 {
     public class SectionRepositoty : Repository<Section, Guid>, ISectionRepositoty
     {
+        private AppDbContext _context;
         public SectionRepositoty(AppDbContext context) : base(context)
         {
+            _context = context;
+        }
 
+        public ISectionQuery BuildQuery()
+        {
+            return new SectionQuery(_context.Sections.AsQueryable(), _context);
         }
 
         public async Task<IEnumerable<Section>> GetAllByCourseId(Guid courseId)

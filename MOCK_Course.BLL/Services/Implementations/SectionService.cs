@@ -27,6 +27,26 @@ namespace Course.BLL.Services.Implementations
             _unitOfWork = unitOfWork;
             _lessonRepository = lessonRepository;
         }
+
+        public async Task<Response<int>> GetTotal(Guid courseId)
+        {
+            try
+            {
+
+                var count = await _sectionRepositoty.BuildQuery()
+                                        .FilterByCourseId(courseId)
+                                        .CountAsync();
+
+                return new Response<int>(
+                    true,
+                    _mapper.Map<int>(count)
+                );
+            }
+            catch (Exception ex)
+            {
+                return new Response<int>(false, ex.Message, null);
+            }
+        }
         public async Task<Response<SectionDTO>> Add(SectionCreateRequest sectionRequest)
         {
             try

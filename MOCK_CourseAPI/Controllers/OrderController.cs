@@ -21,6 +21,16 @@ namespace CourseAPI.Controllers
             _orderService = orderService;
         }
 
+        [HttpGet("Get-Total")]
+        [AllowAnonymous]
+        public async Task<ActionResult<Response<int>>> GetTotal(Guid courseId)
+        {
+            var result = await _orderService.GetTotal(courseId);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
         /// <summary>
         /// Get all purchased courses user
         /// https://gambolthemes.net/html-items/cursus_main_demo/student_courses.html

@@ -28,6 +28,26 @@ namespace Course.BLL.Services.Implementations
             _unitOfWork = unitOfWork;
             _cousesRepository = cousesRepository;
         }
+
+        public async Task<Response<int>> GetTotal(Guid courseId)
+        {
+            try
+            {
+
+                var count = await _orderRepository.BuildQuery()
+                                        .FilterByCourseId(courseId)
+                                        .CountAsync();
+
+                return new Response<int>(
+                    true,
+                    _mapper.Map<int>(count)
+                );
+            }
+            catch (Exception ex)
+            {
+                return new Response<int>(false, ex.Message, null);
+            }
+        }
         public async Task<Responses<OrderDTO>> GetAll(Guid UserId)
         {
             try

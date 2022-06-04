@@ -12,5 +12,6 @@ namespace Course.BLL.Services
         Task<Response<SectionDTO>> Add(SectionCreateRequest sectionRequest);
         Task<BaseResponse> Remove(Guid idSection);
         Task<Response<SectionDTO>> Update(Guid id, SectionUpdateRequest sectionRequest);
+        Task<Response<int>> GetTotal(Guid courseId);
     }
 }
