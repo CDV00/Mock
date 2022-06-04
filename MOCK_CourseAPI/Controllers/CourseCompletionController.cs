@@ -20,7 +20,7 @@ namespace CourseAPI.Controllers
         }
 
         [HttpGet("IsCompleted")]
-        public async Task<ActionResult<BaseResponse>> IsCompleted([FromBody] Guid courseId)
+        public async Task<ActionResult<BaseResponse>> IsCompleted(Guid courseId)
         {
             var userId = User.GetUserId();
             var result = await _courseCompletionService.IsCompletion(userId, courseId);

@@ -58,7 +58,7 @@ namespace CourseAPI
             }
 
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MOCK_CourseAPI v1"));
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v2/swagger.json", "MOCK_CourseAPI v2"));
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
