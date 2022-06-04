@@ -7,6 +7,7 @@ namespace Course.BLL.Services
 {
     public interface ICourseCompletionService
     {
-        Task<BaseResponse> Add(Guid userId, CourseCompletionRequest courseCompletionRequest);
+        Task<BaseResponse> Add(Guid userId, Guid courseId);
+        Task<BaseResponse> IsCompletion(Guid userId, Guid courseId);
     }
 }

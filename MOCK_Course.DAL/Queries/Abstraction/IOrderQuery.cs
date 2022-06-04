@@ -1,8 +1,7 @@
 ﻿using Course.DAL.Models;
-using Course.DAL.Queries.Abstraction;
 using System;
 
-namespace Course.DAL.Queries
+namespace Course.DAL.Queries.Abstraction
 {
     public interface IOrderQuery : IQuery<Order>
     {

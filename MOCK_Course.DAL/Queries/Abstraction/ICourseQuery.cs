@@ -12,6 +12,7 @@ namespace Course.DAL.Queries
         ICourseQuery FilterIsActive(bool? isActice);
         Task<List<Courses>> GetAllByUserIdAsync(Guid userId);
         ICourseQuery FilterById(Guid Id);
+        Task<Courses> GetById(Guid Id);
         ICourseQuery IncludeUser();
         ICourseQuery IncludeLanguage();
         ICourseQuery IncludeCategory();

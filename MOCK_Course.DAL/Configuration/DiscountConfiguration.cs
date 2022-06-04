@@ -11,10 +11,10 @@ namespace Course.DAL.Configuration
 
             builder.Property(c => c.DiscountPercent).HasColumnType("decimal(5,2)");
             // 1-n:discount-course
-            builder.HasOne(c => c.Courses)
-                .WithMany(u => u.Discounts)
-                .HasForeignKey(c => c.CourseId)
-                .OnDelete(DeleteBehavior.NoAction);
+            //builder.HasOne(c => c.Courses)
+            //.WithMany(u => u.Discounts)
+            //.HasForeignKey(c => c.CourseId)
+            //.OnDelete(DeleteBehavior.NoAction);
 
             //builder.HasQueryFilter(u => !u.IsDeleted);
         }

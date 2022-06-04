@@ -5,6 +5,8 @@ using Course.BLL.Requests;
 using Course.DAL.Models;
 using Course.DAL.Repositories;
 using Course.BLL.DTO;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Course.BLL.Services.Implementations
 {
@@ -23,12 +25,33 @@ namespace Course.BLL.Services.Implementations
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<BaseResponse> Add(Guid userId, CourseCompletionRequest courseCompletionRequest)
+
+        public async Task<BaseResponse> IsCompletion(Guid userId, Guid courseId)
         {
             try
             {
-                var coursecompletion = _mapper.Map<CourseCompletion>(courseCompletionRequest);
-                coursecompletion.UserId = userId;
+                var courseCompletion = await _courseCompletionRepository.FindByCondition(c => c.CourseId == courseId && c.UserId == userId).FirstOrDefaultAsync();
+
+                if (courseCompletion == null)
+                    return new BaseResponse(false);
+
+                return new BaseResponse(true);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse(false, ex.Message, null);
+            }
+        }
+
+        public async Task<BaseResponse> Add(Guid userId, Guid courseId)
+        {
+            try
+            {
+                var coursecompletion = new CourseCompletion
+                {
+                    UserId = userId,
+                    CourseId = courseId
+                };
 
                 await _courseCompletionRepository.CreateAsync(coursecompletion);
                 await _unitOfWork.SaveChangesAsync();

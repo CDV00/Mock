@@ -46,7 +46,6 @@ namespace Course.BLL.Services.Implementations
             {
                 return new Responses<CourseReviewDTO>(false, ex.Message, null);
             }
-
         }
 
         public async Task<Response<CourseReviewDTO>> Add(CourseReviewRequest courseReviewRequest)

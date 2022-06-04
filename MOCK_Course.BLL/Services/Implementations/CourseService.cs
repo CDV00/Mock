@@ -89,25 +89,7 @@ namespace Course.BLL.Services.Implementations
                 return new Responses<CourseDTO>(false, ex.Message, null);
             }
         }
-        //public async Task<Response<CourseForDetailDTO>> GetDetail(Guid id)
-        //{
-        //    try
-        //    {
-        //        var course = await _cousesRepository.BuildQuery()
-        //                                            .IncludeCategory()
-        //                                            .IncludeLanguage()
-        //                                            .IncludeSection()
-        //                                            .IncludeUser()
-        //                                            .FilterById(id)
-        //                                            .AsSelectorAsync(c => _mapper.Map<CourseForDetailDTO>(c));
 
-        //        return new Response<CourseForDetailDTO>(true, course);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new Response<CourseForDetailDTO>(false, ex.Message, null);
-        //    }
-        //}
 
         public async Task<Response<CourseDTO>> Get(Guid id)
         {
@@ -214,11 +196,11 @@ namespace Course.BLL.Services.Implementations
             }
         }
 
-        public async Task<Response<CourseDTO>> Update(Guid Id, CourseForUpdateRequest courseRequest)
+        public async Task<Response<CourseDTO>> Update(Guid id, CourseForUpdateRequest courseRequest)
         {
             try
             {
-                var course = await _cousesRepository.GetForUpdate(Id);
+                var course = await _cousesRepository.GetByIdAsync(id);
 
                 if (course == null)
                 {
@@ -233,9 +215,9 @@ namespace Course.BLL.Services.Implementations
                 List<AudioLanguage> audioLanguages = new();
                 if (courseRequest.AudioLanguageIds != null)
                 {
-                    foreach (var id in courseRequest.AudioLanguageIds)
+                    foreach (var idcourse in courseRequest.AudioLanguageIds)
                     {
-                        var audioLanguage = await _audioLanguageRepository.GetByIdAsync(id);
+                        var audioLanguage = await _audioLanguageRepository.GetByIdAsync(idcourse);
                         audioLanguages.Add(audioLanguage);
                     }
                     course.AudioLanguages = audioLanguages;
@@ -246,9 +228,9 @@ namespace Course.BLL.Services.Implementations
                 List<CloseCaption> closeCaptions = new();
                 if (courseRequest.CloseCaptionIds != null)
                 {
-                    foreach (var id in courseRequest.CloseCaptionIds)
+                    foreach (var idcourse in courseRequest.CloseCaptionIds)
                     {
-                        var closeCaption = await _closeCaptionRepository.GetByIdAsync(id);
+                        var closeCaption = await _closeCaptionRepository.GetByIdAsync(idcourse);
                         closeCaptions.Add(closeCaption);
                     }
                     //course.CloseCaptions.Clear();
@@ -258,9 +240,9 @@ namespace Course.BLL.Services.Implementations
                 List<Level> levels = new();
                 if (courseRequest.LevelIds != null)
                 {
-                    foreach (var id in courseRequest.LevelIds)
+                    foreach (var idcourse in courseRequest.LevelIds)
                     {
-                        var level = await _levelRepository.GetByIdAsync(id);
+                        var level = await _levelRepository.GetByIdAsync(idcourse);
                         levels.Add(level);
                     }
                     //course.Levels.Clear();
@@ -298,6 +280,26 @@ namespace Course.BLL.Services.Implementations
                 return new Response<int>(false, ex.Message, null);
             }
         }
+
+        //public async Task<Response<CourseForDetailDTO>> GetDetail(Guid id)
+        //{
+        //    try
+        //    {
+        //        var course = await _cousesRepository.BuildQuery()
+        //                                            .IncludeCategory()
+        //                                            .IncludeLanguage()
+        //                                            .IncludeSection()
+        //                                            .IncludeUser()
+        //                                            .FilterById(id)
+        //                                            .AsSelectorAsync(c => _mapper.Map<CourseForDetailDTO>(c));
+
+        //        return new Response<CourseForDetailDTO>(true, course);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new Response<CourseForDetailDTO>(false, ex.Message, null);
+        //    }
+        //}
 
         //public async Task<Responses<UpcommingCourseDTO>> GetAllUpcomingCourses(Guid userId)
         //{

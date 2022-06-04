@@ -28,9 +28,12 @@ namespace Course.BLL.Services.Implementations
         {
             try
             {
-                var result = await _categoryRepository.GetAll().Where(c => c.ParentId == null).Include("SubCategories").ToListAsync();
+                var categories = await _categoryRepository.BuildQuery()
+                                                      .FilterByParent(null)
+                                                      .IncludeSubCategory()
+                                                      .ToListAsync(c => _mapper.Map<CategoryDTO>(c));
 
-                return new Responses<CategoryDTO>(true, _mapper.Map<IEnumerable<CategoryDTO>>(result));
+                return new Responses<CategoryDTO>(true, categories);
             }
             catch (Exception ex)
             {

@@ -100,5 +100,11 @@ namespace Course.DAL.Queries
                                         && type.IsActive == true);
             return await Query.OrderByDescending(x => x.CreatedAt).ToListAsync().ConfigureAwait(false);
         }
+
+        public Task<Courses> GetById(Guid Id)
+        {
+            Query = Query.Where(type => type.Id == Id);
+            return Query.FirstOrDefaultAsync();
+        }
     }
 }
