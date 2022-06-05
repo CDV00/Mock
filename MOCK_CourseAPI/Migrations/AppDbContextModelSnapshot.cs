@@ -432,9 +432,6 @@ namespace CourseAPI.Migrations
                     b.Property<Guid>("CourseId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CoursesId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -464,7 +461,7 @@ namespace CourseAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CoursesId");
+                    b.HasIndex("CourseId");
 
                     b.ToTable("Discounts");
                 });
@@ -1028,11 +1025,13 @@ namespace CourseAPI.Migrations
 
             modelBuilder.Entity("Course.DAL.Models.Discount", b =>
                 {
-                    b.HasOne("Course.DAL.Models.Courses", "Courses")
+                    b.HasOne("Course.DAL.Models.Courses", "Course")
                         .WithMany("Discounts")
-                        .HasForeignKey("CoursesId");
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
-                    b.Navigation("Courses");
+                    b.Navigation("Course");
                 });
 
             modelBuilder.Entity("Course.DAL.Models.Enrollment", b =>

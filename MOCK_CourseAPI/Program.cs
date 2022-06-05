@@ -1,7 +1,6 @@
 using Course.DAL.Data;
 using Course.DAL.Models;
 using CourseAPI.Data;
-using CourseAPI.Migrations;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

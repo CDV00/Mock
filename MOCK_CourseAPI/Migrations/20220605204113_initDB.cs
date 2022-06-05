@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CourseAPI.Migrations
 {
-    public partial class initdb : Migration
+    public partial class initDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -266,7 +266,6 @@ namespace CourseAPI.Migrations
                     Requirement = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ThumbnailUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PreviewVideoUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    View = table.Column<int>(type: "int", nullable: false),
                     RequireLogin = table.Column<bool>(type: "bit", nullable: false),
                     RequireEnroll = table.Column<bool>(type: "bit", nullable: false),
                     Price = table.Column<decimal>(type: "money", nullable: false),
@@ -458,7 +457,6 @@ namespace CourseAPI.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CoursesId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DiscountPercent = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
@@ -473,11 +471,10 @@ namespace CourseAPI.Migrations
                 {
                     table.PrimaryKey("PK_Discounts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Discounts_Courses_CoursesId",
-                        column: x => x.CoursesId,
+                        name: "FK_Discounts_Courses_CourseId",
+                        column: x => x.CourseId,
                         principalTable: "Courses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -576,7 +573,7 @@ namespace CourseAPI.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Rating = table.Column<int>(type: "int", nullable: false),
+                    Rating = table.Column<float>(type: "real", nullable: false),
                     EnrollmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -749,9 +746,9 @@ namespace CourseAPI.Migrations
                 column: "LevelsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Discounts_CoursesId",
+                name: "IX_Discounts_CourseId",
                 table: "Discounts",
-                column: "CoursesId");
+                column: "CourseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Enrollment_CourseId",

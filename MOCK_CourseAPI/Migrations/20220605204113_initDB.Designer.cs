@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CourseAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220605120603_RemoveView")]
-    partial class RemoveView
+    [Migration("20220605204113_initDB")]
+    partial class initDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -434,9 +434,6 @@ namespace CourseAPI.Migrations
                     b.Property<Guid>("CourseId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CoursesId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -466,7 +463,7 @@ namespace CourseAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CoursesId");
+                    b.HasIndex("CourseId");
 
                     b.ToTable("Discounts");
                 });
@@ -1030,11 +1027,13 @@ namespace CourseAPI.Migrations
 
             modelBuilder.Entity("Course.DAL.Models.Discount", b =>
                 {
-                    b.HasOne("Course.DAL.Models.Courses", "Courses")
+                    b.HasOne("Course.DAL.Models.Courses", "Course")
                         .WithMany("Discounts")
-                        .HasForeignKey("CoursesId");
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
-                    b.Navigation("Courses");
+                    b.Navigation("Course");
                 });
 
             modelBuilder.Entity("Course.DAL.Models.Enrollment", b =>

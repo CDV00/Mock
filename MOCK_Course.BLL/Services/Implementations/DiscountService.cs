@@ -54,7 +54,7 @@ namespace Course.BLL.Services.Implementations
             try
             {
                 var discounts = await _discountRepository.BuildQuery()
-                                                         //.IncludeCourses()
+                                                         .IncludeCourses()
                                                          .FilterByUserId(userId)
                                                          .ToListAsync(d => _mapper.Map<DiscountDTO>(d));
 
@@ -88,11 +88,11 @@ namespace Course.BLL.Services.Implementations
             }
         }
 
-        public async Task<Response<DiscountDTO>> Update(Guid discountId, DiscountForUpdateRequest discountForUpdateRequest)
+        public async Task<Response<DiscountDTO>> Update(Guid id, DiscountForUpdateRequest discountForUpdateRequest)
         {
             try
             {
-                var discount = await _discountRepository.GetByIdAsync(discountId);
+                var discount = await _discountRepository.GetByIdAsync(id);
                 if (discount == null)
                 {
                     new Responses<DiscountDTO>(false, "can't find discount", null);
