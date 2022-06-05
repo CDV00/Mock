@@ -29,7 +29,7 @@ namespace Course.BLL.Requests
         public bool RequireEnroll { get; set; }
 
         public decimal Price { get; set; }
-        public decimal DiscountPrice { get; set; }
+        //public decimal DiscountPrice { get; set; }
 
         public Guid CategoryId { get; set; }
 

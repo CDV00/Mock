@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CourseAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220602023309_InitDb")]
-    partial class InitDb
+    [Migration("20220605120603_RemoveView")]
+    partial class RemoveView
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,6 +21,36 @@ namespace CourseAPI.Migrations
                 .HasAnnotation("ProductVersion", "5.0.17")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("AudioLanguageCourses", b =>
+                {
+                    b.Property<Guid>("AudioLanguagesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CoursesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("AudioLanguagesId", "CoursesId");
+
+                    b.HasIndex("CoursesId");
+
+                    b.ToTable("AudioLanguageCourses");
+                });
+
+            modelBuilder.Entity("CloseCaptionCourses", b =>
+                {
+                    b.Property<Guid>("CloseCaptionsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CoursesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CloseCaptionsId", "CoursesId");
+
+                    b.HasIndex("CoursesId");
+
+                    b.ToTable("CloseCaptionCourses");
+                });
+
             modelBuilder.Entity("Course.DAL.Models.AppUser", b =>
                 {
                     b.Property<Guid>("Id")
@@ -29,6 +59,9 @@ namespace CourseAPI.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
+
+                    b.Property<string>("AvatarUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("CategoryId")
                         .HasColumnType("uniqueidentifier");
@@ -145,10 +178,8 @@ namespace CourseAPI.Migrations
 
             modelBuilder.Entity("Course.DAL.Models.AudioLanguage", b =>
                 {
-                    b.Property<Guid>("CourseId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("LanguageId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
@@ -157,14 +188,14 @@ namespace CourseAPI.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -172,9 +203,7 @@ namespace CourseAPI.Migrations
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("CourseId", "LanguageId");
-
-                    b.HasIndex("LanguageId");
+                    b.HasKey("Id");
 
                     b.ToTable("AudioLanguages");
                 });
@@ -218,10 +247,8 @@ namespace CourseAPI.Migrations
 
             modelBuilder.Entity("Course.DAL.Models.CloseCaption", b =>
                 {
-                    b.Property<Guid>("CourseId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("LanguageId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
@@ -230,14 +257,14 @@ namespace CourseAPI.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -245,9 +272,7 @@ namespace CourseAPI.Migrations
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("CourseId", "LanguageId");
-
-                    b.HasIndex("LanguageId");
+                    b.HasKey("Id");
 
                     b.ToTable("CloseCaptions");
                 });
@@ -291,42 +316,6 @@ namespace CourseAPI.Migrations
                     b.ToTable("CourseCompletions");
                 });
 
-            modelBuilder.Entity("Course.DAL.Models.CourseLevel", b =>
-                {
-                    b.Property<Guid>("CourseId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("LevelId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("CourseId", "LevelId");
-
-                    b.HasIndex("LevelId");
-
-                    b.ToTable("CourseLevels");
-                });
-
             modelBuilder.Entity("Course.DAL.Models.CourseReview", b =>
                 {
                     b.Property<Guid>("Id")
@@ -351,8 +340,8 @@ namespace CourseAPI.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Rating")
-                        .HasColumnType("int");
+                    b.Property<float>("Rating")
+                        .HasColumnType("real");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -384,12 +373,6 @@ namespace CourseAPI.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("DiscountId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("DiscountPrice")
-                        .HasColumnType("money");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -433,14 +416,9 @@ namespace CourseAPI.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("View")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("DiscountId");
 
                     b.HasIndex("UserId");
 
@@ -451,6 +429,12 @@ namespace CourseAPI.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CoursesId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
@@ -481,6 +465,8 @@ namespace CourseAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CoursesId");
 
                     b.ToTable("Discounts");
                 });
@@ -522,38 +508,6 @@ namespace CourseAPI.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Enrollment");
-                });
-
-            modelBuilder.Entity("Course.DAL.Models.Language", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Languages");
                 });
 
             modelBuilder.Entity("Course.DAL.Models.Lecture", b =>
@@ -833,6 +787,21 @@ namespace CourseAPI.Migrations
                     b.ToTable("Subscriptions");
                 });
 
+            modelBuilder.Entity("CoursesLevel", b =>
+                {
+                    b.Property<Guid>("CoursesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("LevelsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CoursesId", "LevelsId");
+
+                    b.HasIndex("LevelsId");
+
+                    b.ToTable("CoursesLevel");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
                 {
                     b.Property<Guid>("Id")
@@ -960,6 +929,36 @@ namespace CourseAPI.Migrations
                     b.ToTable("AppUserTokens");
                 });
 
+            modelBuilder.Entity("AudioLanguageCourses", b =>
+                {
+                    b.HasOne("Course.DAL.Models.AudioLanguage", null)
+                        .WithMany()
+                        .HasForeignKey("AudioLanguagesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Course.DAL.Models.Courses", null)
+                        .WithMany()
+                        .HasForeignKey("CoursesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CloseCaptionCourses", b =>
+                {
+                    b.HasOne("Course.DAL.Models.CloseCaption", null)
+                        .WithMany()
+                        .HasForeignKey("CloseCaptionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Course.DAL.Models.Courses", null)
+                        .WithMany()
+                        .HasForeignKey("CoursesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Course.DAL.Models.AppUser", b =>
                 {
                     b.HasOne("Course.DAL.Models.Category", "Category")
@@ -970,25 +969,6 @@ namespace CourseAPI.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("Course.DAL.Models.AudioLanguage", b =>
-                {
-                    b.HasOne("Course.DAL.Models.Courses", "Course")
-                        .WithMany("AudioLanguages")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Course.DAL.Models.Language", "Language")
-                        .WithMany("AudioLanguages")
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("Language");
-                });
-
             modelBuilder.Entity("Course.DAL.Models.Category", b =>
                 {
                     b.HasOne("Course.DAL.Models.Category", "ParentCategory")
@@ -997,25 +977,6 @@ namespace CourseAPI.Migrations
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("ParentCategory");
-                });
-
-            modelBuilder.Entity("Course.DAL.Models.CloseCaption", b =>
-                {
-                    b.HasOne("Course.DAL.Models.Courses", "Course")
-                        .WithMany("CloseCaptions")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Course.DAL.Models.Language", "Language")
-                        .WithMany("CloseCaptions")
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("Language");
                 });
 
             modelBuilder.Entity("Course.DAL.Models.CourseCompletion", b =>
@@ -1037,25 +998,6 @@ namespace CourseAPI.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Course.DAL.Models.CourseLevel", b =>
-                {
-                    b.HasOne("Course.DAL.Models.Courses", "Course")
-                        .WithMany("CourseLevels")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Course.DAL.Models.Level", "Level")
-                        .WithMany("CourseLevels")
-                        .HasForeignKey("LevelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("Level");
-                });
-
             modelBuilder.Entity("Course.DAL.Models.CourseReview", b =>
                 {
                     b.HasOne("Course.DAL.Models.Enrollment", "Enrollment")
@@ -1075,11 +1017,6 @@ namespace CourseAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Course.DAL.Models.Discount", "Discount")
-                        .WithMany("Courses")
-                        .HasForeignKey("DiscountId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
                     b.HasOne("Course.DAL.Models.AppUser", "User")
                         .WithMany("Courses")
                         .HasForeignKey("UserId")
@@ -1088,9 +1025,16 @@ namespace CourseAPI.Migrations
 
                     b.Navigation("Category");
 
-                    b.Navigation("Discount");
-
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Course.DAL.Models.Discount", b =>
+                {
+                    b.HasOne("Course.DAL.Models.Courses", "Courses")
+                        .WithMany("Discounts")
+                        .HasForeignKey("CoursesId");
+
+                    b.Navigation("Courses");
                 });
 
             modelBuilder.Entity("Course.DAL.Models.Enrollment", b =>
@@ -1115,7 +1059,7 @@ namespace CourseAPI.Migrations
             modelBuilder.Entity("Course.DAL.Models.Lecture", b =>
                 {
                     b.HasOne("Course.DAL.Models.Section", "Section")
-                        .WithMany("Lecture")
+                        .WithMany("Lectures")
                         .HasForeignKey("SectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1209,6 +1153,21 @@ namespace CourseAPI.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("CoursesLevel", b =>
+                {
+                    b.HasOne("Course.DAL.Models.Courses", null)
+                        .WithMany()
+                        .HasForeignKey("CoursesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Course.DAL.Models.Level", null)
+                        .WithMany()
+                        .HasForeignKey("LevelsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
@@ -1288,15 +1247,11 @@ namespace CourseAPI.Migrations
 
             modelBuilder.Entity("Course.DAL.Models.Courses", b =>
                 {
-                    b.Navigation("AudioLanguages");
-
                     b.Navigation("Carts");
-
-                    b.Navigation("CloseCaptions");
 
                     b.Navigation("CourseCompletions");
 
-                    b.Navigation("CourseLevels");
+                    b.Navigation("Discounts");
 
                     b.Navigation("Enrollments");
 
@@ -1307,8 +1262,6 @@ namespace CourseAPI.Migrations
 
             modelBuilder.Entity("Course.DAL.Models.Discount", b =>
                 {
-                    b.Navigation("Courses");
-
                     b.Navigation("Orders");
                 });
 
@@ -1317,26 +1270,14 @@ namespace CourseAPI.Migrations
                     b.Navigation("CourseReviews");
                 });
 
-            modelBuilder.Entity("Course.DAL.Models.Language", b =>
-                {
-                    b.Navigation("AudioLanguages");
-
-                    b.Navigation("CloseCaptions");
-                });
-
             modelBuilder.Entity("Course.DAL.Models.Lecture", b =>
                 {
                     b.Navigation("LectureCompletions");
                 });
 
-            modelBuilder.Entity("Course.DAL.Models.Level", b =>
-                {
-                    b.Navigation("CourseLevels");
-                });
-
             modelBuilder.Entity("Course.DAL.Models.Section", b =>
                 {
-                    b.Navigation("Lecture");
+                    b.Navigation("Lectures");
                 });
 #pragma warning restore 612, 618
         }

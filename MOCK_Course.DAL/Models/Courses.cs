@@ -19,7 +19,7 @@ namespace Course.DAL.Models
         /// Intro Course overview provider type. (
         /// </summary>
         public string PreviewVideoUrl { get; set; }
-        public int View { get; set; } = 0;
+        //public int View { get; set; } = 0;
 
         public bool RequireLogin { get; set; } = false;
         public bool RequireEnroll { get; set; } = false;
@@ -31,9 +31,9 @@ namespace Course.DAL.Models
         public Category Category { get; set; }
         public Guid UserId { get; set; }
         public AppUser User { get; set; }
-        public Guid? DiscountId { get; set; }
-        public Discount Discount { get; set; }
-        //public ICollection<Discount> Discounts { get; set; }
+        //public Guid? DiscountId { get; set; }
+        //public Discount Discount { get; set; }
+        public ICollection<Discount> Discounts { get; set; }
 
         public ICollection<Section> Sections { get; set; }
         public ICollection<CourseCompletion> CourseCompletions { get; set; }

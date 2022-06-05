@@ -35,7 +35,9 @@ namespace Course.BLL.Services.Implementations
                 var userProfileResponse = _mapper.Map<UserProfileDTO>(userProfile);
 
                 userProfileResponse.TotalEnrollment = await _enrollmentRepository.GetTotal(id);
-                userProfileResponse.TotalCourse = await _cousesRepository.GetTotal(id);
+                userProfileResponse.TotalCourse = await _cousesRepository.BuildQuery()
+                                                                         .FilterById(id)
+                                                                         .CountAsync();
                 userProfileResponse.TotalReviewCourse = await _courseReviewRepository.GetTotal(id);
                 userProfileResponse.TotalSubscription = await _subscriptionRepository.GetTotal(id);
 

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CourseAPI.Migrations
 {
-    public partial class InitDb : Migration
+    public partial class initdb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -19,6 +19,24 @@ namespace CourseAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AudioLanguages",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AudioLanguages", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -46,27 +64,7 @@ namespace CourseAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Discounts",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DiscountPercent = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Discounts", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Languages",
+                name: "CloseCaptions",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -80,7 +78,7 @@ namespace CourseAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Languages", x => x.Id);
+                    table.PrimaryKey("PK_CloseCaptions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -127,6 +125,7 @@ namespace CourseAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AvatarUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Fullname = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -271,10 +270,8 @@ namespace CourseAPI.Migrations
                     RequireLogin = table.Column<bool>(type: "bit", nullable: false),
                     RequireEnroll = table.Column<bool>(type: "bit", nullable: false),
                     Price = table.Column<decimal>(type: "money", nullable: false),
-                    DiscountPrice = table.Column<decimal>(type: "money", nullable: false),
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DiscountId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -297,11 +294,6 @@ namespace CourseAPI.Migrations
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Courses_Discounts_DiscountId",
-                        column: x => x.DiscountId,
-                        principalTable: "Discounts",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -329,32 +321,25 @@ namespace CourseAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AudioLanguages",
+                name: "AudioLanguageCourses",
                 columns: table => new
                 {
-                    CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LanguageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    AudioLanguagesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CoursesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AudioLanguages", x => new { x.CourseId, x.LanguageId });
+                    table.PrimaryKey("PK_AudioLanguageCourses", x => new { x.AudioLanguagesId, x.CoursesId });
                     table.ForeignKey(
-                        name: "FK_AudioLanguages_Courses_CourseId",
-                        column: x => x.CourseId,
-                        principalTable: "Courses",
+                        name: "FK_AudioLanguageCourses_AudioLanguages_AudioLanguagesId",
+                        column: x => x.AudioLanguagesId,
+                        principalTable: "AudioLanguages",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AudioLanguages_Languages_LanguageId",
-                        column: x => x.LanguageId,
-                        principalTable: "Languages",
+                        name: "FK_AudioLanguageCourses_Courses_CoursesId",
+                        column: x => x.CoursesId,
+                        principalTable: "Courses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -390,32 +375,25 @@ namespace CourseAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CloseCaptions",
+                name: "CloseCaptionCourses",
                 columns: table => new
                 {
-                    CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LanguageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    CloseCaptionsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CoursesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CloseCaptions", x => new { x.CourseId, x.LanguageId });
+                    table.PrimaryKey("PK_CloseCaptionCourses", x => new { x.CloseCaptionsId, x.CoursesId });
                     table.ForeignKey(
-                        name: "FK_CloseCaptions_Courses_CourseId",
-                        column: x => x.CourseId,
-                        principalTable: "Courses",
+                        name: "FK_CloseCaptionCourses_CloseCaptions_CloseCaptionsId",
+                        column: x => x.CloseCaptionsId,
+                        principalTable: "CloseCaptions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CloseCaptions_Languages_LanguageId",
-                        column: x => x.LanguageId,
-                        principalTable: "Languages",
+                        name: "FK_CloseCaptionCourses_Courses_CoursesId",
+                        column: x => x.CoursesId,
+                        principalTable: "Courses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -451,12 +429,39 @@ namespace CourseAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CourseLevels",
+                name: "CoursesLevel",
                 columns: table => new
                 {
-                    LevelId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CoursesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LevelsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CoursesLevel", x => new { x.CoursesId, x.LevelsId });
+                    table.ForeignKey(
+                        name: "FK_CoursesLevel_Courses_CoursesId",
+                        column: x => x.CoursesId,
+                        principalTable: "Courses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CoursesLevel_Levels_LevelsId",
+                        column: x => x.LevelsId,
+                        principalTable: "Levels",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Discounts",
+                columns: table => new
+                {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CoursesId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DiscountPercent = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -466,19 +471,13 @@ namespace CourseAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CourseLevels", x => new { x.CourseId, x.LevelId });
+                    table.PrimaryKey("PK_Discounts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CourseLevels_Courses_CourseId",
-                        column: x => x.CourseId,
+                        name: "FK_Discounts_Courses_CoursesId",
+                        column: x => x.CoursesId,
                         principalTable: "Courses",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CourseLevels_Levels_LevelId",
-                        column: x => x.LevelId,
-                        principalTable: "Levels",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -508,6 +507,31 @@ namespace CourseAPI.Migrations
                         column: x => x.CourseId,
                         principalTable: "Courses",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Sections",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sections", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Sections_Courses_CourseId",
+                        column: x => x.CourseId,
+                        principalTable: "Courses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -544,31 +568,6 @@ namespace CourseAPI.Migrations
                         column: x => x.DiscountId,
                         principalTable: "Discounts",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Sections",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Sections", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Sections_Courses_CourseId",
-                        column: x => x.CourseId,
-                        principalTable: "Courses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -695,9 +694,9 @@ namespace CourseAPI.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AudioLanguages_LanguageId",
-                table: "AudioLanguages",
-                column: "LanguageId");
+                name: "IX_AudioLanguageCourses_CoursesId",
+                table: "AudioLanguageCourses",
+                column: "CoursesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Carts_CourseId",
@@ -715,9 +714,9 @@ namespace CourseAPI.Migrations
                 column: "ParentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CloseCaptions_LanguageId",
-                table: "CloseCaptions",
-                column: "LanguageId");
+                name: "IX_CloseCaptionCourses_CoursesId",
+                table: "CloseCaptionCourses",
+                column: "CoursesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CourseCompletions_CourseId",
@@ -730,11 +729,6 @@ namespace CourseAPI.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CourseLevels_LevelId",
-                table: "CourseLevels",
-                column: "LevelId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_CourseReviews_EnrollmentId",
                 table: "CourseReviews",
                 column: "EnrollmentId");
@@ -745,14 +739,19 @@ namespace CourseAPI.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Courses_DiscountId",
-                table: "Courses",
-                column: "DiscountId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Courses_UserId",
                 table: "Courses",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CoursesLevel_LevelsId",
+                table: "CoursesLevel",
+                column: "LevelsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Discounts_CoursesId",
+                table: "Discounts",
+                column: "CoursesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Enrollment_CourseId",
@@ -823,22 +822,22 @@ namespace CourseAPI.Migrations
                 name: "AppUserTokens");
 
             migrationBuilder.DropTable(
-                name: "AudioLanguages");
+                name: "AudioLanguageCourses");
 
             migrationBuilder.DropTable(
                 name: "Carts");
 
             migrationBuilder.DropTable(
-                name: "CloseCaptions");
+                name: "CloseCaptionCourses");
 
             migrationBuilder.DropTable(
                 name: "CourseCompletions");
 
             migrationBuilder.DropTable(
-                name: "CourseLevels");
+                name: "CourseReviews");
 
             migrationBuilder.DropTable(
-                name: "CourseReviews");
+                name: "CoursesLevel");
 
             migrationBuilder.DropTable(
                 name: "LectureCompletions");
@@ -853,16 +852,22 @@ namespace CourseAPI.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Languages");
+                name: "AudioLanguages");
 
             migrationBuilder.DropTable(
-                name: "Levels");
+                name: "CloseCaptions");
 
             migrationBuilder.DropTable(
                 name: "Enrollment");
 
             migrationBuilder.DropTable(
+                name: "Levels");
+
+            migrationBuilder.DropTable(
                 name: "Lectures");
+
+            migrationBuilder.DropTable(
+                name: "Discounts");
 
             migrationBuilder.DropTable(
                 name: "Sections");
@@ -872,9 +877,6 @@ namespace CourseAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "Discounts");
 
             migrationBuilder.DropTable(
                 name: "Categories");

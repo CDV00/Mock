@@ -78,8 +78,7 @@ namespace Course.BLL.Extensions
             CreateMap<EnrollmentUserDTO, AppUser>().ReverseMap();
             CreateMap<EnrollmentCourseDTO, Courses>().ReverseMap();
             CreateMap<EnrollmentCategoryDTO, Category>().ReverseMap();
-            CreateMap<Enrollment, EnrollmentDTO>().ForMember(des => des.User, opt => opt.MapFrom(src => src.User)).ForMember(des => des.Course, opt => opt.MapFrom(src => src.Courses)).ForPath(des => des.Course.Category, opt => opt.MapFrom(src => src.Courses.Category)).ReverseMap();
-            CreateMap<Enrollment, EnrollmentRequest>().ReverseMap();
+            CreateMap<Enrollment, EnrollmentDTO>().ReverseMap();
 
             // map course completion
             CreateMap<CourseCompletionRequest, CourseCompletionDTO>().ReverseMap();
