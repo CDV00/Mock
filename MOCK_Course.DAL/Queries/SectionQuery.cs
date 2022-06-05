@@ -1,5 +1,6 @@
 ﻿using Course.DAL.Data;
 using Course.DAL.Models;
+using Course.DAL.Queries.Abstraction;
 using Microsoft.EntityFrameworkCore;
 using SES.HomeServices.Data.Queries.Abstractions;
 using System;

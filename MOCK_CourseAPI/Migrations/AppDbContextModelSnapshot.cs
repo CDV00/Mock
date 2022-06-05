@@ -766,6 +766,9 @@ namespace CourseAPI.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<Guid>("SubscriberId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -776,6 +779,8 @@ namespace CourseAPI.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SubscriberId");
 
                     b.HasIndex("UserId");
 
@@ -1141,11 +1146,19 @@ namespace CourseAPI.Migrations
 
             modelBuilder.Entity("Course.DAL.Models.Subscription", b =>
                 {
+                    b.HasOne("Course.DAL.Models.AppUser", "Subscriber")
+                        .WithMany()
+                        .HasForeignKey("SubscriberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Course.DAL.Models.AppUser", "User")
                         .WithMany("Subscriptions")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Subscriber");
 
                     b.Navigation("User");
                 });

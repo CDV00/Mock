@@ -43,5 +43,13 @@ namespace Course.DAL.Queries
             Query = Query.Where(type => type.CourseId == CourseId);
             return this;
         }
+
+
+        public IOrderQuery FilterByUserId(Guid userId)
+        {
+
+            Query = Query.Where(type => type.UserId == userId);
+            return this;
+        }
     }
 }

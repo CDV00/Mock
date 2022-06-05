@@ -4,6 +4,7 @@ using SES.HomeServices.Data.Queries.Abstractions;
 using System;
 using System.Linq;
 using Course.DAL.Data;
+using Course.DAL.Queries.Abstraction;
 
 namespace Course.Queries
 {

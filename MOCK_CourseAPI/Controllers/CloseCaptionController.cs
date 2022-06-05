@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Course.BLL.DTO;
-using Course.BLL.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Course.BLL.Responses;
+using Course.BLL.Services.Abstraction;
 
 namespace CourseAPI.Controllers
 {

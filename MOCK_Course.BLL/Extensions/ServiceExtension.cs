@@ -1,10 +1,7 @@
 ﻿using Course.BLL.Services;
-using Course.BLL.Services.Implementations;
-using Course.BLL.Services.Interface;
+using Course.BLL.Services.Abstraction;
 using Course.DAL.Repositories;
-using Course.DAL.Repositories.Implementations;
-using Coursess.DAL.Repositories.Abstraction;
-using Coursess.DAL.Repositories.Implementations;
+using Course.DAL.Repositories.Abstraction;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Course.BLL.Extensions

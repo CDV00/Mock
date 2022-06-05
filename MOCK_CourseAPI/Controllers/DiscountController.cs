@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Course.BLL.Responses;
 using Course.BLL.Requests;
 using System;
-using Course.BLL.Services.Interface;
 using CourseAPI.Extensions.ControllerBase;
+using Course.BLL.Services.Abstraction;
 
 namespace CourseAPI.Controllers
 {

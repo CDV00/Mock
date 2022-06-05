@@ -1,11 +1,11 @@
 ﻿using Course.BLL.Requests;
 using Course.BLL.DTO;
-using Course.BLL.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using CourseAPI.Extensions.ControllerBase;
+using Course.BLL.Services.Abstraction;
 
 namespace CourseAPI.Controllers
 {
@@ -43,10 +43,10 @@ namespace CourseAPI.Controllers
         /// <param name="cartRequest"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Responses<CartDTO>>> Create([FromBody] CartRequest cartRequest)
+        public async Task<ActionResult<Responses<CartDTO>>> Create(Guid courseId)
         {
             var userId = User.GetUserId();
-            var result = await _shoppingCartService.Add(userId, cartRequest);
+            var result = await _shoppingCartService.Add(userId, courseId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);

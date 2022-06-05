@@ -1,12 +1,12 @@
 ﻿using System.Threading.Tasks;
 using Course.BLL.DTO;
 using Course.BLL.Requests;
-using Course.BLL.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using Course.BLL.Responses;
 using Microsoft.AspNetCore.Authorization;
 using CourseAPI.Extensions.ControllerBase;
+using Course.BLL.Services.Abstraction;
 
 namespace CourseAPI.Controllers
 {
