@@ -1,14 +1,14 @@
 ﻿using System.Threading.Tasks;
-using Course.BLL.Responses;
-using Course.BLL.Requests;
 using System;
 using Course.BLL.DTO;
+using Course.BLL.Responses;
 
 namespace Course.BLL.Services
 {
     public interface IEnrollmentService
     {
-        Task<BaseResponse> Add(Guid userId, EnrollmentRequest enrollmentRequest);
+        Task<Response<EnrollmentDTO>> Add(Guid userId, Guid CourseId);
         Task<Response<int>> GetTotal(Guid userId);
+        Task<Response<EnrollmentDTO>> IsEnrollment(Guid userId, Guid courseId);
     }
 }

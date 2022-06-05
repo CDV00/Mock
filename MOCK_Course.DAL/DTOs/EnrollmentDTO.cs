@@ -1,4 +1,5 @@
-﻿using Course.DAL.Models;
+﻿using Course.BLL.DTO;
+using Course.DAL.Models;
 using System;
 
 namespace Course.BLL.Responses
@@ -6,8 +7,8 @@ namespace Course.BLL.Responses
     public class EnrollmentDTO
     {
         public Guid Id { get; set; }
-        public EnrollmentUserDTO User { get; set; }
-        public EnrollmentCourseDTO Course { get; set; }
+        public UserDTO User { get; set; }
+        public CourseDTO Course { get; set; }
     }
     public class EnrollmentUserDTO
     {

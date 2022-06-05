@@ -6,7 +6,8 @@ namespace Course.BLL.Responses
     {
         public Guid Id;
         public string Content { get; set; }
-        public int Rating { get; set; }
-        public Guid EnrollmentId { get; set; }
+        public float Rating { get; set; }
+        public DateTime CreateAt { get; set; }
+        public EnrollmentDTO Enrollment { get; set; }
     }
 }

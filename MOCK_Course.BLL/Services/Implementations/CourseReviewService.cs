@@ -4,11 +4,8 @@ using Course.BLL.Responses;
 using Course.BLL.DTO;
 using Course.DAL.Models;
 using Course.DAL.Repositories;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Course.BLL.Services.Implementations
@@ -38,9 +35,12 @@ namespace Course.BLL.Services.Implementations
         {
             try
             {
-                var result = await _courseReviewRepository.GetAll().Where(c => c.Enrollment.CourseId == courseId).ToListAsync();
+                var courseReview = await _courseReviewRepository.BuildQuery()
+                                                          .FilterByCourseId(courseId)
+                                                          .IncludeUser()
+                                                          .ToListAsync(c => _mapper.Map<CourseReviewDTO>(c));
 
-                return new Responses<CourseReviewDTO>(true, _mapper.Map<IEnumerable<CourseReviewDTO>>(result));
+                return new Responses<CourseReviewDTO>(true, _mapper.Map<IEnumerable<CourseReviewDTO>>(courseReview));
             }
             catch (Exception ex)
             {
@@ -108,16 +108,18 @@ namespace Course.BLL.Services.Implementations
                 return new BaseResponse(false, ex.Message, null);
             }
         }
-        /// <summary>
-        /// Get total review of course
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
+        // <summary>
+        // Get total review of course
+        // </summary>
+        // <param name = "userId" ></ param >
+        // < returns ></ returns >
         public async Task<Response<int>> GetTotal(Guid userId)
         {
             try
             {
-                var courses = await _courseReviewRepository.GetTotal(userId);
+                var courses = await _courseReviewRepository.BuildQuery()
+                                                           .FilterByUserId(userId)
+                                                           .CountAsync();
                 return new Response<int>(true, courses);
             }
             catch (Exception ex)

@@ -1,9 +1,7 @@
 ﻿using Course.DAL.Data;
 using Course.DAL.Models;
-using Microsoft.EntityFrameworkCore;
+using Course.DAL.Queries;
 using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Course.DAL.Repositories.Implementations
 {
@@ -14,10 +12,15 @@ namespace Course.DAL.Repositories.Implementations
         {
             _context = context;
         }
-        public async Task<int> GetTotal(Guid userId)
+
+        public ICourseReviewQuery BuildQuery()
         {
-            return await GetAll().Where(s => s.Enrollment.UserId == userId).GroupBy(s => s.Enrollment.UserId).CountAsync();
+            return new CourseReviewQuery(_context.CourseReviews.AsQueryable(), _context);
         }
+        //public async Task<int> GetTotal(Guid userId)
+        //{
+        //    return await GetAll().Where(s => s.Enrollment.UserId == userId).GroupBy(s => s.Enrollment.UserId).CountAsync();
+        //}
 
     }
 }

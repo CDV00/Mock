@@ -1,14 +1,13 @@
 ﻿using Course.DAL.Data;
-using Course.DAL.Data;
 using Course.DAL.Models;
-using Course.DAL.Queries.Abstraction;
+using Microsoft.EntityFrameworkCore;
 using SES.HomeServices.Data.Queries.Abstractions;
 using System;
 using System.Linq;
 
 namespace Course.DAL.Queries
 {
-    public class SectionQuery : QueryBase<Section>, ISectionQuery
+    public class CourseReviewQuery : QueryBase<CourseReview>, ICourseReviewQuery
     {
         private readonly AppDbContext _dbContext;
 
@@ -17,31 +16,43 @@ namespace Course.DAL.Queries
         /// </summary>
         /// <param name="masterDataQuery"></param>
         /// <param name="dbContext"></param>
-        public SectionQuery(IQueryable<Section> courseQuery, AppDbContext dbContext) : base(courseQuery)
+        public CourseReviewQuery(IQueryable<CourseReview> courseQuery, AppDbContext dbContext) : base(courseQuery)
         { _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext)); }
-
-
-
-        /// <summary>
-        /// FilterIsActive
-        /// </summary>
-        /// <param name="isActice"></param>
-        /// <returns></returns>
-        public ISectionQuery FilterIsActive(bool? isActice)
-        {
-            Query = Query.Where(type => isActice == null || type.IsActive == isActice);
-            return this;
-        }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="CourseId"></param>
         /// <returns></returns>
-        public ISectionQuery FilterByCourseId(Guid CourseId)
+        public ICourseReviewQuery FilterByCourseId(Guid CourseId)
         {
+            Query.Include(c => c.Enrollment).Load();
+            Query = Query.Where(type => type.Enrollment.CourseId == CourseId);
+            return this;
+        }
 
-            Query = Query.Where(type => type.CourseId == CourseId);
+        public ICourseReviewQuery FilterByUserId(Guid UserId)
+        {
+            Query.Include(c => c.Enrollment).Load();
+            Query = Query.Where(type => type.Enrollment.UserId == UserId);
+            return this;
+        }
+
+        public ICourseReviewQuery IncludeEnrollment()
+        {
+            Query.Include(c => c.Enrollment).Load();
+            return this;
+        }
+
+        public ICourseReviewQuery IncludeUser()
+        {
+            Query.Include(c => c.Enrollment.User).Load();
+            return this;
+        }
+
+        public ICourseReviewQuery IncludeCourse()
+        {
+            Query.Include(c => c.Enrollment.Courses).Load();
             return this;
         }
     }

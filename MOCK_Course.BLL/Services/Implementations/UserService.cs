@@ -34,11 +34,14 @@ namespace Course.BLL.Services.Implementations
                 var userProfile = await _userManager.FindByIdAsync(id.ToString());
                 var userProfileResponse = _mapper.Map<UserProfileDTO>(userProfile);
 
-                userProfileResponse.TotalEnrollment = await _enrollmentRepository.GetTotal(id);
+                userProfileResponse.TotalEnrollment = await _enrollmentRepository.BuildQuery()
+                                                                                 .FilterByUserId(id)
+                                                                                 .CountAsync();
                 userProfileResponse.TotalCourse = await _cousesRepository.BuildQuery()
-                                                                         .FilterById(id)
+                                                                         .FilterByUserId(id)
                                                                          .CountAsync();
-                userProfileResponse.TotalReviewCourse = await _courseReviewRepository.GetTotal(id);
+                userProfileResponse.TotalReviewCourse = await _courseReviewRepository.BuildQuery().FilterByUserId(id).CountAsync();
+
                 userProfileResponse.TotalSubscription = await _subscriptionRepository.GetTotal(id);
 
                 return new Response<UserProfileDTO>(

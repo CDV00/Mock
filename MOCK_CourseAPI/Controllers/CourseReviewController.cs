@@ -26,7 +26,7 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <param name="CourseId"></param>
         /// <returns></returns>
-        [HttpGet("{CourseId:guid}")]
+        [HttpGet("Get-All")]
         public async Task<ActionResult<Responses<CourseReviewDTO>>> GetAll([FromQuery] Guid CourseId)
         {
             var result = await _courseReviewService.GetAll(CourseId);
@@ -55,7 +55,7 @@ namespace CourseAPI.Controllers
         /// <param name="id"></param>
         /// <param name="courseReviewUpdateRequest"></param>
         /// <returns></returns>
-        [HttpPut("{id:guid}")]
+        [HttpPut()]
         public async Task<ActionResult<BaseResponse>> Update(Guid id, CourseReviewUpdateRequest courseReviewUpdateRequest)
         {
             var result = await _courseReviewService.Update(id, courseReviewUpdateRequest);
@@ -69,7 +69,7 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete("{id:guid}")]
+        [HttpDelete()]
         public async Task<ActionResult<BaseResponse>> Delete(Guid id)
         {
             var result = await _courseReviewService.Delete(id);
@@ -80,15 +80,13 @@ namespace CourseAPI.Controllers
         /// <summary>
         /// Get Review of Course of User
         /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        //[HttpGet("Get-total/{userId}")]
-        //public async Task<ActionResult<Response<int>>> GetTotal(Guid userId)
-        //{
-        //    var result = await _courseReviewService.GetTotal(userId);
-        //    if (result.IsSuccess == false)
-        //        return BadRequest(result);
-        //    return Ok(result);
-        //}
+        [HttpGet("Get-total-Reivew-of-course")]
+        public async Task<ActionResult<Response<int>>> GetTotal(Guid userId)
+        {
+            var result = await _courseReviewService.GetTotal(userId);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
     }
 }

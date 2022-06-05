@@ -25,29 +25,35 @@ namespace CourseAPI.Controllers
         /// when user press enrellment one course
         /// https://gambolthemes.net/html-items/cursus_main_demo/course_detail_view.html
         /// </summary>
-        /// <param name="enrollmentRequest"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<BaseResponse>> Create([FromBody] EnrollmentRequest enrollmentRequest)
+        public async Task<ActionResult<Response<EnrollmentDTO>>> Create(Guid courseId)
         {
             var userId = User.GetUserId();
-            var result = await _enrollmentService.Add(userId, enrollmentRequest);
+            var result = await _enrollmentService.Add(userId, courseId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
         }
-        /// <summary>
-        /// Get Errollment of User
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        //[HttpGet("Get-total/{userId}")]
-        //public async Task<ActionResult<Response<int>>> GetTotal(Guid userId)
-        //{
-        //    var result = await _enrollmentService.GetTotal(userId);
-        //    if (result.IsSuccess == false)
-        //        return BadRequest(result);
-        //    return Ok(result);
-        //}
+
+        [HttpGet("Get-total-enroll-of-user")]
+        public async Task<ActionResult<Response<int>>> GetTotal()
+        {
+            var userId = User.GetUserId();
+            var result = await _enrollmentService.GetTotal(userId);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
+        [HttpGet("check-enrollment")]
+        public async Task<ActionResult<Response<EnrollmentDTO>>> IsEnrollment(Guid courseId)
+        {
+            var userId = User.GetUserId();
+            var result = await _enrollmentService.IsEnrollment(userId,courseId);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
     }
 }

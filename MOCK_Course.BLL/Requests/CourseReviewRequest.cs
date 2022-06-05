@@ -8,13 +8,13 @@ namespace Course.BLL.Requests
         public Guid EnrollmentId { get; set; }
         public string Content { get; set; }
         [Required]
-        public int Rating { get; set; }
+        public float Rating { get; set; }
     }
     public class CourseReviewUpdateRequest
     {
         [Required]
         public string Content { get; set; }
         [Required]
-        public int Rating { get; set; }
+        public float Rating { get; set; }
     }
 }
