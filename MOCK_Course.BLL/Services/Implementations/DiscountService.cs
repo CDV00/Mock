@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Course.BLL.DTO;
 using Course.BLL.Requests;
 using Course.DAL.Models;
-using Course.DAL.Repositories;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using Course.BLL.Responses;
-using Course.DAL.DTOs;
-using Microsoft.AspNetCore.Identity;
+using Course.BLL.Services.Interface;
+using Coursess.DAL.Repositories.Abstraction;
+using Course.DAL.Repositories;
 
 namespace Course.BLL.Services.Implementations
 {
@@ -27,38 +24,41 @@ namespace Course.BLL.Services.Implementations
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Response<DiscountForCreateDTO>> Add(DiscountForCreateRequest discountForCreateRequest)
+        public async Task<Response<DiscountDTO>> Add(DiscountForCreateRequest discountForCreateRequest)
         {
             try
             {
                 var discount = _mapper.Map<Discount>(discountForCreateRequest);
-                
+
 
                 await _discountRepository.CreateAsync(discount);
 
                 var result = await _unitOfWork.SaveChangesAsync();
 
-                var DiscountDTO = _mapper.Map<DiscountForCreateDTO>(discount);
-                return new Response<DiscountForCreateDTO>(
+                var DiscountDTO = _mapper.Map<DiscountDTO>(discount);
+                return new Response<DiscountDTO>(
                     true,
                     DiscountDTO
                 );
             }
             catch (Exception ex)
             {
-                return new Response<DiscountForCreateDTO>(false, ex.Message, null);
+                return new Response<DiscountDTO>(false, ex.Message, null);
             }
         }
 
 
-        public async Task<Responses<DiscountDTO>> GetAllDiscount()
+        // Get All theo UserId !!!
+        public async Task<Responses<DiscountDTO>> GetAllDiscount(Guid userId)
         {
             try
             {
-                var discount = await _discountRepository.GetAllDiscount();
+                var discounts = await _discountRepository.BuildQuery()
+                                                         //.IncludeCourses()
+                                                         .FilterByUserId(userId)
+                                                         .ToListAsync(d => _mapper.Map<DiscountDTO>(d));
 
-                var discountResponse = _mapper.Map<List<DiscountDTO>>(discount);
-                return new Responses<DiscountDTO>(true, discountResponse);
+                return new Responses<DiscountDTO>(true, discounts);
             }
             catch (Exception ex)
             {
@@ -88,14 +88,14 @@ namespace Course.BLL.Services.Implementations
             }
         }
 
-        public async Task<Response<DiscountForUpdateDTO>> Update(Guid discountId, DiscountForUpdateRequest discountForUpdateRequest)
+        public async Task<Response<DiscountDTO>> Update(Guid discountId, DiscountForUpdateRequest discountForUpdateRequest)
         {
             try
             {
                 var discount = await _discountRepository.GetByIdAsync(discountId);
                 if (discount == null)
                 {
-                    new Responses<BaseResponse>(false, "can't find discount", null);
+                    new Responses<DiscountDTO>(false, "can't find discount", null);
                 }
 
 
@@ -103,18 +103,17 @@ namespace Course.BLL.Services.Implementations
 
                 await _unitOfWork.SaveChangesAsync();
 
-                var DiscountResponse = _mapper.Map<DiscountForUpdateDTO>(discount);
+                var DiscountResponse = _mapper.Map<DiscountDTO>(discount);
 
-                return new Response<DiscountForUpdateDTO>(
+                return new Response<DiscountDTO>(
                     true,
                     DiscountResponse
                 );
             }
             catch (Exception ex)
             {
-                return new Response<DiscountForUpdateDTO>(false, ex.Message, null);
+                return new Response<DiscountDTO>(false, ex.Message, null);
             }
         }
-
     }
 }

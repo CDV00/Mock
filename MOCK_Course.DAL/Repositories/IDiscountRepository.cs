@@ -1,14 +1,12 @@
-﻿using Course.BLL.Responses;
-using Course.DAL.DTOs;
-using Course.DAL.Models;
+﻿using Course.DAL.Models;
+using Course.DAL.Repositories;
+using Course.Queries;
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace Course.DAL.Repositories
+namespace Coursess.DAL.Repositories.Abstraction
 {
     public interface IDiscountRepository : IRepository<Discount, Guid>
     {
-        Task<List<DiscountDTO>> GetAllDiscount();
+        IDiscountQuery BuildQuery();
     }
 }

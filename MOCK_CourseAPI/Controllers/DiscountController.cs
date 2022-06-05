@@ -1,11 +1,12 @@
 ﻿using System.Threading.Tasks;
 using Course.BLL.DTO;
-using Course.BLL.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Course.BLL.Responses;
 using Course.BLL.Requests;
 using System;
+using Course.BLL.Services.Interface;
+using CourseAPI.Extensions.ControllerBase;
 
 namespace CourseAPI.Controllers
 {
@@ -28,7 +29,8 @@ namespace CourseAPI.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<Responses<DiscountDTO>>> GetAllDiscount()
         {
-            var result = await _discountService.GetAllDiscount();
+            var userId = User.GetUserId();
+            var result = await _discountService.GetAllDiscount(userId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
@@ -53,7 +55,7 @@ namespace CourseAPI.Controllers
         /// don't have Page UI yet!
         /// </summary>
         /// <returns></returns>
-        [HttpPut("{id:guid}")]
+        [HttpPut()]
         public async Task<ActionResult<Response<DiscountForUpdateDTO>>> Update(Guid id, DiscountForUpdateRequest discountUpdateRequest)
         {
             var result = await _discountService.Update(id, discountUpdateRequest);
@@ -68,7 +70,7 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <param name="id">Id Discount</param>
         /// <returns></returns>
-        [HttpDelete("{id:guid}")]
+        [HttpDelete()]
         public async Task<ActionResult<BaseResponse>> Delete(Guid id)
         {
             var result = await _discountService.Remove(id);

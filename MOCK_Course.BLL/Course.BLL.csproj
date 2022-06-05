@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DataTransferObjects\**" />
+    <EmbeddedResource Remove="DataTransferObjects\**" />
+    <None Remove="DataTransferObjects\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="CloudinaryDotNet" Version="1.16.0" />
     <PackageReference Include="Google.Apis.Auth" Version="1.40.3" />
@@ -18,10 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MOCK_Course.DAL\Course.DAL.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DataTransferObjects\" />
   </ItemGroup>
 
 </Project>
