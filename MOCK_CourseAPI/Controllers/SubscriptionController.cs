@@ -52,7 +52,7 @@ namespace CourseAPI.Controllers
         }
 
         [HttpGet("Get-total-Instrutors-Subscribing")]
-        public async Task<ActionResult<Response<int>>> GetTotal()
+        public async Task<ActionResult<Response<int>>> GetTotalInstrutorsSubscribing()
         {
             var userId = User.GetUserId();
             //var result = await _subscriptionService.GetTotalInstrutorsSubscribing(userId);

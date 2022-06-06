@@ -103,6 +103,7 @@ namespace Course.BLL.Services
                                                     .IncludeUser()
                                                     .FilterById(id)
                                                     .AsSelectorAsync(x => _mapper.Map<CourseDTO>(x));
+
                 var courseResponse = _mapper.Map<CourseDTO>(course);
                 return new Response<CourseDTO>(true, courseResponse);
             }
