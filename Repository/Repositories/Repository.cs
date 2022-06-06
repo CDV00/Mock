@@ -8,7 +8,7 @@ using Course.DAL.Models;
 using Course.DAL.Repositories.Abstraction;
 using Microsoft.EntityFrameworkCore;
 
-namespace Course.DAL.Repositories
+namespace Repository.Repositories
 {
     public class Repository<T, K> : IRepository<T, K> where T : BaseEntity<K>
     {

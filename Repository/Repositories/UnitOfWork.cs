@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Course.DAL.Data;
 using Course.DAL.Repositories.Abstraction;
 
-namespace Course.DAL.Repositories
+namespace Repository.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {

@@ -6,7 +6,7 @@ using Course.Queries;
 using System;
 using System.Linq;
 
-namespace Course.DAL.Repositories
+namespace Repository.Repositories
 {
     public class DiscountRepository : Repository<Discount, Guid>, IDiscountRepository
     {

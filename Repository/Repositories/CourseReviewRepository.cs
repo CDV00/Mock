@@ -5,7 +5,7 @@ using Course.DAL.Queries.Abstraction;
 using Course.DAL.Repositories.Abstraction;
 using System;
 
-namespace Course.DAL.Repositories
+namespace Repository.Repositories
 {
     public class CourseReviewRepository : Repository<CourseReview, Guid>, ICourseReviewRepository
     {

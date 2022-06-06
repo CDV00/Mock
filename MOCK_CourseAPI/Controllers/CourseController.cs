@@ -7,6 +7,7 @@ using Course.BLL.Responses;
 using Microsoft.AspNetCore.Authorization;
 using CourseAPI.Extensions.ControllerBase;
 using Course.BLL.Services.Abstraction;
+using System.Text.Json;
 
 namespace CourseAPI.Controllers
 {
@@ -19,6 +20,18 @@ namespace CourseAPI.Controllers
         public CourseController(ICourseService coursesService)
         {
             _coursesService = coursesService;
+        }
+
+        [HttpGet("Get-all-course")]
+        [AllowAnonymous]
+        public async Task<ActionResult<Responses<CourseDTO>>> GetAllCourses([FromQuery] CourseParameters courseParameters)
+        {
+            var Pageresult = await _coursesService.GetCoursesAsync(courseParameters);
+
+            Response.Headers.Add("X-Pagination",
+                                 JsonSerializer.Serialize(Pageresult.metaData));
+
+            return Ok(Pageresult.courses);
         }
 
         /// <summary>

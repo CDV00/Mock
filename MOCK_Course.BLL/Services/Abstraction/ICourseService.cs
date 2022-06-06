@@ -4,6 +4,8 @@ using Course.BLL.Requests;
 using System;
 using Course.BLL.Responses;
 using Course.DAL.DTOs;
+using Course.BLL.Share.RequestFeatures;
+using System.Collections.Generic;
 
 namespace Course.BLL.Services.Abstraction
 {
@@ -18,6 +20,8 @@ namespace Course.BLL.Services.Abstraction
         Task<Responses<CourseDTO>> GetAllMyCoures(Guid userId);
         //Task<Responses<UpcommingCourseDTO>> GetAllUpcomingCourses(Guid id);
         Task<Responses<CourseDTO>> GetAllMyPurchase(Guid userId);
+        //Task<Responses<CourseDTO>> GetCoursesAsync(CourseParameters courseParameter);
+        Task<(IList<CourseDTO> courses, MetaData metaData)> GetCoursesAsync(CourseParameters courseParameter);
         //Task<Responses<CousrsePagingDTO>> GetCoursePaing(CousrsePagingRequest cousrsePagingRequest);
         //Task<Responses<CousrsePagingDTO>> GetByFilteringCousrse(string key);
         //Task<Response<CourseForDetailDTO>> GetDetail(Guid id);

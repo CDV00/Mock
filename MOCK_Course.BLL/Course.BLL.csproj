@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MOCK_Course.DAL\Course.DAL.csproj" />
+    <ProjectReference Include="..\Repository\Repository.csproj" />
   </ItemGroup>
 
 </Project>

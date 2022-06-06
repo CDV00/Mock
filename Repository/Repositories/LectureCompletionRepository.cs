@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 
-namespace Course.DAL.Repositories
+namespace Repository.Repositories
 {
     public class LectureCompletionRepository : Repository<LectureCompletion, Guid>, ILectureCompletionRepository
     {

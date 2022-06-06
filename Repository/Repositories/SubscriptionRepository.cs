@@ -8,7 +8,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Course.DAL.Repositories
+namespace Repository.Repositories
 {
     public class SubscriptionRepository : Repository<Subscription, Guid>, ISubscriptionRepository
     {

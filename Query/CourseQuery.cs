@@ -77,6 +77,67 @@ namespace Course.DAL.Queries
             return this;
         }
 
+        public ICourseQuery FilterByCategoryId(Guid? categoryId)
+        {
+            if (categoryId == null)
+                return this;
+
+            Query = Query.Where(c => c.CategoryId == categoryId);
+            return this;
+        }
+
+        public ICourseQuery FilterByAudioLanguageIds(List<Guid?> AudioLanguageIds)
+        {
+            if (AudioLanguageIds == null)
+                return this;
+
+            var audioLanguages = _dbContext.AudioLanguages.AsQueryable()
+                                                          .Where(a => AudioLanguageIds.Contains(a.Id))
+                                                          .Select(a => a);
+
+            foreach (var item in audioLanguages)
+            {
+                Query = Query.Where(c => c.AudioLanguages.Contains(item));
+            }
+
+            return this;
+        }
+
+        public ICourseQuery FilterByCloseCaptionIds(List<Guid?> closeCaptionIds)
+        {
+            if (closeCaptionIds == null)
+                return this;
+
+            var closeCaptions = _dbContext.CloseCaptions.AsQueryable()
+                                                          .Where(a => closeCaptionIds.Contains(a.Id))
+                                                          .Select(a => a);
+
+            foreach (var item in closeCaptions)
+            {
+                Query = Query.Where(c => c.CloseCaptions.Contains(item));
+            }
+
+            return this;
+        }
+
+        public ICourseQuery FilterByLevelIds(List<Guid?> levelIds)
+        {
+            if (levelIds == null)
+                return this;
+
+            var levels = _dbContext.Levels.AsQueryable()
+                                          .Where(a => levelIds.Contains(a.Id))
+                                          .Select(a => a);
+
+            foreach (var item in levels)
+            {
+                Query = Query.Where(c => c.Levels.Contains(item));
+            }
+
+            return this;
+        }
+
+
         public ICourseQuery IncludeCategory()
         {
             Query.Include(c => c.Category).Load();

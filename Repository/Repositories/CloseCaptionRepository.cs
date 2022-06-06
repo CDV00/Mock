@@ -3,7 +3,7 @@ using Course.DAL.Models;
 using Course.DAL.Repositories.Abstraction;
 using System;
 
-namespace Course.DAL.Repositories
+namespace Repository.Repositories
 {
     public class CloseCaptionRepository : Repository<CloseCaption, Guid>, ICloseCaptionRepository
     {

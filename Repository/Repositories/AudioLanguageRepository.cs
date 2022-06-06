@@ -1,17 +1,17 @@
 ﻿using Course.DAL.Data;
 using Course.DAL.Models;
-using Course.DAL.Queries;
 using Course.DAL.Repositories.Abstraction;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
-namespace Course.DAL.Repositories
+namespace Repository.Repositories
 {
-    public class CourseCompletionRepository : Repository<CourseCompletion, Guid>, ICourseCompletionRepository
+    public class AudioLanguageRepository : Repository<AudioLanguage, Guid>, IAudioLanguageRepository
     {
         private AppDbContext _context;
-        public CourseCompletionRepository(AppDbContext context) : base(context)
+        public AudioLanguageRepository(AppDbContext context) : base(context)
         {
             _context = context;
         }

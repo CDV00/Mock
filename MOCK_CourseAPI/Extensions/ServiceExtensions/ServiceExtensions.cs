@@ -10,7 +10,6 @@ using Course.BLL.Services.Abstraction;
 using Course.DAL.ConfigurationModels;
 using Course.DAL.Data;
 using Course.DAL.Models;
-using Course.DAL.Repositories;
 using Course.DAL.Repositories.Abstraction;
 using LoggerService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -21,6 +20,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Repository.Repositories;
 
 namespace CourseAPI.Extensions.ServiceExtensions
 {
@@ -37,7 +37,8 @@ namespace CourseAPI.Extensions.ServiceExtensions
                 {
                     builder.AllowAnyOrigin()
                     .AllowAnyMethod()
-                    .AllowAnyHeader();
+                    .AllowAnyHeader()
+                    .WithExposedHeaders("X-Pagination");
                 });
             });
         }

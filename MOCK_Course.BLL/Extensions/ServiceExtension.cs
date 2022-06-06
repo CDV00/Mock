@@ -1,8 +1,8 @@
 ﻿using Course.BLL.Services;
 using Course.BLL.Services.Abstraction;
-using Course.DAL.Repositories;
 using Course.DAL.Repositories.Abstraction;
 using Microsoft.Extensions.DependencyInjection;
+using Repository.Repositories;
 
 namespace Course.BLL.Extensions
 {

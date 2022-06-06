@@ -1,4 +1,4 @@
-﻿namespace Course.BLL.Requests
+﻿namespace Course.BLL.Share.RequestFeatures
 {
     public class CousrsePagingRequest
     {

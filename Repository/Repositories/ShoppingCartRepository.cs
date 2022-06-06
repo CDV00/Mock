@@ -6,7 +6,7 @@ using Course.DAL.Repositories.Abstraction;
 using Microsoft.EntityFrameworkCore;
 using System;
 
-namespace Course.DAL.Repositories
+namespace Repository.Repositories
 {
     public class ShoppingCartRepository : Repository<ShoppingCart, Guid>, IShoppingCartRepository
     {

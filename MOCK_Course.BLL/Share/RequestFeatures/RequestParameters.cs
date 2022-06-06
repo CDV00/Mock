@@ -1,4 +1,4 @@
-﻿namespace Course.BLL.Requests
+﻿namespace Course.BLL.Share.RequestFeatures
 {
     public class RequestParameters
     {
@@ -13,7 +13,7 @@
             }
             set
             {
-                _pageSize = (value > maxPageSize) ? maxPageSize : value;
+                _pageSize = value > maxPageSize ? maxPageSize : value;
             }
         }
     }

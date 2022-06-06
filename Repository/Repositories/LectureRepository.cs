@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Course.DAL.Repositories
+namespace Repository.Repositories
 {
     public class LectureRepository : Repository<Lecture, Guid>, ILectureRepository
     {

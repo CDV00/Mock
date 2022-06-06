@@ -18,5 +18,9 @@ namespace Course.DAL.Queries
         ICourseQuery IncludeCategory();
         ICourseQuery IncludeSection();
         ICourseQuery FilterByOrderd(Guid userId);
+        ICourseQuery FilterByCategoryId(Guid? categoryId);
+        ICourseQuery FilterByAudioLanguageIds(List<Guid?> AudioLanguageIds);
+        ICourseQuery FilterByCloseCaptionIds(List<Guid?> closeCaptionIds);
+        ICourseQuery FilterByLevelIds(List<Guid?> levelIds);
     }
 }

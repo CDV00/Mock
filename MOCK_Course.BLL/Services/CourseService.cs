@@ -10,6 +10,7 @@ using Course.DAL.DTOs;
 using Microsoft.AspNetCore.Identity;
 using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
+using Course.BLL.Share.RequestFeatures;
 
 namespace Course.BLL.Services
 {
@@ -33,6 +34,26 @@ namespace Course.BLL.Services
             _audioLanguageRepository = audioLanguageRepository;
             _closeCaptionRepository = closeCaptionRepository;
             _levelRepository = levelRepository;
+        }
+
+        public async Task<(IList<CourseDTO> courses, MetaData metaData)> GetCoursesAsync(CourseParameters courseParameter)
+        {
+            var coursesDTO = await _cousesRepository.BuildQuery()
+                                                    .IncludeCategory()
+                                                    .IncludeUser()
+                                                    .FilterByCategoryId(courseParameter.CategoryId)
+                                                    .FilterByAudioLanguageIds(courseParameter.AudioLanguageIds)
+                                                    .FilterByCloseCaptionIds(courseParameter.CloseCaptionIds)
+                                                    .FilterByLevelIds(courseParameter.LevelIds)
+                                                    .Skip((courseParameter.PageNumber - 1) * courseParameter.PageSize)
+                                                    .Take(courseParameter.PageSize)
+                                                    .ToListAsync(c => _mapper.Map<CourseDTO>(c));
+
+            var pageList = PagedList<CourseDTO>
+            .ToPagedList(coursesDTO, courseParameter.PageNumber,
+            courseParameter.PageSize);
+
+            return (courses: coursesDTO, metaData: pageList.MetaData);
         }
 
         /// <summary>

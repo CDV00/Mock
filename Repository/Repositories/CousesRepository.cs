@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Course.DAL.Repositories
+namespace Repository.Repositories
 {
     public class CousesRepository : Repository<Courses, Guid>, ICousesRepository
     {
@@ -30,6 +30,8 @@ namespace Course.DAL.Repositories
         {
             return new CourseQuery(_context.Courses.AsQueryable(), _context);
         }
+
+
 
         //public override Task CreateAsync(Courses _object)
         //{
