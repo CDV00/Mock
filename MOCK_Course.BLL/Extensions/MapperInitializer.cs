@@ -14,7 +14,8 @@ namespace Course.BLL.Extensions
             CreateMap<Category, CategoryRequest>().ReverseMap();
             CreateMap<Category, CategoryUpdateRequest>().ReverseMap();
 
-            CreateMap<RegisterRequest, AppUser>().ReverseMap();
+            CreateMap<RegisterRequest, AppUser>().ForMember(des => des.UserName,
+                                                            src => src.MapFrom(opt => opt.Email)).ReverseMap();
 
             // level
             CreateMap<Level, CourseLevelDTO>().ReverseMap();
