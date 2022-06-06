@@ -51,9 +51,9 @@ namespace Course.BLL.Services
             try
             {
                 var subscription = await _subscriptionRepository.BuildQuery()
-                                                           .FilterByUserId(userId)
-                                                           .FilterBySubscriberId(subscripberId)
-                                                           .AsSelectorAsync(s => s);
+                                                                .FilterByUserId(userId)
+                                                                .FilterBySubscriberId(subscripberId)
+                                                                .AsSelectorAsync(s => s);
                 if (subscription is null)
                 {
                     return new BaseResponse(false, null, "can't find subscription");
@@ -83,6 +83,11 @@ namespace Course.BLL.Services
             {
                 return new Response<int>(false, ex.Message, null);
             }
+        }
+
+        public Task GetTotalInstrutorsSubscribing(Guid userId)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<Response<SubscriptionDTO>> IsSubscription(Guid userId, Guid subscriberId)

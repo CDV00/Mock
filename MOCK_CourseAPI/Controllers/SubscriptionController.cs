@@ -45,12 +45,23 @@ namespace CourseAPI.Controllers
         public async Task<ActionResult<Response<int>>> GetTotal()
         {
             var userId = User.GetUserId();
-
             var result = await _subscriptionService.GetTotal(userId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
         }
+
+        [HttpGet("Get-total-Instrutors-Subscribing")]
+        public async Task<ActionResult<Response<int>>> GetTotal()
+        {
+            var userId = User.GetUserId();
+            //var result = await _subscriptionService.GetTotalInstrutorsSubscribing(userId);
+            //if (result.IsSuccess == false)
+            //    return BadRequest(result);
+            //return Ok(result);
+            return Ok();
+        }
+
 
         [HttpDelete()]
         public async Task<ActionResult<BaseResponse>> Delete(Guid SubscriberId)

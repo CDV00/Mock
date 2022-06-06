@@ -12,5 +12,6 @@ namespace Course.BLL.Services.Abstraction
         Task<BaseResponse> Delete(Guid userId, Guid subscripberId);
         Task<Response<int>> GetTotal(Guid userId);
         Task<Response<SubscriptionDTO>> IsSubscription(Guid userId, Guid subscriberId);
+        Task GetTotalInstrutorsSubscribing(Guid userId);
     }
 }
