@@ -116,16 +116,17 @@ namespace CourseAPI.Controllers
         /// <summary>
         /// Get Total Course of User
         /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        //[HttpGet("Get-total/{userId}")]
-        //public async Task<ActionResult<Response<int>>> GetTotal(Guid userId)
-        //{
-        //    var result = await _coursesService.GetTotal(userId);
-        //    if (result.IsSuccess == false)
-        //        return BadRequest(result);
-        //    return Ok(result);
-        //}
+        /// <param name = "userId" ></ param >
+        /// < returns ></ returns >
+        [HttpGet("Get-total-courses")]
+        public async Task<ActionResult<Response<int>>> GetTotal()
+        {
+            var userId = User.GetUserId();
+            var result = await _coursesService.GetTotal(userId);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
 
         /// <summary>
         /// Get all My Course

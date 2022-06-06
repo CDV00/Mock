@@ -7,8 +7,8 @@ namespace Course.BLL.Services.Abstraction
 {
     public interface IUserService
     {
-        Task<Response<UserProfileDTO>> GetProfile(Guid id);
-        Task<Response<UserProfileDTO>> UpdateProfile(Guid userId, UpdateProfileRequest updateProfileRequest);
+        Task<Response<UserDTO>> GetUserProfile(Guid id);
+        Task<Response<UserDTO>> UpdateProfile(Guid userId, UpdateProfileRequest updateProfileRequest);
         Task<BaseResponse> ChangePassword(Guid userId, ChangePasswordRequest changePasswordRequest);
         Task<BaseResponse> CheckExistEmail(string Email);
     }

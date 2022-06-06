@@ -28,31 +28,32 @@ namespace Course.BLL.Services
             _courseReviewRepository = courseReviewRepository;
             _subscriptionRepository = subscriptionRepository;
         }
-        public async Task<Response<UserProfileDTO>> GetProfile(Guid id)
+        public async Task<Response<UserDTO>> GetUserProfile(Guid id)
         {
             try
             {
-                var userProfile = await _userManager.FindByIdAsync(id.ToString());
-                var userProfileResponse = _mapper.Map<UserProfileDTO>(userProfile);
+                var user = await _userManager.FindByIdAsync(id.ToString());
 
-                userProfileResponse.TotalEnrollment = await _enrollmentRepository.BuildQuery()
-                                                                                 .FilterByUserId(id)
-                                                                                 .CountAsync();
-                userProfileResponse.TotalCourse = await _cousesRepository.BuildQuery()
-                                                                         .FilterByUserId(id)
-                                                                         .CountAsync();
-                userProfileResponse.TotalReviewCourse = await _courseReviewRepository.BuildQuery().FilterByUserId(id).CountAsync();
+                var userResponse = _mapper.Map<UserDTO>(user);
+
+                //userProfileResponse.TotalEnrollment = await _enrollmentRepository.BuildQuery()
+                //                                                                 .FilterByUserId(id)
+                //                                                                 .CountAsync();
+                //userProfileResponse.TotalCourse = await _cousesRepository.BuildQuery()
+                //                                                         .FilterByUserId(id)
+                //                                                         .CountAsync();
+                //userProfileResponse.TotalReviewCourse = await _courseReviewRepository.BuildQuery().FilterByUserId(id).CountAsync();
 
                 //userProfileResponse.TotalSubscription = await _subscriptionRepository.GetTotal(id);
 
-                return new Response<UserProfileDTO>(
+                return new Response<UserDTO>(
                     true,
-                    userProfileResponse
+                    userResponse
                 );
             }
             catch (Exception ex)
             {
-                return new Response<UserProfileDTO>(false, ex.Message, null);
+                return new Response<UserDTO>(false, ex.Message, null);
             }
         }
         public async Task<BaseResponse> ChangePassword(Guid userId, ChangePasswordRequest changePasswordRequest)
@@ -74,16 +75,16 @@ namespace Course.BLL.Services
                 //update user password
                 await _userManager.UpdateAsync(user);
                 //return BadRequest("request is incorrect");
-                return new Response<UserProfileDTO>(true, null, null);
+                return new Response<UserDTO>(true, null, null);
             }
             catch (Exception ex)
             {
-                return new Responses<UserProfileDTO>(false, ex.Message, null);
+                return new Responses<UserDTO>(false, ex.Message, null);
             }
         }
 
 
-        public async Task<Response<UserProfileDTO>> UpdateProfile(Guid id, UpdateProfileRequest updateProfileRequest)
+        public async Task<Response<UserDTO>> UpdateProfile(Guid id, UpdateProfileRequest updateProfileRequest)
         {
             try
             {
@@ -94,15 +95,15 @@ namespace Course.BLL.Services
                 _mapper.Map(updateProfileRequest, user);
                 await _userManager.UpdateAsync(user);
 
-                return new Response<UserProfileDTO>(
+                return new Response<UserDTO>(
                     true,
-                    _mapper.Map<UserProfileDTO>(user)
+                    _mapper.Map<UserDTO>(user)
                 );
 
             }
             catch (Exception ex)
             {
-                return new Response<UserProfileDTO>(false, ex.Message, null);
+                return new Response<UserDTO>(false, ex.Message, null);
             }
         }
 
