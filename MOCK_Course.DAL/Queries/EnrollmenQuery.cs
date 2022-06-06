@@ -21,8 +21,15 @@ namespace Course.DAL.Queries
         { _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext)); }
 
 
-        public ISubscriptionQuery FilterByOwnUserId(Guid UserId)
+        public ISubscriptionQuery FilterByUserId(Guid UserId)
         {
+            Query.Where(type => type.UserId == UserId);
+            return this;
+        }
+
+        public ISubscriptionQuery FilterBySubscriberId(Guid subscriberId)
+        {
+            Query.Where(type => type.SubscriberId == subscriberId);
             return this;
         }
 

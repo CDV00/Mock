@@ -9,5 +9,8 @@ namespace Course.BLL.Services.Abstraction
     public interface ISubscriptionService
     {
         Task<Response<SubscriptionDTO>> Add(Guid userId, Guid SubscripberId);
+        Task<BaseResponse> Delete(Guid userId, Guid subscripberId);
+        Task<Response<int>> GetTotal(Guid userId);
+        Task<Response<SubscriptionDTO>> IsSubscription(Guid userId, Guid subscriberId);
     }
 }

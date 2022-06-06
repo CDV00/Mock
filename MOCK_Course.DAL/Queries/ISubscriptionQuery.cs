@@ -6,7 +6,8 @@ namespace Course.DAL.Queries
 {
     public interface ISubscriptionQuery : IQuery<Subscription>
     {
-        ISubscriptionQuery FilterByOwnUserId(Guid UserId);
+        ISubscriptionQuery FilterBySubscriberId(Guid subscriberId);
+        ISubscriptionQuery FilterByUserId(Guid UserId);
         ISubscriptionQuery IncludeUser();
     }
 }

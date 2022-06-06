@@ -14,6 +14,7 @@ namespace Course.DAL.Configuration
                    .HasForeignKey(s => s.UserId)
                    .OnDelete(DeleteBehavior.NoAction);
 
+
             //builder.HasOne(s => s.Subscriber)
             //    .WithMany(u => u.Subscriptions)
             //    .HasForeignKey(s => s.SubscriberId);
