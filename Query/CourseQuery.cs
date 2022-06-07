@@ -137,6 +137,23 @@ namespace Course.DAL.Queries
             return this;
         }
 
+        public ICourseQuery orderBy(string orderBy)
+        {
+            if (orderBy == null)
+                return this;
+
+            switch (orderBy)
+            {
+                case "date":
+                    Query = Query.OrderBy(c => c.CreatedBy);
+                    break;
+                case "subscription":
+                    Query = Query.OrderBy(c => c.Enrollments.Count());
+                    break;
+            }
+
+            return this;
+        }
 
         public ICourseQuery IncludeCategory()
         {

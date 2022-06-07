@@ -50,7 +50,6 @@ namespace CourseAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-
             }
             else
             {
