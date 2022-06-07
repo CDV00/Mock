@@ -22,5 +22,7 @@ namespace Course.DAL.Queries
         ICourseQuery FilterByAudioLanguageIds(List<Guid?> AudioLanguageIds);
         ICourseQuery FilterByCloseCaptionIds(List<Guid?> closeCaptionIds);
         ICourseQuery FilterByLevelIds(List<Guid?> levelIds);
+        ICourseQuery FilterByKeyword(string Keyword);
+        ICourseQuery ApplySort(string orderby);
     }
 }

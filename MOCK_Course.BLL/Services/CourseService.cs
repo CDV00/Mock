@@ -41,10 +41,12 @@ namespace Course.BLL.Services
             var coursesDTO = await _cousesRepository.BuildQuery()
                                                     .IncludeCategory()
                                                     .IncludeUser()
+                                                    .FilterByKeyword(courseParameter.Keyword.ToUpper())
                                                     .FilterByCategoryId(courseParameter.CategoryId)
                                                     .FilterByAudioLanguageIds(courseParameter.AudioLanguageIds)
                                                     .FilterByCloseCaptionIds(courseParameter.CloseCaptionIds)
                                                     .FilterByLevelIds(courseParameter.LevelIds)
+                                                    .ApplySort(courseParameter.Keyword)
                                                     .Skip((courseParameter.PageNumber - 1) * courseParameter.PageSize)
                                                     .Take(courseParameter.PageSize)
                                                     .ToListAsync(c => _mapper.Map<CourseDTO>(c));

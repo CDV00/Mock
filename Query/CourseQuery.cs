@@ -6,6 +6,8 @@ using SES.HomeServices.Data.Queries.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Course.DAL.Queries
@@ -91,31 +93,14 @@ namespace Course.DAL.Queries
             if (AudioLanguageIds == null)
                 return this;
 
-            var audioLanguages = _dbContext.AudioLanguages.AsQueryable()
-                                                          .Where(a => AudioLanguageIds.Contains(a.Id))
-                                                          .Select(a => a);
-
-            foreach (var item in audioLanguages)
-            {
-                Query = Query.Where(c => c.AudioLanguages.Contains(item));
-            }
+            Query = Query.Where(c => c.AudioLanguages.Any(c => AudioLanguageIds.Contains(c.Id)));
 
             return this;
         }
 
         public ICourseQuery FilterByCloseCaptionIds(List<Guid?> closeCaptionIds)
         {
-            if (closeCaptionIds == null)
-                return this;
-
-            var closeCaptions = _dbContext.CloseCaptions.AsQueryable()
-                                                          .Where(a => closeCaptionIds.Contains(a.Id))
-                                                          .Select(a => a);
-
-            foreach (var item in closeCaptions)
-            {
-                Query = Query.Where(c => c.CloseCaptions.Contains(item));
-            }
+            Query = Query.Where(c => c.CloseCaptions.Any(c => closeCaptionIds.Contains(c.Id)));
 
             return this;
         }
@@ -125,35 +110,66 @@ namespace Course.DAL.Queries
             if (levelIds == null)
                 return this;
 
-            var levels = _dbContext.Levels.AsQueryable()
-                                          .Where(a => levelIds.Contains(a.Id))
-                                          .Select(a => a);
-
-            foreach (var item in levels)
-            {
-                Query = Query.Where(c => c.Levels.Contains(item));
-            }
+            Query = Query.Where(c => c.Levels.Any(c => levelIds.Contains(c.Id)));
 
             return this;
         }
 
-        public ICourseQuery orderBy(string orderBy)
+        //public ICourseQuery orderBy(string orderBy)
+        //{
+        //    if (orderBy == null)
+        //        return this;
+
+        //    switch (orderBy)
+        //    {
+        //        case "date":
+        //            Query = Query.OrderBy(c => c.CreatedBy);
+        //            break;
+        //        case "subscription":
+        //            Query = Query.OrderBy(c => c.Enrollments.Count());
+        //            break;
+        //    }
+
+        //    return this;
+        //}
+
+        public ICourseQuery ApplySort(string orderby)
         {
-            if (orderBy == null)
-                return this;
-
-            switch (orderBy)
+            if (string.IsNullOrWhiteSpace(orderby))
             {
-                case "date":
-                    Query = Query.OrderBy(c => c.CreatedBy);
-                    break;
-                case "subscription":
-                    Query = Query.OrderBy(c => c.Enrollments.Count());
-                    break;
+                return this;
             }
 
+            var orderParams = orderby.Trim().Split(',');
+            var propertyInfos = typeof(Courses).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            var orderQueryBuilder = new StringBuilder();
+            foreach (var param in orderParams)
+            {
+                if (string.IsNullOrWhiteSpace(param))
+                    continue;
+                var propertyFromQueryName = param.Split(" ")[0];
+                var objectProperty = propertyInfos.FirstOrDefault(pi => pi.Name.Equals(propertyFromQueryName, StringComparison.InvariantCultureIgnoreCase));
+                if (objectProperty == null)
+                    continue;
+                var sortingOrder = param.EndsWith(" desc") ? "descending" : "ascending";
+                orderQueryBuilder.Append($"{objectProperty.Name} {sortingOrder}, ");
+            }
+            var orderQuery = orderQueryBuilder.ToString().TrimEnd(',', ' ');
+            if (string.IsNullOrEmpty(orderQuery))
+            {
+                return this;
+            }
             return this;
         }
+
+        public ICourseQuery FilterByKeyword(string Keyword)
+        {
+            Query = Query.Where(c => c.Title.ToUpper().Contains(Keyword) || c.User.Fullname
+                                            .ToUpper().Contains(Keyword) || c.Description
+                                            .ToUpper().Contains(Keyword));
+            return this;
+        }
+
 
         public ICourseQuery IncludeCategory()
         {
