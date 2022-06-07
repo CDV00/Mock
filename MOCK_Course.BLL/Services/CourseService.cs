@@ -6,8 +6,6 @@ using Course.BLL.DTO;
 using Course.BLL.Requests;
 using Course.DAL.Models;
 using Course.BLL.Responses;
-using Course.DAL.DTOs;
-using Microsoft.AspNetCore.Identity;
 using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
 using Course.BLL.Share.RequestFeatures;
@@ -41,12 +39,12 @@ namespace Course.BLL.Services
             var coursesDTO = await _cousesRepository.BuildQuery()
                                                     .IncludeCategory()
                                                     .IncludeUser()
-                                                    .FilterByKeyword(courseParameter.Keyword.ToUpper())
+                                                    .FilterByKeyword(courseParameter.Keyword)
                                                     .FilterByCategoryId(courseParameter.CategoryId)
                                                     .FilterByAudioLanguageIds(courseParameter.AudioLanguageIds)
                                                     .FilterByCloseCaptionIds(courseParameter.CloseCaptionIds)
                                                     .FilterByLevelIds(courseParameter.LevelIds)
-                                                    .ApplySort(courseParameter.Keyword)
+                                                    .ApplySort(courseParameter.Orderby)
                                                     .Skip((courseParameter.PageNumber - 1) * courseParameter.PageSize)
                                                     .Take(courseParameter.PageSize)
                                                     .ToListAsync(c => _mapper.Map<CourseDTO>(c));
@@ -102,7 +100,6 @@ namespace Course.BLL.Services
             {
                 var myPurchase = await _cousesRepository.BuildQuery()
                                                         .IncludeCategory()
-                                                        //.FilterByUserId(userId)
                                                         .FilterByOrderd(userId)
                                                         .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 

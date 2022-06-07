@@ -26,9 +26,10 @@ namespace Course.DAL.Queries
 
         public ICourseQuery FilterByOrderd(Guid userId)
         {
-            var orderIds = _dbContext.Orders.Where(o => o.UserId == userId).Select(o => o.CourseId);
+            //var orderIds = _dbContext.Orders.Where(o => o.UserId == userId).Select(o => o.CourseId);
+            //Query = Query.Where(type => orderIds.Contains(type.Id));
 
-            Query = Query.Where(type => orderIds.Contains(type.Id));
+            Query.Where(c => c.Orders.Any(o => o.UserId == userId));
             return this;
         }
 
@@ -61,7 +62,6 @@ namespace Course.DAL.Queries
         /// <returns></returns>
         public ICourseQuery FilterById(Guid Id)
         {
-
             Query = Query.Where(type => type.Id == Id);
             return this;
         }
@@ -99,6 +99,8 @@ namespace Course.DAL.Queries
 
         public ICourseQuery FilterByCloseCaptionIds(List<Guid?> closeCaptionIds)
         {
+            if (closeCaptionIds == null)
+                return this;
             Query = Query.Where(c => c.CloseCaptions.Any(c => closeCaptionIds.Contains(c.Id)));
 
             return this;
@@ -135,9 +137,13 @@ namespace Course.DAL.Queries
 
         public ICourseQuery FilterByKeyword(string Keyword)
         {
-            Query = Query.Where(c => c.Title.ToUpper().Contains(Keyword) || c.User.Fullname
-                                            .ToUpper().Contains(Keyword) || c.Description
-                                            .ToUpper().Contains(Keyword));
+            if (string.IsNullOrWhiteSpace(Keyword))
+                return this;
+
+            var KEYWORD = Keyword.ToUpper();
+            Query = Query.Where(c => c.Title.ToUpper().Contains(KEYWORD) || c.User.Fullname
+                                            .ToUpper().Contains(KEYWORD) || c.Description
+                                            .ToUpper().Contains(KEYWORD));
             return this;
         }
 

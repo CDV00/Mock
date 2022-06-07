@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Linq.Dynamic.Core;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -177,6 +178,8 @@ namespace SES.HomeServices.Data.Queries.Abstractions
             {
                 return this;
             }
+
+            Query = Query.OrderBy(orderQuery);
             return this;
         }
     }
