@@ -296,8 +296,8 @@ namespace Course.BLL.Services
                 //_userManager.toke
                 // From Address
                 var senderEmail = _configurations["SMTP:Sender"];
-                //string url = $"{_configurations["AppUrl"]}/ResetPassword?email={email}&token={validToken}";
-                string url = $"http://localhost:3000/reset-pass?email={email}&token={token}";
+                string url = $"{_configurations["AppUrl"]}/ResetPassword?email={email}&token={token}";
+                //string url = $"http://localhost:3000/reset-pass?email={email}&token={token}";
                 await _emailService.SendEmailAsync(senderEmail, user.Email, "FORGET PASSWORD", "<h1>Follow the instruction to reset your password</h1>" + $"<p>To reset your password <a href={url}> click here.</a></p>");
 
                 return new Response<BaseResponse>(true, null, null);
