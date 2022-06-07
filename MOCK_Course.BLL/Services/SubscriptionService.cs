@@ -95,15 +95,33 @@ namespace Course.BLL.Services
             try
             {
                 var subscription = await _subscriptionRepository.BuildQuery()
-                                                           .FilterByUserId(userId)
-                                                           .FilterBySubscriberId(subscriberId)
-                                                           .AsSelectorAsync(s => _mapper.Map<SubscriptionDTO>(s));
+                                                                .FilterByUserId(userId)
+                                                                .FilterBySubscriberId(subscriberId)
+                                                                .AsSelectorAsync(s => _mapper.Map<SubscriptionDTO>(s));
 
                 return new Response<SubscriptionDTO>(true, subscription);
             }
             catch (Exception ex)
             {
                 return new Response<SubscriptionDTO>(false, ex.Message, null);
+            }
+        }
+
+
+        public async Task<Responses<UserDTO>> GetUserSubscription(Guid userId)
+        {
+            try
+            {
+                var user = await _subscriptionRepository.BuildQuery()
+                                                        .FilterByUserId(userId)
+                                                        .IncludeSubcriber()
+                                                        .ToListAsync(s => _mapper.Map<UserDTO>(s));
+
+                return new Responses<UserDTO>(true, user);
+            }
+            catch (Exception ex)
+            {
+                return new Responses<UserDTO>(false, ex.Message, null);
             }
         }
     }
