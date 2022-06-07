@@ -128,5 +128,29 @@ namespace Course.BLL.Services
                 return new Response<int>(false, ex.Message, null);
             }
         }
+
+        public async Task<BaseResponse> IsCourseReview(Guid userId, Guid courseId)
+       {
+           try
+           {
+               var courseReview = await _courseReviewRepository.BuildQuery()
+                                                         .IncludeEnrollment()
+                                                         .IncludeUser()
+                                                         .IncludeCourse()
+                                                         .FilterByUserId(userId)
+                                                         .FilterByCourseId(courseId)
+                                                         .AsSelectorAsync(c => _mapper.Map<CourseReviewDTO>(c));
+                if(courseReview == null)
+                {
+                    return new BaseResponse(false);
+                }
+                //var courseResponse = _mapper.Map<CourseDTO>(course);
+                return new BaseResponse(true);
+           }
+           catch (Exception ex)
+           {
+               return new BaseResponse(false, ex.Message, null);
+           }
+       }
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using CourseAPI.Extensions.ControllerBase;
 using Course.BLL.Services.Abstraction;
+using System;
 
 namespace CourseAPI.Controllers
 {
@@ -36,12 +37,12 @@ namespace CourseAPI.Controllers
         }
 
         // iscompletion
-        [HttpGet("Is-Completion")]
-        public async Task<ActionResult<BaseResponse>> IsCompletion(LectureCompletionRequest lessonCompletionRequest)
+        [HttpGet("Is-Completion{lectureId}")]
+        public async Task<ActionResult<BaseResponse>> IsCompletion(Guid lectureId)
         {
             var userId = User.GetUserId();
-            var result = await _lessonCompletionService.IsCompletion(userId, lessonCompletionRequest);
-            if (result.IsSuccess == false)
+            var result = await _lessonCompletionService.IsCompletion(userId, lectureId);
+            if (result.IsSuccess == false && result.Message != null)
                 return BadRequest(result);
             return Ok(result);
         }

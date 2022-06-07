@@ -41,14 +41,15 @@ namespace Course.BLL.Services
                 return new Response<BaseResponse>(false, ex.Message, null);
             }
         }
-        public async Task<BaseResponse> IsCompletion(Guid userId, LectureCompletionRequest lessonCompletionRequest)
+        public async Task<BaseResponse> IsCompletion(Guid userId, Guid lectureId)
         {
             try
             {
-                var lessoncompletion = _mapper.Map<LectureCompletion>(lessonCompletionRequest);
-                lessoncompletion.UserId = userId;
-                var Result = await _lessonCompletionRepository.IsCompletion(lessoncompletion);
-
+                LectureCompletionRequest lectureCompletionRequest = new LectureCompletionRequest();
+                lectureCompletionRequest.LectureId = lectureId;
+                var lectureCompletion = _mapper.Map<LectureCompletion>(lectureCompletionRequest);
+                lectureCompletion.UserId = userId;
+                var Result = await _lessonCompletionRepository.IsCompletion(lectureCompletion);
                 return new BaseResponse(Result);
             }
             catch (Exception ex)
