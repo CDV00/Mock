@@ -26,6 +26,7 @@ namespace Course.DAL.Models
 
         public decimal Price { get; set; } = 0;
         //public decimal DiscountPrice { get; set; } = 0;
+        public bool IsFree { get; set; } = true;
 
         public Guid CategoryId { get; set; }
         public Category Category { get; set; }

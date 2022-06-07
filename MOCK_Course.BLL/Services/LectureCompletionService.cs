@@ -41,5 +41,20 @@ namespace Course.BLL.Services
                 return new Response<BaseResponse>(false, ex.Message, null);
             }
         }
+        public async Task<BaseResponse> IsCompletion(Guid userId, LectureCompletionRequest lessonCompletionRequest)
+        {
+            try
+            {
+                var lessoncompletion = _mapper.Map<LectureCompletion>(lessonCompletionRequest);
+                lessoncompletion.UserId = userId;
+                var Result = await _lessonCompletionRepository.IsCompletion(lessoncompletion);
+
+                return new BaseResponse(Result);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse(false, ex.Message, null);
+            }
+        }
     }
 }

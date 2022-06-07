@@ -369,8 +369,11 @@ namespace Course.BLL.Services
         /// <exception cref="NotImplementedException"></exception>
         private async Task<LoginDTO> FacebookLogin(ExternalLoginResquest externalLoginResquest)
         {
+            string AppId = _configurations["AuthSettings:Facebook:AppId"];
+            string AppSecret = _configurations["AuthSettings:Facebook:AppSecret"];
+            string url = $"https://graph.facebook.com/oauth/access_token?client_id={AppId}&client_secret={AppSecret}&grant_type=client_credentials";
             // 1.generate an app access token
-            var appAccessTokenResponse = await Client.GetStringAsync($"https://graph.facebook.com/oauth/access_token?client_id={_configurations["AuthSettings:Facebook:AppId"]}&client_secret={_configurations["AuthSettings:Facebook:AppSecret"]}&grant_type=client_credentials");
+            var appAccessTokenResponse = await Client.GetStringAsync(url);
             var appAccessToken = JsonConvert.DeserializeObject<FacebookAppAccessToken>(appAccessTokenResponse);
             // 2. validate the user access token
             var userAccessTokenValidationResponse = await Client.GetStringAsync($"https://graph.facebook.com/debug_token?input_token={externalLoginResquest.Token}&access_token={appAccessToken.AccessToken}");

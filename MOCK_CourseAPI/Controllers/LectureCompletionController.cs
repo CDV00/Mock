@@ -34,5 +34,16 @@ namespace CourseAPI.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
+
+        // iscompletion
+        [HttpGet("Is-Completion")]
+        public async Task<ActionResult<BaseResponse>> IsCompletion(LectureCompletionRequest lessonCompletionRequest)
+        {
+            var userId = User.GetUserId();
+            var result = await _lessonCompletionService.IsCompletion(userId, lessonCompletionRequest);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
     }
 }

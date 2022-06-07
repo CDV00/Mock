@@ -31,7 +31,8 @@ namespace Course.BLL.Services
         {
             try
             {
-                var courseCompletion = await _courseCompletionRepository.FindByCondition(c => c.CourseId == courseId && c.UserId == userId).FirstOrDefaultAsync();
+                var courseCompletion = await _courseCompletionRepository.FindByCondition(c => c.CourseId == courseId && c.UserId == userId)
+                                                                        .FirstOrDefaultAsync();
 
                 if (courseCompletion == null)
                     return new BaseResponse(false);

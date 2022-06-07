@@ -303,7 +303,26 @@ namespace Course.BLL.Services
                 return new Response<int>(false, ex.Message, null);
             }
         }
+        /*public async Task<BaseResponse> c(Guid id)
+        {
+            try
+            {
+                var course = await _cousesRepository.BuildQuery()
+                                                    .IncludeUser()
+                                                    .IncludeEr()
+                                                    .IncludeSection()
+                                                    .IncludeUser()
+                                                    .FilterById(id)
+                                                    .AsSelectorAsync();
 
+                //var courseResponse = _mapper.Map<CourseDTO>(course);
+                return new BaseResponse(true);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse(false, ex.Message, null);
+            }
+        }*/
         //public async Task<Response<CourseForDetailDTO>> GetDetail(Guid id)
         //{
         //    try
