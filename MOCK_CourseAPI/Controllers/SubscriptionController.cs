@@ -83,5 +83,15 @@ namespace CourseAPI.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
+        [HttpGet("GetAllSubscripber")]
+        public async Task<ActionResult<UserDTO>> GetUserSubscription()
+        {
+            var userId = User.GetUserId();
+            var result = await _subscriptionService.GetUserSubscription(userId);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
     }
 }

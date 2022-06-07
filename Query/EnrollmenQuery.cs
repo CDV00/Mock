@@ -27,6 +27,12 @@ namespace Course.DAL.Queries
             return this;
         }
 
+        public ISubscriptionQuery IncludeSubcriber()
+        {
+            Query.Include(u => u.Subscriber);
+            return this;
+        }
+
         public ISubscriptionQuery FilterBySubscriberId(Guid subscriberId)
         {
             Query.Where(type => type.SubscriberId == subscriberId);
