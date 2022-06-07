@@ -1,6 +1,5 @@
 ﻿using Course.DAL.Data;
 using Course.DAL.Models;
-using Course.DAL.Queries.Abstraction;
 using Microsoft.EntityFrameworkCore;
 using SES.HomeServices.Data.Queries.Abstractions;
 using System;
@@ -133,34 +132,6 @@ namespace Course.DAL.Queries
         //    return this;
         //}
 
-        public ICourseQuery ApplySort(string orderby)
-        {
-            if (string.IsNullOrWhiteSpace(orderby))
-            {
-                return this;
-            }
-
-            var orderParams = orderby.Trim().Split(',');
-            var propertyInfos = typeof(Courses).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            var orderQueryBuilder = new StringBuilder();
-            foreach (var param in orderParams)
-            {
-                if (string.IsNullOrWhiteSpace(param))
-                    continue;
-                var propertyFromQueryName = param.Split(" ")[0];
-                var objectProperty = propertyInfos.FirstOrDefault(pi => pi.Name.Equals(propertyFromQueryName, StringComparison.InvariantCultureIgnoreCase));
-                if (objectProperty == null)
-                    continue;
-                var sortingOrder = param.EndsWith(" desc") ? "descending" : "ascending";
-                orderQueryBuilder.Append($"{objectProperty.Name} {sortingOrder}, ");
-            }
-            var orderQuery = orderQueryBuilder.ToString().TrimEnd(',', ' ');
-            if (string.IsNullOrEmpty(orderQuery))
-            {
-                return this;
-            }
-            return this;
-        }
 
         public ICourseQuery FilterByKeyword(string Keyword)
         {

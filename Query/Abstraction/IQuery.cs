@@ -74,5 +74,6 @@ namespace Course.DAL.Queries.Abstraction
         /// <returns></returns>
         Task<int> CountAsync();
         Task<TOutput> AsSelectorAsync<TOutput>(Expression<Func<TEntity, TOutput>> selector);
+        IQuery<TEntity> ApplySort(string orderby);
     }
 }

@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SES.HomeServices.Data.Queries.Abstractions
@@ -146,6 +148,36 @@ namespace SES.HomeServices.Data.Queries.Abstractions
         public async Task<int> CountAsync()
         {
             return await Query.CountAsync().ConfigureAwait(false);
+        }
+
+
+        public IQuery<TEntity> ApplySort(string orderby)
+        {
+            if (string.IsNullOrWhiteSpace(orderby))
+            {
+                return this;
+            }
+
+            var orderParams = orderby.Trim().Split(',');
+            var propertyInfos = typeof(TEntity).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            var orderQueryBuilder = new StringBuilder();
+            foreach (var param in orderParams)
+            {
+                if (string.IsNullOrWhiteSpace(param))
+                    continue;
+                var propertyFromQueryName = param.Split(" ")[0];
+                var objectProperty = propertyInfos.FirstOrDefault(pi => pi.Name.Equals(propertyFromQueryName, StringComparison.InvariantCultureIgnoreCase));
+                if (objectProperty == null)
+                    continue;
+                var sortingOrder = param.EndsWith(" desc") ? "descending" : "ascending";
+                orderQueryBuilder.Append($"{objectProperty.Name} {sortingOrder}, ");
+            }
+            var orderQuery = orderQueryBuilder.ToString().TrimEnd(',', ' ');
+            if (string.IsNullOrEmpty(orderQuery))
+            {
+                return this;
+            }
+            return this;
         }
     }
 }
