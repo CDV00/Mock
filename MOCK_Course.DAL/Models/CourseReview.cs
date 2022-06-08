@@ -9,5 +9,10 @@ namespace Course.DAL.Models
 
         public Guid EnrollmentId { get; set; }
         public Enrollment Enrollment { get; set; }
+
+        public CourseReview()
+        {
+            CreatedAt = DateTime.Now;
+        }
     }
 }

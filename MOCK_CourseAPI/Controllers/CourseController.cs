@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using CourseAPI.Extensions.ControllerBase;
 using Course.BLL.Services.Abstraction;
 using System.Text.Json;
+using System.Collections.ObjectModel;
 
 namespace CourseAPI.Controllers
 {
@@ -32,6 +33,14 @@ namespace CourseAPI.Controllers
                                  JsonSerializer.Serialize(Pageresult.metaData));
 
             return Ok(Pageresult.courses);
+        }
+
+        [HttpGet("Get-time-zone")]
+        [AllowAnonymous]
+        public ActionResult<ReadOnlyCollection<TimeZoneInfo>> GetTimeZone()
+        {
+            ReadOnlyCollection<TimeZoneInfo> zones = TimeZoneInfo.GetSystemTimeZones();
+            return zones;
         }
 
         /// <summary>
