@@ -13,5 +13,6 @@ namespace Course.BLL.Services.Abstraction
         Task<Response<CourseReviewDTO>> Update(Guid id, CourseReviewUpdateRequest courseReviewUpdateRequest);
         Task<BaseResponse> Delete(Guid id);
         Task<Response<int>> GetTotal(Guid userId);
+        Task<BaseResponse> IsCourseReview(Guid userId, Guid courseId);
     }
 }

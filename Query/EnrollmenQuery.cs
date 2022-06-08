@@ -29,7 +29,7 @@ namespace Course.DAL.Queries
 
         public ISubscriptionQuery IncludeSubcriber()
         {
-            Query.Include(u => u.Subscriber);
+            Query.Include(u => u.Subscriber).Load();
             return this;
         }
 

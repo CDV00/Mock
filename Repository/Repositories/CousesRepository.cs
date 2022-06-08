@@ -30,7 +30,10 @@ namespace Repository.Repositories
         {
             return new CourseQuery(_context.Courses.AsQueryable(), _context);
         }
-
+        public async Task<bool> IsFree(Guid courseId)
+        {
+            return await _context.Courses.Where(c=> c.Id == courseId).Select(c=> c.IsFree).FirstOrDefaultAsync();
+        }
 
 
         //public override Task CreateAsync(Courses _object)

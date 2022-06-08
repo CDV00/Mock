@@ -314,7 +314,18 @@ namespace Course.BLL.Services
                 return new Response<int>(false, ex.Message, null);
             }
         }
-
+        public async Task<BaseResponse> IsFree(Guid courseId)
+        {
+            try
+            {
+                bool result = await _cousesRepository.IsFree(courseId);
+                return new BaseResponse(result);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse(false, ex.Message, null);
+            }
+        }
         //public async Task<Response<CourseForDetailDTO>> GetDetail(Guid id)
         //{
         //    try
