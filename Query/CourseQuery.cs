@@ -1,11 +1,12 @@
 ﻿using Course.DAL.Data;
 using Course.DAL.Models;
-using Course.DAL.Queries.Abstraction;
 using Microsoft.EntityFrameworkCore;
 using SES.HomeServices.Data.Queries.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Course.DAL.Queries
@@ -25,9 +26,10 @@ namespace Course.DAL.Queries
 
         public ICourseQuery FilterByOrderd(Guid userId)
         {
-            var orderIds = _dbContext.Orders.Where(o => o.UserId == userId).Select(o => o.CourseId);
+            //var orderIds = _dbContext.Orders.Where(o => o.UserId == userId).Select(o => o.CourseId);
+            //Query = Query.Where(type => orderIds.Contains(type.Id));
 
-            Query = Query.Where(type => orderIds.Contains(type.Id));
+            Query.Where(c => c.Orders.Any(o => o.UserId == userId));
             return this;
         }
 
@@ -60,7 +62,6 @@ namespace Course.DAL.Queries
         /// <returns></returns>
         public ICourseQuery FilterById(Guid Id)
         {
-
             Query = Query.Where(type => type.Id == Id);
             return this;
         }
@@ -91,14 +92,7 @@ namespace Course.DAL.Queries
             if (AudioLanguageIds == null)
                 return this;
 
-            var audioLanguages = _dbContext.AudioLanguages.AsQueryable()
-                                                          .Where(a => AudioLanguageIds.Contains(a.Id))
-                                                          .Select(a => a);
-
-            foreach (var item in audioLanguages)
-            {
-                Query = Query.Where(c => c.AudioLanguages.Contains(item));
-            }
+            Query = Query.Where(c => c.AudioLanguages.Any(c => AudioLanguageIds.Contains(c.Id)));
 
             return this;
         }
@@ -107,15 +101,7 @@ namespace Course.DAL.Queries
         {
             if (closeCaptionIds == null)
                 return this;
-
-            var closeCaptions = _dbContext.CloseCaptions.AsQueryable()
-                                                          .Where(a => closeCaptionIds.Contains(a.Id))
-                                                          .Select(a => a);
-
-            foreach (var item in closeCaptions)
-            {
-                Query = Query.Where(c => c.CloseCaptions.Contains(item));
-            }
+            Query = Query.Where(c => c.CloseCaptions.Any(c => closeCaptionIds.Contains(c.Id)));
 
             return this;
         }
@@ -125,35 +111,42 @@ namespace Course.DAL.Queries
             if (levelIds == null)
                 return this;
 
-            var levels = _dbContext.Levels.AsQueryable()
-                                          .Where(a => levelIds.Contains(a.Id))
-                                          .Select(a => a);
-
-            foreach (var item in levels)
-            {
-                Query = Query.Where(c => c.Levels.Contains(item));
-            }
+            Query = Query.Where(c => c.Levels.Any(c => levelIds.Contains(c.Id)));
 
             return this;
         }
 
-        public ICourseQuery orderBy(string orderBy)
+        //public ICourseQuery orderBy(string orderBy)
+        //{
+        //    if (orderBy == null)
+        //        return this;
+
+        //    switch (orderBy)
+        //    {
+        //        case "date":
+        //            Query = Query.OrderBy(c => c.CreatedBy);
+        //            break;
+        //        case "subscription":
+        //            Query = Query.OrderBy(c => c.Enrollments.Count());
+        //            break;
+        //    }
+
+        //    return this;
+        //}
+
+
+        public ICourseQuery FilterByKeyword(string Keyword)
         {
-            if (orderBy == null)
+            if (string.IsNullOrWhiteSpace(Keyword))
                 return this;
 
-            switch (orderBy)
-            {
-                case "date":
-                    Query = Query.OrderBy(c => c.CreatedBy);
-                    break;
-                case "subscription":
-                    Query = Query.OrderBy(c => c.Enrollments.Count());
-                    break;
-            }
-
+            var KEYWORD = Keyword.ToUpper();
+            Query = Query.Where(c => c.Title.ToUpper().Contains(KEYWORD) || c.User.Fullname
+                                            .ToUpper().Contains(KEYWORD) || c.Description
+                                            .ToUpper().Contains(KEYWORD));
             return this;
         }
+
 
         public ICourseQuery IncludeCategory()
         {

@@ -28,7 +28,6 @@ namespace CourseAPI.Controllers
             var result = await _audioLanguageService.GetAll();
             if (result.IsSuccess == false)
                 return BadRequest(result);
-            return BadRequest(result);
             return Ok(result);
         }
     }
