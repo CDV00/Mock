@@ -14,6 +14,6 @@ namespace Course.BLL.Requests
         public List<Guid?> CloseCaptionIds { get; set; }
         public List<Guid?> LevelIds { get; set; }
         public string Orderby { get; set; }
-        public bool? IsSeller { get; set; }
+        public bool? IsDiscount { get; set; }
     }
 }

@@ -34,7 +34,7 @@ namespace Course.BLL.Services
             _levelRepository = levelRepository;
         }
 
-        public async Task<(IList<CourseDTO> courses, MetaData metaData)> GetCoursesAsync(CourseParameters courseParameter)
+        public async Task<PagedList<CourseDTO>> GetCoursesAsync(CourseParameters courseParameter)
         {
             var coursesDTO = await _cousesRepository.BuildQuery()
                                                     .IncludeCategory()
@@ -44,17 +44,24 @@ namespace Course.BLL.Services
                                                     .FilterByAudioLanguageIds(courseParameter.AudioLanguageIds)
                                                     .FilterByCloseCaptionIds(courseParameter.CloseCaptionIds)
                                                     .FilterByLevelIds(courseParameter.LevelIds)
-                                                    .FilterByDiscount(courseParameter.IsSeller)
+                                                    .FilterByDiscount(courseParameter.IsDiscount)
                                                     .ApplySort(courseParameter.Orderby)
                                                     .Skip((courseParameter.PageNumber - 1) * courseParameter.PageSize)
                                                     .Take(courseParameter.PageSize)
                                                     .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 
-            var pageList = PagedList<CourseDTO>
-            .ToPagedList(coursesDTO, courseParameter.PageNumber,
-            courseParameter.PageSize);
+            var count = await _cousesRepository.BuildQuery()
+                                                    .FilterByKeyword(courseParameter.Keyword)
+                                                    .FilterByCategoryId(courseParameter.CategoryId)
+                                                    .FilterByAudioLanguageIds(courseParameter.AudioLanguageIds)
+                                                    .FilterByCloseCaptionIds(courseParameter.CloseCaptionIds)
+                                                    .FilterByLevelIds(courseParameter.LevelIds)
+                                                    .FilterByDiscount(courseParameter.IsDiscount)
+                                                    .CountAsync();
+            var pageList = new PagedList<CourseDTO>(coursesDTO, count, courseParameter.PageNumber, courseParameter.PageSize);
 
-            return (courses: coursesDTO, metaData: pageList.MetaData);
+            return pageList;
+            //return (courses: new Response<IList<CourseDTO>>(true , coursesDTO), metaData: pageList.MetaData);
         }
 
         /// <summary>
@@ -231,7 +238,7 @@ namespace Course.BLL.Services
                                                     .IncludeCategory()
                                                     .IncludeLevel()
                                                     .IncludeLanguage()
-                                                    .AsSelectorAsync(c=>c);
+                                                    .AsSelectorAsync(c => c);
 
 
                 if (course == null)

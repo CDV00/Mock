@@ -31,12 +31,12 @@ namespace CourseAPI.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<Responses<CourseDTO>>> GetAllCourses([FromQuery] CourseParameters courseParameters)
         {
-            var Pageresult = await _coursesService.GetCoursesAsync(courseParameters);
+            var result = await _coursesService.GetCoursesAsync(courseParameters);
 
             Response.Headers.Add("X-Pagination",
-                                 JsonSerializer.Serialize(Pageresult.metaData));
+                                 JsonSerializer.Serialize(result.MetaData));
 
-            return Ok(Pageresult.courses);
+            return Ok(new Responses<CourseDTO>(true,result));
         }
 
         /// <summary>

@@ -21,10 +21,6 @@ namespace Course.BLL.Services.Abstraction
         //Task<Responses<UpcommingCourseDTO>> GetAllUpcomingCourses(Guid id);
         Task<Responses<CourseDTO>> GetAllMyPurchase(Guid userId);
         //Task<Responses<CourseDTO>> GetCoursesAsync(CourseParameters courseParameter);
-        Task<(IList<CourseDTO> courses, MetaData metaData)> GetCoursesAsync(CourseParameters courseParameter);
-        //Task<Responses<CousrsePagingDTO>> GetCoursePaing(CousrsePagingRequest cousrsePagingRequest);
-        //Task<Responses<CousrsePagingDTO>> GetByFilteringCousrse(string key);
-        //Task<Response<CourseForDetailDTO>> GetDetail(Guid id);
-        //Task<BaseResponse> IsFree(Guid courseId);
+        Task<PagedList<CourseDTO>> GetCoursesAsync(CourseParameters courseParameter);
     }
 }
