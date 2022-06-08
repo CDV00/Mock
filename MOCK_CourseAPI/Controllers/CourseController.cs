@@ -192,6 +192,15 @@ namespace CourseAPI.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
+        [HttpGet("is-courses-free/{courseId}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<Responses<CourseDTO>>> IsCoursesFree(Guid courseId)
+        {
+            var result = await _coursesService.IsFree(courseId);
+            if (result.IsSuccess == false && result.Message != null)
+                return BadRequest(result);
+            return Ok(result);
+        }
         /// <summary>
         /// Erroring
         /// Comming soon...

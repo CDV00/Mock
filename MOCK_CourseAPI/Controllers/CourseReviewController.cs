@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using Course.BLL.Services.Abstraction;
+using CourseAPI.Extensions.ControllerBase;
 
 namespace CourseAPI.Controllers
 {
@@ -85,6 +86,18 @@ namespace CourseAPI.Controllers
         {
             var result = await _courseReviewService.GetTotal(userId);
             if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
+
+        // check user commit yet
+        [HttpGet("is-course-review")]
+        public async Task<ActionResult<BaseResponse>> IsCourseReview(Guid courseId)
+        {
+            var userId = User.GetUserId();
+            var result = await _courseReviewService.IsCourseReview(userId, courseId);
+            if (result.IsSuccess == false && result.Message != null)
                 return BadRequest(result);
             return Ok(result);
         }
