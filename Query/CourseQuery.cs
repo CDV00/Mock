@@ -69,9 +69,17 @@ namespace Course.DAL.Queries
             return this;
         }
 
+        public ICourseQuery IncludeLevel()
+        {
+            Query.Include(c => c.Levels).Load();
+            return this;
+        }
+
         public ICourseQuery IncludeLanguage()
         {
-            Query.Include(c => c.AudioLanguages).Include(c => c.CloseCaptions).Load();
+            Query.Include(c => c.AudioLanguages)
+                 .Include(c => c.CloseCaptions)
+                 .Load();
             return this;
         }
 

@@ -26,7 +26,6 @@ namespace Course.BLL.Responses
         public bool RequireEnroll { get; set; }
 
         public decimal Price { get; set; }
-        public decimal DiscountPrice { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public bool IsActive { get; set; }
@@ -61,7 +60,6 @@ namespace Course.BLL.Responses
         public bool RequireEnroll { get; set; }
 
         public decimal Price { get; set; }
-        public decimal DiscountPrice { get; set; }
 
         public DateTime? UpdatedAt { get; set; }
 

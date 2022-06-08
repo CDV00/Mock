@@ -122,6 +122,7 @@ namespace Course.BLL.Services
                 var course = await _cousesRepository.BuildQuery()
                                                     .IncludeCategory()
                                                     .IncludeLanguage()
+                                                    .IncludeLevel()
                                                     .IncludeSection()
                                                     .IncludeUser()
                                                     .FilterById(id)
@@ -225,7 +226,13 @@ namespace Course.BLL.Services
         {
             try
             {
-                var course = await _cousesRepository.GetByIdAsync(id);
+                var course = await _cousesRepository.BuildQuery()
+                                                    .FilterById(id)
+                                                    .IncludeCategory()
+                                                    .IncludeLevel()
+                                                    .IncludeLanguage()
+                                                    .AsSelectorAsync(c=>c);
+
 
                 if (course == null)
                 {
@@ -233,8 +240,8 @@ namespace Course.BLL.Services
                 }
                 _mapper.Map(courseRequest, course);
 
-
                 course.UpdatedAt = DateTime.Now;
+                course.UpdatedBy = id;
 
                 #region
                 List<AudioLanguage> audioLanguages = new();
@@ -245,6 +252,8 @@ namespace Course.BLL.Services
                         var audioLanguage = await _audioLanguageRepository.GetByIdAsync(idcourse);
                         audioLanguages.Add(audioLanguage);
                     }
+                    //course.AudioLanguages.Clear();
+
                     course.AudioLanguages = audioLanguages;
                 }
 

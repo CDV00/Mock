@@ -24,5 +24,6 @@ namespace Course.DAL.Queries
         ICourseQuery FilterByLevelIds(List<Guid?> levelIds);
         ICourseQuery FilterByKeyword(string Keyword);
         ICourseQuery FilterByDiscount(bool? IsSeller);
+        ICourseQuery IncludeLevel();
     }
 }

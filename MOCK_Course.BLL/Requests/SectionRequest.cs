@@ -12,9 +12,9 @@ namespace Course.BLL.Requests
     }
     public class SectionUpdateRequest
     {
+        public Guid Id { get; set; }
         [Required]
         public string Title { get; set; }
-
         public IList<LectureForUpdateRequest> Lectures { get; set; }
     }
 }
