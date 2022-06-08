@@ -8,6 +8,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
+using System.Linq;
+using Course.DAL.DTOs;
+using System.Collections;
 
 namespace Course.BLL.Services
 {
@@ -128,5 +131,90 @@ namespace Course.BLL.Services
                 return new Response<int>(false, ex.Message, null);
             }
         }
+        public async Task<Response<float>> GetAVGRatinng(Guid courseId)
+        {
+            try
+            {
+                var courses = await _courseReviewRepository.BuildQuery()
+                                                           .FilterByCourseId(courseId)
+                                                           .GetAvgRate();
+                return new Response<float>(true, courses);
+            }
+            catch (Exception ex)
+            {
+                return new Response<float>(false, ex.Message, null);
+            }
+        }
+        public async Task<Response<RatingDetailDTO>> GetDetaiRate(Guid courseId)
+        {
+            try
+            {
+                var sumRating = await _courseReviewRepository.BuildQuery().
+                    FilterByCourseId(courseId).SumAsync(c => (long)c.Rating);
+
+                /*var result = await _courseReviewRepository.BuildQuery()
+                                                           .FilterByCourseId(courseId)
+                                                           .FilterByRating(rating)
+                                                           .GetAvgRatePercent(sumRating);*/
+                var result = new RatingDetailDTO()
+                {
+                    OneRatingPercent = await _courseReviewRepository.BuildQuery()
+                                                           .FilterByCourseId(courseId)
+                                                           .FilterByRating(1)
+                                                           .GetAvgRatePercent(sumRating),
+                    TwoRatingPercent = await _courseReviewRepository.BuildQuery()
+                                                           .FilterByCourseId(courseId)
+                                                           .FilterByRating(2)
+                                                           .GetAvgRatePercent(sumRating),
+                    ThreeRatingPercent = await _courseReviewRepository.BuildQuery()
+                                                           .FilterByCourseId(courseId)
+                                                           .FilterByRating(3)
+                                                           .GetAvgRatePercent(sumRating),
+                    FourRatingPercent = await _courseReviewRepository.BuildQuery()
+                                                           .FilterByCourseId(courseId)
+                                                           .FilterByRating(4)
+                                                           .GetAvgRatePercent(sumRating),
+                    FiveRatingPercent = await _courseReviewRepository.BuildQuery()
+                                                           .FilterByCourseId(courseId)
+                                                           .FilterByRating(5)
+                                                           .GetAvgRatePercent(sumRating)
+                };
+
+
+                return new Response<RatingDetailDTO>(true, result);
+            }
+            catch (Exception ex)
+            {
+                return new Response<RatingDetailDTO>(false, ex.Message, null);
+            }
+        }
+        /*public async Task<Responses<float>> GetRate(Guid courseId)
+        {
+            try
+            {
+                var sumRating = await _courseReviewRepository.BuildQuery().
+                    FilterByCourseId(courseId).SumAsync(c => (long)c.Rating);
+
+                List<float> rates = new List<float>();
+
+                for (int i = 0; i < 5; i++)
+                {
+                    rates[i] = await _courseReviewRepository.BuildQuery()
+                                                          .FilterByCourseId(courseId)
+                                                          .FilterByRating(++i)
+                                                          .GetAvgRatePercent(sumRating);
+
+                }
+
+                var result =  rates.AsEnumerable();
+
+                return new Responses<float>(true, result);
+            }
+            catch (Exception ex)
+            {
+                return new Responses<float>(false, ex.Message, null);
+            }
+        }*/
+
     }
 }

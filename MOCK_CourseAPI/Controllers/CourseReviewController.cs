@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using Course.BLL.Services.Abstraction;
+using Course.DAL.DTOs;
+using System.Collections.Generic;
 
 namespace CourseAPI.Controllers
 {
@@ -84,6 +86,28 @@ namespace CourseAPI.Controllers
         public async Task<ActionResult<Response<int>>> GetTotal(Guid userId)
         {
             var result = await _courseReviewService.GetTotal(userId);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
+        /// <summary>
+        /// Get Review of Course of User
+        /// </summary>
+        [HttpGet("Get-avg-rating-course")]
+        public async Task<ActionResult<Response<float>>> GetAVGRatinng(Guid courseId)
+        {
+            var result = await _courseReviewService.GetAVGRatinng(courseId);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
+        /// <summary>
+        /// Get Review of Course of User
+        /// </summary>
+        [HttpGet("Get-detail-rating-course")]
+        public async Task<ActionResult<Response<RatingDetailDTO>>> GetDetailRating(Guid courseId)
+        {
+            var result = await _courseReviewService.GetDetaiRate(courseId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);

@@ -1,12 +1,16 @@
 ﻿using Course.DAL.Models;
 using System;
+using System.Threading.Tasks;
 
 namespace Course.DAL.Queries.Abstraction
 {
     public interface ICourseReviewQuery : IQuery<CourseReview>
     {
         ICourseReviewQuery FilterByCourseId(Guid CourseId);
+        ICourseReviewQuery FilterByRating(float Rating);
         ICourseReviewQuery FilterByUserId(Guid UserId);
+        Task<float> GetAvgRate();
+        Task<float> GetAvgRatePercent(long sum);
         ICourseReviewQuery IncludeCourse();
         ICourseReviewQuery IncludeEnrollment();
         ICourseReviewQuery IncludeUser();
