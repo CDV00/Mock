@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Authorization;
 using CourseAPI.Extensions.ControllerBase;
 using Course.BLL.Services.Abstraction;
 using System.Text.Json;
-using System.Collections.ObjectModel;
 
 namespace CourseAPI.Controllers
 {
@@ -23,6 +22,11 @@ namespace CourseAPI.Controllers
             _coursesService = coursesService;
         }
 
+        /// <summary>
+        /// Get all course with paging and filter
+        /// </summary>
+        /// <param name="courseParameters"></param>
+        /// <returns>List of course</returns>
         [HttpGet("Get-all-course")]
         [AllowAnonymous]
         public async Task<ActionResult<Responses<CourseDTO>>> GetAllCourses([FromQuery] CourseParameters courseParameters)
@@ -35,19 +39,10 @@ namespace CourseAPI.Controllers
             return Ok(Pageresult.courses);
         }
 
-        [HttpGet("Get-time-zone")]
-        [AllowAnonymous]
-        public ActionResult<ReadOnlyCollection<TimeZoneInfo>> GetTimeZone()
-        {
-            ReadOnlyCollection<TimeZoneInfo> zones = TimeZoneInfo.GetSystemTimeZones();
-            return zones;
-        }
-
         /// <summary>
-        /// Get all course for Page:
-        /// https://gambolthemes.net/html-items/cursus_main_demo/explore.html
+        /// Get all course! This API is old, need use Get-all-course to paging and filter
         /// </summary>
-        /// <returns></returns>
+        /// <returns>List of course</returns>
         [HttpGet("Get-all")]
         [AllowAnonymous]
         public async Task<ActionResult<Responses<CourseDTO>>> GetAll()
@@ -59,25 +54,9 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// Get Detail of course to render page: https://gambolthemes.net/html-items/cursus_main_demo/course_detail_view.html
+        /// Get Detail course Include User, Category, Language, Levels 
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        //[HttpGet("Get-Detail-Course")]
-        //[AllowAnonymous]
-        //public async Task<ActionResult<Responses<CourseForDetailDTO>>> GetDetail(Guid id)
-        //{
-        //    var result = await _coursesService.GetDetail(id);
-        //    if (result.IsSuccess == false)
-        //        return BadRequest(result);
-        //    return Ok(result);
-        //}
-
-        /// <summary>
-        /// Get Detail course For Update Course
-        /// https://gambolthemes.net/html-items/cursus_main_demo/course_detail_view.html
-        /// </summary>
-        /// <returns></returns>
+        /// <returns>an course</returns>
         [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult<Response<CourseDTO>>> Get(Guid id)
@@ -89,9 +68,7 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// Create new course | 
-        /// https://gambolthemes.net/html-items/cursus_main_demo/create_new_course.html | 
-        /// UserId:9e47da69-3d3e-428d-a395-d53908753582
+        /// Create new course Include Sections, lecture 
         /// </summary>
         /// <param name="courseRequest"></param>
         /// <returns></returns>
@@ -106,12 +83,11 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// update course by id
-        /// don't have Page UI yet!
+        /// Update course by Id
         /// </summary>
         /// <param name="id"></param>
         /// <param name="CoursesUpdateRequest"></param>
-        /// <returns></returns>
+        /// <returns>an course</returns>
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<Response<CourseDTO>>> Update(Guid id, CourseForUpdateRequest CoursesUpdateRequest)
         {
@@ -122,11 +98,10 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// Delete an Courses by id
-        /// https://gambolthemes.net/html-items/cursus_main_demo/instructor_courses.html#
+        /// Delete an Courses by Id
         /// </summary>
         /// <param name="id">Id Courses</param>
-        /// <returns></returns>
+        /// <returns>true or false</returns>
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<BaseResponse>> Delete(Guid id)
         {
@@ -136,9 +111,11 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
         /// <summary>
-        /// Get Total Course of User
+        /// Get Total Course of Instructor User
         /// </summary>
+        /// <returns>total course as Interger type</returns>
         [HttpGet("Get-total-courses")]
+        [AllowAnonymous]
         public async Task<ActionResult<Response<int>>> GetTotal()
         {
             var userId = User.GetUserId();
@@ -149,12 +126,10 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// Get all My Course
-        /// 
+        /// Get all My Course of Instructor
         /// </summary>
-        /// <returns></returns>
+        /// <returns>List Courses</returns>
         [HttpGet("Get-all-my-course")]
-        [AllowAnonymous]
         public async Task<ActionResult<Responses<CourseDTO>>> GetAllMyCoures()
         {
             var userId = User.GetUserId();
@@ -166,30 +141,10 @@ namespace CourseAPI.Controllers
 
 
         /// <summary>
-        /// Get all Upcomming Course
-        /// 
+        /// Get all Course, User already purchased
         /// </summary>
-        ///<param name="userId"> User Id Courses</param>
-        /// <returns></returns>
-        //[HttpGet("Get-all-upcoming-courses")]
-        //[AllowAnonymous]
-        //public async Task<ActionResult<Responses<UpcommingCourseDTO>>> GetAllUpcomingCourses()
-        //{
-        //    var userId = User.GetUserId();
-        //    var result = await _coursesService.GetAllUpcomingCourses(userId);
-        //    if (result.IsSuccess == false)
-        //        return BadRequest(result);
-        //    return Ok(result);
-        //}
-
-        /// <summary>
-        /// Get all My Purchase
-        /// 
-        /// </summary>
-        ///<param name="userId"> User Id Courses</param>
-        /// <returns></returns>
+        /// <returns>List Courses</returns>
         [HttpGet("Get-all-my-purchse")]
-        [AllowAnonymous]
         public async Task<ActionResult<Responses<CourseDTO>>> GetAllMyPurchase()
         {
             var userId = User.GetUserId();
@@ -198,6 +153,35 @@ namespace CourseAPI.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         //[HttpGet("is-courses-free/{courseId}")]
         //[AllowAnonymous]
         //public async Task<ActionResult<Responses<CourseDTO>>> IsCoursesFree(Guid courseId)

@@ -35,7 +35,6 @@ namespace Course.DAL.Queries
 
         public async Task<float> GetAvgRate()
         {
-            //Query.Include(c => c.Enrollment).Load();
             return await Query.AverageAsync(c => c.Rating);
         }
 

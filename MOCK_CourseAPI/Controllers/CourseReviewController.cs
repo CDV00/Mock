@@ -6,9 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using Course.BLL.Services.Abstraction;
-using Course.DAL.DTOs;
-using System.Collections.Generic;
 using CourseAPI.Extensions.ControllerBase;
+using System.Collections.Generic;
 
 namespace CourseAPI.Controllers
 {
@@ -24,10 +23,10 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// Get all review of course
+        /// Get all review of course. 
         /// https://gambolthemes.net/html-items/cursus_main_demo/course_detail_view.html
         /// </summary>
-        /// <param name="CourseId"></param>
+        /// <param name="CourseId">Course Id</param>
         /// <returns></returns>
         [HttpGet("Get-All")]
         [AllowAnonymous]
@@ -40,7 +39,7 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// Add new review
+        /// Create new review
         /// </summary>
         /// <param name="courseReviewRequest"></param>
         /// <returns></returns>
@@ -54,7 +53,7 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// update review
+        /// Update review
         /// </summary>
         /// <param name="id"></param>
         /// <param name="courseReviewUpdateRequest"></param>
@@ -82,13 +81,29 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
         /// <summary>
-        /// Get Review of Course of User
+        /// Get total review of course
         /// </summary>
         [HttpGet("Get-total-Reivew-of-course")]
         public async Task<ActionResult<Response<int>>> GetTotal()
         {
             var userId = User.GetUserId();
             var result = await _courseReviewService.GetTotal(userId);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
+
+        /// <summary>
+        /// Get Rating Percent from 1-5. if [0] = 1s, [1] = 2s,...
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <returns>List float</returns>
+        [HttpGet("Get-Rating")]
+        [AllowAnonymous]
+        public async Task<ActionResult<Response<List<float>>>> GetRating(Guid courseId)
+        {
+            var result = await _courseReviewService.GetDetaiRate(courseId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
