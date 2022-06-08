@@ -113,11 +113,11 @@ namespace Course.BLL.Services
             try
             {
                 var user = await _subscriptionRepository.BuildQuery()
-                                                        .IncludeSubcriber()
                                                         .FilterByUserId(userId)
-                                                        .ToListAsync(s => _mapper.Map<UserDTO>(s));
+                                                        .IncludeSubcriber()
+                                                        .ToListAsync(u => _mapper.Map<UserDTO>(u));
 
-                return new Responses<UserDTO>(true, user);
+                return new Responses<UserDTO>(true,user);
             }
             catch (Exception ex)
             {

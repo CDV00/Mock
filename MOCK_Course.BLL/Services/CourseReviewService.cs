@@ -134,12 +134,9 @@ namespace Course.BLL.Services
            try
            {
                var courseReview = await _courseReviewRepository.BuildQuery()
-                                                         .IncludeEnrollment()
-                                                         .IncludeUser()
-                                                         .IncludeCourse()
-                                                         .FilterByUserId(userId)
-                                                         .FilterByCourseId(courseId)
-                                                         .AsSelectorAsync(c => _mapper.Map<CourseReviewDTO>(c));
+                                                               .FilterByUserId(userId)
+                                                               .FilterByCourseId(courseId)
+                                                               .AsSelectorAsync(c => _mapper.Map<CourseReviewDTO>(c));
                 if(courseReview == null)
                 {
                     return new BaseResponse(false);

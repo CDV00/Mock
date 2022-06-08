@@ -25,5 +25,6 @@ namespace Course.BLL.Services.Abstraction
         //Task<Responses<CousrsePagingDTO>> GetCoursePaing(CousrsePagingRequest cousrsePagingRequest);
         //Task<Responses<CousrsePagingDTO>> GetByFilteringCousrse(string key);
         //Task<Response<CourseForDetailDTO>> GetDetail(Guid id);
+        Task<BaseResponse> IsFree(Guid courseId);
     }
 }

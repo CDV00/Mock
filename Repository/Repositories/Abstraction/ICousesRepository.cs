@@ -21,5 +21,6 @@ namespace Course.DAL.Repositories.Abstraction
         //Task<CourseForDetailDTO> GetDetail(Guid id);
         //Task<Courses> GetForUpdate(Guid id);
         ICourseQuery BuildQuery();
+        Task<bool> IsFree(Guid courseId);
     }
 }
