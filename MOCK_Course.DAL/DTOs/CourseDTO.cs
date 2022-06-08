@@ -24,6 +24,8 @@ namespace Course.BLL.Responses
 
         public bool RequireLogin { get; set; }
         public bool RequireEnroll { get; set; }
+       
+        public bool IsFree { get; set; }
 
         public decimal Price { get; set; }
         public DateTime CreatedAt { get; set; }

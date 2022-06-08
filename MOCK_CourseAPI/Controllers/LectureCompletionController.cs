@@ -37,7 +37,7 @@ namespace CourseAPI.Controllers
         }
 
         // iscompletion
-        [HttpGet("Is-Completion{lectureId}")]
+        [HttpGet("Is-Completion")]
         public async Task<ActionResult<BaseResponse>> IsCompletion(Guid lectureId)
         {
             var userId = User.GetUserId();

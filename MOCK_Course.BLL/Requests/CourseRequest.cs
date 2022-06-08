@@ -28,6 +28,8 @@ namespace Course.BLL.Requests
         public bool RequireLogin { get; set; }
         public bool RequireEnroll { get; set; }
 
+        public bool IsFree { get; set; }
+
         public decimal Price { get; set; }
         //public decimal DiscountPrice { get; set; }
 
@@ -58,6 +60,8 @@ namespace Course.BLL.Requests
 
         public bool RequireLogin { get; set; }
         public bool RequireEnroll { get; set; }
+
+        public bool IsFree { get; set; }
 
         public decimal Price { get; set; }
 

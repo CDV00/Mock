@@ -137,11 +137,12 @@ namespace Course.BLL.Services
                                                                .FilterByUserId(userId)
                                                                .FilterByCourseId(courseId)
                                                                .AsSelectorAsync(c => _mapper.Map<CourseReviewDTO>(c));
+
                 if(courseReview == null)
                 {
                     return new BaseResponse(false);
                 }
-                //var courseResponse = _mapper.Map<CourseDTO>(course);
+
                 return new BaseResponse(true);
            }
            catch (Exception ex)
