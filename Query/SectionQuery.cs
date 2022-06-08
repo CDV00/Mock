@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using SES.HomeServices.Data.Queries.Abstractions;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Course.DAL.Queries
 {
@@ -31,6 +32,25 @@ namespace Course.DAL.Queries
             Query = Query.Where(type => type.Enrollment.CourseId == CourseId);
             return this;
         }
+
+        public async Task<float> GetAvgRate()
+        {
+            //Query.Include(c => c.Enrollment).Load();
+            return await Query.AverageAsync(c => c.Rating);
+        }
+
+        public async Task<float> GetAvgRatePercent(long sum)
+        {
+            var result = (await Query.AverageAsync(c => c.Rating) * 100) / sum;
+            return result;
+        }
+
+        public ICourseReviewQuery FilterByRating(float Rating)
+        {
+            Query = Query.Where(type => type.Rating == Rating);
+            return this;
+        }
+
 
         public ICourseReviewQuery FilterByUserId(Guid UserId)
         {

@@ -8,6 +8,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
+using System.Linq;
+using Course.DAL.DTOs;
+using System.Collections;
 
 namespace Course.BLL.Services
 {
@@ -129,26 +132,80 @@ namespace Course.BLL.Services
             }
         }
 
-        public async Task<BaseResponse> IsCourseReview(Guid userId, Guid courseId)
-       {
-           try
-           {
-               var courseReview = await _courseReviewRepository.BuildQuery()
-                                                               .FilterByUserId(userId)
-                                                               .FilterByCourseId(courseId)
-                                                               .AsSelectorAsync(c => _mapper.Map<CourseReviewDTO>(c));
+        public async Task<Response<float>> GetAVGRatinng(Guid courseId)
+        {
+            try
+            {
+                var courses = await _courseReviewRepository.BuildQuery()
+                                                           .FilterByCourseId(courseId)
+                                                           .GetAvgRate();
+                return new Response<float>(true, courses);
+            }
+            catch (Exception ex)
+            {
+                return new Response<float>(false, ex.Message, null);
+            }
+        }
+        public async Task<Response<RatingDetailDTO>> GetDetaiRate(Guid courseId)
+        {
+            try
+            {
+                var sumRating = await _courseReviewRepository.BuildQuery().
+                    FilterByCourseId(courseId).SumAsync(c => (long)c.Rating);
 
-                if(courseReview == null)
+                var result = new RatingDetailDTO()
+                {
+                    OneRatingPercent = await _courseReviewRepository.BuildQuery()
+                                                           .FilterByCourseId(courseId)
+                                                           .FilterByRating(1)
+                                                           .GetAvgRatePercent(sumRating),
+                    TwoRatingPercent = await _courseReviewRepository.BuildQuery()
+                                                           .FilterByCourseId(courseId)
+                                                           .FilterByRating(2)
+                                                           .GetAvgRatePercent(sumRating),
+                    ThreeRatingPercent = await _courseReviewRepository.BuildQuery()
+                                                           .FilterByCourseId(courseId)
+                                                           .FilterByRating(3)
+                                                           .GetAvgRatePercent(sumRating),
+                    FourRatingPercent = await _courseReviewRepository.BuildQuery()
+                                                           .FilterByCourseId(courseId)
+                                                           .FilterByRating(4)
+                                                           .GetAvgRatePercent(sumRating),
+                    FiveRatingPercent = await _courseReviewRepository.BuildQuery()
+                                                           .FilterByCourseId(courseId)
+                                                           .FilterByRating(5)
+                                                           .GetAvgRatePercent(sumRating)
+                };
+
+
+                return new Response<RatingDetailDTO>(true, result);
+            }
+            catch (Exception ex)
+            {
+                return new Response<RatingDetailDTO>(false, ex.Message, null);
+            }
+        }
+
+        public async Task<BaseResponse> IsCourseReview(Guid userId, Guid courseId)
+        {
+            try
+            {
+                var courseReview = await _courseReviewRepository.BuildQuery()
+                                                                .FilterByUserId(userId)
+                                                                .FilterByCourseId(courseId)
+                                                                .AsSelectorAsync(c => _mapper.Map<CourseReviewDTO>(c));
+
+                if (courseReview == null)
                 {
                     return new BaseResponse(false);
                 }
 
                 return new BaseResponse(true);
-           }
-           catch (Exception ex)
-           {
-               return new BaseResponse(false, ex.Message, null);
-           }
-       }
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse(false, ex.Message, null);
+            }
+        }
     }
 }
