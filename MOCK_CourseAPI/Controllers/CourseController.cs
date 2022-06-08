@@ -129,8 +129,6 @@ namespace CourseAPI.Controllers
         /// <summary>
         /// Get Total Course of User
         /// </summary>
-        /// <param name = "userId" ></ param >
-        /// < returns ></ returns >
         [HttpGet("Get-total-courses")]
         public async Task<ActionResult<Response<int>>> GetTotal()
         {
@@ -145,7 +143,6 @@ namespace CourseAPI.Controllers
         /// Get all My Course
         /// 
         /// </summary>
-        ///<param name="userId"> User Id Courses</param>
         /// <returns></returns>
         [HttpGet("Get-all-my-course")]
         [AllowAnonymous]

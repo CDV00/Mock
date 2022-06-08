@@ -44,6 +44,7 @@ namespace Course.BLL.Services
                                                     .FilterByAudioLanguageIds(courseParameter.AudioLanguageIds)
                                                     .FilterByCloseCaptionIds(courseParameter.CloseCaptionIds)
                                                     .FilterByLevelIds(courseParameter.LevelIds)
+                                                    .FilterByDiscount(courseParameter.IsSeller)
                                                     .ApplySort(courseParameter.Orderby)
                                                     .Skip((courseParameter.PageNumber - 1) * courseParameter.PageSize)
                                                     .Take(courseParameter.PageSize)
@@ -83,6 +84,7 @@ namespace Course.BLL.Services
             {
                 var courses = await _cousesRepository.BuildQuery()
                                                      .IncludeCategory()
+                                                     .IncludeUser()
                                                      .FilterByUserId(userId)
                                                      .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 
@@ -100,6 +102,7 @@ namespace Course.BLL.Services
             {
                 var myPurchase = await _cousesRepository.BuildQuery()
                                                         .IncludeCategory()
+                                                        .IncludeUser()
                                                         .FilterByOrderd(userId)
                                                         .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 

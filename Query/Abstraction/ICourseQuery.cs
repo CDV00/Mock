@@ -23,5 +23,6 @@ namespace Course.DAL.Queries
         ICourseQuery FilterByCloseCaptionIds(List<Guid?> closeCaptionIds);
         ICourseQuery FilterByLevelIds(List<Guid?> levelIds);
         ICourseQuery FilterByKeyword(string Keyword);
+        ICourseQuery FilterByDiscount(bool? IsSeller);
     }
 }

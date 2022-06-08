@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using Course.BLL.Services.Abstraction;
+using CourseAPI.Extensions.ControllerBase;
 
 namespace CourseAPI.Controllers
 {
@@ -27,6 +28,7 @@ namespace CourseAPI.Controllers
         /// <param name="CourseId"></param>
         /// <returns></returns>
         [HttpGet("Get-All")]
+        [AllowAnonymous]
         public async Task<ActionResult<Responses<CourseReviewDTO>>> GetAll([FromQuery] Guid CourseId)
         {
             var result = await _courseReviewService.GetAll(CourseId);
@@ -81,8 +83,9 @@ namespace CourseAPI.Controllers
         /// Get Review of Course of User
         /// </summary>
         [HttpGet("Get-total-Reivew-of-course")]
-        public async Task<ActionResult<Response<int>>> GetTotal(Guid userId)
+        public async Task<ActionResult<Response<int>>> GetTotal()
         {
+            var userId = User.GetUserId();
             var result = await _courseReviewService.GetTotal(userId);
             if (result.IsSuccess == false)
                 return BadRequest(result);

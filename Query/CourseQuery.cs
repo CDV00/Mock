@@ -26,9 +26,6 @@ namespace Course.DAL.Queries
 
         public ICourseQuery FilterByOrderd(Guid userId)
         {
-            //var orderIds = _dbContext.Orders.Where(o => o.UserId == userId).Select(o => o.CourseId);
-            //Query = Query.Where(type => orderIds.Contains(type.Id));
-
             Query.Where(c => c.Orders.Any(o => o.UserId == userId));
             return this;
         }
@@ -84,6 +81,16 @@ namespace Course.DAL.Queries
                 return this;
 
             Query = Query.Where(c => c.CategoryId == categoryId);
+            return this;
+        }
+
+
+        public ICourseQuery FilterByDiscount(bool? IsSeller)
+        {
+            if (IsSeller == null || IsSeller == false)
+                return this;
+
+            Query = Query.Where(c => c.Discounts.Any(d=>d.EndDate > DateTime.Now));
             return this;
         }
 
