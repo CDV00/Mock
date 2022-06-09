@@ -47,8 +47,9 @@ namespace Course.DAL.Queries
         public IShoppingCartQuery IncludeDiscount()
         {
             Query.Include(type => type.Course.Discounts).Load();
+            Query.Where(Type => Type.Course.Discounts.Any(d => d.EndDate > DateTime.Now));
             return this;
         }
-        
+
     }
 }

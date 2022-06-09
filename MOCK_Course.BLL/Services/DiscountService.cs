@@ -48,13 +48,13 @@ namespace Course.BLL.Services
 
 
         // Get All theo UserId !!!
-        public async Task<Responses<DiscountDTO>> GetAllDiscount(Guid userId)
+        public async Task<Responses<DiscountDTO>> GetAllDiscount(Guid UserId)
         {
             try
             {
                 var discounts = await _discountRepository.BuildQuery()
                                                          .IncludeCourses()
-                                                         .FilterByUserId(userId)
+                                                         .FilterByUserId(UserId)
                                                          .ToListAsync(d => _mapper.Map<DiscountDTO>(d));
 
                 return new Responses<DiscountDTO>(true, discounts);

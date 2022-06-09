@@ -58,6 +58,10 @@ namespace Course.BLL.Services
                                                     .FilterByLevelIds(courseParameter.LevelIds)
                                                     .FilterByDiscount(courseParameter.IsDiscount)
                                                     .CountAsync();
+
+
+            // TODO: use For to add total enroll and rating of course
+
             var pageList = new PagedList<CourseDTO>(coursesDTO, count, courseParameter.PageNumber, courseParameter.PageSize);
 
             return pageList;

@@ -28,6 +28,7 @@ namespace Course.BLL.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
+
         /// <summary>
         /// Get all course review
         /// </summary>
@@ -37,9 +38,9 @@ namespace Course.BLL.Services
             try
             {
                 var courseReview = await _courseReviewRepository.BuildQuery()
-                                                          .FilterByCourseId(courseId)
-                                                          .IncludeUser()
-                                                          .ToListAsync(c => _mapper.Map<CourseReviewDTO>(c));
+                                                                .FilterByCourseId(courseId)
+                                                                .IncludeUser()
+                                                                .ToListAsync(c => _mapper.Map<CourseReviewDTO>(c));
 
                 return new Responses<CourseReviewDTO>(true, _mapper.Map<IEnumerable<CourseReviewDTO>>(courseReview));
             }
@@ -152,14 +153,14 @@ namespace Course.BLL.Services
 
                 List<float> rates = new();
 
-                for(var i = 1;i<= 5; i++)
+                for (var i = 1; i <= 5; i++)
                 {
                     rates.Add(await _courseReviewRepository.BuildQuery()
                                                            .FilterByCourseId(courseId)
                                                            .FilterByRating(i)
                                                            .GetAvgRatePercent(sumRating));
                 }
-              
+
 
                 return new Response<List<float>>(true, rates);
             }

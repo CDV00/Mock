@@ -24,7 +24,7 @@ namespace Course.BLL.Responses
 
         public bool RequireLogin { get; set; }
         public bool RequireEnroll { get; set; }
-       
+
         public bool IsFree { get; set; }
 
         public decimal Price { get; set; }
@@ -33,6 +33,7 @@ namespace Course.BLL.Responses
         public bool IsActive { get; set; }
         public UserDTO User { get; set; }
         public CategoryDTO Category { get; set; }
+        public DiscountDTO Discount { get; set; }
 
         public IList<AudioLanguageDTO> AudioLanguages { get; set; }
         public IList<CloseCaptionDTO> CloseCaptions { get; set; }

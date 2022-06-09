@@ -8,7 +8,7 @@ namespace Course.BLL.DTO
         public Guid Id { get; set; }
         public UserDTO Cart { get; set; }
         public CourseDTO Course { get; set; }
-        public DiscountDTO Discount { get; set; }
+
     }
     //public class CartUserDTO
     //{
