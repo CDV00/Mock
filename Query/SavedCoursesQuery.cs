@@ -35,13 +35,13 @@ namespace Course.DAL.Queries
 
         public ISavedCoursesQuery IncludeCategory()
         {
-            Query.Include(type => type.User.Category).Load();
+            Query.Include(type => type.Course.Category).Load();
             return this;
         }
 
         public ISavedCoursesQuery IncludeCourse()
         {
-            Query.Include(type => type.User.Courses).Load();
+            Query.Include(type => type.Course).Load();
             return this;
         }
         public ISavedCoursesQuery IncludeDiscount()
