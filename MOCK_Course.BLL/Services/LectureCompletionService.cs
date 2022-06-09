@@ -32,6 +32,7 @@ namespace Course.BLL.Services
 
                 lessoncompletion.UserId = userId;
                 lessoncompletion.CreatedAt = DateTime.Now;
+
                 await _lessonCompletionRepository.CreateAsync(lessoncompletion);
                 await _unitOfWork.SaveChangesAsync();
 
@@ -50,6 +51,7 @@ namespace Course.BLL.Services
                 lectureCompletionRequest.LectureId = lectureId;
                 var lectureCompletion = _mapper.Map<LectureCompletion>(lectureCompletionRequest);
                 lectureCompletion.UserId = userId;
+
                 var Result = await _lessonCompletionRepository.IsCompletion(lectureCompletion);
                 return new BaseResponse(Result);
             }

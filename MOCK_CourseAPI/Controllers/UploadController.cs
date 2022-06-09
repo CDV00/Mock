@@ -19,6 +19,11 @@ namespace CourseAPI.Controllers
             _uploadService = uploadService;
         }
 
+        /// <summary>
+        /// Upload image file
+        /// </summary>
+        /// <param name="image">url string</param>
+        /// <returns></returns>
         [HttpPost("UploadImage")]
         //[AllowedExtensions(new string[] { ".jpg", ".png" })]
         public async Task<ActionResult<UploadImageDTO>> UploadImage(IFormFile image)
@@ -32,6 +37,11 @@ namespace CourseAPI.Controllers
         }
 
 
+        /// <summary>
+        /// Upload video file
+        /// </summary>
+        /// <param name="video">Url string. Get duration is Erroring!</param>
+        /// <returns></returns>
         [HttpPost("UploadVideo"), DisableRequestSizeLimit]
         public async Task<ActionResult<UploadVideoDTO>> UploadVideo(IFormFile video)
         {

@@ -36,7 +36,11 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
 
-        // iscompletion
+        /// <summary>
+        /// check completion lecture
+        /// </summary>
+        /// <param name="lectureId"></param>
+        /// <returns></returns>
         [HttpGet("Is-Completion")]
         public async Task<ActionResult<BaseResponse>> IsCompletion(Guid lectureId)
         {

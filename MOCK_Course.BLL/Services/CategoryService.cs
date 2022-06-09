@@ -30,9 +30,9 @@ namespace Course.BLL.Services
             try
             {
                 var categories = await _categoryRepository.BuildQuery()
-                                                      .FilterByParent(null)
-                                                      .IncludeSubCategory()
-                                                      .ToListAsync(c => _mapper.Map<CategoryDTO>(c));
+                                                          .FilterByParent(null)
+                                                          .IncludeSubCategory()
+                                                          .ToListAsync(c => _mapper.Map<CategoryDTO>(c));
 
                 return new Responses<CategoryDTO>(true, categories);
             }

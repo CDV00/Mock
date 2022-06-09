@@ -36,6 +36,10 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Get total enrollment
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("Get-total-enroll-of-user")]
         public async Task<ActionResult<Response<int>>> GetTotal()
         {
@@ -46,6 +50,11 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// check enrollment
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <returns></returns>
         [HttpGet("check-enrollment")]
         public async Task<ActionResult<Response<EnrollmentDTO>>> IsEnrollment(Guid courseId)
         {

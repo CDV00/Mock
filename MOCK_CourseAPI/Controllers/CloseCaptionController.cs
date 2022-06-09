@@ -18,7 +18,7 @@ namespace CourseAPI.Controllers
             _closeCaptionService = closeCaptionService;
         }
         /// <summary>
-        /// Get All CloseCaption and sub-closeCaption
+        /// Get All CloseCaption 
         /// </summary>
         /// <returns></returns>
         [HttpGet]

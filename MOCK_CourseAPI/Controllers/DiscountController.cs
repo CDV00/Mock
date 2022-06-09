@@ -22,7 +22,7 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// Get All Category and sub-category
+        /// Get All discount
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -51,8 +51,7 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// update Discount by id
-        /// don't have Page UI yet!
+        /// Update Discount
         /// </summary>
         /// <returns></returns>
         [HttpPut()]
@@ -65,7 +64,7 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// Delete Discount by id
+        /// Delete Discount
         /// https://gambolthemes.net/html-items/cursus_main_demo/instructor_courses.html#
         /// </summary>
         /// <param name="id">Id Discount</param>

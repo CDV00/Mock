@@ -24,9 +24,7 @@ namespace CourseAPI.Controllers
         /// Get all shoppingCart of user
         /// https://gambolthemes.net/html-items/cursus_main_demo/shopping_cart.html
         /// </summary>
-        /// <param name="userId"></param>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         [HttpGet]
         public async Task<ActionResult<Responses<CartDTO>>> GetAll()
         {
@@ -38,9 +36,9 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// when user click "add cart", will create new cart
+        /// Create new cart
         /// </summary>
-        /// <param name="cartRequest"></param>
+        /// <param name="courseId"></param>
         /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<Responses<CartDTO>>> Create(Guid courseId)

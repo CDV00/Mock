@@ -19,6 +19,11 @@ namespace CourseAPI.Controllers
             _courseCompletionService = courseCompletionService;
         }
 
+        /// <summary>
+        /// check course completion
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <returns></returns>
         [HttpGet("IsCompleted")]
         public async Task<ActionResult<BaseResponse>> IsCompleted(Guid courseId)
         {

@@ -20,7 +20,7 @@ namespace CourseAPI.Controllers
             _levelService = levelService;
         }
         /// <summary>
-        /// Get All Level and sub-level
+        /// Get All Level
         /// </summary>
         /// <returns></returns>
         [HttpGet]

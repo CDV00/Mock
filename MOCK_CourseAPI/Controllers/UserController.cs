@@ -25,7 +25,6 @@ namespace CourseAPI.Controllers
         /// Get profile of user
         /// https://gambolthemes.net/html-items/cursus_main_demo/my_instructor_profile_view.html
         /// </summary>
-        /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("Get-User")]
         public async Task<ActionResult<UserDTO>> GetUser()
@@ -42,7 +41,6 @@ namespace CourseAPI.Controllers
         /// Update profile of user
         /// https://gambolthemes.net/html-items/cursus_main_demo/setting.html
         /// </summary>
-        /// <param name="id"></param>
         /// <param name="updateProfileRequest"></param>
         /// <returns></returns>
         [HttpPut("Update-User")]
@@ -56,9 +54,7 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// Change passowrd by User Id
-        /// not Page UI yet!
-        /// </summary>
+        /// Change passowrd
         /// <param name="changePasswordRequest"></param>
         /// <returns></returns>
         [HttpPut("Change-Password")]
@@ -72,6 +68,11 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        ///  Check exist email
+        /// </summary>
+        /// <param name="Email"></param>
+        /// <returns></returns>
         [HttpGet("Check-Exist-Email")]
         [AllowAnonymous]
         public async Task<ActionResult<BaseResponse>> CheckExistEmail(string Email)
@@ -79,7 +80,11 @@ namespace CourseAPI.Controllers
             var result = await _userService.CheckExistEmail(Email);
             return Ok(result);
         }
-        // Todo: Get popular instructor ( Paing and soft subscribe asc )
+
+        /// <summary>
+        /// Get Popular Instructor
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("GetPopularInstructor")]
         [AllowAnonymous]
         public async Task<ActionResult<UserDTO>> GetPopularInstructor()

@@ -21,6 +21,11 @@ namespace CourseAPI.Controllers
             _orderService = orderService;
         }
 
+        /// <summary>
+        /// Get total course has been sold
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <returns></returns>
         [HttpGet("Get-Total")]
         [AllowAnonymous]
         public async Task<ActionResult<Response<int>>> GetTotal(Guid courseId)
@@ -35,7 +40,6 @@ namespace CourseAPI.Controllers
         /// Get all purchased courses user
         /// https://gambolthemes.net/html-items/cursus_main_demo/student_courses.html
         /// </summary>
-        /// <param name="UserId"></param>
         /// <returns></returns>
         [HttpGet()]
         public async Task<ActionResult<Responses<OrderDTO>>> GetAll()
@@ -48,7 +52,7 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// this will call, when Payment success then it will create new order record
+        /// Create new order record
         /// </summary>
         /// <param name="orderRequest"></param>
         /// <returns></returns>

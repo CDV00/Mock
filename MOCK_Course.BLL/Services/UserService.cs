@@ -129,9 +129,9 @@ namespace Course.BLL.Services
             {
                 string RoleName = UserRoles.Instructor;
                 var user = await _userRepository.BuildQuery()
-                                                        .FilterByRole(RoleName)
-                                                        .SortBySubscription()
-                                                        .ToListAsync(u => _mapper.Map<UserDTO>(u));
+                                                .FilterByRole(RoleName)
+                                                .SortBySubscription()
+                                                .ToListAsync(u => _mapper.Map<UserDTO>(u));
 
                 return new Responses<UserDTO>(true, user);
             }

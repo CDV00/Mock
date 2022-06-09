@@ -19,6 +19,11 @@ namespace CourseAPI.Controllers
             _sectionService = sectionService;
         }
 
+        /// <summary>
+        /// Get total secton of course
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <returns></returns>
         [HttpGet("Get-Total")]
         [AllowAnonymous]
         public async Task<ActionResult<Response<int>>> GetTotal(Guid courseId)

@@ -19,6 +19,11 @@ namespace CourseAPI.Controllers
             _authenticationService = authenticationService;
         }
 
+        /// <summary>
+        /// Refresh token
+        /// </summary>
+        /// <param name="tokenDto"></param>
+        /// <returns></returns>
         [HttpPost("refresh")]
         [AllowAnonymous]
         public async Task<ActionResult<Response<TokenDTO>>> Refresh([FromBody] TokenDTO tokenDto)
