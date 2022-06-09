@@ -223,6 +223,7 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IDiscountService, DiscountService>();
             services.AddScoped<ISubscriptionService, SubscriptionService>();
+            services.AddScoped<ISavedCoursesService, SavedCoursesService>();
         }
     }
 }
