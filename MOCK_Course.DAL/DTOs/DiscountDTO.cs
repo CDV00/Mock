@@ -6,7 +6,8 @@ namespace Course.BLL.Responses
     public class DiscountDTO
     {
         public Guid Id { get; set; }
-        public CourseDTO course { get; set; }
+        public Guid CourseId { get; set; }
+        //public CourseDTO course { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public decimal DiscountPercent { get; set; }

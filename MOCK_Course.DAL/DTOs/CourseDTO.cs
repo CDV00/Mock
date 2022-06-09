@@ -33,7 +33,7 @@ namespace Course.BLL.Responses
         public bool IsActive { get; set; }
         public UserDTO User { get; set; }
         public CategoryDTO Category { get; set; }
-        public List<DiscountDTO> Discount { get; set; }
+        public List<DiscountDTO> Discounts { get; set; }
 
         public IList<AudioLanguageDTO> AudioLanguages { get; set; }
         public IList<CloseCaptionDTO> CloseCaptions { get; set; }
