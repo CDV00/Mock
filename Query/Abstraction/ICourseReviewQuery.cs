@@ -9,6 +9,7 @@ namespace Course.DAL.Queries.Abstraction
         ICourseReviewQuery FilterByCourseId(Guid CourseId);
         ICourseReviewQuery FilterByRating(float Rating);
         ICourseReviewQuery FilterByUserId(Guid UserId);
+        ICourseReviewQuery FilterByKeyword(string Keyword);
         Task<float> GetAvgRate();
         Task<float> GetAvgRatePercent(long sum);
         ICourseReviewQuery IncludeCourse();

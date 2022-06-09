@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Course.BLL.Services.Abstraction;
 using CourseAPI.Extensions.ControllerBase;
 using System.Collections.Generic;
+using System.Text.Json;
 
 namespace CourseAPI.Controllers
 {
@@ -23,20 +24,32 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// Get all review of course. 
+        /// Get all review of course. with paging and search
         /// https://gambolthemes.net/html-items/cursus_main_demo/course_detail_view.html
         /// </summary>
         /// <param name="CourseId">Course Id</param>
         /// <returns></returns>
-        [HttpGet("Get-All")]
+        [HttpGet("Get-all")]
         [AllowAnonymous]
-        public async Task<ActionResult<Responses<CourseReviewDTO>>> GetAll([FromQuery] Guid CourseId)
+        public async Task<ActionResult<Responses<CourseReviewDTO>>> GetAllCourses([FromQuery] Guid courseId, [FromQuery] CourseReviewParameters courseReviewParameters)
         {
-            var result = await _courseReviewService.GetAll(CourseId);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
-            return Ok(result);
+            var result = await _courseReviewService.GetAll(courseId, courseReviewParameters);
+
+            Response.Headers.Add("X-Pagination",
+                                 JsonSerializer.Serialize(result.MetaData));
+
+            return Ok(new Responses<CourseReviewDTO>(true, result));
         }
+
+        //[HttpGet("Get-all")]
+        //[AllowAnonymous]
+        //public async Task<ActionResult<Responses<CourseReviewDTO>>> GetAll(Guid courseId)
+        //{
+        //    var result = await _courseReviewService.Getall(courseId);
+        //    if (result.IsSuccess == false)
+        //        return BadRequest(result);
+        //    return Ok(result);
+        //}
 
         /// <summary>
         /// Create new review

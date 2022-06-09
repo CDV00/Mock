@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
+using Course.BLL.Share.RequestFeatures;
 
 namespace Course.BLL.Services
 {
@@ -28,27 +29,45 @@ namespace Course.BLL.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
+
+        // Todo: filter and paging
         /// <summary>
         /// Get all course review
         /// </summary>
         /// <returns></returns>
-        public async Task<Responses<CourseReviewDTO>> GetAll(Guid courseId)
+        public async Task<PagedList<CourseReviewDTO>> GetAll(Guid courseId, CourseReviewParameters courseReviewParameters)
+        {
+                var courseReview = await _courseReviewRepository.BuildQuery()
+                                                          .FilterByCourseId(courseId)
+                                                          .FilterByKeyword(courseReviewParameters.Keyword)
+                                                          .IncludeUser()
+                                                          .ApplySort(courseReviewParameters.Orderby)
+                                                          .Skip((courseReviewParameters.PageNumber - 1) * courseReviewParameters.PageSize)
+                                                           .Take(courseReviewParameters.PageSize)
+                                                          .ToListAsync(c => _mapper.Map<CourseReviewDTO>(c));
+                var count = await _courseReviewRepository.BuildQuery()
+                                                   .FilterByCourseId(courseId)
+                                                   .CountAsync();
+                var pageList = new PagedList<CourseReviewDTO>(courseReview, count, courseReviewParameters.PageNumber, courseReviewParameters.PageSize);
+
+                return pageList;
+        }
+        public async Task<Responses<CourseReviewDTO>> Getall(Guid courseId)
         {
             try
             {
-                var courseReview = await _courseReviewRepository.BuildQuery()
-                                                          .FilterByCourseId(courseId)
-                                                          .IncludeUser()
-                                                          .ToListAsync(c => _mapper.Map<CourseReviewDTO>(c));
+                var courses = await _courseReviewRepository.BuildQuery()
+                                                    .FilterByCourseId(courseId)
+                                                     .IncludeUser()
+                                                     .ToListAsync(c => _mapper.Map<CourseReviewDTO>(c));
 
-                return new Responses<CourseReviewDTO>(true, _mapper.Map<IEnumerable<CourseReviewDTO>>(courseReview));
+                return new Responses<CourseReviewDTO>(true, courses);
             }
             catch (Exception ex)
             {
                 return new Responses<CourseReviewDTO>(false, ex.Message, null);
             }
         }
-
         public async Task<Response<CourseReviewDTO>> Add(CourseReviewRequest courseReviewRequest)
         {
             try

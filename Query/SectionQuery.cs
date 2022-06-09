@@ -75,5 +75,14 @@ namespace Course.DAL.Queries
             Query.Include(c => c.Enrollment.Courses).Load();
             return this;
         }
+        public ICourseReviewQuery FilterByKeyword(string Keyword)
+        {
+            if (string.IsNullOrWhiteSpace(Keyword))
+                return this;
+
+            var KEYWORD = Keyword.ToUpper();
+            Query = Query.Where(c => c.Content.ToUpper().Contains(KEYWORD));
+            return this;
+        }
     }
 }
