@@ -50,6 +50,7 @@ namespace Course.BLL.Services
             }
         }
 
+        // todo:test
         public async Task<Responses<CartDTO>> GetAll(Guid userId)
         {
             try
@@ -58,6 +59,8 @@ namespace Course.BLL.Services
                                                                 .FilterByUserId(userId)
                                                                 .IncludeUser()
                                                                 .IncludeCategory()
+                                                                .IncludeDiscount()
+                                                                .IncludeCourse()
                                                                 .ToListAsync(c => _mapper.Map<CartDTO>(c));
 
                 return new Responses<CartDTO>(true, ShoppingCart);

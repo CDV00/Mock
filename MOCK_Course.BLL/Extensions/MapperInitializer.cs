@@ -55,10 +55,11 @@ namespace Course.BLL.Extensions
 
             // map cart
             CreateMap<CartRequest, CartDTO>().ReverseMap();
-            CreateMap<CartUserDTO, AppUser>().ReverseMap();
-            CreateMap<CartCourseDTO, Courses>().ReverseMap();
-            CreateMap<CartCategoryDTO, Category>().ReverseMap();
-            CreateMap<ShoppingCart, CartDTO>().ForMember(des => des.Cart, opt => opt.MapFrom(src => src.User)).ForMember(des => des.Course, opt => opt.MapFrom(src => src.Course)).ForPath(des => des.Course.Category, opt => opt.MapFrom(src => src.Course.Category)).ReverseMap();
+            CreateMap<UserDTO, AppUser>().ReverseMap();
+            CreateMap<CourseDTO, Courses>().ReverseMap();
+            CreateMap<CategoryDTO, Category>().ReverseMap();
+            CreateMap<DiscountDTO, Discount>().ReverseMap();
+            CreateMap<ShoppingCart, CartDTO>().ReverseMap();
             CreateMap<ShoppingCart, CartRequest>().ReverseMap();
 
             // AppUser

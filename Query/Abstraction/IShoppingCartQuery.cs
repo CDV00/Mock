@@ -7,6 +7,8 @@ namespace Course.DAL.Queries.Abstraction
     {
         IShoppingCartQuery FilterByUserId(Guid userId);
         IShoppingCartQuery IncludeCategory();
+        IShoppingCartQuery IncludeCourse();
         IShoppingCartQuery IncludeUser();
+        IShoppingCartQuery IncludeDiscount();
     }
 }
