@@ -121,7 +121,14 @@ namespace Course.BLL.Extensions
             //CreateMap<Discount, DiscountForUpdateRequest>().ReverseMap();
             //
             CreateMap<UserDTO, Subscription>().ReverseMap();
-            //
+
+            // map saved cart
+            CreateMap<SavedCoursesRequest, SavedCoursesDTO>().ReverseMap();
+            CreateMap<UserDTO, AppUser>().ReverseMap();
+            CreateMap<CourseDTO, Courses>().ReverseMap();
+            CreateMap<DiscountDTO, Discount>().ReverseMap();
+            CreateMap<SavedCourses, SavedCoursesDTO>().ReverseMap();
+            CreateMap<SavedCourses, SavedCoursesRequest>().ReverseMap();
 
         }
     }

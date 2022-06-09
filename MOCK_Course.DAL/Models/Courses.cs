@@ -40,6 +40,7 @@ namespace Course.DAL.Models
         public ICollection<CourseCompletion> CourseCompletions { get; set; }
         public ICollection<Enrollment> Enrollments { get; set; }
         public ICollection<ShoppingCart> Carts { get; set; }
+        public ICollection<SavedCourses> SavedCourses { get; set; }
         public ICollection<Order> Orders { get; set; }
         public ICollection<Level> Levels { get; set; }
         public ICollection<AudioLanguage> AudioLanguages { get; set; }

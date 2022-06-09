@@ -184,6 +184,8 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<ILectureCompletionRepository, LectureCompletionRepository>();
             services.AddScoped<IDiscountRepository, DiscountRepository>();
             services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+            services.AddScoped<ISavedCoursesRepository, SavedCoursesRepository>();
+
         }
         /// <summary>
         /// Configure Services
@@ -220,6 +222,7 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IDiscountService, DiscountService>();
             services.AddScoped<ISubscriptionService, SubscriptionService>();
+            services.AddScoped<ISavedCoursesService, SavedCoursesService>();
         }
     }
 }
