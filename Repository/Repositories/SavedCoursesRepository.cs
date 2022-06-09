@@ -8,7 +8,7 @@ using System;
 
 namespace Repository.Repositories
 {
-    public class SavedCoursesRepository : Repository<SavedCourses, Guid>, ISavedCoursesRepository
+    public class SavedCoursesRepository : Repository<SavedCourses>, ISavedCoursesRepository
     {
         private AppDbContext _context;
         public SavedCoursesRepository(AppDbContext context) : base(context)

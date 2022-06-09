@@ -4,7 +4,7 @@ using System;
 
 namespace Course.DAL.Repositories.Abstraction
 {
-    public interface ISavedCoursesRepository : IRepository<SavedCourses, Guid>
+    public interface ISavedCoursesRepository : IRepository<SavedCourses>
     {
         ISavedCoursesQuery BuildQuery();
     }
