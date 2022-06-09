@@ -38,6 +38,7 @@ namespace Course.BLL.Services
 
                 var userResponse = _mapper.Map<UserDTO>(user);
 
+
                 //userProfileResponse.TotalEnrollment = await _enrollmentRepository.BuildQuery()
                 //                                                                 .FilterByUserId(id)
                 //                                                                 .CountAsync();
@@ -95,6 +96,7 @@ namespace Course.BLL.Services
 
                 var user = await _userManager.FindByIdAsync(id.ToString());
                 _mapper.Map(updateProfileRequest, user);
+                user.UpdatedAt = DateTime.Now;
                 await _userManager.UpdateAsync(user);
 
                 return new Response<UserDTO>(

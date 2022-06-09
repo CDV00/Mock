@@ -35,6 +35,7 @@ namespace Course.BLL.Services
                 {
                     UserId = userId,
                     CourseId = courseId,
+                    CreatedAt = DateTime.Now
                 };
 
                 await _shoppingCartRepository.CreateAsync(cart);

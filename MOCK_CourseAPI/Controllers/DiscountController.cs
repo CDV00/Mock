@@ -27,7 +27,7 @@ namespace CourseAPI.Controllers
         /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<Responses<DiscountDTO>>> GetAllDiscount()
+        public async Task<ActionResult<Responses<DiscountDTO_>>> GetAllDiscount()
         {
             var userId = User.GetUserId();
             var result = await _discountService.GetAllDiscount(userId);
@@ -42,7 +42,7 @@ namespace CourseAPI.Controllers
         /// <param name="discountCreateRequest"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Response<DiscountForCreateDTO>>> Add(DiscountForCreateRequest discountCreateRequest)
+        public async Task<ActionResult<Response<DiscountDTO_>>> Add(DiscountForCreateRequest discountCreateRequest)
         {
             var result = await _discountService.Add(discountCreateRequest);
             if (result.IsSuccess == false)
@@ -56,7 +56,7 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPut()]
-        public async Task<ActionResult<Response<DiscountForUpdateDTO>>> Update(Guid id, DiscountForUpdateRequest discountUpdateRequest)
+        public async Task<ActionResult<Response<DiscountDTO_>>> Update(Guid id, DiscountForUpdateRequest discountUpdateRequest)
         {
             var result = await _discountService.Update(id, discountUpdateRequest);
             if (result.IsSuccess == false)

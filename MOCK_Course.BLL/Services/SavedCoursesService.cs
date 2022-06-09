@@ -36,6 +36,7 @@ namespace Course.BLL.Services
                 {
                     UserId = userId,
                     CourseId = courseId,
+                    CreatedAt = DateTime.Now
                 };
 
                 await _savedCoursesRepository.CreateAsync(savecourse);
@@ -55,15 +56,15 @@ namespace Course.BLL.Services
         public async Task<PagedList<SavedCoursesDTO>> GetAll(Guid userId, SavedCoursesParameters savedCoursesParameters)
         {
 
-                var savedCourses = await _savedCoursesRepository.BuildQuery()
-                                                                .FilterByUserId(userId)
-                                                                .IncludeCourse()
-                                                                .IncludeUser()
-                                                                .IncludeCategory()
-                                                                .IncludeDiscount()
-                                                                .Skip((savedCoursesParameters.PageNumber - 1) * savedCoursesParameters.PageSize)
-                                                                .Take(savedCoursesParameters.PageSize)
-                                                                .ToListAsync(c => _mapper.Map<SavedCoursesDTO>(c));
+            var savedCourses = await _savedCoursesRepository.BuildQuery()
+                                                            .FilterByUserId(userId)
+                                                            .IncludeCourse()
+                                                            .IncludeUser()
+                                                            .IncludeCategory()
+                                                            .IncludeDiscount()
+                                                            .Skip((savedCoursesParameters.PageNumber - 1) * savedCoursesParameters.PageSize)
+                                                            .Take(savedCoursesParameters.PageSize)
+                                                            .ToListAsync(c => _mapper.Map<SavedCoursesDTO>(c));
             var count = await _savedCoursesRepository.BuildQuery()
                                                         .FilterByUserId(userId)
                                                         .CountAsync();

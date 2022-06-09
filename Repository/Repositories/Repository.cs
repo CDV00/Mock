@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Repository.Repositories
 {
     public class Repository<T> : IRepository<T> where T : class
-    { 
+    {
         protected DbSet<T> DbSet;
         private readonly AppDbContext _context;
         public Repository(AppDbContext context)
@@ -29,11 +29,11 @@ namespace Repository.Repositories
 
         public virtual async Task CreateRangeAsync(List<T> _object) => await DbSet.AddRangeAsync(_object);
 
-        public virtual void Remove(T _object)
+        public virtual void Remove(dynamic _object)
         {
             //_context.Entry(_object).State = EntityState.Modified;
-            //_object.IsDeleted = true;
-            Remove(_object);
+            _object.IsDeleted = true;
+            //Remove(_object);
         }
 
         public virtual void RemoveRange(List<T> _objects)

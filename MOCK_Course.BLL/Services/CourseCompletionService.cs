@@ -52,7 +52,8 @@ namespace Course.BLL.Services
                 var coursecompletion = new CourseCompletion
                 {
                     UserId = userId,
-                    CourseId = courseId
+                    CourseId = courseId,
+                    CreatedAt = DateTime.Now,
                 };
 
                 await _courseCompletionRepository.CreateAsync(coursecompletion);

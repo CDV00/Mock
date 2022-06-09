@@ -14,6 +14,7 @@ namespace Course.BLL.Extensions
             CreateMap<Category, CategoryRequest>().ReverseMap();
             CreateMap<Category, CategoryUpdateRequest>().ReverseMap();
             CreateMap<DiscountDTO, Discount>().ReverseMap();
+            CreateMap<DiscountDTO_, Discount>().ReverseMap();
 
 
             CreateMap<RegisterRequest, AppUser>().ForMember(des => des.UserName,
@@ -52,6 +53,7 @@ namespace Course.BLL.Extensions
 
             CreateMap<AudioLanguageDTO, AudioLanguage>().ReverseMap();
             CreateMap<CourseDTO, Courses>().ReverseMap();
+            CreateMap<CourseOfDiscountDTO, Courses>().ReverseMap();
             CreateMap<AppUser, CourseDetailUserDTO>().ReverseMap();
             CreateMap<CourseForDetailDTO, Courses>().ReverseMap();
 

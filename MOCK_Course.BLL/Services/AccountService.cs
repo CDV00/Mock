@@ -87,6 +87,7 @@ namespace Course.BLL.Services
                 var user = _mapper.Map<AppUser>(registerRequest);
                 user.Description = registerRequest.Description;
                 user.AvatarUrl = "https://gambolthemes.net/html-items/cursus_main_demo/images/hd_dp.jpg";
+                user.CreatedAt = DateTime.Now;
 
                 var result = await _userManager.CreateAsync(user, registerRequest.Password);
 

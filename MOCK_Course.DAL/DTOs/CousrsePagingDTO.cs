@@ -17,6 +17,6 @@ namespace Course.DAL.DTOs
         public int Rating { get; set; }
         public int View { get; set; } = 0;
         public int TotalTime { get; set; } = 0;
-        public DateTime CreateAt { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

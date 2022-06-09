@@ -1,6 +1,7 @@
 ﻿using Course.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 
 namespace Course.DAL.Configuration
 {
@@ -16,7 +17,8 @@ namespace Course.DAL.Configuration
             .HasForeignKey(c => c.CourseId)
             .OnDelete(DeleteBehavior.NoAction);
 
-            builder.HasQueryFilter(u => !u.IsDeleted);
+            builder.HasQueryFilter(u => !u.IsDeleted && u.EndDate > DateTime.Now);
+            ////builder.HasQueryFilter();
         }
     }
 }

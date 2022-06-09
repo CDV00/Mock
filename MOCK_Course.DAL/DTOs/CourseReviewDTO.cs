@@ -7,7 +7,7 @@ namespace Course.BLL.Responses
         public Guid Id;
         public string Content { get; set; }
         public float Rating { get; set; }
-        public DateTime CreateAt { get; set; }
+        public DateTime CreatedAt { get; set; }
         public EnrollmentDTO Enrollment { get; set; }
     }
 }

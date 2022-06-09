@@ -38,6 +38,7 @@ namespace Course.BLL.Services
                 {
                     UserId = userId,
                     SubscriberId = SubscripberId,
+                    CreatedAt = DateTime.Now
                 };
 
                 await _subscriptionRepository.CreateAsync(subscription);
@@ -74,7 +75,7 @@ namespace Course.BLL.Services
             }
         }
 
-        public async Task<Response<int>> GetTotalSubscriptions(Guid userId)
+        public async Task<Response<int>> GetTotalSubscriber(Guid userId)
         {
             try
             {
@@ -117,7 +118,7 @@ namespace Course.BLL.Services
         }
 
 
-        public async Task<Responses<UserDTO>> GetUserSubscription(Guid userId)
+        public async Task<Responses<UserDTO>> GetAllSubscriber(Guid userId)
         {
             try
             {

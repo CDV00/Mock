@@ -31,6 +31,7 @@ namespace Course.BLL.Services
                 var lessoncompletion = _mapper.Map<LectureCompletion>(lessonCompletionRequest);
 
                 lessoncompletion.UserId = userId;
+                lessoncompletion.CreatedAt = DateTime.Now;
                 await _lessonCompletionRepository.CreateAsync(lessoncompletion);
                 await _unitOfWork.SaveChangesAsync();
 

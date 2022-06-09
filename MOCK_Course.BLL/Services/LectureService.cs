@@ -29,6 +29,7 @@ namespace Course.BLL.Services
             try
             {
                 var Lecture = _mapper.Map<Lecture>(LectureRequest);
+                Lecture.CreatedAt = DateTime.Now;
 
                 await _lectureRepositoty.CreateAsync(Lecture);
                 await _unitOfWork.SaveChangesAsync();

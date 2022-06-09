@@ -23,45 +23,46 @@ namespace Course.BLL.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Response<DiscountDTO>> Add(DiscountForCreateRequest discountForCreateRequest)
+        public async Task<Response<DiscountDTO_>> Add(DiscountForCreateRequest discountForCreateRequest)
         {
             try
             {
                 var discount = _mapper.Map<Discount>(discountForCreateRequest);
+                discount.CreatedAt = DateTime.Now;
 
 
                 await _discountRepository.CreateAsync(discount);
 
                 var result = await _unitOfWork.SaveChangesAsync();
 
-                var DiscountDTO = _mapper.Map<DiscountDTO>(discount);
-                return new Response<DiscountDTO>(
+                var DiscountDTO_ = _mapper.Map<DiscountDTO_>(discount);
+                return new Response<DiscountDTO_>(
                     true,
-                    DiscountDTO
+                    DiscountDTO_
                 );
             }
             catch (Exception ex)
             {
-                return new Response<DiscountDTO>(false, ex.Message, null);
+                return new Response<DiscountDTO_>(false, ex.Message, null);
             }
         }
 
 
         // Get All theo UserId !!!
-        public async Task<Responses<DiscountDTO>> GetAllDiscount(Guid UserId)
+        public async Task<Responses<DiscountDTO_>> GetAllDiscount(Guid UserId)
         {
             try
             {
                 var discounts = await _discountRepository.BuildQuery()
                                                          .IncludeCourses()
                                                          .FilterByUserId(UserId)
-                                                         .ToListAsync(d => _mapper.Map<DiscountDTO>(d));
+                                                         .ToListAsync(d => _mapper.Map<DiscountDTO_>(d));
 
-                return new Responses<DiscountDTO>(true, discounts);
+                return new Responses<DiscountDTO_>(true, discounts);
             }
             catch (Exception ex)
             {
-                return new Responses<DiscountDTO>(false, ex.Message, null);
+                return new Responses<DiscountDTO_>(false, ex.Message, null);
             }
         }
 
@@ -87,31 +88,31 @@ namespace Course.BLL.Services
             }
         }
 
-        public async Task<Response<DiscountDTO>> Update(Guid id, DiscountForUpdateRequest discountForUpdateRequest)
+        public async Task<Response<DiscountDTO_>> Update(Guid id, DiscountForUpdateRequest discountForUpdateRequest)
         {
             try
             {
                 var discount = await _discountRepository.GetByIdAsync(id);
                 if (discount == null)
                 {
-                    new Responses<DiscountDTO>(false, "can't find discount", null);
+                    new Responses<DiscountDTO_>(false, "can't find discount", null);
                 }
 
 
                 _mapper.Map(discountForUpdateRequest, discount);
-
+                discount.UpdatedAt = DateTime.Now;
                 await _unitOfWork.SaveChangesAsync();
 
-                var DiscountResponse = _mapper.Map<DiscountDTO>(discount);
+                var DiscountResponse = _mapper.Map<DiscountDTO_>(discount);
 
-                return new Response<DiscountDTO>(
+                return new Response<DiscountDTO_>(
                     true,
                     DiscountResponse
                 );
             }
             catch (Exception ex)
             {
-                return new Response<DiscountDTO>(false, ex.Message, null);
+                return new Response<DiscountDTO_>(false, ex.Message, null);
             }
         }
     }

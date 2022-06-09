@@ -15,7 +15,7 @@ namespace Course.DAL.Repositories.Abstraction
         Task CreateAsync(T _object);
         Task CreateRangeAsync(List<T> _object);
         public bool Update(T _object);
-        void Remove(T _object);
+        void Remove(object _object);
         void RemoveRange(List<T> _object);
     }
 }

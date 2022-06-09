@@ -72,6 +72,7 @@ namespace Course.BLL.Services
             {
                 var order = _mapper.Map<Order>(orderRequest);
                 order.UserId = userId;
+                order.CreatedAt = DateTime.Now;
 
                 var course = await _cousesRepository.GetByIdAsync(order.CourseId);
                 order.Price = course.Price;

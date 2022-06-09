@@ -33,17 +33,16 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
 
-
         /// <summary>
-        /// Get Total subscription of Instructor
+        /// Get Total subscriber of user
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        [HttpGet("Get-total-subscription")]
+        [HttpGet("Get-total-subscriber")]
         [AllowAnonymous]
-        public async Task<ActionResult<Response<int>>> GetTotalSubscrition(Guid userId)
+        public async Task<ActionResult<Response<int>>> GetTotalSubscriber(Guid userId)
         {
-            var result = await _subscriptionService.GetTotalSubscriptions(userId);
+            var result = await _subscriptionService.GetTotalSubscriber(userId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
@@ -55,14 +54,14 @@ namespace CourseAPI.Controllers
         /// <returns></returns>
         [HttpGet("Get-total-subscription")]
         [AllowAnonymous]
-        public async Task<ActionResult<Response<int>>> GetTotalSubscription(Guid userId)
+        public async Task<ActionResult<Response<int>>> GetTotalSubscription()
         {
+            var userId = User.GetUserId();
             var result = await _subscriptionService.GetTotalSubscription(userId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
         }
-
 
         [HttpDelete()]
         public async Task<ActionResult<BaseResponse>> Delete(Guid SubscriberId)
@@ -86,19 +85,31 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// Get total registered users
+        /// Get all Subscriber
         /// </summary>
         /// <returns></returns>
-        [HttpGet("GetAllSubscripber")]
+        [HttpGet("Get-All-Subscriber")]
         [AllowAnonymous]
-        public async Task<ActionResult<UserDTO>> GetUserSubscription(Guid userId)
+        public async Task<ActionResult<UserDTO>> GetAllSubscriber(Guid userId)
         {
-            var result = await _subscriptionService.GetUserSubscription(userId);
+            var result = await _subscriptionService.GetAllSubscriber(userId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
         }
 
-        
+
+        // todo: get all subscription
+        [HttpGet("Get-All-Subscription")]
+        [AllowAnonymous]
+        public async Task<ActionResult<UserDTO>> GetAllSubscription()
+        {
+            var userId = User.GetUserId();
+
+            var result = await _subscriptionService.GetAllSubscriber(userId);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
     }
 }

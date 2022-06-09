@@ -32,6 +32,7 @@ namespace Course.BLL.Services
                 {
                     UserId = userId,
                     CourseId = CourseId,
+                    CreatedAt = DateTime.Now,
                 };
 
                 await _enrollmentRepository.CreateAsync(enrollment);

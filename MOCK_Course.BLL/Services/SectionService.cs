@@ -51,6 +51,7 @@ namespace Course.BLL.Services
             try
             {
                 var section = _mapper.Map<Section>(sectionRequest);
+                section.CreatedAt = DateTime.Now;
 
                 await _sectionRepositoty.CreateAsync(section);
                 await _unitOfWork.SaveChangesAsync();

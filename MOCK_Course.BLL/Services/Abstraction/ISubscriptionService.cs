@@ -10,9 +10,9 @@ namespace Course.BLL.Services.Abstraction
     {
         Task<Response<SubscriptionDTO>> Add(Guid userId, Guid SubscripberId);
         Task<BaseResponse> Delete(Guid userId, Guid subscripberId);
-        Task<Response<int>> GetTotalSubscriptions(Guid userId);
+        Task<Response<int>> GetTotalSubscriber(Guid userId);
         Task<Response<SubscriptionDTO>> IsSubscription(Guid userId, Guid subscriberId);
-        Task<Responses<UserDTO>> GetUserSubscription(Guid userId);
+        Task<Responses<UserDTO>> GetAllSubscriber(Guid userId);
         Task<Response<int>> GetTotalSubscription(Guid subscriberId);
         Task<Responses<UserDTO>> GetPopularInstructor();
     }
