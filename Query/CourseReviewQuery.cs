@@ -45,6 +45,7 @@ namespace Course.DAL.Queries
             Query = Query.Where(type => type.CourseId == CourseId);
             return this;
         }
-        
+
+
     }
 }
