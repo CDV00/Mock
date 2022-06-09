@@ -40,7 +40,7 @@ namespace Course.DAL.Queries
 
         public async Task<float> GetAvgRatePercent(long sum)
         {
-            var result = (await Query.AverageAsync(c => c.Rating) * 100) / sum;
+            var result = (await Query.SumAsync(c => c.Rating) * 100) / sum;
             return result;
         }
 
