@@ -24,6 +24,7 @@ namespace Course.DAL.Data
         public DbSet<Discount> Discounts { get; set; }
         public DbSet<Lecture> Lectures { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<SavedCourses> SavedCourses { get; set; }
 
         public DbSet<AudioLanguage> AudioLanguages { get; set; }
         public DbSet<CloseCaption> CloseCaptions { get; set; }
@@ -55,6 +56,7 @@ namespace Course.DAL.Data
             modelBuilder.ApplyConfiguration(new CloseCaptionConfiguration());
             modelBuilder.ApplyConfiguration(new CourseLevelConfiguration());
             modelBuilder.ApplyConfiguration(new DiscountConfiguration());
+            modelBuilder.ApplyConfiguration(new SavedCourseConfiguration());
 
             modelBuilder.ConfigTablesOfIdentity();
             //modelBuilder.SeedData();
