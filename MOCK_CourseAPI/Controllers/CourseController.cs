@@ -36,7 +36,7 @@ namespace CourseAPI.Controllers
             Response.Headers.Add("X-Pagination",
                                  JsonSerializer.Serialize(result.MetaData));
 
-            return Ok(new Responses<CourseDTO>(true,result));
+            return Ok(new Responses<CourseDTO>(true, result));
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace CourseAPI.Controllers
         /// <param name="id"></param>
         /// <param name="CoursesUpdateRequest"></param>
         /// <returns>an course</returns>
-        [HttpPut("{id:guid}")]
+        [HttpPut()]
         public async Task<ActionResult<Response<CourseDTO>>> Update(Guid id, CourseForUpdateRequest CoursesUpdateRequest)
         {
             var result = await _coursesService.Update(id, CoursesUpdateRequest);
@@ -102,7 +102,7 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <param name="id">Id Courses</param>
         /// <returns>true or false</returns>
-        [HttpDelete("{id:guid}")]
+        [HttpDelete()]
         public async Task<ActionResult<BaseResponse>> Delete(Guid id)
         {
             var result = await _coursesService.Remove(id);
@@ -111,15 +111,14 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
         /// <summary>
-        /// Get Total Course of Instructor User
+        /// Get Total Course of Instructor 
         /// </summary>
-        /// <returns>total course as Interger type</returns>
+        /// <returns>total course as Integer type</returns>
         [HttpGet("Get-total-courses")]
         [AllowAnonymous]
-        public async Task<ActionResult<Response<int>>> GetTotal()
+        public async Task<ActionResult<Response<int>>> GetTotal(Guid UserId)
         {
-            var userId = User.GetUserId();
-            var result = await _coursesService.GetTotal(userId);
+            var result = await _coursesService.GetTotal(UserId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
@@ -144,7 +143,7 @@ namespace CourseAPI.Controllers
         /// Get all Course, User already purchased
         /// </summary>
         /// <returns>List Courses</returns>
-        [HttpGet("Get-all-my-purchse")]
+        [HttpGet("Get-all-my-purchased")]
         public async Task<ActionResult<Responses<CourseDTO>>> GetAllMyPurchase()
         {
             var userId = User.GetUserId();

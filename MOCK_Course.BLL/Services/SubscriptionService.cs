@@ -69,15 +69,15 @@ namespace Course.BLL.Services
             }
         }
 
-        public async Task<Response<int>> GetTotal(Guid userId)
+        public async Task<Response<int>> GetTotalSubscriptions(Guid userId)
         {
             try
             {
-                var courses = await _subscriptionRepository.BuildQuery()
+                var total = await _subscriptionRepository.BuildQuery()
                                                            .FilterByUserId(userId)
                                                            .CountAsync();
 
-                return new Response<int>(true, courses);
+                return new Response<int>(true, total);
             }
             catch (Exception ex)
             {
@@ -85,9 +85,13 @@ namespace Course.BLL.Services
             }
         }
 
-        public Task GetTotalInstrutorsSubscribing(Guid userId)
+        public async Task<Response<int>> GetTotalSubscription(Guid subscriberId)
         {
-            throw new NotImplementedException();
+            var total = await _subscriptionRepository.BuildQuery()
+                                                     .FilterBySubscriberId(subscriberId)
+                                                     .CountAsync();
+
+            return new Response<int>(true, total);
         }
 
         public async Task<Response<SubscriptionDTO>> IsSubscription(Guid userId, Guid subscriberId)
@@ -115,9 +119,9 @@ namespace Course.BLL.Services
                 var user = await _subscriptionRepository.BuildQuery()
                                                         .FilterByUserId(userId)
                                                         .IncludeSubcriber()
-                                                        .ToListAsync(u => _mapper.Map<UserDTO>(u));
+                                                        .ToListAsync(u => _mapper.Map<UserDTO>(u.User));
 
-                return new Responses<UserDTO>(true,user);
+                return new Responses<UserDTO>(true, user);
             }
             catch (Exception ex)
             {

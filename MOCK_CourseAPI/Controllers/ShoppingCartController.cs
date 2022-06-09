@@ -58,7 +58,7 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        [HttpDelete("{UserId:guid}")]
+        [HttpDelete()]
         public async Task<ActionResult<BaseResponse>> Remove(Guid Id)
         {
             var result = await _shoppingCartService.Remove(Id);

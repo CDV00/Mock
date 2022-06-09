@@ -23,8 +23,6 @@ namespace CourseAPI.Controllers
         /// <summary>
         ///  Add subscription
         /// </summary>
-        /// <param name = "courseCompletionRequest" ></ param >
-        /// < returns ></ returns >
         [HttpPost]
         public async Task<ActionResult<SubscriptionDTO>> Create(Guid SubscriberId)
         {
@@ -37,29 +35,32 @@ namespace CourseAPI.Controllers
 
 
         /// <summary>
-        /// Get Total Course of User
+        /// Get Total subscription of Instructor
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        [HttpGet("Get-total")]
-        public async Task<ActionResult<Response<int>>> GetTotal()
+        [HttpGet("Get-total-subscription")]
+        [AllowAnonymous]
+        public async Task<ActionResult<Response<int>>> GetTotalSubscrition(Guid userId)
         {
-            var userId = User.GetUserId();
-            var result = await _subscriptionService.GetTotal(userId);
+            var result = await _subscriptionService.GetTotalSubscriptions(userId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
         }
 
-        [HttpGet("Get-total-Instrutors-Subscribing")]
-        public async Task<ActionResult<Response<int>>> GetTotalInstrutorsSubscribing()
+        /// <summary>
+        /// Get the Total of the instructors that the student has registered
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("Get-total-subscription")]
+        [AllowAnonymous]
+        public async Task<ActionResult<Response<int>>> GetTotalSubscription(Guid userId)
         {
-            var userId = User.GetUserId();
-            //var result = await _subscriptionService.GetTotalInstrutorsSubscribing(userId);
-            //if (result.IsSuccess == false)
-            //    return BadRequest(result);
-            //return Ok(result);
-            return Ok();
+            var result = await _subscriptionService.GetTotalSubscription(userId);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
         }
 
 
@@ -83,10 +84,15 @@ namespace CourseAPI.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
+
+        /// <summary>
+        /// Get total registered users
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("GetAllSubscripber")]
-        public async Task<ActionResult<UserDTO>> GetUserSubscription()
+        [AllowAnonymous]
+        public async Task<ActionResult<UserDTO>> GetUserSubscription(Guid userId)
         {
-            var userId = User.GetUserId();
             var result = await _subscriptionService.GetUserSubscription(userId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
