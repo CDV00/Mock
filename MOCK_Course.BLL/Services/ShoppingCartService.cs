@@ -57,10 +57,10 @@ namespace Course.BLL.Services
             {
                 var ShoppingCart = await _shoppingCartRepository.BuildQuery()
                                                                 .FilterByUserId(userId)
+                                                                .IncludeCourse()
                                                                 .IncludeUser()
                                                                 .IncludeCategory()
                                                                 .IncludeDiscount()
-                                                                .IncludeCourse()
                                                                 .ToListAsync(c => _mapper.Map<CartDTO>(c));
 
                 return new Responses<CartDTO>(true, ShoppingCart);

@@ -53,22 +53,22 @@ namespace Course.BLL.Services
 
                 return pageList;
         }
-        public async Task<Responses<CourseReviewDTO>> Getall(Guid courseId)
-        {
-            try
-            {
-                var courseReview = await _courseReviewRepository.BuildQuery()
-                                                          .FilterByCourseId(courseId)
-                                                          .IncludeUser()
-                                                          .ToListAsync(c => _mapper.Map<CourseReviewDTO>(c));
+        //public async Task<Responses<CourseReviewDTO>> Getall(Guid courseId)
+        //{
+        //    try
+        //    {
+        //        var courseReview = await _courseReviewRepository.BuildQuery()
+        //                                                  .FilterByCourseId(courseId)
+        //                                                  .IncludeUser()
+        //                                                  .ToListAsync(c => _mapper.Map<CourseReviewDTO>(c));
 
-                return new Responses<CourseReviewDTO>(true, courses);
-            }
-            catch (Exception ex)
-            {
-                return new Responses<CourseReviewDTO>(false, ex.Message, null);
-            }
-        }
+        //        return new Responses<CourseReviewDTO>(true, courses);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new Responses<CourseReviewDTO>(false, ex.Message, null);
+        //    }
+        //}
         public async Task<Response<CourseReviewDTO>> Add(CourseReviewRequest courseReviewRequest)
         {
             try

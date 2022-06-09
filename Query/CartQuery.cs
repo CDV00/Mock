@@ -29,7 +29,7 @@ namespace Course.DAL.Queries
 
         public IShoppingCartQuery IncludeUser()
         {
-            Query.Include(type => type.User).Load();
+            Query.Include(type => type.Course.User).Load();
             return this;
         }
 

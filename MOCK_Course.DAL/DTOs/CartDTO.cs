@@ -6,7 +6,7 @@ namespace Course.BLL.DTO
     public class CartDTO
     {
         public Guid Id { get; set; }
-        public UserDTO Cart { get; set; }
+        //public UserDTO User { get; set; }
         public CourseDTO Course { get; set; }
 
     }
