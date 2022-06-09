@@ -4,7 +4,7 @@ using System;
 
 namespace Course.DAL.Repositories.Abstraction
 {
-    public interface IShoppingCartRepository : IRepository<ShoppingCart, Guid>
+    public interface IShoppingCartRepository : IRepository<ShoppingCart>
     {
         IShoppingCartQuery BuildQuery();
     }

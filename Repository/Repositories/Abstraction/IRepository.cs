@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Course.DAL.Repositories.Abstraction
 {
-    public interface IRepository<T, K> where T : BaseEntity<K>
+    public interface IRepository<T> where T : class
     {
         IQueryable<T> GetAll();
         IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression);
-        Task<T> GetByIdAsync(K Id);
+        Task<T> GetByIdAsync(Guid Id);
         Task CreateAsync(T _object);
         Task CreateRangeAsync(List<T> _object);
         public bool Update(T _object);

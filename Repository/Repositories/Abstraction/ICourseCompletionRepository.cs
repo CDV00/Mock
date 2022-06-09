@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Course.DAL.Repositories.Abstraction
 {
-    public interface ICourseCompletionRepository : IRepository<CourseCompletion, Guid>
+    public interface ICourseCompletionRepository : IRepository<CourseCompletion>
     {
     }
 }

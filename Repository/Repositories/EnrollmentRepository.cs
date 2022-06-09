@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Repository.Repositories
 {
-    public class EnrollmentRepository : Repository<Enrollment, Guid>, IEnrollmentRepository
+    public class EnrollmentRepository : Repository<Enrollment>, IEnrollmentRepository
     {
         private AppDbContext _context;
         public EnrollmentRepository(AppDbContext context) : base(context)

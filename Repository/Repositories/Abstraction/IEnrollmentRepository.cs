@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Course.DAL.Repositories.Abstraction
 {
-    public interface IEnrollmentRepository : IRepository<Enrollment, Guid>
+    public interface IEnrollmentRepository : IRepository<Enrollment>
     {
         //Task<bool> IsEnrollmented(Enrollment enrollment);
         //Task<int> GetTotal(Guid userId);

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Course.DAL.Repositories.Abstraction
 {
-    public interface ILevelRepository : IRepository<Level, Guid>
+    public interface ILevelRepository : IRepository<Level>
     {
         Task<IList<LevelDTO>> GetAll();
     }

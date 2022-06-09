@@ -4,7 +4,7 @@ using System;
 
 namespace Course.DAL.Repositories.Abstraction
 {
-    public interface IOrderRepository : IRepository<Order, Guid>
+    public interface IOrderRepository : IRepository<Order>
     {
         IOrderQuery BuildQuery();
     }

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Repository.Repositories
 {
-    public class Repository<T, K> : IRepository<T, K> where T : BaseEntity<K>
-    {
+    public class Repository<T> : IRepository<T> where T : class
+    { 
         protected DbSet<T> DbSet;
         private readonly AppDbContext _context;
         public Repository(AppDbContext context)
@@ -31,23 +31,25 @@ namespace Repository.Repositories
 
         public virtual void Remove(T _object)
         {
-            _context.Entry(_object).State = EntityState.Modified;
-            _object.IsDeleted = true;
+            //_context.Entry(_object).State = EntityState.Modified;
+            //_object.IsDeleted = true;
+            Remove(_object);
         }
 
-        public virtual void RemoveRange(List<T> _object)
+        public virtual void RemoveRange(List<T> _objects)
         {
-            _context.Entry(_object).State = EntityState.Modified;
-            for (var i = 0; i < _object.Count; i++)
-            {
-                _object[0].IsDeleted = true;
-            }
+            Entity().RemoveRange(_objects);
+            //_context.Entry(_object).State = EntityState.Modified;
+            //for (var i = 0; i < _object.Count; i++)
+            //{
+            //    _object[0].IsDeleted = true;
+            //}
         }
 
 
         public virtual IQueryable<T> GetAll() => DbSet.AsNoTracking();
 
-        public virtual async Task<T> GetByIdAsync(K Id)
+        public virtual async Task<T> GetByIdAsync(Guid Id)
         {
             var data = await DbSet.FindAsync(Id);
             if (data == null) return null;

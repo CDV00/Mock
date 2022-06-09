@@ -7,7 +7,7 @@ using System;
 
 namespace Repository.Repositories
 {
-    public class CourseReviewRepository : Repository<CourseReview, Guid>, ICourseReviewRepository
+    public class CourseReviewRepository : Repository<CourseReview>, ICourseReviewRepository
     {
         private AppDbContext _context;
         public CourseReviewRepository(AppDbContext context) : base(context)

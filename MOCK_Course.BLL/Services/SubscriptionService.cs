@@ -7,6 +7,8 @@ using Course.BLL.DTO;
 using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
 using Course.BLL.Responses;
+using System.Linq;
+using Microsoft.AspNetCore.Identity;
 
 namespace Course.BLL.Services
 {
@@ -15,14 +17,17 @@ namespace Course.BLL.Services
         private readonly ISubscriptionRepository _subscriptionRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly UserManager<AppUser> _userManager;
 
         public SubscriptionService(ISubscriptionRepository subscriptionRepository,
             IMapper mapper,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            UserManager<AppUser> userManager)
         {
             _subscriptionRepository = subscriptionRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _userManager = userManager;
         }
 
         public async Task<Response<SubscriptionDTO>> Add(Guid userId, Guid SubscripberId)
@@ -118,6 +123,26 @@ namespace Course.BLL.Services
                                                         .ToListAsync(u => _mapper.Map<UserDTO>(u));
 
                 return new Responses<UserDTO>(true,user);
+            }
+            catch (Exception ex)
+            {
+                return new Responses<UserDTO>(false, ex.Message, null);
+            }
+        }
+        //
+        //
+        public async Task<Responses<UserDTO>> GetPopularInstructor()
+        {
+            try
+            {
+                string RoleName = UserRoles.Instructor;
+                var user = await _subscriptionRepository.BuildQuery()
+                                                        .IncludeSubcriber()
+                                                        .IncludeUser()
+                                                        //.FilterByRole(RoleName)
+                                                        .ToListAsync(u => _mapper.Map<UserDTO>(u.User));
+
+                return new Responses<UserDTO>(true, user);
             }
             catch (Exception ex)
             {

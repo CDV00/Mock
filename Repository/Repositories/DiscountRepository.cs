@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Repository.Repositories
 {
-    public class DiscountRepository : Repository<Discount, Guid>, IDiscountRepository
+    public class DiscountRepository : Repository<Discount>, IDiscountRepository
     {
         private AppDbContext _context;
         public DiscountRepository(AppDbContext context) : base(context)

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Course.DAL.Repositories.Abstraction
 {
-    public interface ILectureRepository : IRepository<Lecture, Guid>
+    public interface ILectureRepository : IRepository<Lecture>
     {
         ILectureQuery BuildQuery();
         Task<bool> RemoveBySectionId(Guid sectionId);

@@ -5,7 +5,7 @@ using System;
 
 namespace Repository.Repositories
 {
-    public class CloseCaptionRepository : Repository<CloseCaption, Guid>, ICloseCaptionRepository
+    public class CloseCaptionRepository : Repository<CloseCaption>, ICloseCaptionRepository
     {
         private AppDbContext _context;
         public CloseCaptionRepository(AppDbContext context) : base(context)

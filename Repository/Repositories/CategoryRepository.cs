@@ -7,7 +7,7 @@ using System;
 
 namespace Repository.Repositories
 {
-    public class CategoryRepository : Repository<Category, Guid>, ICategoryRepository
+    public class CategoryRepository : Repository<Category>, ICategoryRepository
     {
         private AppDbContext _context;
         public CategoryRepository(AppDbContext context) : base(context)

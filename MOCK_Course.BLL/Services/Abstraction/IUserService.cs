@@ -11,5 +11,6 @@ namespace Course.BLL.Services.Abstraction
         Task<Response<UserDTO>> UpdateProfile(Guid userId, UpdateProfileRequest updateProfileRequest);
         Task<BaseResponse> ChangePassword(Guid userId, ChangePasswordRequest changePasswordRequest);
         Task<BaseResponse> CheckExistEmail(string Email);
+        Task<Responses<UserDTO>> GetPopularInstructor();
     }
 }

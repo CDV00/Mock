@@ -3,7 +3,7 @@ using System;
 
 namespace Course.DAL.Repositories.Abstraction
 {
-    public interface ILanguageRepository : IRepository<AudioLanguage, Guid>
+    public interface ILanguageRepository : IRepository<AudioLanguage>
     {
     }
 }
