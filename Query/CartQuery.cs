@@ -38,5 +38,17 @@ namespace Course.DAL.Queries
             Query.Include(type => type.User.Category).Load();
             return this;
         }
+
+        public IShoppingCartQuery IncludeCourse()
+        {
+            Query.Include(type => type.User.Courses).Load();
+            return this;
+        }
+        public IShoppingCartQuery IncludeDiscount()
+        {
+            Query.Include(type => type.Course.Discounts).Load();
+            return this;
+        }
+        
     }
 }
