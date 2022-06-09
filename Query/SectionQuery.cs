@@ -28,7 +28,6 @@ namespace Course.DAL.Queries
         /// <returns></returns>
         public ICourseReviewQuery FilterByCourseId(Guid CourseId)
         {
-            Query.Include(c => c.Enrollment).Load();
             Query = Query.Where(type => type.Enrollment.CourseId == CourseId);
             return this;
         }

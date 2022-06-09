@@ -30,14 +30,14 @@ namespace Course.BLL.Services
             _userManager = userManager;
         }
 
-        public async Task<Response<SubscriptionDTO>> Add(Guid userId, Guid SubscripberId)
+        public async Task<Response<SubscriptionDTO>> Add(Guid userId, Guid instructorId)
         {
             try
             {
                 var subscription = new Subscription()
                 {
-                    UserId = userId,
-                    SubscriberId = SubscripberId,
+                    UserId = instructorId,
+                    SubscriberId = userId,
                     CreatedAt = DateTime.Now
                 };
 
@@ -80,8 +80,8 @@ namespace Course.BLL.Services
             try
             {
                 var total = await _subscriptionRepository.BuildQuery()
-                                                           .FilterByUserId(userId)
-                                                           .CountAsync();
+                                                         .FilterByUserId(userId)
+                                                         .CountAsync();
 
                 return new Response<int>(true, total);
             }
@@ -91,7 +91,7 @@ namespace Course.BLL.Services
             }
         }
 
-        public async Task<Response<int>> GetTotalSubscription(Guid subscriberId)
+        public async Task<Response<int>> GetTotalInstructor(Guid subscriberId)
         {
             var total = await _subscriptionRepository.BuildQuery()
                                                      .FilterBySubscriberId(subscriberId)
@@ -100,13 +100,13 @@ namespace Course.BLL.Services
             return new Response<int>(true, total);
         }
 
-        public async Task<Response<SubscriptionDTO>> IsSubscription(Guid userId, Guid subscriberId)
+        public async Task<Response<SubscriptionDTO>> IsSubscription(Guid userId, Guid instructorId)
         {
             try
             {
                 var subscription = await _subscriptionRepository.BuildQuery()
-                                                                .FilterByUserId(userId)
-                                                                .FilterBySubscriberId(subscriberId)
+                                                                .FilterByUserId(instructorId)
+                                                                .FilterBySubscriberId(userId)
                                                                 .AsSelectorAsync(s => _mapper.Map<SubscriptionDTO>(s));
 
                 return new Response<SubscriptionDTO>(true, subscription);
@@ -134,17 +134,14 @@ namespace Course.BLL.Services
                 return new Responses<UserDTO>(false, ex.Message, null);
             }
         }
-        //
-        //
-        public async Task<Responses<UserDTO>> GetPopularInstructor()
+
+        public async Task<Responses<UserDTO>> GetAllInstructor(Guid userId)
         {
             try
             {
-                string RoleName = UserRoles.Instructor;
                 var user = await _subscriptionRepository.BuildQuery()
-                                                        .IncludeSubcriber()
-                                                        .IncludeUser()
-                                                        //.FilterByRole(RoleName)
+                                                        .FilterBySubscriberId(userId)
+                                                        .IncludeInstructor()
                                                         .ToListAsync(u => _mapper.Map<UserDTO>(u.User));
 
                 return new Responses<UserDTO>(true, user);
@@ -154,5 +151,24 @@ namespace Course.BLL.Services
                 return new Responses<UserDTO>(false, ex.Message, null);
             }
         }
+
+        //public async Task<Responses<UserDTO>> GetPopularInstructor()
+        //{
+        //    try
+        //    {
+        //        string RoleName = UserRoles.Instructor;
+        //        var user = await _subscriptionRepository.BuildQuery()
+        //                                                .IncludeSubcriber()
+        //                                                .IncludeUser()
+        //                                                //.FilterByRole(RoleName)
+        //                                                .ToListAsync(u => _mapper.Map<UserDTO>(u.User));
+
+        //        return new Responses<UserDTO>(true, user);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new Responses<UserDTO>(false, ex.Message, null);
+        //    }
+        //}
     }
 }

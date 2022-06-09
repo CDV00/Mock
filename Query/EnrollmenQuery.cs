@@ -39,6 +39,12 @@ namespace Course.DAL.Queries
             return this;
         }
 
+        public ISubscriptionQuery IncludeInstructor()
+        {
+            Query.Include(u => u.User).Load();
+            return this;
+        }
+
         public ISubscriptionQuery FilterBySubscriberId(Guid subscriberId)
         {
             Query.Where(type => type.SubscriberId == subscriberId);

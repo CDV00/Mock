@@ -41,15 +41,6 @@ namespace CourseAPI.Controllers
             return Ok(new Responses<CourseReviewDTO>(true, result));
         }
 
-        //[HttpGet("Get-all")]
-        //[AllowAnonymous]
-        //public async Task<ActionResult<Responses<CourseReviewDTO>>> GetAll(Guid courseId)
-        //{
-        //    var result = await _courseReviewService.Getall(courseId);
-        //    if (result.IsSuccess == false)
-        //        return BadRequest(result);
-        //    return Ok(result);
-        //}
 
         /// <summary>
         /// Create new review
@@ -117,6 +108,22 @@ namespace CourseAPI.Controllers
         public async Task<ActionResult<Response<List<float>>>> GetRating(Guid courseId)
         {
             var result = await _courseReviewService.GetDetaiRate(courseId);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
+
+        /// <summary>
+        /// Get avg rating of course
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <returns>rating</returns>
+        [HttpGet("Get-Avg-Rating")]
+        [AllowAnonymous]
+        public async Task<ActionResult<Response<List<float>>>> GetAvgRating(Guid courseId)
+        {
+            var result = await _courseReviewService.GetAVGRatinng(courseId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);

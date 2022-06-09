@@ -39,16 +39,17 @@ namespace Course.BLL.Services
         public async Task<PagedList<CourseReviewDTO>> GetAll(Guid courseId, CourseReviewParameters courseReviewParameters)
         {
             var courseReview = await _courseReviewRepository.BuildQuery()
-                                                      .FilterByCourseId(courseId)
-                                                      .FilterByKeyword(courseReviewParameters.Keyword)
-                                                      .IncludeUser()
-                                                      .ApplySort(courseReviewParameters.Orderby)
-                                                      .Skip((courseReviewParameters.PageNumber - 1) * courseReviewParameters.PageSize)
-                                                       .Take(courseReviewParameters.PageSize)
-                                                      .ToListAsync(c => _mapper.Map<CourseReviewDTO>(c));
+                                                            .FilterByCourseId(courseId)
+                                                            .FilterByKeyword(courseReviewParameters.Keyword)
+                                                            .IncludeUser()
+                                                            .ApplySort(courseReviewParameters.Orderby)
+                                                            .Skip((courseReviewParameters.PageNumber - 1) * courseReviewParameters.PageSize)
+                                                            .Take(courseReviewParameters.PageSize)
+                                                            .ToListAsync(c => _mapper.Map<CourseReviewDTO>(c));
+
             var count = await _courseReviewRepository.BuildQuery()
-                                               .FilterByCourseId(courseId)
-                                               .CountAsync();
+                                                     .FilterByCourseId(courseId)
+                                                     .CountAsync();
             var pageList = new PagedList<CourseReviewDTO>(courseReview, count, courseReviewParameters.PageNumber, courseReviewParameters.PageSize);
 
             return pageList;
@@ -169,8 +170,9 @@ namespace Course.BLL.Services
         {
             try
             {
-                var sumRating = await _courseReviewRepository.BuildQuery().
-                    FilterByCourseId(courseId).SumAsync(c => (long)c.Rating);
+                var sumRating = await _courseReviewRepository.BuildQuery()
+                                                             .FilterByCourseId(courseId)
+                                                             .SumAsync(c => (long)c.Rating);
 
                 List<float> rates = new();
 
@@ -181,7 +183,6 @@ namespace Course.BLL.Services
                                                            .FilterByRating(i)
                                                            .GetAvgRatePercent(sumRating));
                 }
-
 
                 return new Response<List<float>>(true, rates);
             }

@@ -11,5 +11,6 @@ namespace Course.DAL.Queries
         ISubscriptionQuery IncludeUser();
         ISubscriptionQuery IncludeSubcriber();
         ISubscriptionQuery FilterByRole(string RoleName);
+        ISubscriptionQuery IncludeInstructor();
     }
 }

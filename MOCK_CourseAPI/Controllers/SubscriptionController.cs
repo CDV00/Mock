@@ -21,13 +21,13 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        ///  Add subscription
+        ///  Subscription
         /// </summary>
         [HttpPost]
-        public async Task<ActionResult<SubscriptionDTO>> Create(Guid SubscriberId)
+        public async Task<ActionResult<SubscriptionDTO>> Create(Guid instructorId)
         {
             var userId = User.GetUserId();
-            var result = await _subscriptionService.Add(userId, SubscriberId);
+            var result = await _subscriptionService.Add(userId, instructorId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
@@ -57,12 +57,17 @@ namespace CourseAPI.Controllers
         public async Task<ActionResult<Response<int>>> GetTotalSubscription()
         {
             var userId = User.GetUserId();
-            var result = await _subscriptionService.GetTotalSubscription(userId);
+            var result = await _subscriptionService.GetTotalInstructor(userId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
         }
 
+        /// <summary>
+        /// unscription
+        /// </summary>
+        /// <param name="SubscriberId"></param>
+        /// <returns></returns>
         [HttpDelete()]
         public async Task<ActionResult<BaseResponse>> Delete(Guid SubscriberId)
         {
@@ -74,18 +79,23 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Check Is subscription
+        /// </summary>
+        /// <param name="instructorId"></param>
+        /// <returns></returns>
         [HttpGet("Is-Subscription")]
-        public async Task<ActionResult<SubscriptionDTO>> IsSubscription(Guid SubscriberId)
+        public async Task<ActionResult<SubscriptionDTO>> IsSubscription(Guid instructorId)
         {
             var userId = User.GetUserId();
-            var result = await _subscriptionService.IsSubscription(userId, SubscriberId);
+            var result = await _subscriptionService.IsSubscription(userId, instructorId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
         }
 
         /// <summary>
-        /// Get all Subscriber
+        /// Get all Subscriber, user has been registed
         /// </summary>
         /// <returns></returns>
         [HttpGet("Get-All-Subscriber")]
@@ -99,10 +109,13 @@ namespace CourseAPI.Controllers
         }
 
 
-        // todo: get all subscription
+        /// <summary>
+        /// Get all instructor, user has registed
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("Get-All-Subscription")]
         [AllowAnonymous]
-        public async Task<ActionResult<UserDTO>> GetAllSubscription()
+        public async Task<ActionResult<UserDTO>> GetAllInstructor()
         {
             var userId = User.GetUserId();
 
