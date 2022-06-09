@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Repository.Repositories
 {
-    public class LectureRepository : Repository<Lecture, Guid>, ILectureRepository
+    public class LectureRepository : Repository<Lecture>, ILectureRepository
     {
         private AppDbContext _context;
         public LectureRepository(AppDbContext context) : base(context)

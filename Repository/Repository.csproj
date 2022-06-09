@@ -13,4 +13,8 @@
 	  <Folder Include="Requests\" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.Owin.Security.Facebook" Version="4.2.2" />
+	</ItemGroup>
+
 </Project>

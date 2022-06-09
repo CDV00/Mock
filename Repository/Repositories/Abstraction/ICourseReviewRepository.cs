@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Course.DAL.Repositories.Abstraction
 {
-    public interface ICourseReviewRepository : IRepository<CourseReview, Guid>
+    public interface ICourseReviewRepository : IRepository<CourseReview>
     {
         ICourseReviewQuery BuildQuery();
     }

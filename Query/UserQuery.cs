@@ -17,7 +17,30 @@ namespace Course.DAL.Queries
         /// </summary>
         /// <param name="masterDataQuery"></param>
         /// <param name="dbContext"></param>
-        public UserQuery(IQueryable<AppUser> courseQuery, AppDbContext dbContext) : base(courseQuery)
+        public UserQuery(IQueryable<AppUser> userQuery, AppDbContext dbContext) : base(userQuery)
         { _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext)); }
+
+        
+
+        public IUserQuery FilterByRole(string RoleName)
+        {
+            var roles = _dbContext.Roles.AsQueryable().Where(r => r.NormalizedName == RoleName.ToUpper());
+            var userRole = _dbContext.UserRoles.AsQueryable().Where(ur => roles.Any(r => r.Id == ur.RoleId));
+
+            Query = Query.Where(u => userRole.Any(ur => ur.UserId == u.Id));
+
+            return this;
+        }
+
+        public IUserQuery SortBySubscription()
+        {
+            /*Query = Query.Include(u=> u.Subscriptions);
+            var suscription = Query.Include(u=>u.Subscriptions).Select(u => u.Subscriptions.Count);*/
+            //Query.Include(s => s.Subscriptions).Load();
+            //var subscriper = Query.Where(u => u.Subscriptions.Any(sb => sb.SubscriberId == u.Id));
+            //Query = Query.OrderBy(u=>u.Subscriptions.Where(u=>u.SubscriberId == ).Select(s=>s.SubscriberId));
+            
+            return this;
+        }
     }
 }

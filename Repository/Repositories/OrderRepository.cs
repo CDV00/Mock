@@ -7,7 +7,7 @@ using System;
 
 namespace Repository.Repositories
 {
-    public class OrderRepository : Repository<Order, Guid>, IOrderRepository
+    public class OrderRepository : Repository<Order>, IOrderRepository
     {
         private AppDbContext _context;
         public OrderRepository(AppDbContext context) : base(context)

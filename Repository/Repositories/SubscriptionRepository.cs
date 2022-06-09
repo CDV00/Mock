@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Repository.Repositories
 {
-    public class SubscriptionRepository : Repository<Subscription, Guid>, ISubscriptionRepository
+    public class SubscriptionRepository : Repository<Subscription>, ISubscriptionRepository
     {
         private AppDbContext _context;
         public SubscriptionRepository(AppDbContext context) : base(context)

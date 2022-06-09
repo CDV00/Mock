@@ -27,6 +27,12 @@ namespace Course.DAL.Queries
             return this;
         }
 
+        //public ISubscriptionQuery FilterByRole(Guid UserId)
+        //{
+        //    Query.Where(type => type.User);
+        //    return this;
+        //}
+
         public ISubscriptionQuery IncludeSubcriber()
         {
             Query.Include(u => u.Subscriber).Load();
@@ -42,6 +48,25 @@ namespace Course.DAL.Queries
         public ISubscriptionQuery IncludeUser()
         {
             Query.Include(c => c.User).Load();
+            return this;
+        }
+
+
+        public ISubscriptionQuery FilterByRole(string RoleName)
+        {
+            var roles = _dbContext.Roles.AsQueryable().Where(r => r.NormalizedName == RoleName.ToUpper());
+            var userRole = _dbContext.UserRoles.AsQueryable().Where(ur => roles.Any(r => r.Id == ur.RoleId));
+
+            Query = Query.Where(u => userRole.Any(ur => ur.UserId == u.User.Id));
+
+            return this;
+        }
+
+        public ISubscriptionQuery SortByTotalSubscription()
+        {
+
+            Query = Query.OrderBy(s=>s.UserId);
+
             return this;
         }
     }

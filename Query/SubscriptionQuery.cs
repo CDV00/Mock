@@ -17,7 +17,7 @@ namespace Course.DAL.Queries
         /// </summary>
         /// <param name="masterDataQuery"></param>
         /// <param name="dbContext"></param>
-        public EnrollmentQuery(IQueryable<Enrollment> courseQuery, AppDbContext dbContext) : base(courseQuery)
+        public EnrollmentQuery(IQueryable<Enrollment> enrollQuery, AppDbContext dbContext) : base(enrollQuery)
         { _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext)); }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace Course.DAL.Queries
             Query = Query.Where(type => type.CourseId == CourseId);
             return this;
         }
-
+        
         public IEnrollmentQuery FilterByUserId(Guid UserId)
         {
             Query = Query.Where(type => type.UserId == UserId);

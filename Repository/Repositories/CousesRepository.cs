@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Repository.Repositories
 {
-    public class CousesRepository : Repository<Courses, Guid>, ICousesRepository
+    public class CousesRepository : Repository<Courses>, ICousesRepository
     {
         private AppDbContext _context;
         private IMapper _mapper;

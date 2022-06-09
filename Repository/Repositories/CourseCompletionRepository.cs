@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Repository.Repositories
 {
-    public class CourseCompletionRepository : Repository<CourseCompletion, Guid>, ICourseCompletionRepository
+    public class CourseCompletionRepository : Repository<CourseCompletion>, ICourseCompletionRepository
     {
         private AppDbContext _context;
         public CourseCompletionRepository(AppDbContext context) : base(context)

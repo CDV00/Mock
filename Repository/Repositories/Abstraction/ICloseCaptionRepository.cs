@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Course.DAL.Repositories.Abstraction
 {
-    public interface ICloseCaptionRepository : IRepository<CloseCaption, Guid>
+    public interface ICloseCaptionRepository : IRepository<CloseCaption>
     {
         //Task<bool> RemoveAll(Guid courseId);
     }

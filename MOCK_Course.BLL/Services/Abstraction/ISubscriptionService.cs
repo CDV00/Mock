@@ -14,5 +14,6 @@ namespace Course.BLL.Services.Abstraction
         Task<Response<SubscriptionDTO>> IsSubscription(Guid userId, Guid subscriberId);
         Task<Responses<UserDTO>> GetUserSubscription(Guid userId);
         Task<Response<int>> GetTotalSubscription(Guid subscriberId);
+        Task<Responses<UserDTO>> GetPopularInstructor();
     }
 }

@@ -4,7 +4,7 @@ using System;
 
 namespace Course.DAL.Repositories.Abstraction
 {
-    public interface ICategoryRepository : IRepository<Category, Guid>
+    public interface ICategoryRepository : IRepository<Category>
     {
         ICategoryQuery BuildQuery();
     }

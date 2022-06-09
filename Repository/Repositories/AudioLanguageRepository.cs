@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Repository.Repositories
 {
-    public class AudioLanguageRepository : Repository<AudioLanguage, Guid>, IAudioLanguageRepository
+    public class AudioLanguageRepository : Repository<AudioLanguage>, IAudioLanguageRepository
     {
         private AppDbContext _context;
         public AudioLanguageRepository(AppDbContext context) : base(context)

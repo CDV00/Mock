@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Course.DAL.Repositories.Abstraction
 {
-    public interface ICousesRepository : IRepository<Courses, Guid>
+    public interface ICousesRepository : IRepository<Courses>
     {
         //Task<IEnumerable<Courses>> GetAllForCard();
         //Task<Courses> GetForPost(Guid id);

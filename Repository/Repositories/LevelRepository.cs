@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Repository.Repositories
 {
-    public class LevelRepository : Repository<Level, Guid>, ILevelRepository
+    public class LevelRepository : Repository<Level>, ILevelRepository
     {
         private AppDbContext _context;
         public LevelRepository(AppDbContext context) : base(context)

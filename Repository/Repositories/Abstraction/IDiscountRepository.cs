@@ -4,7 +4,7 @@ using System;
 
 namespace Course.DAL.Repositories.Abstraction
 {
-    public interface IDiscountRepository : IRepository<Discount, Guid>
+    public interface IDiscountRepository : IRepository<Discount>
     {
         IDiscountQuery BuildQuery();
     }

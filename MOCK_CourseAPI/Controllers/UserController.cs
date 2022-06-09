@@ -72,12 +72,21 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
 
-
         [HttpGet("Check-Exist-Email")]
         [AllowAnonymous]
         public async Task<ActionResult<BaseResponse>> CheckExistEmail(string Email)
         {
             var result = await _userService.CheckExistEmail(Email);
+            return Ok(result);
+        }
+        // Todo: Get popular instructor ( Paing and soft subscribe asc )
+        [HttpGet("GetPopularInstructor")]
+        [AllowAnonymous]
+        public async Task<ActionResult<UserDTO>> GetPopularInstructor()
+        {
+            var result = await _userService.GetPopularInstructor();
+            if (result.IsSuccess == false)
+                return BadRequest(result);
             return Ok(result);
         }
     }

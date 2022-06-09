@@ -162,7 +162,7 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<ILoggerManager, LoggerManager>();
         public static void ConfigureRepositories(this IServiceCollection services)
         {
-            services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
@@ -186,6 +186,7 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
             services.AddScoped<ISavedCoursesRepository, SavedCoursesRepository>();
 
+            services.AddScoped<IUserRepository, UserRepository>();
         }
         /// <summary>
         /// Configure Services
@@ -222,7 +223,6 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IDiscountService, DiscountService>();
             services.AddScoped<ISubscriptionService, SubscriptionService>();
-            services.AddScoped<ISavedCoursesService, SavedCoursesService>();
         }
     }
 }

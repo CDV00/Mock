@@ -8,7 +8,7 @@ using System;
 
 namespace Repository.Repositories
 {
-    public class ShoppingCartRepository : Repository<ShoppingCart, Guid>, IShoppingCartRepository
+    public class ShoppingCartRepository : Repository<ShoppingCart>, IShoppingCartRepository
     {
         private AppDbContext _context;
         public ShoppingCartRepository(AppDbContext context) : base(context)

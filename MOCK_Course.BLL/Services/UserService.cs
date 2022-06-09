@@ -18,8 +18,9 @@ namespace Course.BLL.Services
         private readonly ICousesRepository _cousesRepository;
         private readonly ICourseReviewRepository _courseReviewRepository;
         private readonly ISubscriptionRepository _subscriptionRepository;
+        private readonly IUserRepository _userRepository;
         public UserService(UserManager<AppUser> userManager,
-           IMapper mapper, IEnrollmentRepository enrollmentRepository, ICousesRepository cousesRepository, ICourseReviewRepository courseReviewRepository, ISubscriptionRepository subscriptionRepository)
+           IMapper mapper, IEnrollmentRepository enrollmentRepository, ICousesRepository cousesRepository, ICourseReviewRepository courseReviewRepository, ISubscriptionRepository subscriptionRepository, IUserRepository userRepository)
         {
             _userManager = userManager;
             _mapper = mapper;
@@ -27,6 +28,7 @@ namespace Course.BLL.Services
             _cousesRepository = cousesRepository;
             _courseReviewRepository = courseReviewRepository;
             _subscriptionRepository = subscriptionRepository;
+            _userRepository = userRepository;
         }
         public async Task<Response<UserDTO>> GetUserProfile(Guid id)
         {
@@ -117,6 +119,24 @@ namespace Course.BLL.Services
             }
 
             return new BaseResponse(true);
+        }
+        //
+        public async Task<Responses<UserDTO>> GetPopularInstructor()
+        {
+            try
+            {
+                string RoleName = UserRoles.Instructor;
+                var user = await _userRepository.BuildQuery()
+                                                        .FilterByRole(RoleName)
+                                                        .SortBySubscription()
+                                                        .ToListAsync(u => _mapper.Map<UserDTO>(u));
+
+                return new Responses<UserDTO>(true, user);
+            }
+            catch (Exception ex)
+            {
+                return new Responses<UserDTO>(false, ex.Message, null);
+            }
         }
     }
 }

@@ -4,7 +4,7 @@ using System;
 
 namespace Course.DAL.Repositories.Abstraction
 {
-    public interface ISectionRepositoty : IRepository<Section, Guid>
+    public interface ISectionRepositoty : IRepository<Section>
     {
         ISectionQuery BuildQuery();
         //Task<IEnumerable<Section>> GetAllByCourseId(Guid courseId);

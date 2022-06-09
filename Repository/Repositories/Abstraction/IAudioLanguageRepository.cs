@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Course.DAL.Repositories.Abstraction
 {
-    public interface IAudioLanguageRepository : IRepository<AudioLanguage, Guid>
+    public interface IAudioLanguageRepository : IRepository<AudioLanguage>
     {
         //Task<bool> RemoveAll(Guid courseId);
     }
