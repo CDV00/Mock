@@ -243,7 +243,7 @@ namespace Course.BLL.Services
         }
 
 
-        public async Task<BaseResponse> Remove(Guid idCourse)
+        public async Task<BaseResponse> Remove(Guid idCourse,Guid userId)
         {
             try
             {
@@ -252,6 +252,9 @@ namespace Course.BLL.Services
                 {
                     new Responses<BaseResponse>(false, "can't find course", null);
                 }
+
+                if (course.UserId != userId)
+                    return new Response<CourseDTO>(false, "You are't the owner of the course", null);
 
                 _cousesRepository.Remove(course);
                 await _unitOfWork.SaveChangesAsync();
@@ -265,7 +268,7 @@ namespace Course.BLL.Services
             }
         }
 
-        public async Task<Response<CourseDTO>> Update(Guid id, CourseForUpdateRequest courseRequest)
+        public async Task<Response<CourseDTO>> Update(Guid id, CourseForUpdateRequest courseRequest, Guid userId)
         {
             try
             {
@@ -277,12 +280,15 @@ namespace Course.BLL.Services
                                                     //.IncludeSection()
                                                     .AsSelectorAsync(c => c);
 
-                AddNewSection(courseRequest);
 
                 if (course == null)
                 {
                     return new Response<CourseDTO>(false, "can't find course", null);
                 }
+                if(course.UserId != userId)
+                    return new Response<CourseDTO>(false, "You are't the owner of the course", null);
+
+                AddNewSection(courseRequest);
                 _mapper.Map(courseRequest, course);
 
                 course.UpdatedAt = DateTime.Now;

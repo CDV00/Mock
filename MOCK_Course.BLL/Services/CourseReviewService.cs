@@ -183,7 +183,7 @@ namespace Course.BLL.Services
                 var sumRating = await _courseReviewRepository.BuildQuery()
                                                              .FilterByCourseId(courseId)
                                                              .FilterByUserId(userId)
-                                                             .SumAsync(c => (long)c.Rating);
+                                                             .CountAsync();
 
                 List<float> rates = new();
 

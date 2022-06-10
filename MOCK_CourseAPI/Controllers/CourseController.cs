@@ -91,7 +91,9 @@ namespace CourseAPI.Controllers
         [HttpPut()]
         public async Task<ActionResult<Response<CourseDTO>>> Update(Guid id, CourseForUpdateRequest CoursesUpdateRequest)
         {
-            var result = await _coursesService.Update(id, CoursesUpdateRequest);
+            var userId = User.GetUserId();
+
+            var result = await _coursesService.Update(id, CoursesUpdateRequest, userId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
@@ -105,7 +107,8 @@ namespace CourseAPI.Controllers
         [HttpDelete()]
         public async Task<ActionResult<BaseResponse>> Delete(Guid id)
         {
-            var result = await _coursesService.Remove(id);
+            var userId = User.GetUserId();
+            var result = await _coursesService.Remove(id, userId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
