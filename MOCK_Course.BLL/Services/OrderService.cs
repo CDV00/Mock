@@ -104,7 +104,7 @@ namespace Course.BLL.Services
                 {
                     return new BaseResponse(false, null, "can't order lesson");
                 }
-                _orderRepository.Remove(order);
+                _orderRepository.Remove(order, false);
 
                 await _unitOfWork.SaveChangesAsync();
                 return new BaseResponse(true);

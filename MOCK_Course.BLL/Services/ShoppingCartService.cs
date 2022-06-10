@@ -98,7 +98,7 @@ namespace Course.BLL.Services
                 return new Response<CartUpdateDTO>(false, ex.Message, null);
             }
         }
-            public async Task<BaseResponse> Remove(Guid Id)
+        public async Task<BaseResponse> Remove(Guid Id)
         {
             try
             {
@@ -108,7 +108,7 @@ namespace Course.BLL.Services
                     return new BaseResponse(false, null, "can't find cart");
                 }
 
-                _shoppingCartRepository.Remove(cart);
+                _shoppingCartRepository.Remove(cart, true);
                 await _unitOfWork.SaveChangesAsync();
 
                 return new BaseResponse { IsSuccess = true };

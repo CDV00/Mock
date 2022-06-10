@@ -243,7 +243,7 @@ namespace Course.BLL.Services
         }
 
 
-        public async Task<BaseResponse> Remove(Guid idCourse,Guid userId)
+        public async Task<BaseResponse> Remove(Guid idCourse, Guid userId)
         {
             try
             {
@@ -256,7 +256,7 @@ namespace Course.BLL.Services
                 if (course.UserId != userId)
                     return new Response<CourseDTO>(false, "You are't the owner of the course", null);
 
-                _cousesRepository.Remove(course);
+                _cousesRepository.Remove(course, false);
                 await _unitOfWork.SaveChangesAsync();
 
                 return new BaseResponse(true);
@@ -285,7 +285,7 @@ namespace Course.BLL.Services
                 {
                     return new Response<CourseDTO>(false, "can't find course", null);
                 }
-                if(course.UserId != userId)
+                if (course.UserId != userId)
                     return new Response<CourseDTO>(false, "You are't the owner of the course", null);
 
                 AddNewSection(courseRequest);

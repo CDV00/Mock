@@ -68,7 +68,7 @@ namespace Course.BLL.Services
                 var category = await _categoryRepository.GetByIdAsync(id);
                 // Check category null 
 
-                _categoryRepository.Remove(category);
+                _categoryRepository.Remove(category, false);
                 await _unitOfWork.SaveChangesAsync();
                 return new BaseResponse(true, null, null);
             }

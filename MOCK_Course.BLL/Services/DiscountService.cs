@@ -76,7 +76,7 @@ namespace Course.BLL.Services
                     new Responses<BaseResponse>(false, "can't find discount", null);
                 }
 
-                _discountRepository.Remove(discount);
+                _discountRepository.Remove(discount, false);
                 await _unitOfWork.SaveChangesAsync();
 
                 return new BaseResponse(true, "Delete success", null);

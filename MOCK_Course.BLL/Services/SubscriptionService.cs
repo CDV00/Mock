@@ -60,13 +60,13 @@ namespace Course.BLL.Services
             }
         }
 
-        public async Task<BaseResponse> Delete(Guid userId, Guid subscripberId)
+        public async Task<BaseResponse> Delete(Guid userId, Guid instructorId)
         {
             try
             {
                 var subscription = await _subscriptionRepository.BuildQuery()
-                                                                .FilterByUserId(userId)
-                                                                .FilterBySubscriberId(subscripberId)
+                                                                .FilterByUserId(instructorId)
+                                                                .FilterBySubscriberId(userId)
                                                                 .AsSelectorAsync(s => s);
 
                 if (subscription is null)
@@ -134,7 +134,7 @@ namespace Course.BLL.Services
                 var user = await _subscriptionRepository.BuildQuery()
                                                         .FilterByUserId(userId)
                                                         .IncludeSubcriber()
-                                                        .ToListAsync(u => _mapper.Map<UserDTO>(u.User));
+                                                        .ToListAsync(u => _mapper.Map<UserDTO>(u.Subscriber));
 
                 return new Responses<UserDTO>(true, user);
             }

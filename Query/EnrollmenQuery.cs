@@ -23,7 +23,7 @@ namespace Course.DAL.Queries
 
         public ISubscriptionQuery FilterByUserId(Guid UserId)
         {
-            Query.Where(type => type.UserId == UserId);
+            Query = Query.Where(type => type.UserId == UserId);
             return this;
         }
 
@@ -47,7 +47,7 @@ namespace Course.DAL.Queries
 
         public ISubscriptionQuery FilterBySubscriberId(Guid subscriberId)
         {
-            Query.Where(type => type.SubscriberId == subscriberId);
+            Query = Query.Where(type => type.SubscriberId == subscriberId);
             return this;
         }
 
@@ -71,7 +71,7 @@ namespace Course.DAL.Queries
         public ISubscriptionQuery SortByTotalSubscription()
         {
 
-            Query = Query.OrderBy(s=>s.UserId);
+            Query = Query.OrderBy(s => s.UserId);
 
             return this;
         }

@@ -111,7 +111,7 @@ namespace Course.BLL.Services
                 var courseReview = await _courseReviewRepository.GetByIdAsync(id);
                 // Check courseReview null
 
-                _courseReviewRepository.Remove(courseReview);
+                _courseReviewRepository.Remove(courseReview, true);
                 await _unitOfWork.SaveChangesAsync();
                 return new BaseResponse(true, "Delete success", null);
             }

@@ -71,7 +71,7 @@ namespace Course.BLL.Services
                     return new BaseResponse(false, null, "can't find lesson");
                 }
 
-                _lectureRepositoty.Remove(lesson);
+                _lectureRepositoty.Remove(lesson, false);
                 await _unitOfWork.SaveChangesAsync();
                 return new BaseResponse(true);
             }

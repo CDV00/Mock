@@ -24,9 +24,12 @@ namespace CourseAPI.Controllers
         ///  Subscription
         /// </summary>
         [HttpPost]
-        public async Task<ActionResult<SubscriptionDTO>> Create(Guid instructorId)
+        public async Task<ActionResult<Response<SubscriptionDTO>>> Create(Guid instructorId)
         {
             var userId = User.GetUserId();
+            if (userId == instructorId)
+                return new Response<SubscriptionDTO>(false, "can't register yourself", null);
+
             var result = await _subscriptionService.Add(userId, instructorId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
@@ -119,7 +122,7 @@ namespace CourseAPI.Controllers
         {
             var userId = User.GetUserId();
 
-            var result = await _subscriptionService.GetAllSubscriber(userId);
+            var result = await _subscriptionService.GetAllInstructor(userId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);

@@ -31,7 +31,7 @@ namespace Repository.Repositories
 
             for (var i = 0; i < lessons.Count; i++)
             {
-                Remove(lessons[i]);
+                Remove(lessons[i], false);
             }
 
             return true;

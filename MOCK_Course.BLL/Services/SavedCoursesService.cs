@@ -88,7 +88,7 @@ namespace Course.BLL.Services
                     return new BaseResponse(false, null, "can't find course");
                 }
 
-                _savedCoursesRepository.Remove(cart);
+                _savedCoursesRepository.Remove(cart, true);
                 await _unitOfWork.SaveChangesAsync();
 
                 return new BaseResponse { IsSuccess = true };

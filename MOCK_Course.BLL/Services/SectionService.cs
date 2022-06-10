@@ -98,7 +98,7 @@ namespace Course.BLL.Services
                                                      .FilterBySectionId(idSection)
                                                      .ToListAsync(c => c);
                 _lessonRepository.RemoveRange(lessons);
-                _sectionRepositoty.Remove(section);
+                _sectionRepositoty.Remove(section, false);
                 await _unitOfWork.SaveChangesAsync();
 
                 return new BaseResponse(true);

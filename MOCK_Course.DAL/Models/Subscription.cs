@@ -9,8 +9,5 @@ namespace Course.DAL.Models
 
         public Guid UserId { get; set; }
         public AppUser User { get; set; }
-
-        // 10 instructor -> user == instructor
-        // 0 subscription :user == instructor
     }
 }
