@@ -34,6 +34,14 @@ namespace Course.BLL.Services
         {
             try
             {
+                var IsExits = await _subscriptionRepository.BuildQuery()
+                                                           .FilterByUserId(instructorId)
+                                                           .FilterBySubscriberId(userId)
+                                                           .AnyAsync();
+
+                if (IsExits)
+                    return new Response<SubscriptionDTO>(false, "You are already subscription", null);
+
                 var subscription = new Subscription()
                 {
                     UserId = instructorId,
@@ -60,11 +68,12 @@ namespace Course.BLL.Services
                                                                 .FilterByUserId(userId)
                                                                 .FilterBySubscriberId(subscripberId)
                                                                 .AsSelectorAsync(s => s);
+
                 if (subscription is null)
                 {
                     return new BaseResponse(false, null, "can't find subscription");
                 }
-                _subscriptionRepository.Remove(subscription);
+                _subscriptionRepository.Remove(subscription, true);
 
                 await _unitOfWork.SaveChangesAsync();
                 return new BaseResponse(true);
@@ -151,24 +160,5 @@ namespace Course.BLL.Services
                 return new Responses<UserDTO>(false, ex.Message, null);
             }
         }
-
-        //public async Task<Responses<UserDTO>> GetPopularInstructor()
-        //{
-        //    try
-        //    {
-        //        string RoleName = UserRoles.Instructor;
-        //        var user = await _subscriptionRepository.BuildQuery()
-        //                                                .IncludeSubcriber()
-        //                                                .IncludeUser()
-        //                                                //.FilterByRole(RoleName)
-        //                                                .ToListAsync(u => _mapper.Map<UserDTO>(u.User));
-
-        //        return new Responses<UserDTO>(true, user);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new Responses<UserDTO>(false, ex.Message, null);
-        //    }
-        //}
     }
 }

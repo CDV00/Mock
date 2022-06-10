@@ -29,11 +29,15 @@ namespace Repository.Repositories
 
         public virtual async Task CreateRangeAsync(List<T> _object) => await DbSet.AddRangeAsync(_object);
 
-        public virtual void Remove(dynamic _object)
+        public virtual void Remove(dynamic _object, bool? permanent)
         {
-            //_context.Entry(_object).State = EntityState.Modified;
-            _object.IsDeleted = true;
-            //Remove(_object);
+            if(permanent == null || permanent == false)
+            {
+                _object.IsDeleted = true;
+                return;
+            }
+
+            DbSet.Remove(_object);
         }
 
         public virtual void RemoveRange(List<T> _objects)
