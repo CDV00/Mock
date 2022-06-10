@@ -20,7 +20,7 @@ namespace Course.DAL.Queries
         public UserQuery(IQueryable<AppUser> userQuery, AppDbContext dbContext) : base(userQuery)
         { _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext)); }
 
-        
+
 
         public IUserQuery FilterByRole(string RoleName)
         {
@@ -34,12 +34,8 @@ namespace Course.DAL.Queries
 
         public IUserQuery SortBySubscription()
         {
-            /*Query = Query.Include(u=> u.Subscriptions);
-            var suscription = Query.Include(u=>u.Subscriptions).Select(u => u.Subscriptions.Count);*/
-            //Query.Include(s => s.Subscriptions).Load();
-            //var subscriper = Query.Where(u => u.Subscriptions.Any(sb => sb.SubscriberId == u.Id));
-            //Query = Query.OrderBy(u=>u.Subscriptions.Where(u=>u.SubscriberId == ).Select(s=>s.SubscriberId));
-            
+            Query = Query.OrderByDescending(u => u.Subscriptions.Count());
+
             return this;
         }
     }
