@@ -9,7 +9,7 @@ namespace Repository.Repositories
 {
     public class CourseReviewRepository : Repository<CourseReview>, ICourseReviewRepository
     {
-        private AppDbContext _context;
+        private readonly AppDbContext _context;
         public CourseReviewRepository(AppDbContext context) : base(context)
         {
             _context = context;

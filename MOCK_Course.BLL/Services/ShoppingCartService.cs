@@ -76,6 +76,7 @@ namespace Course.BLL.Services
             try
             {
                 var cart = await _shoppingCartRepository.GetByIdAsync(id);
+
                 if (cart == null)
                 {
                     new Responses<CartUpdateDTO>(false, "can't find cart", null);

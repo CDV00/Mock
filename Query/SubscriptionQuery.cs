@@ -20,19 +20,25 @@ namespace Course.DAL.Queries
         public EnrollmentQuery(IQueryable<Enrollment> enrollQuery, AppDbContext dbContext) : base(enrollQuery)
         { _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext)); }
 
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="CourseId"></param>
         /// <returns></returns>
-        public IEnrollmentQuery FilterByCourseId(Guid CourseId)
+        public IEnrollmentQuery FilterByCourseId(Guid? CourseId)
         {
+            if (CourseId == null) 
+                return this;
             Query = Query.Where(type => type.CourseId == CourseId);
             return this;
         }
         
-        public IEnrollmentQuery FilterByUserId(Guid UserId)
+        public IEnrollmentQuery FilterByUserId(Guid? UserId)
         {
+            if (UserId == null)
+                return this;
+
             Query = Query.Where(type => type.UserId == UserId);
             return this;
         }

@@ -5,8 +5,6 @@ using SES.HomeServices.Data.Queries.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Course.DAL.Queries
@@ -63,15 +61,26 @@ namespace Course.DAL.Queries
             return this;
         }
 
+        public ICourseQuery FilterByFree(bool? isFree)
+        {
+            if (isFree == null || isFree == false)
+                return this;
+
+            Query = Query.Where(type => type.IsFree == isFree);
+            return this;
+        }
+
         public ICourseQuery IncludeUser()
         {
-            Query.Include(c => c.User).Load();
+            Query.Include(c => c.User)
+                 .Load();
             return this;
         }
 
         public ICourseQuery IncludeLevel()
         {
-            Query.Include(c => c.Levels).Load();
+            Query.Include(c => c.Levels)
+                 .Load();
             return this;
         }
 
@@ -88,12 +97,12 @@ namespace Course.DAL.Queries
             return this;
         }
 
-        public ICourseQuery FilterByCategoryId(Guid? categoryId)
+        public ICourseQuery FilterByCategoryId(List<Guid?> categoryId)
         {
             if (categoryId == null)
                 return this;
 
-            Query = Query.Where(c => c.CategoryId == categoryId);
+            Query = Query.Where(c => categoryId.Contains(c.CategoryId));
             return this;
         }
 
@@ -136,32 +145,15 @@ namespace Course.DAL.Queries
             return this;
         }
 
-        //public ICourseQuery orderBy(string orderBy)
-        //{
-        //    if (orderBy == null)
-        //        return this;
-
-        //    switch (orderBy)
-        //    {
-        //        case "date":
-        //            Query = Query.OrderBy(c => c.CreatedBy);
-        //            break;
-        //        case "subscription":
-        //            Query = Query.OrderBy(c => c.Enrollments.Count());
-        //            break;
-        //    }
-
-        //    return this;
-        //}
-
-
+       
         public ICourseQuery FilterByKeyword(string Keyword)
         {
             if (string.IsNullOrWhiteSpace(Keyword))
                 return this;
 
             var KEYWORD = Keyword.ToUpper();
-            Query = Query.Where(c => c.Title.ToUpper().Contains(KEYWORD) || c.User.Fullname
+            Query = Query.Where(c => c.Title.ToUpper()
+                                            .Contains(KEYWORD) || c.User.Fullname
                                             .ToUpper().Contains(KEYWORD) || c.Description
                                             .ToUpper().Contains(KEYWORD));
             return this;
@@ -170,13 +162,15 @@ namespace Course.DAL.Queries
 
         public ICourseQuery IncludeCategory()
         {
-            Query.Include(c => c.Category).Load();
+            Query.Include(c => c.Category);
             return this;
         }
 
         public ICourseQuery IncludeSection()
         {
-            Query.Include(c => c.Sections).ThenInclude(s => s.Lectures).Load();
+            Query.Include(c => c.Sections)
+                 .ThenInclude(s => s.Lectures)
+                 .Load();
             return this;
         }
 
@@ -189,7 +183,10 @@ namespace Course.DAL.Queries
         {
             Query = Query.Where(type => type.UserId == userId
                                         && type.IsActive == true);
-            return await Query.OrderByDescending(x => x.CreatedAt).ToListAsync().ConfigureAwait(false);
+
+            return await Query.OrderByDescending(x => x.CreatedAt)
+                              .ToListAsync()
+                              .ConfigureAwait(false);
         }
 
         public Task<Courses> GetById(Guid Id)

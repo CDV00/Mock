@@ -38,17 +38,6 @@ namespace Course.BLL.Services
 
                 var userResponse = _mapper.Map<UserDTO>(user);
 
-
-                //userProfileResponse.TotalEnrollment = await _enrollmentRepository.BuildQuery()
-                //                                                                 .FilterByUserId(id)
-                //                                                                 .CountAsync();
-                //userProfileResponse.TotalCourse = await _cousesRepository.BuildQuery()
-                //                                                         .FilterByUserId(id)
-                //                                                         .CountAsync();
-                //userProfileResponse.TotalReviewCourse = await _courseReviewRepository.BuildQuery().FilterByUserId(id).CountAsync();
-
-                //userProfileResponse.TotalSubscription = await _subscriptionRepository.GetTotal(id);
-
                 return new Response<UserDTO>(
                     true,
                     userResponse

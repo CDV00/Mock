@@ -50,6 +50,15 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
 
+        [HttpGet("Get-total-enroll-of-course")]
+        public async Task<ActionResult<Response<int>>> GetTotalEnrollCourse(Guid courseId)
+        {
+            var result = await _enrollmentService.GetTotalEnrollCourse(courseId);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
         /// <summary>
         /// check enrollment
         /// </summary>
