@@ -6,7 +6,7 @@ namespace Course.DAL.Queries.Abstraction
 {
     public interface ICourseReviewQuery : IQuery<CourseReview>
     {
-        ICourseReviewQuery FilterByCourseId(Guid CourseId);
+        ICourseReviewQuery FilterByCourseId(Guid? CourseId);
         ICourseReviewQuery FilterByRating(float Rating);
         ICourseReviewQuery FilterByUserId(Guid UserId);
         ICourseReviewQuery FilterByKeyword(string Keyword);
@@ -15,5 +15,6 @@ namespace Course.DAL.Queries.Abstraction
         ICourseReviewQuery IncludeCourse();
         ICourseReviewQuery IncludeEnrollment();
         ICourseReviewQuery IncludeUser();
+        ICourseReviewQuery FilterByUserId(Guid? userId);
     }
 }

@@ -16,5 +16,8 @@ namespace Course.BLL.Requests
     public class LectureForUpdateRequest : LectureForCreateRequest
     {
         public Guid Id { get; set; }
+
+        public bool IsDeleted { get; set; }
+        public bool IsNew { get; set; }
     }
 }

@@ -152,13 +152,15 @@ namespace Course.BLL.Services
             }
         }
 
-        public async Task<Response<float>> GetAVGRatinng(Guid courseId)
+        public async Task<Response<float>> GetAVGRatinng(Guid? courseId, Guid? userId)
         {
             try
             {
                 var courses = await _courseReviewRepository.BuildQuery()
                                                            .FilterByCourseId(courseId)
+                                                           .FilterByUserId(userId)
                                                            .GetAvgRate();
+
                 return new Response<float>(true, courses);
             }
             catch (Exception ex)
@@ -166,12 +168,13 @@ namespace Course.BLL.Services
                 return new Response<float>(false, ex.Message, null);
             }
         }
-        public async Task<Response<List<float>>> GetDetaiRate(Guid courseId)
+        public async Task<Response<List<float>>> GetDetaiRate(Guid? courseId, Guid? userId)
         {
             try
             {
                 var sumRating = await _courseReviewRepository.BuildQuery()
                                                              .FilterByCourseId(courseId)
+                                                             .FilterByUserId(userId)
                                                              .SumAsync(c => (long)c.Rating);
 
                 List<float> rates = new();
@@ -180,6 +183,7 @@ namespace Course.BLL.Services
                 {
                     rates.Add(await _courseReviewRepository.BuildQuery()
                                                            .FilterByCourseId(courseId)
+                                                           .FilterByUserId(userId)
                                                            .FilterByRating(i)
                                                            .GetAvgRatePercent(sumRating));
                 }

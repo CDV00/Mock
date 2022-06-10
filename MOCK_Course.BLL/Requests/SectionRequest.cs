@@ -16,5 +16,8 @@ namespace Course.BLL.Requests
         [Required]
         public string Title { get; set; }
         public IList<LectureForUpdateRequest> Lectures { get; set; }
+
+        public bool IsDeleted { get; set; }
+        public bool IsNew { get; set; }
     }
 }

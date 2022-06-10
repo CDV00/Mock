@@ -9,6 +9,9 @@ namespace Course.BLL.Responses
         public string Title { get; set; }
 
         public IList<LectureDTO> Lectures { get; set; }
+
+        public bool IsDeleted { get; set; }
+        public bool IsNew { get; set; } = false;
     }
 
     public class SectionForDetailDTO
@@ -30,6 +33,9 @@ namespace Course.BLL.Responses
         public string VideoPoster { get; set; }
         public bool IsPreview { get; set; }
         public int TotalTime { get; set; }
+
+        public bool IsDeleted { get; set; }
+        public bool IsNew { get; set; } = false;
     }
 
     public class LectureForDetailDTO

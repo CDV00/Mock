@@ -243,7 +243,17 @@ namespace Course.BLL.Services
                                                     .IncludeCategory()
                                                     .IncludeLevel()
                                                     .IncludeLanguage()
+                                                    //.IncludeSection()
                                                     .AsSelectorAsync(c => c);
+
+
+                //var sections = courseRequest.Sections;
+                //for (var i = 0; i < sections.Count; i++)
+                //{
+                //    var section = sections[i];
+                //    if (section.Id != null)
+                //}
+
 
                 if (course == null)
                 {

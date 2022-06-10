@@ -26,9 +26,19 @@ namespace Course.DAL.Queries
         /// </summary>
         /// <param name="CourseId"></param>
         /// <returns></returns>
-        public ICourseReviewQuery FilterByCourseId(Guid CourseId)
+        public ICourseReviewQuery FilterByCourseId(Guid? CourseId)
         {
+            if (CourseId == null)
+                return this;
             Query = Query.Where(type => type.Enrollment.CourseId == CourseId);
+            return this;
+        }
+
+        public ICourseReviewQuery FilterByUserId(Guid? userId)
+        {
+            if (userId == null)
+                return this;
+            Query = Query.Where(type => type.Enrollment.Courses.UserId == userId);
             return this;
         }
 

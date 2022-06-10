@@ -17,8 +17,8 @@ namespace Course.BLL.Services.Abstraction
         Task<Response<CourseReviewDTO>> Update(Guid id, CourseReviewUpdateRequest courseReviewUpdateRequest);
         Task<BaseResponse> Delete(Guid id);
         Task<Response<int>> GetTotal(Guid userId);
-        Task<Response<float>> GetAVGRatinng(Guid courseId);
-        Task<Response<List<float>>> GetDetaiRate(Guid courseId);
+        Task<Response<float>> GetAVGRatinng(Guid? courseId, Guid? userId);
+        Task<Response<List<float>>> GetDetaiRate(Guid? courseId, Guid? userId);
         Task<BaseResponse> IsCourseReview(Guid userId, Guid courseId);
     }
 }

@@ -25,9 +25,13 @@ namespace Course.BLL.Responses
         public bool RequireLogin { get; set; }
         public bool RequireEnroll { get; set; }
 
+
         public bool IsFree { get; set; }
 
         public decimal Price { get; set; }
+
+        // TODO: Add rating and Total Enrollments
+
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public bool IsActive { get; set; }
