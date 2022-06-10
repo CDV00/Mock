@@ -36,6 +36,8 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
 
+        // Get total purchase of user
+
         /// <summary>
         /// Get all purchased courses user
         /// https://gambolthemes.net/html-items/cursus_main_demo/student_courses.html

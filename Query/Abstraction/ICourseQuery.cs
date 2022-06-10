@@ -18,12 +18,13 @@ namespace Course.DAL.Queries
         ICourseQuery IncludeCategory();
         ICourseQuery IncludeSection();
         ICourseQuery FilterByOrderd(Guid userId);
-        ICourseQuery FilterByCategoryId(Guid? categoryId);
+        ICourseQuery FilterByCategoryId(List<Guid?> categoryId);
         ICourseQuery FilterByAudioLanguageIds(List<Guid?> AudioLanguageIds);
         ICourseQuery FilterByCloseCaptionIds(List<Guid?> closeCaptionIds);
         ICourseQuery FilterByLevelIds(List<Guid?> levelIds);
         ICourseQuery FilterByKeyword(string Keyword);
         ICourseQuery FilterByDiscount(bool? IsSeller);
         ICourseQuery IncludeLevel();
+        ICourseQuery FilterByFree(bool? isFree);
     }
 }

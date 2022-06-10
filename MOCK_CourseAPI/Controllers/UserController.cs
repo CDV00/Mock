@@ -22,15 +22,20 @@ namespace CourseAPI.Controllers
 
 
         /// <summary>
-        /// Get profile of user
+        /// Get profile of user. If userId == null, it will get userId of user is login in ( if user not authentication and not pass userId will return error)
         /// https://gambolthemes.net/html-items/cursus_main_demo/my_instructor_profile_view.html
         /// </summary>
         /// <returns></returns>
         [HttpGet("Get-User")]
-        public async Task<ActionResult<UserDTO>> GetUser()
+        [AllowAnonymous]
+        public async Task<ActionResult<UserDTO>> GetUser(Guid? userId)
         {
-            var userId = User.GetUserId();
-            var result = await _userService.GetUserProfile(userId);
+            if(userId == null)
+                userId = User.GetUserId();
+            if (userId == null)
+                return BadRequest(new Response<UserDTO>(false,"User Id is null or not authentication",null));
+
+            var result = await _userService.GetUserProfile(userId.GetValueOrDefault());
             if (result.IsSuccess == false)
                 return BadRequest(result);
 
