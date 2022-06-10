@@ -246,14 +246,7 @@ namespace Course.BLL.Services
                                                     //.IncludeSection()
                                                     .AsSelectorAsync(c => c);
 
-
-                //var sections = courseRequest.Sections;
-                //for (var i = 0; i < sections.Count; i++)
-                //{
-                //    var section = sections[i];
-                //    if (section.Id != null)
-                //}
-
+                AddNewSection(courseRequest);
 
                 if (course == null)
                 {
@@ -321,6 +314,38 @@ namespace Course.BLL.Services
                 return new Response<CourseDTO>(false, ex.Message, null);
             }
         }
+
+        private static void AddNewSection(CourseForUpdateRequest courseRequest)
+        {
+            var sections = courseRequest.Sections;
+            if (sections == null)
+                return;
+
+            for (var i = 0; i < sections.Count; i++)
+            {
+                var section = sections[i];
+
+                var lectures = section.Lectures;
+                if (lectures != null)
+                {
+                    for (var j = 0; j < lectures.Count; j++)
+                    {
+                        var lecture = lectures[j];
+
+                        if (!lecture.IsNew)
+                            continue;
+
+                        lecture.Id = Guid.Empty;
+                    }
+                }
+
+                if (!section.IsNew)
+                    continue;
+
+                section.Id = Guid.Empty;
+            }
+        }
+
         public async Task<Response<int>> GetTotal(Guid userId)
         {
             try
