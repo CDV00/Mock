@@ -34,17 +34,20 @@ namespace Course.DAL.Queries
             return this;
         }
 
+
         public ICourseReviewQuery FilterByUserId(Guid? userId)
         {
             if (userId == null)
                 return this;
+
             Query = Query.Where(type => type.Enrollment.Courses.UserId == userId);
             return this;
         }
 
         public async Task<float> GetAvgRate()
         {
-            return await Query.AverageAsync(c => c.Rating);
+            var rate = await Query.AverageAsync(c => c.Rating);
+            return rate;
         }
 
         public async Task<float> GetAvgRatePercent(long sum)

@@ -18,16 +18,16 @@ namespace Course.BLL.Services
         private readonly IAudioLanguageRepository _audioLanguageRepository;
         private readonly ICloseCaptionRepository _closeCaptionRepository;
         private readonly ILevelRepository _levelRepository;
-        private readonly ICourseReviewRepository _courseReviewRepository;
-        private readonly IEnrollmentRepository _enrollmentRepository;
-        
+        private readonly ICourseReviewService _courseReviewService;
+        private readonly IEnrollmentService _enrollmentService;
+
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public CourseService(ICousesRepository cousesRepository,
             IMapper mapper,
             IUnitOfWork unitOfWork, IAudioLanguageRepository audioLanguageRepository,
-            ICloseCaptionRepository closeCaptionRepository, ILevelRepository levelRepository, ICourseReviewRepository courseReviewRepository, IEnrollmentRepository enrollmentRepository)
+            ICloseCaptionRepository closeCaptionRepository, ILevelRepository levelRepository, ICourseReviewService courseReviewService, IEnrollmentService enrollmentService)
         {
             _cousesRepository = cousesRepository;
             _mapper = mapper;
@@ -35,13 +35,13 @@ namespace Course.BLL.Services
             _audioLanguageRepository = audioLanguageRepository;
             _closeCaptionRepository = closeCaptionRepository;
             _levelRepository = levelRepository;
-            _courseReviewRepository = courseReviewRepository;
-            _enrollmentRepository = enrollmentRepository;
+            _courseReviewService = courseReviewService;
+            _enrollmentService = enrollmentService;
         }
 
         public async Task<PagedList<CourseDTO>> GetCoursesAsync(CourseParameters courseParameter)
         {
-            var coursesDTO = await _cousesRepository.BuildQuery()
+            var courses = await _cousesRepository.BuildQuery()
                                                     .IncludeCategory()
                                                     .IncludeUser()
                                                     .FilterByKeyword(courseParameter.Keyword)
@@ -54,8 +54,7 @@ namespace Course.BLL.Services
                                                     .ApplySort(courseParameter.Orderby)
                                                     .Skip((courseParameter.PageNumber - 1) * courseParameter.PageSize)
                                                     .Take(courseParameter.PageSize)
-                                                    .AsSelectorAsync(c => _mapper.Map<CourseDTO>(c));
-          
+                                                    .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 
             var count = await _cousesRepository.BuildQuery()
                                                .FilterByKeyword(courseParameter.Keyword)
@@ -67,15 +66,28 @@ namespace Course.BLL.Services
                                                .FilterByFree(courseParameter.IsFree)
                                                .CountAsync();
 
-            // TODO: use For to add total enroll and rating of course
-            var courseResponse =  _mapper.Map<CourseDTO>(coursesDTO);
-            courseResponse.Rating = await _courseReviewRepository.BuildQuery().FilterByCourseId(courseResponse.Id).GetAvgRate();
-            courseResponse.TotalEnroll = await _enrollmentRepository.BuildQuery().FilterByCourseId(courseResponse.Id).CountAsync();
-            var pageList = new PagedList<CourseDTO>(courseResponse, count, courseParameter.PageNumber, courseParameter.PageSize);
-            
+            await AddRating(courses);
+
+            var pageList = new PagedList<CourseDTO>(courses, count, courseParameter.PageNumber, courseParameter.PageSize);
 
             return pageList;
-            //return (courses: new Response<IList<CourseDTO>>(true , coursesDTO), metaData: pageList.MetaData);
+        }
+
+        private async Task AddRating(List<CourseDTO> courses)
+        {
+            try
+            {
+                for (var i = 0; i < courses.Count; i++)
+                {
+                    courses[i].Rating = (await _courseReviewService.GetAVGRatinng(courses[i].Id, null)).data;
+                    courses[i].TotalEnroll = (await _enrollmentService.GetTotalEnrollCourse(courses[i].Id)).data;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                string exption = ex.ToString();
+            }
         }
 
         /// <summary>
@@ -91,10 +103,8 @@ namespace Course.BLL.Services
                                                      .IncludeUser()
                                                      .IncludeEnrolment()
                                                      .AsSelectorAsync(x => _mapper.Map<CourseDTO>(x));
-                var courseResponse = _mapper.Map<CourseDTO>(courses);
-                courseResponse.Rating = await _courseReviewRepository.BuildQuery().FilterByCourseId(courseResponse.Id).GetAvgRate();
-                courseResponse.TotalEnroll = await _enrollmentRepository.BuildQuery().FilterByCourseId(courseResponse.Id).CountAsync();
-                return new Response<CourseDTO>(true, courseResponse);
+
+                return new Response<CourseDTO>(true, courses);
             }
             catch (Exception ex)
             {
@@ -112,7 +122,7 @@ namespace Course.BLL.Services
                                                      .FilterByUserId(userId)
                                                      .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 
-
+                await AddRating(courses);
                 return new Responses<CourseDTO>(true, courses);
             }
             catch (Exception ex)
@@ -125,13 +135,14 @@ namespace Course.BLL.Services
         {
             try
             {
-                var myPurchase = await _cousesRepository.BuildQuery()
+                var courses = await _cousesRepository.BuildQuery()
                                                         .IncludeCategory()
                                                         .IncludeUser()
                                                         .FilterByOrderd(userId)
                                                         .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 
-                return new Responses<CourseDTO>(true, myPurchase);
+                await AddRating(courses);
+                return new Responses<CourseDTO>(true, courses);
             }
             catch (Exception ex)
             {
@@ -152,15 +163,20 @@ namespace Course.BLL.Services
                                                     .IncludeUser()
                                                     .FilterById(id)
                                                     .AsSelectorAsync(x => _mapper.Map<CourseDTO>(x));
-
+                await AddRate(course);
                 var courseResponse = _mapper.Map<CourseDTO>(course);
-                courseResponse.Rating = await _courseReviewRepository.BuildQuery().GetAvgRate();
                 return new Response<CourseDTO>(true, courseResponse);
             }
             catch (Exception ex)
             {
                 return new Response<CourseDTO>(false, ex.Message, null);
             }
+        }
+
+        private async Task AddRate(CourseDTO course)
+        {
+            course.Rating = (await _courseReviewService.GetAVGRatinng(course.Id, null)).data;
+            course.TotalEnroll = (await _enrollmentService.GetTotalEnrollCourse(course.Id)).data;
         }
 
         public async Task<Response<CourseDTO>> Add(Guid userId, CourseForCreateRequest courseRequest)
@@ -361,13 +377,14 @@ namespace Course.BLL.Services
             }
         }
 
-        public async Task<Response<int>> GetTotal(Guid userId)
+        public async Task<Response<int>> GetTotalCourseOfUser(Guid userId)
         {
             try
             {
                 var courses = await _cousesRepository.BuildQuery()
                                                      .FilterByUserId(userId)
                                                      .CountAsync();
+
                 return new Response<int>(true, courses);
             }
             catch (Exception ex)

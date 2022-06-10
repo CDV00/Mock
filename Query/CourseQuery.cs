@@ -162,8 +162,7 @@ namespace Course.DAL.Queries
 
         public ICourseQuery IncludeCategory()
         {
-            Query.Include(c => c.Category)
-                 .Load();
+            Query.Include(c => c.Category);
             return this;
         }
 

@@ -9,6 +9,7 @@ namespace Course.BLL.Services.Abstraction
     {
         Task<Response<EnrollmentDTO>> Add(Guid userId, Guid CourseId);
         Task<Response<int>> GetTotal(Guid userId);
+        Task<Response<int>> GetTotalEnrollCourse(Guid courseId);
         Task<Response<EnrollmentDTO>> IsEnrollment(Guid userId, Guid courseId);
     }
 }

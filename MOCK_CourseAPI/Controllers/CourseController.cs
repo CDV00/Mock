@@ -118,7 +118,7 @@ namespace CourseAPI.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<Response<int>>> GetTotal(Guid UserId)
         {
-            var result = await _coursesService.GetTotal(UserId);
+            var result = await _coursesService.GetTotalCourseOfUser(UserId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);

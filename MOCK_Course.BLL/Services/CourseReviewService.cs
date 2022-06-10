@@ -15,19 +15,22 @@ namespace Course.BLL.Services
     public class CourseReviewService : ICourseReviewService
     {
         private readonly ICourseReviewRepository _courseReviewRepository;
+        private readonly IEnrollmentRepository _enrollmentRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+
         /// <summary>
         /// contructer CourseReviewService 
         /// </summary>
         /// <param name="courseReviewRepository"></param>
         /// <param name="unitOfWork"></param>
         /// <param name="mapper"></param>
-        public CourseReviewService(ICourseReviewRepository courseReviewRepository, IUnitOfWork unitOfWork, IMapper mapper)
+        public CourseReviewService(ICourseReviewRepository courseReviewRepository, IEnrollmentRepository enrollmentRepository, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _courseReviewRepository = courseReviewRepository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _enrollmentRepository = enrollmentRepository;
         }
 
 
@@ -54,22 +57,7 @@ namespace Course.BLL.Services
 
             return pageList;
         }
-        //public async Task<Responses<CourseReviewDTO>> Getall(Guid courseId)
-        //{
-        //    try
-        //    {
-        //        var courseReview = await _courseReviewRepository.BuildQuery()
-        //                                                  .FilterByCourseId(courseId)
-        //                                                  .IncludeUser()
-        //                                                  .ToListAsync(c => _mapper.Map<CourseReviewDTO>(c));
 
-        //        return new Responses<CourseReviewDTO>(true, courses);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new Responses<CourseReviewDTO>(false, ex.Message, null);
-        //    }
-        //}
         public async Task<Response<CourseReviewDTO>> Add(CourseReviewRequest courseReviewRequest)
         {
             try
@@ -141,6 +129,12 @@ namespace Course.BLL.Services
         {
             try
             {
+                var IsExistEnrolls = await _enrollmentRepository.BuildQuery()
+                                                                .FilterByUserId(userId)
+                                                                .AnyAsync();
+                if (!IsExistEnrolls)
+                    return new Response<int>(true, 0);
+
                 var courses = await _courseReviewRepository.BuildQuery()
                                                            .FilterByUserId(userId)
                                                            .CountAsync();
@@ -156,6 +150,13 @@ namespace Course.BLL.Services
         {
             try
             {
+                var IsExistEnrolls = await _enrollmentRepository.BuildQuery()
+                                                                .FilterByCourseId(courseId)
+                                                                .FilterByUserId(userId)
+                                                                .AnyAsync();
+                if (!IsExistEnrolls)
+                    return new Response<float>(true, 0);
+
                 var courses = await _courseReviewRepository.BuildQuery()
                                                            .FilterByCourseId(courseId)
                                                            .FilterByUserId(userId)
@@ -172,6 +173,13 @@ namespace Course.BLL.Services
         {
             try
             {
+                var IsExistEnrolls = await _enrollmentRepository.BuildQuery()
+                                                                .FilterByCourseId(courseId)
+                                                                .FilterByUserId(userId)
+                                                                .AnyAsync();
+                if (!IsExistEnrolls)
+                    return new Response<List<float>>(true, new() { 0, 0, 0, 0, 0 });
+
                 var sumRating = await _courseReviewRepository.BuildQuery()
                                                              .FilterByCourseId(courseId)
                                                              .FilterByUserId(userId)
