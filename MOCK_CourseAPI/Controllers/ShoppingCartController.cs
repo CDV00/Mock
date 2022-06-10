@@ -49,6 +49,21 @@ namespace CourseAPI.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
+        /// <summary>
+        /// Update IsActive Shopping Cart 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="cartUpdateRequest"></param>
+        /// <returns></returns>
+        [HttpPut]
+        public async Task<ActionResult<Response<CartDTO>>> Update(Guid id, CartUpdateRequest cartUpdateRequest)
+        {
+            var result = await _shoppingCartService.Update(id, cartUpdateRequest);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
 
         /// <summary>
         /// Remove Shopping Cart
