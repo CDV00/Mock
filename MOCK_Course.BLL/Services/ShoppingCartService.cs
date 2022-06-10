@@ -71,8 +71,33 @@ namespace Course.BLL.Services
                 return new Responses<CartDTO>(false, ex.Message, null);
             }
         }
+        public async Task<Response<CartUpdateDTO>> Update(Guid id, CartUpdateRequest cartUpdateRequest)
+        {
+            try
+            {
+                var cart = await _shoppingCartRepository.GetByIdAsync(id);
+                if (cart == null)
+                {
+                    new Responses<CartUpdateDTO>(false, "can't find cart", null);
+                }
 
-        public async Task<BaseResponse> Remove(Guid Id)
+
+                _mapper.Map(cartUpdateRequest, cart);
+                await _unitOfWork.SaveChangesAsync();
+
+                var cartResponse = _mapper.Map<CartUpdateDTO>(cart);
+
+                return new Response<CartUpdateDTO>(
+                    true,
+                    cartResponse
+                );
+            }
+            catch (Exception ex)
+            {
+                return new Response<CartUpdateDTO>(false, ex.Message, null);
+            }
+        }
+            public async Task<BaseResponse> Remove(Guid Id)
         {
             try
             {

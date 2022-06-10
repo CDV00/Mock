@@ -10,5 +10,6 @@ namespace Course.BLL.Services.Abstraction
         Task<Responses<CartDTO>> GetAll(Guid userId);
         Task<BaseResponse> Remove(Guid userId);
         Task<Response<CartDTO>> Add(Guid userId, Guid courseId);
+        Task<Response<CartUpdateDTO>> Update(Guid id, CartUpdateRequest cartUpdateRequest);
     }
 }
