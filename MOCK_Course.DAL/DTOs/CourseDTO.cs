@@ -1,4 +1,5 @@
 ﻿using Course.BLL.DTO;
+using Course.DAL.DTOs;
 using System;
 using System.Collections.Generic;
 
@@ -31,7 +32,8 @@ namespace Course.BLL.Responses
         public decimal Price { get; set; }
 
         // TODO: Add rating and Total Enrollments
-
+        public float Rating { get; set; }
+        public int TotalEnroll { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public bool IsActive { get; set; }
