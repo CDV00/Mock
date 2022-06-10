@@ -33,6 +33,7 @@ namespace Course.BLL.Responses
 
         // TODO: Add rating and Total Enrollments
         public float Rating { get; set; }
+        public float PercentComplete { get; set; }
         public int TotalEnroll { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }

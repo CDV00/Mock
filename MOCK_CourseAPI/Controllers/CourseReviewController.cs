@@ -106,7 +106,7 @@ namespace CourseAPI.Controllers
         /// <returns>List float</returns>
         [HttpGet("Get-Rating")]
         [AllowAnonymous]
-        public async Task<ActionResult<Response<List<float>>>> GetRating(Guid? courseId,Guid? userId)
+        public async Task<ActionResult<Response<List<float>>>> GetRating(Guid? courseId, Guid? userId)
         {
             var result = await _courseReviewService.GetDetaiRate(courseId, userId);
             if (result.IsSuccess == false)
@@ -126,6 +126,20 @@ namespace CourseAPI.Controllers
         public async Task<ActionResult<Response<List<float>>>> GetAvgRating(Guid? courseId, Guid? userId)
         {
             var result = await _courseReviewService.GetAVGRatinng(courseId, userId);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
+        /// <summary>
+        /// Check User Course Review only review once
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <returns></returns>
+        [HttpGet("check-user-course-review")]
+        public async Task<ActionResult<BaseResponse>> CheckUserCourseReview(Guid courseId)
+        {
+            var userId = User.GetUserId();
+            var result = await _courseReviewService.CheckUserCourseReview(userId, courseId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);

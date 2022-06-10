@@ -225,5 +225,31 @@ namespace Course.BLL.Services
                 return new BaseResponse(false, ex.Message, null);
             }
         }
+        public async Task<BaseResponse> CheckUserCourseReview(Guid userId, Guid courseId)
+        {
+            try
+            {
+                var check = await _courseReviewRepository.BuildQuery()
+                                                         .FilterByUserId(userId)
+                                                         .FilterByCourseId(courseId)
+                                                         .AnyAsync();
+                var IsExistCourse = await _enrollmentRepository.BuildQuery()
+                                                               .FilterByCourseId(courseId)
+                                                               .AnyAsync();
+                if (IsExistCourse)
+                {
+                    if (check)
+                    {
+                        return new BaseResponse(false, "This user can only review once!", null);
+                    }
+                    return new BaseResponse(true, "This user has not reviewed this course!", null);
+                }
+                return new BaseResponse(false, "Course not found", null);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse(false, ex.Message, null);
+            }
+        }
     }
 }

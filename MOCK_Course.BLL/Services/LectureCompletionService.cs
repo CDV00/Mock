@@ -60,5 +60,6 @@ namespace Course.BLL.Services
                 return new BaseResponse(false, ex.Message, null);
             }
         }
+        //Lấy tí lệ khóa học đã hoàn thành; tong lecture * 100%/cac khoa hoc hoan thanh
     }
 }
