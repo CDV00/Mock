@@ -75,6 +75,11 @@ namespace Course.DAL.Queries
             return this;
         }
 
+        public ICourseQuery IncludeEnrolment()
+        {
+            Query.Include(c => c.Enrollments).Load();
+            return this;
+        }
         public ICourseQuery IncludeLanguage()
         {
             Query.Include(c => c.AudioLanguages)
