@@ -7,5 +7,10 @@ namespace Course.BLL.Requests
     {
         [Required]
         public Guid CourseId { get; set; }
+        public bool IsActive { get; set; }
+    }
+    public class CartUpdateRequest
+    {
+        public bool IsActive { get; set; }
     }
 }

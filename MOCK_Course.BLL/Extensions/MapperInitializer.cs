@@ -64,6 +64,8 @@ namespace Course.BLL.Extensions
             CreateMap<CategoryDTO, Category>().ReverseMap();
             CreateMap<ShoppingCart, CartDTO>().ReverseMap();
             CreateMap<ShoppingCart, CartRequest>().ReverseMap();
+            CreateMap<ShoppingCart, CartUpdateDTO>().ReverseMap();
+            CreateMap<ShoppingCart, CartUpdateRequest>().ReverseMap();
 
             // AppUser
             CreateMap<UpdateProfileRequest, AppUser>().ReverseMap();
