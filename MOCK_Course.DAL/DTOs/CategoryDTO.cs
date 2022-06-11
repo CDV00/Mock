@@ -7,8 +7,13 @@ namespace Course.BLL.DTO
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public Guid? ParentId { get; set; }
+    }
 
+    public class CategoryDTO_
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public Guid? ParentId { get; set; }
         public ICollection<CategoryDTO> SubCategories { get; set; }
     }
 }

@@ -11,6 +11,7 @@ namespace Course.BLL.Extensions
         public MapperInitializer()
         {
             CreateMap<Category, CategoryDTO>().ReverseMap();
+            CreateMap<Category, CategoryDTO_>().ReverseMap();
             CreateMap<Category, CategoryRequest>().ReverseMap();
             CreateMap<Category, CategoryUpdateRequest>().ReverseMap();
             CreateMap<DiscountDTO, Discount>().ReverseMap();
@@ -27,13 +28,11 @@ namespace Course.BLL.Extensions
             CreateMap<Lecture, LectureForCreateRequest>().ReverseMap();
             CreateMap<Lecture, LectureForUpdateRequest>().ReverseMap();
             CreateMap<Lecture, LectureDTO>().ReverseMap();
-            CreateMap<Lecture, LectureForDetailDTO>().ReverseMap();
 
             // section
-            CreateMap<Section, SectionCreateRequest>().ForMember(des => des.Lectures, src => src.MapFrom(opt => opt.Lectures)).ReverseMap();
+            CreateMap<Section, SectionCreateRequest>().ReverseMap();
             CreateMap<Section, SectionUpdateRequest>().ReverseMap().ForMember(des => des.Lectures, src => src.MapFrom(opt => opt.Lectures)).ReverseMap();
             CreateMap<Section, SectionDTO>().ForMember(des => des.Lectures, src => src.MapFrom(opt => opt.Lectures)).ReverseMap();
-            CreateMap<Section, SectionForDetailDTO>().ForMember(des => des.Lectures, src => src.MapFrom(opt => opt.Lectures)).ReverseMap().ReverseMap();
 
             // language
             CreateMap<AudioLanguage, AudioLanguageForCreateRequest>().ReverseMap();
@@ -48,14 +47,10 @@ namespace Course.BLL.Extensions
             CreateMap<Courses, CourseForUpdateRequest>().ReverseMap();
 
             CreateMap<AppUser, UserDTO>().ReverseMap();
-            CreateMap<Category, CourseCategoryDTO>().ReverseMap();
-            CreateMap<Courses, CoursesCardDTO>().ReverseMap();
 
             CreateMap<AudioLanguageDTO, AudioLanguage>().ReverseMap();
             CreateMap<CourseDTO, Courses>().ReverseMap();
             CreateMap<CourseOfDiscountDTO, Courses>().ReverseMap();
-            CreateMap<AppUser, CourseDetailUserDTO>().ReverseMap();
-            CreateMap<CourseForDetailDTO, Courses>().ReverseMap();
 
             // map cart
             CreateMap<CartRequest, CartDTO>().ReverseMap();
@@ -64,7 +59,6 @@ namespace Course.BLL.Extensions
             CreateMap<CategoryDTO, Category>().ReverseMap();
             CreateMap<ShoppingCart, CartDTO>().ReverseMap();
             CreateMap<ShoppingCart, CartRequest>().ReverseMap();
-            CreateMap<ShoppingCart, CartUpdateDTO>().ReverseMap();
             CreateMap<ShoppingCart, CartUpdateRequest>().ReverseMap();
 
             // AppUser
@@ -81,25 +75,15 @@ namespace Course.BLL.Extensions
 
             // map enrollment
             CreateMap<EnrollmentRequest, EnrollmentDTO>().ReverseMap();
-            CreateMap<EnrollmentUserDTO, AppUser>().ReverseMap();
-            CreateMap<EnrollmentCourseDTO, Courses>().ReverseMap();
-            CreateMap<EnrollmentCategoryDTO, Category>().ReverseMap();
             CreateMap<Enrollment, EnrollmentDTO>().ReverseMap();
 
             // map course completion
-            CreateMap<CourseCompletionRequest, CourseCompletionDTO>().ReverseMap();
-            CreateMap<CourseCompletionUserDTO, AppUser>().ReverseMap();
-            CreateMap<CourseCompletionCourseDTO, Courses>().ReverseMap();
-            CreateMap<CourseCompletionCategoryDTO, Category>().ReverseMap();
-            CreateMap<CourseCompletion, CourseCompletionDTO>().ForMember(des => des.User, opt => opt.MapFrom(src => src.User)).ForMember(des => des.Course, opt => opt.MapFrom(src => src.Course)).ForPath(des => des.Course.Category, opt => opt.MapFrom(src => src.Course.Category)).ReverseMap();
             CreateMap<CourseCompletion, CourseCompletionRequest>().ReverseMap();
 
             // map lesson completion
             CreateMap<LectureCompletionRequest, LectureCompletionDTO>().ReverseMap();
             CreateMap<LectureCompletionRequest, LectureCompletion>().ReverseMap();
-            CreateMap<LectureCompletionUserDTO, AppUser>().ReverseMap();
-            CreateMap<LectureCompletionLessionDTO, Lecture>().ReverseMap();
-            CreateMap<LectureCompletion, LectureCompletionDTO>().ForMember(des => des.User, opt => opt.MapFrom(src => src.User)).ForMember(des => des.Lecture, opt => opt.MapFrom(src => src.Lecture)).ReverseMap();
+            CreateMap<LectureCompletion, LectureCompletionDTO>().ReverseMap();
             CreateMap<LectureCompletion, LectureCompletionRequest>().ReverseMap();
 
             //CourseReview
@@ -111,8 +95,6 @@ namespace Course.BLL.Extensions
             CreateMap<Discount, DiscountDTO>().ReverseMap();
             CreateMap<Discount, DiscountForCreateRequest>().ReverseMap();
             CreateMap<Discount, DiscountForUpdateRequest>().ReverseMap();
-            CreateMap<Discount, DiscountForCreateDTO>().ReverseMap();
-            CreateMap<Discount, DiscountForUpdateDTO>().ReverseMap();
 
 
             CreateMap<SubscriptionRequest, SubscriptionDTO>().ReverseMap();
@@ -120,10 +102,7 @@ namespace Course.BLL.Extensions
             CreateMap<Subscription, SubscriptionDTO>().ReverseMap();
             CreateMap<Subscription, SubscriptionRequest>().ReverseMap();
 
-            //CreateMap<Discount, DiscountDTO>().ReverseMap();
             CreateMap<Discount, DiscounRequest>().ReverseMap();
-            //CreateMap<Discount, DiscountForUpdateRequest>().ReverseMap();
-            //
             CreateMap<UserDTO, Subscription>().ReverseMap();
 
             // map saved cart

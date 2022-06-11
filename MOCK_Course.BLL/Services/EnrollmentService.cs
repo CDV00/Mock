@@ -81,9 +81,9 @@ namespace Course.BLL.Services
             try
             {
                 var enrollment = await _enrollmentRepository.BuildQuery()
-                                                         .FilterByUserId(userId)
-                                                         .FilterByCourseId(courseId)
-                                                         .AsSelectorAsync(e => _mapper.Map<EnrollmentDTO>(e));
+                                                            .FilterByUserId(userId)
+                                                            .FilterByCourseId(courseId)
+                                                            .AsSelectorAsync(e => _mapper.Map<EnrollmentDTO>(e));
 
                 if (enrollment == null)
                 {

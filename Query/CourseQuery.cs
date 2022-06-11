@@ -24,7 +24,7 @@ namespace Course.DAL.Queries
 
         public ICourseQuery FilterByOrderd(Guid userId)
         {
-            Query.Where(c => c.Orders.Any(o => o.UserId == userId));
+            Query = Query.Where(c => c.Orders.Any(o => o.UserId == userId));
             return this;
         }
 
@@ -162,7 +162,7 @@ namespace Course.DAL.Queries
 
         public ICourseQuery IncludeCategory()
         {
-            Query.Include(c => c.Category);
+            Query.Include(c => c.Category).Load();
             return this;
         }
 

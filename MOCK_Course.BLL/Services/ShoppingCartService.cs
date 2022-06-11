@@ -71,7 +71,7 @@ namespace Course.BLL.Services
                 return new Responses<CartDTO>(false, ex.Message, null);
             }
         }
-        public async Task<Response<CartUpdateDTO>> Update(Guid id, CartUpdateRequest cartUpdateRequest)
+        public async Task<Response<CartDTO>> Update(Guid id, CartUpdateRequest cartUpdateRequest)
         {
             try
             {
@@ -79,23 +79,23 @@ namespace Course.BLL.Services
 
                 if (cart == null)
                 {
-                    new Responses<CartUpdateDTO>(false, "can't find cart", null);
+                    new Responses<CartDTO>(false, "can't find cart", null);
                 }
 
 
                 _mapper.Map(cartUpdateRequest, cart);
                 await _unitOfWork.SaveChangesAsync();
 
-                var cartResponse = _mapper.Map<CartUpdateDTO>(cart);
+                var cartResponse = _mapper.Map<CartDTO>(cart);
 
-                return new Response<CartUpdateDTO>(
+                return new Response<CartDTO>(
                     true,
                     cartResponse
                 );
             }
             catch (Exception ex)
             {
-                return new Response<CartUpdateDTO>(false, ex.Message, null);
+                return new Response<CartDTO>(false, ex.Message, null);
             }
         }
         public async Task<BaseResponse> Remove(Guid Id)

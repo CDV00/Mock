@@ -85,13 +85,29 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
         /// <summary>
+        /// Get total review of user, if userId from query == null, It will get userId from token.
+        /// </summary>
+        [HttpGet("Get-total-Review-of-User")]
+        public async Task<ActionResult<Response<int>>> GetTotalReviewOfUser(Guid? userId)
+        {
+            if (userId == null)
+                userId = User.GetUserId();
+            if (userId == null)
+                return new Response<int>(false, "userId is null! need pass userId from Query or authentication", null);
+
+            var result = await _courseReviewService.GetTotalReviewOfUser(userId.GetValueOrDefault());
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
+        /// <summary>
         /// Get total review of course
         /// </summary>
-        [HttpGet("Get-total-Reivew-of-course")]
-        public async Task<ActionResult<Response<int>>> GetTotal()
+        [HttpGet("Get-total-Review-of-course")]
+        public async Task<ActionResult<Response<int>>> GetTotalReviewOfCourse(Guid courseId)
         {
-            var userId = User.GetUserId();
-            var result = await _courseReviewService.GetTotal(userId);
+            var result = await _courseReviewService.GetTotalReviewOfCourse(courseId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);

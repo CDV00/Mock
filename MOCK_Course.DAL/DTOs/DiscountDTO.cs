@@ -17,7 +17,7 @@ namespace Course.BLL.Responses
     {
         public Guid Id { get; set; }
         //public Guid CourseId { get; set; }
-        public CourseOfDiscountDTO course { get; set; }
+        public CourseOfDiscountDTO Course { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public decimal DiscountPercent { get; set; }
@@ -27,22 +27,5 @@ namespace Course.BLL.Responses
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
-    }
-
-    public class DiscountForUpdateDTO
-    {
-        public Guid Id { get; set; }
-        public Guid CourseId { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public decimal DiscountPercent { get; set; }
-    }
-    public class DiscountForCreateDTO
-    {
-        public Guid CourseId { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public decimal DiscountPercent { get; set; }
-
     }
 }

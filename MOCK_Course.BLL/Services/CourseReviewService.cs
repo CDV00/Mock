@@ -125,7 +125,7 @@ namespace Course.BLL.Services
         // </summary>
         // <param name = "userId" ></ param >
         // < returns ></ returns >
-        public async Task<Response<int>> GetTotal(Guid userId)
+        public async Task<Response<int>> GetTotalReviewOfUser(Guid userId)
         {
             try
             {
@@ -137,6 +137,27 @@ namespace Course.BLL.Services
 
                 var courses = await _courseReviewRepository.BuildQuery()
                                                            .FilterByUserId(userId)
+                                                           .CountAsync();
+                return new Response<int>(true, courses);
+            }
+            catch (Exception ex)
+            {
+                return new Response<int>(false, ex.Message, null);
+            }
+        }
+
+        public async Task<Response<int>> GetTotalReviewOfCourse(Guid courseId)
+        {
+            try
+            {
+                var IsExistEnrolls = await _enrollmentRepository.BuildQuery()
+                                                                .FilterByCourseId(courseId)
+                                                                .AnyAsync();
+                if (!IsExistEnrolls)
+                    return new Response<int>(true, 0);
+
+                var courses = await _courseReviewRepository.BuildQuery()
+                                                           .FilterByCourseId(courseId)
                                                            .CountAsync();
                 return new Response<int>(true, courses);
             }

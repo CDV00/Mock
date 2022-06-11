@@ -128,10 +128,10 @@ namespace Course.BLL.Services
             try
             {
                 var courses = await _cousesRepository.BuildQuery()
-                                                        .IncludeCategory()
-                                                        .IncludeUser()
-                                                        .FilterByOrderd(userId)
-                                                        .ToListAsync(c => _mapper.Map<CourseDTO>(c));
+                                                     .IncludeCategory()
+                                                     .IncludeUser()
+                                                     .FilterByOrderd(userId)
+                                                     .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 
                 await AddRating(courses);
                 return new Responses<CourseDTO>(true, courses);

@@ -14,15 +14,6 @@ namespace Course.BLL.Responses
         public bool IsNew { get; set; } = false;
     }
 
-    public class SectionForDetailDTO
-    {
-        public Guid Id { get; set; }
-        public string Title { get; set; }
-        //public int TotalTime { get; set; }
-        //public int TotalLectures { get; set; }
-
-        public IList<LectureForDetailDTO> Lectures { get; set; }
-    }
 
     public class LectureDTO
     {
@@ -38,11 +29,4 @@ namespace Course.BLL.Responses
         public bool IsNew { get; set; } = false;
     }
 
-    public class LectureForDetailDTO
-    {
-        public Guid Id { get; set; }
-        public string Title { get; set; }
-        public bool IsPreview { get; set; }
-        public int TotalTime { get; set; }
-    }
 }

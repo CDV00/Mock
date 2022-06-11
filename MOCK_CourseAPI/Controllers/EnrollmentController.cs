@@ -37,7 +37,7 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// <h1>Get total enrollment of user. if userId from query == null, It will get userId from token.</h1>
+        /// Get total enrollment of user. if userId from query == null, It will get userId from token.
         /// </summary>
         /// <returns></returns>
         [HttpGet("Get-total-enroll-of-user")]
