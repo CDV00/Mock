@@ -25,7 +25,6 @@ namespace Course.DAL.Queries
         ICourseQuery FilterByKeyword(string Keyword);
         ICourseQuery FilterByDiscount(bool? IsSeller);
         ICourseQuery IncludeLevel();
-        ICourseQuery FilterByFree(bool? isFree);
         ICourseQuery IncludeDiscount();
         ICourseQuery FilterByUserId(Guid? userId);
         ICourseQuery FilterByRating(int? Rate);

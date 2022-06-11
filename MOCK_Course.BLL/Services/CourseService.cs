@@ -66,7 +66,7 @@ namespace Course.BLL.Services
                                                .FilterByCloseCaptionIds(courseParameter.CloseCaptionIds)
                                                .FilterByLevelIds(courseParameter.LevelIds)
                                                .FilterByDiscount(courseParameter.IsDiscount)
-                                               .FilterByFree(courseParameter.IsFree)
+                                               .FilterByPrice(courseParameter.IsFree, courseParameter.IsDiscount)
                                                .FilterByRating(courseParameter.Rate)
                                                .CountAsync();
 
@@ -79,10 +79,10 @@ namespace Course.BLL.Services
 
         private async Task AddRating(List<CourseDTO> courses)
         {
-            for (var i = 0; i < courses.Count; i++)
-            {
-                courses[i].TotalEnroll = (await _enrollmentService.GetTotalEnrollOfCourse(courses[i].Id)).data;
-            }
+            //for (var i = 0; i < courses.Count; i++)
+            //{
+            //courses[i].TotalEnroll = (await _enrollmentService.GetTotalEnrollOfCourse(courses[i].Id)).data;
+            //}
         }
 
         /// <summary>

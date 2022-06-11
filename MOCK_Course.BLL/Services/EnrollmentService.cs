@@ -6,22 +6,26 @@ using Course.BLL.DTO;
 using Course.BLL.Responses;
 using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
+using Repository.Repositories;
 
 namespace Course.BLL.Services
 {
     public class EnrollmentService : IEnrollmentService
     {
         private readonly IEnrollmentRepository _enrollmentRepository;
+        private readonly ICousesRepository _cousesRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public EnrollmentService(IEnrollmentRepository enrollmentRepository,
             IMapper mapper,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            ICousesRepository cousesRepository)
         {
             _enrollmentRepository = enrollmentRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _cousesRepository = cousesRepository;
         }
 
         public async Task<Response<EnrollmentDTO>> Add(Guid userId, Guid CourseId)
@@ -36,6 +40,10 @@ namespace Course.BLL.Services
                 };
 
                 await _enrollmentRepository.CreateAsync(enrollment);
+
+                var course = await _cousesRepository.GetByIdAsync(CourseId);
+                course.TotalEnrolls++;
+
                 await _unitOfWork.SaveChangesAsync();
 
                 return new Response<EnrollmentDTO>(

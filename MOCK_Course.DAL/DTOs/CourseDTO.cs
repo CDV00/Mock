@@ -32,6 +32,8 @@ namespace Course.BLL.Responses
 
         public decimal Price { get; set; }
         public float AvgRate { get; set; } = 0;
+        public int TotalEnrolls { get; set; } = 0;
+
         public float PercentComplete { get; set; }
         public int TotalEnroll { get; set; }
         public DateTime CreatedAt { get; set; }
