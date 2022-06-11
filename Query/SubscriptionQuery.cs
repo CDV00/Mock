@@ -28,12 +28,12 @@ namespace Course.DAL.Queries
         /// <returns></returns>
         public IEnrollmentQuery FilterByCourseId(Guid? CourseId)
         {
-            if (CourseId == null) 
+            if (CourseId == null)
                 return this;
             Query = Query.Where(type => type.CourseId == CourseId);
             return this;
         }
-        
+
         public IEnrollmentQuery FilterByUserId(Guid? UserId)
         {
             if (UserId == null)

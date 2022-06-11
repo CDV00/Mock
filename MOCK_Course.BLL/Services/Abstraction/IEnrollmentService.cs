@@ -8,8 +8,8 @@ namespace Course.BLL.Services.Abstraction
     public interface IEnrollmentService
     {
         Task<Response<EnrollmentDTO>> Add(Guid userId, Guid CourseId);
-        Task<Response<int>> GetTotal(Guid userId);
-        Task<Response<int>> GetTotalEnrollCourse(Guid courseId);
+        Task<Response<int>> GetTotalEnrollOfUser(Guid userId);
+        Task<Response<int>> GetTotalEnrollOfCourse(Guid courseId);
         Task<Response<EnrollmentDTO>> IsEnrollment(Guid userId, Guid courseId);
     }
 }

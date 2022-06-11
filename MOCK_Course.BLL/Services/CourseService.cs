@@ -75,18 +75,10 @@ namespace Course.BLL.Services
 
         private async Task AddRating(List<CourseDTO> courses)
         {
-            try
+            for (var i = 0; i < courses.Count; i++)
             {
-                for (var i = 0; i < courses.Count; i++)
-                {
-                    courses[i].Rating = (await _courseReviewService.GetAVGRatinng(courses[i].Id, null)).data;
-                    courses[i].TotalEnroll = (await _enrollmentService.GetTotalEnrollCourse(courses[i].Id)).data;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                string exption = ex.ToString();
+                courses[i].Rating = (await _courseReviewService.GetAVGRatinng(courses[i].Id, null)).data;
+                courses[i].TotalEnroll = (await _enrollmentService.GetTotalEnrollOfCourse(courses[i].Id)).data;
             }
         }
 
@@ -176,7 +168,7 @@ namespace Course.BLL.Services
         private async Task AddRate(CourseDTO course)
         {
             course.Rating = (await _courseReviewService.GetAVGRatinng(course.Id, null)).data;
-            course.TotalEnroll = (await _enrollmentService.GetTotalEnrollCourse(course.Id)).data;
+            course.TotalEnroll = (await _enrollmentService.GetTotalEnrollOfCourse(course.Id)).data;
         }
 
         public async Task<Response<CourseDTO>> Add(Guid userId, CourseForCreateRequest courseRequest)
@@ -398,75 +390,5 @@ namespace Course.BLL.Services
                 return new Response<int>(false, ex.Message, null);
             }
         }
-        //public async Task<BaseResponse> IsFree(Guid courseId)
-        //{
-        //    try
-        //    {
-        //        bool result = await _cousesRepository.IsFree(courseId);
-        //        return new BaseResponse(result);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new BaseResponse(false, ex.Message, null);
-        //    }
-        //}
-        //public async Task<Response<CourseForDetailDTO>> GetDetail(Guid id)
-        //{
-        //    try
-        //    {
-        //        var course = await _cousesRepository.BuildQuery()
-        //                                            .IncludeCategory()
-        //                                            .IncludeLanguage()
-        //                                            .IncludeSection()
-        //                                            .IncludeUser()
-        //                                            .FilterById(id)
-        //                                            .AsSelectorAsync(c => _mapper.Map<CourseForDetailDTO>(c));
-
-        //        return new Response<CourseForDetailDTO>(true, course);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new Response<CourseForDetailDTO>(false, ex.Message, null);
-        //    }
-        //}
-
-        //public async Task<Responses<UpcommingCourseDTO>> GetAllUpcomingCourses(Guid userId)
-        //{
-        //    try
-        //    {
-        //        var myCourse = await _cousesRepository.GetAllUpcomingCourses(userId);
-        //        return new Responses<UpcommingCourseDTO>(true, myCourse);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new Responses<UpcommingCourseDTO>(false, ex.Message, null);
-        //    }
-        //}
-
-
-        //public async Task<Responses<CousrsePagingDTO>> GetCoursePaing(CousrsePagingRequest cousrsePagingRequest)
-        //{
-        //    try
-        //    {
-        //        var cousrsePaging = await _cousesRepository.GetPagingCourses(cousrsePagingRequest.page, cousrsePagingRequest.pageSize, cousrsePagingRequest.sortBy);
-        //        return new Responses<CousrsePagingDTO>(true, cousrsePaging);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new Responses<CousrsePagingDTO>(false, ex.Message, null);
-        //    }
-        //}
-        //public async Task<Responses<CousrsePagingDTO>> GetByFilteringCousrse(string key)
-        //{
-        //    try
-        //    {
-        //        var cousrsePaging = await _cousesRepository.GetByFilteringCousrse(key);
-        //        return new Responses<CousrsePagingDTO>(true, cousrsePaging);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new Responses<CousrsePagingDTO>(false, ex.Message, null);
-        //    }
-        //}
     }
 }

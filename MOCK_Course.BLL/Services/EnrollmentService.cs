@@ -46,7 +46,7 @@ namespace Course.BLL.Services
                 return new Response<EnrollmentDTO>(false, ex.Message, null);
             }
         }
-        public async Task<Response<int>> GetTotal(Guid userId)
+        public async Task<Response<int>> GetTotalEnrollOfUser(Guid userId)
         {
             try
             {
@@ -61,7 +61,7 @@ namespace Course.BLL.Services
             }
         }
 
-        public async Task<Response<int>> GetTotalEnrollCourse(Guid courseId)
+        public async Task<Response<int>> GetTotalEnrollOfCourse(Guid courseId)
         {
             try
             {

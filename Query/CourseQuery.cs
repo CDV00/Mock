@@ -112,7 +112,7 @@ namespace Course.DAL.Queries
             if (IsSeller == null || IsSeller == false)
                 return this;
 
-            Query = Query.Where(c => c.Discounts.Any(d=>d.EndDate > DateTime.Now));
+            Query = Query.Where(c => c.Discounts.Any(d => d.EndDate > DateTime.Now));
             return this;
         }
 
@@ -145,7 +145,7 @@ namespace Course.DAL.Queries
             return this;
         }
 
-       
+
         public ICourseQuery FilterByKeyword(string Keyword)
         {
             if (string.IsNullOrWhiteSpace(Keyword))

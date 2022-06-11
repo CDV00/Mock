@@ -37,23 +37,34 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// Get total enrollment
+        /// <h1>Get total enrollment of user. if userId from query == null, It will get userId from token.</h1>
         /// </summary>
         /// <returns></returns>
         [HttpGet("Get-total-enroll-of-user")]
-        public async Task<ActionResult<Response<int>>> GetTotal()
+        [AllowAnonymous]
+        public async Task<ActionResult<Response<int>>> GetTotalOfUser(Guid? userId)
         {
-            var userId = User.GetUserId();
-            var result = await _enrollmentService.GetTotal(userId);
+            if (userId == null)
+                userId = User.GetUserId();
+            if (userId == null)
+                return new Response<int>(false, "userId is null! need pass userId from Query or authentication", null);
+
+            var result = await _enrollmentService.GetTotalEnrollOfUser(userId.GetValueOrDefault());
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
         }
 
+        /// <summary>
+        /// Get total enrollment of an course
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <returns></returns>
         [HttpGet("Get-total-enroll-of-course")]
-        public async Task<ActionResult<Response<int>>> GetTotalEnrollCourse(Guid courseId)
+        [AllowAnonymous]
+        public async Task<ActionResult<Response<int>>> GetTotalEnrollOfCourse(Guid courseId)
         {
-            var result = await _enrollmentService.GetTotalEnrollCourse(courseId);
+            var result = await _enrollmentService.GetTotalEnrollOfCourse(courseId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
@@ -68,7 +79,7 @@ namespace CourseAPI.Controllers
         public async Task<ActionResult<Response<EnrollmentDTO>>> IsEnrollment(Guid courseId)
         {
             var userId = User.GetUserId();
-            var result = await _enrollmentService.IsEnrollment(userId,courseId);
+            var result = await _enrollmentService.IsEnrollment(userId, courseId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
