@@ -33,8 +33,11 @@ namespace Course.DAL.Queries
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public ICourseQuery FilterByUserId(Guid userId)
+        public ICourseQuery FilterByUserId(Guid? userId)
         {
+            if (userId == null)
+                return this;
+
             Query = Query.Where(type => type.UserId == userId);
             return this;
         }
@@ -61,12 +64,21 @@ namespace Course.DAL.Queries
             return this;
         }
 
-        public ICourseQuery FilterByFree(bool? isFree)
+        public ICourseQuery FilterByPrice(bool isFree, bool isDiscount)
         {
-            if (isFree == null || isFree == false)
+            if (isFree && isDiscount)
+            {
+                Query = Query.Where(type => type.IsFree == isFree || type.Discounts.Any(d => d.EndDate > DateTime.Now));
                 return this;
+            }
 
-            Query = Query.Where(type => type.IsFree == isFree);
+            if (isFree)
+                Query = Query.Where(type => type.IsFree == isFree);
+
+
+            if (isDiscount)
+                Query = Query.Where(type => type.Discounts.Any(d => d.EndDate > DateTime.Now));
+
             return this;
         }
 
@@ -76,6 +88,15 @@ namespace Course.DAL.Queries
                  .Load();
             return this;
         }
+
+        public ICourseQuery IncludeDiscount()
+        {
+            Query.Include(c => c.Discounts)
+                 .Load();
+
+            return this;
+        }
+
 
         public ICourseQuery IncludeLevel()
         {
@@ -113,6 +134,16 @@ namespace Course.DAL.Queries
                 return this;
 
             Query = Query.Where(c => c.Discounts.Any(d => d.EndDate > DateTime.Now));
+            return this;
+        }
+
+        public ICourseQuery FilterByRating(int? Rate)
+        {
+            if (Rate == null)
+                return this;
+
+            Query = Query.Where(c => c.Enrollments.SelectMany(e => e.CourseReviews).Average(e => e.Rating) > Rate);
+
             return this;
         }
 
@@ -158,6 +189,15 @@ namespace Course.DAL.Queries
                                             .ToUpper().Contains(KEYWORD));
             return this;
         }
+
+        //public ICourseQuery FilterByUserId(Guid? userId)
+        //{
+        //    if (userId == null)
+        //        return this;
+
+        //    Query = Query.Where(c => c.UserId == userId);
+        //    return this;
+        //}
 
 
         public ICourseQuery IncludeCategory()

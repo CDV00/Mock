@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Course.DAL.Models
 {
@@ -25,15 +26,18 @@ namespace Course.DAL.Models
         public bool RequireEnroll { get; set; } = false;
 
         public decimal Price { get; set; } = 0;
-        //public decimal DiscountPrice { get; set; } = 0;
+
         public bool? IsFree { get; set; }
+
+        public float SumRates { get; set; } = 0;
+        public float AvgRate { get; set; } = 0;
+        public int TotalReviews { get; set; } = 0;
 
         public Guid CategoryId { get; set; }
         public Category Category { get; set; }
         public Guid UserId { get; set; }
         public AppUser User { get; set; }
-        //public Guid? DiscountId { get; set; }
-        //public Discount Discount { get; set; }
+
         public ICollection<Discount> Discounts { get; set; }
 
         public ICollection<Section> Sections { get; set; }

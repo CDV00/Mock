@@ -2,6 +2,7 @@
 using Course.BLL.DTO;
 using Course.BLL.Requests;
 using Course.BLL.Services.Abstraction;
+using Course.BLL.Share.RequestFeatures;
 using Course.DAL.Models;
 using Course.DAL.Repositories.Abstraction;
 using Microsoft.AspNetCore.Identity;
@@ -80,9 +81,6 @@ namespace Course.BLL.Services
         {
             try
             {
-
-                //var user = _mapper.Map<AppUser>(updateProfileRequest);
-
                 var user = await _userManager.FindByIdAsync(id.ToString());
                 _mapper.Map(updateProfileRequest, user);
                 user.UpdatedAt = DateTime.Now;
@@ -111,23 +109,25 @@ namespace Course.BLL.Services
 
             return new BaseResponse(true);
         }
-        //
-        public async Task<Responses<UserDTO>> GetPopularInstructor()
-        {
-            try
-            {
-                string RoleName = UserRoles.Instructor;
-                var user = await _userRepository.BuildQuery()
-                                                .FilterByRole(RoleName)
-                                                .SortBySubscription()
-                                                .ToListAsync(u => _mapper.Map<UserDTO>(u));
 
-                return new Responses<UserDTO>(true, user);
-            }
-            catch (Exception ex)
-            {
-                return new Responses<UserDTO>(false, ex.Message, null);
-            }
+        public async Task<PagedList<UserDTO>> GetPopularInstructor(UserParameter userParameter)
+        {
+            string RoleName = UserRoles.Instructor;
+            var users = await _userRepository.BuildQuery()
+                                             .FilterByRole(RoleName)
+                                             .FilterByName(userParameter.Keyword)
+                                             .SortBySubscription()
+                                             .Skip((userParameter.PageNumber - 1) * userParameter.PageSize)
+                                             .Take(userParameter.PageSize)
+                                             .ToListAsync(u => _mapper.Map<UserDTO>(u));
+
+            var count = await _userRepository.BuildQuery()
+                                             .FilterByRole(RoleName)
+                                             .FilterByName(userParameter.Keyword)
+                                             .CountAsync();
+
+            var pageList = new PagedList<UserDTO>(users, count, userParameter.PageNumber, userParameter.PageSize);
+            return pageList;
         }
     }
 }

@@ -36,5 +36,15 @@ namespace Course.DAL.Queries
 
             return this;
         }
+
+        public IUserQuery FilterByName(string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(keyword))
+                return this;
+
+            Query = Query.Where(u => u.Fullname.ToUpper().Contains(keyword.ToUpper()));
+
+            return this;
+        }
     }
 }

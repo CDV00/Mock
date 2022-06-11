@@ -7,7 +7,7 @@ namespace Course.DAL.Models
     {
         [MaxLength(500)]
         public string Content { get; set; }
-        [Range(1,5)]
+        [Range(1, 5)]
         public float Rating { get; set; }
 
         public Guid EnrollmentId { get; set; }

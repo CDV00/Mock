@@ -8,7 +8,6 @@ namespace Course.DAL.Queries
 {
     public interface ICourseQuery : IQuery<Courses>
     {
-        ICourseQuery FilterByUserId(Guid userId);
         ICourseQuery FilterIsActive(bool? isActice);
         Task<List<Courses>> GetAllByUserIdAsync(Guid userId);
         ICourseQuery FilterById(Guid Id);
@@ -27,5 +26,9 @@ namespace Course.DAL.Queries
         ICourseQuery FilterByDiscount(bool? IsSeller);
         ICourseQuery IncludeLevel();
         ICourseQuery FilterByFree(bool? isFree);
+        ICourseQuery IncludeDiscount();
+        ICourseQuery FilterByUserId(Guid? userId);
+        ICourseQuery FilterByRating(int? Rate);
+        ICourseQuery FilterByPrice(bool isFree, bool isDiscount);
     }
 }

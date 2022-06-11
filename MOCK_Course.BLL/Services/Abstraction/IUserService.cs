@@ -2,6 +2,7 @@
 using Course.BLL.DTO;
 using System;
 using System.Threading.Tasks;
+using Course.BLL.Share.RequestFeatures;
 
 namespace Course.BLL.Services.Abstraction
 {
@@ -11,6 +12,6 @@ namespace Course.BLL.Services.Abstraction
         Task<Response<UserDTO>> UpdateProfile(Guid userId, UpdateProfileRequest updateProfileRequest);
         Task<BaseResponse> ChangePassword(Guid userId, ChangePasswordRequest changePasswordRequest);
         Task<BaseResponse> CheckExistEmail(string Email);
-        Task<Responses<UserDTO>> GetPopularInstructor();
+        Task<PagedList<UserDTO>> GetPopularInstructor(UserParameter userParameter);
     }
 }

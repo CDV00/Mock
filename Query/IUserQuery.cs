@@ -5,6 +5,7 @@ namespace Course.DAL.Queries
 {
     public interface IUserQuery : IQuery<AppUser>
     {
+        IUserQuery FilterByName(string keyword);
         IUserQuery FilterByRole(string RoleName);
         IUserQuery SortBySubscription();
     }

@@ -42,28 +42,32 @@ namespace Course.BLL.Services
         public async Task<PagedList<CourseDTO>> GetCoursesAsync(CourseParameters courseParameter)
         {
             var courses = await _cousesRepository.BuildQuery()
-                                                    .IncludeCategory()
-                                                    .IncludeUser()
-                                                    .FilterByKeyword(courseParameter.Keyword)
-                                                    .FilterByCategoryId(courseParameter.CategoryId)
-                                                    .FilterByAudioLanguageIds(courseParameter.AudioLanguageIds)
-                                                    .FilterByCloseCaptionIds(courseParameter.CloseCaptionIds)
-                                                    .FilterByLevelIds(courseParameter.LevelIds)
-                                                    .FilterByDiscount(courseParameter.IsDiscount)
-                                                    .FilterByFree(courseParameter.IsFree)
-                                                    .ApplySort(courseParameter.Orderby)
-                                                    .Skip((courseParameter.PageNumber - 1) * courseParameter.PageSize)
-                                                    .Take(courseParameter.PageSize)
-                                                    .ToListAsync(c => _mapper.Map<CourseDTO>(c));
+                                                 .IncludeCategory()
+                                                 .IncludeUser()
+                                                 .IncludeDiscount()
+                                                 .FilterByKeyword(courseParameter.Keyword)
+                                                 .FilterByUserId(courseParameter.userId)
+                                                 .FilterByCategoryId(courseParameter.CategoryId)
+                                                 .FilterByAudioLanguageIds(courseParameter.AudioLanguageIds)
+                                                 .FilterByCloseCaptionIds(courseParameter.CloseCaptionIds)
+                                                 .FilterByLevelIds(courseParameter.LevelIds)
+                                                 .FilterByDiscount(courseParameter.IsDiscount)
+                                                 .FilterByPrice(courseParameter.IsFree, courseParameter.IsDiscount)
+                                                 .ApplySort(courseParameter.Orderby)
+                                                 .Skip((courseParameter.PageNumber - 1) * courseParameter.PageSize)
+                                                 .Take(courseParameter.PageSize)
+                                                 .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 
             var count = await _cousesRepository.BuildQuery()
                                                .FilterByKeyword(courseParameter.Keyword)
+                                               .FilterByUserId(courseParameter.userId)
                                                .FilterByCategoryId(courseParameter.CategoryId)
                                                .FilterByAudioLanguageIds(courseParameter.AudioLanguageIds)
                                                .FilterByCloseCaptionIds(courseParameter.CloseCaptionIds)
                                                .FilterByLevelIds(courseParameter.LevelIds)
                                                .FilterByDiscount(courseParameter.IsDiscount)
                                                .FilterByFree(courseParameter.IsFree)
+                                               .FilterByRating(courseParameter.Rate)
                                                .CountAsync();
 
             await AddRating(courses);
@@ -77,13 +81,12 @@ namespace Course.BLL.Services
         {
             for (var i = 0; i < courses.Count; i++)
             {
-                courses[i].Rating = (await _courseReviewService.GetAVGRatinng(courses[i].Id, null)).data;
                 courses[i].TotalEnroll = (await _enrollmentService.GetTotalEnrollOfCourse(courses[i].Id)).data;
             }
         }
 
         /// <summary>
-        /// làm thêm phân trang và filter ở đây
+        /// làm thêm phân trang và filter ở đâu
         /// </summary>
         /// <returns></returns>
         public async Task<Response<CourseDTO>> GetAll()
@@ -111,6 +114,7 @@ namespace Course.BLL.Services
                 var courses = await _cousesRepository.BuildQuery()
                                                      .IncludeCategory()
                                                      .IncludeUser()
+                                                     .IncludeDiscount()
                                                      .FilterByUserId(userId)
                                                      .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 
@@ -130,6 +134,7 @@ namespace Course.BLL.Services
                 var courses = await _cousesRepository.BuildQuery()
                                                      .IncludeCategory()
                                                      .IncludeUser()
+                                                     .IncludeDiscount()
                                                      .FilterByOrderd(userId)
                                                      .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 
@@ -167,7 +172,7 @@ namespace Course.BLL.Services
 
         private async Task AddRate(CourseDTO course)
         {
-            course.Rating = (await _courseReviewService.GetAVGRatinng(course.Id, null)).data;
+            //course.Rating = (await _courseReviewService.GetAVGRatinng(course.Id, null)).data;
             course.TotalEnroll = (await _enrollmentService.GetTotalEnrollOfCourse(course.Id)).data;
         }
 

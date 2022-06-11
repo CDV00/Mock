@@ -147,6 +147,7 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <returns>List Courses</returns>
         [HttpGet("Get-all-my-purchased")]
+        [Authorize(Roles = "Student")]
         public async Task<ActionResult<Responses<CourseDTO>>> GetAllMyPurchase()
         {
             var userId = User.GetUserId();

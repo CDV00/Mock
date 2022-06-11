@@ -16,5 +16,6 @@ namespace Course.DAL.Queries.Abstraction
         ICourseReviewQuery IncludeEnrollment();
         ICourseReviewQuery IncludeUser();
         ICourseReviewQuery FilterByUserId(Guid? userId);
+        ICourseReviewQuery GetById(Guid id);
     }
 }

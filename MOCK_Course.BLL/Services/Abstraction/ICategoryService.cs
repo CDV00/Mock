@@ -8,9 +8,9 @@ namespace Course.BLL.Services.Abstraction
 {
     public interface ICategoryService
     {
-        Task<Responses<CategoryDTO>> GetAll();
-        Task<Response<CategoryDTO>> Add(CategoryRequest categoryRequest);
+        Task<Responses<CategoryDTO_>> GetAll();
+        Task<Response<CategoryDTO_>> Add(CategoryRequest categoryRequest);
         Task<BaseResponse> remove(Guid id);
-        Task<Response<CategoryDTO>> Update(Guid id, CategoryUpdateRequest categoryUpdateRequest);
+        Task<Response<CategoryDTO_>> Update(Guid id, CategoryUpdateRequest categoryUpdateRequest);
     }
 }

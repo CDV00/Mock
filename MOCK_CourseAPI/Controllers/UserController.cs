@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using CourseAPI.Extensions.ControllerBase;
 using Course.BLL.Services.Abstraction;
+using System.Text.Json;
 
 namespace CourseAPI.Controllers
 {
@@ -30,10 +31,10 @@ namespace CourseAPI.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<UserDTO>> GetUser(Guid? userId)
         {
-            if(userId == null)
+            if (userId == null)
                 userId = User.GetUserId();
             if (userId == null)
-                return BadRequest(new Response<UserDTO>(false,"User Id is null or not authentication",null));
+                return BadRequest(new Response<UserDTO>(false, "User Id is null or not authentication", null));
 
             var result = await _userService.GetUserProfile(userId.GetValueOrDefault());
             if (result.IsSuccess == false)
@@ -59,7 +60,7 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// Change passowrd
+        /// Change password
         /// <param name="changePasswordRequest"></param>
         /// <returns></returns>
         [HttpPut("Change-Password")]
@@ -90,13 +91,15 @@ namespace CourseAPI.Controllers
         /// Get Popular Instructor
         /// </summary>
         /// <returns></returns>
-        [HttpGet("GetPopularInstructor")]
+        [HttpGet("Get-Popular-Instructor")]
         [AllowAnonymous]
-        public async Task<ActionResult<UserDTO>> GetPopularInstructor()
+        public async Task<ActionResult<Responses<UserDTO>>> GetPopularInstructor([FromQuery] UserParameter userParameter)
         {
-            var result = await _userService.GetPopularInstructor();
-            if (result.IsSuccess == false)
-                return BadRequest(result);
+            var result = await _userService.GetPopularInstructor(userParameter);
+
+            Response.Headers.Add("X-Pagination",
+                               JsonSerializer.Serialize(result.MetaData));
+
             return Ok(result);
         }
     }

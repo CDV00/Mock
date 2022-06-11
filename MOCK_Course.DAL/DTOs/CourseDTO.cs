@@ -29,10 +29,9 @@ namespace Course.BLL.Responses
 
         public bool IsFree { get; set; }
 
-        public decimal Price { get; set; }
 
-        // TODO: Add rating and Total Enrollments
-        public float Rating { get; set; }
+        public decimal Price { get; set; }
+        public float AvgRate { get; set; } = 0;
         public float PercentComplete { get; set; }
         public int TotalEnroll { get; set; }
         public DateTime CreatedAt { get; set; }

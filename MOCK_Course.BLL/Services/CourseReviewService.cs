@@ -14,6 +14,7 @@ namespace Course.BLL.Services
 {
     public class CourseReviewService : ICourseReviewService
     {
+        private readonly ICousesRepository _cousesRepository;
         private readonly ICourseReviewRepository _courseReviewRepository;
         private readonly IEnrollmentRepository _enrollmentRepository;
         private readonly IUnitOfWork _unitOfWork;
@@ -25,12 +26,13 @@ namespace Course.BLL.Services
         /// <param name="courseReviewRepository"></param>
         /// <param name="unitOfWork"></param>
         /// <param name="mapper"></param>
-        public CourseReviewService(ICourseReviewRepository courseReviewRepository, IEnrollmentRepository enrollmentRepository, IUnitOfWork unitOfWork, IMapper mapper)
+        public CourseReviewService(ICourseReviewRepository courseReviewRepository, ICousesRepository cousesRepository, IEnrollmentRepository enrollmentRepository, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _courseReviewRepository = courseReviewRepository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _enrollmentRepository = enrollmentRepository;
+            _cousesRepository = cousesRepository;
         }
 
 
@@ -64,8 +66,14 @@ namespace Course.BLL.Services
             {
                 var courseReview = _mapper.Map<CourseReview>(courseReviewRequest);
                 courseReview.CreatedAt = DateTime.Now;
-
                 await _courseReviewRepository.CreateAsync(courseReview);
+
+                var enrollment = await _enrollmentRepository.GetByIdAsync(courseReviewRequest.EnrollmentId);
+                var course = await _cousesRepository.GetByIdAsync(enrollment.CourseId);
+                course.SumRates += courseReview.Rating;
+                course.TotalReviews++;
+                course.AvgRate = course.SumRates / course.TotalReviews;
+
                 await _unitOfWork.SaveChangesAsync();
                 return new Response<CourseReviewDTO>(true, _mapper.Map<CourseReviewDTO>(courseReview));
             }
@@ -83,11 +91,22 @@ namespace Course.BLL.Services
         {
             try
             {
-                var courseReview = await _courseReviewRepository.GetByIdAsync(id);
-                courseReview.UpdatedAt = DateTime.Now;
-                //check coursereview null
-                _mapper.Map(courseReviewUpdateRequest, courseReview);
+                var courseReview = await _courseReviewRepository.BuildQuery()
+                                                                .GetById(id)
+                                                                .IncludeEnrollment()
+                                                                .AsSelectorAsync(c => c);
 
+                if (courseReview == null)
+                    return new Response<CourseReviewDTO>(true, "Don't have this reviews", null);
+
+                courseReview.UpdatedAt = DateTime.Now;
+
+                var course = await _cousesRepository.GetByIdAsync(courseReview.Enrollment.CourseId);
+                course.SumRates -= courseReview.Rating;
+                course.SumRates += courseReviewUpdateRequest.Rating;
+                course.AvgRate = course.SumRates / course.TotalReviews;
+
+                _mapper.Map(courseReviewUpdateRequest, courseReview);
                 await _unitOfWork.SaveChangesAsync();
                 return new Response<CourseReviewDTO>(
                     true,
@@ -108,8 +127,17 @@ namespace Course.BLL.Services
         {
             try
             {
-                var courseReview = await _courseReviewRepository.GetByIdAsync(id);
-                // Check courseReview null
+                var courseReview = await _courseReviewRepository.BuildQuery()
+                                                                .GetById(id)
+                                                                .IncludeEnrollment()
+                                                                .AsSelectorAsync(c => c);
+                if (courseReview == null)
+                    return new BaseResponse(true, "Don't have this reviews", null);
+
+                var course = await _cousesRepository.GetByIdAsync(courseReview.Enrollment.CourseId);
+                course.SumRates -= courseReview.Rating;
+                course.TotalReviews--;
+                course.AvgRate = course.SumRates / course.TotalReviews;
 
                 _courseReviewRepository.Remove(courseReview, true);
                 await _unitOfWork.SaveChangesAsync();
@@ -153,6 +181,7 @@ namespace Course.BLL.Services
                 var IsExistEnrolls = await _enrollmentRepository.BuildQuery()
                                                                 .FilterByCourseId(courseId)
                                                                 .AnyAsync();
+
                 if (!IsExistEnrolls)
                     return new Response<int>(true, 0);
 
@@ -251,9 +280,11 @@ namespace Course.BLL.Services
             try
             {
                 var check = await _courseReviewRepository.BuildQuery()
+                                                         .IncludeEnrollment()
                                                          .FilterByUserId(userId)
                                                          .FilterByCourseId(courseId)
                                                          .AnyAsync();
+
                 var IsExistCourse = await _enrollmentRepository.BuildQuery()
                                                                .FilterByCourseId(courseId)
                                                                .AnyAsync();
