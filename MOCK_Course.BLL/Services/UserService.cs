@@ -116,7 +116,7 @@ namespace Course.BLL.Services
             var users = await _userRepository.BuildQuery()
                                              .FilterByRole(RoleName)
                                              .FilterByName(userParameter.Keyword)
-                                             .SortBySubscription()
+                                             .SortBySubscription(userParameter.IsPopular)
                                              .Skip((userParameter.PageNumber - 1) * userParameter.PageSize)
                                              .Take(userParameter.PageSize)
                                              .ToListAsync(u => _mapper.Map<UserDTO>(u));

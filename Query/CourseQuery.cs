@@ -64,20 +64,26 @@ namespace Course.DAL.Queries
             return this;
         }
 
-        public ICourseQuery FilterByPrice(bool isFree, bool isDiscount)
+        public ICourseQuery FilterByPrice(bool isFree, bool isDiscount, decimal MinPrice, decimal MaxPrice)
         {
             if (isFree && isDiscount)
             {
                 Query = Query.Where(type => type.IsFree == isFree || type.Discounts.Any(d => d.EndDate > DateTime.Now));
+                Query = Query.Where(type => type.Price >= MinPrice && type.Price <= MaxPrice);
                 return this;
             }
 
             if (isFree)
+            {
                 Query = Query.Where(type => type.IsFree == isFree);
+            }
 
 
             if (isDiscount)
+            {
                 Query = Query.Where(type => type.Discounts.Any(d => d.EndDate > DateTime.Now));
+                Query = Query.Where(type => type.Price > MinPrice && type.Price < MaxPrice);
+            }
 
             return this;
         }

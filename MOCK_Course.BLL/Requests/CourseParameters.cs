@@ -18,5 +18,7 @@ namespace Course.BLL.Requests
         public string Orderby { get; set; }
         public bool IsDiscount { get; set; } = false;
         public bool IsFree { get; set; } = false;
+        public decimal MinPrice { get; set; } = 0;
+        public decimal MaxPrice { get; set; } = 999999999;
     }
 }

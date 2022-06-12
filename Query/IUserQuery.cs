@@ -7,6 +7,6 @@ namespace Course.DAL.Queries
     {
         IUserQuery FilterByName(string keyword);
         IUserQuery FilterByRole(string RoleName);
-        IUserQuery SortBySubscription();
+        IUserQuery SortBySubscription(bool IsPupular);
     }
 }

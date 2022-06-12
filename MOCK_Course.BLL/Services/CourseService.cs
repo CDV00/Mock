@@ -51,8 +51,7 @@ namespace Course.BLL.Services
                                                  .FilterByAudioLanguageIds(courseParameter.AudioLanguageIds)
                                                  .FilterByCloseCaptionIds(courseParameter.CloseCaptionIds)
                                                  .FilterByLevelIds(courseParameter.LevelIds)
-                                                 .FilterByDiscount(courseParameter.IsDiscount)
-                                                 .FilterByPrice(courseParameter.IsFree, courseParameter.IsDiscount)
+                                                 .FilterByPrice(courseParameter.IsFree, courseParameter.IsDiscount, courseParameter.MinPrice, courseParameter.MaxPrice)
                                                  .ApplySort(courseParameter.Orderby)
                                                  .Skip((courseParameter.PageNumber - 1) * courseParameter.PageSize)
                                                  .Take(courseParameter.PageSize)
@@ -65,8 +64,7 @@ namespace Course.BLL.Services
                                                .FilterByAudioLanguageIds(courseParameter.AudioLanguageIds)
                                                .FilterByCloseCaptionIds(courseParameter.CloseCaptionIds)
                                                .FilterByLevelIds(courseParameter.LevelIds)
-                                               .FilterByDiscount(courseParameter.IsDiscount)
-                                               .FilterByPrice(courseParameter.IsFree, courseParameter.IsDiscount)
+                                               .FilterByPrice(courseParameter.IsFree, courseParameter.IsDiscount, courseParameter.MinPrice, courseParameter.MaxPrice)
                                                .FilterByRating(courseParameter.Rate)
                                                .CountAsync();
 

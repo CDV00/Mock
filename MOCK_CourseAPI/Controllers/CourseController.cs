@@ -13,7 +13,7 @@ namespace CourseAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin,Instructor")]
+    [Authorize(Roles = "Admin, Instructor, Student")]
     public class CourseController : ControllerBase
     {
         private readonly ICourseService _coursesService;
@@ -73,6 +73,7 @@ namespace CourseAPI.Controllers
         /// <param name="courseRequest"></param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize(Roles = "Admin, Instructor")]
         public async Task<ActionResult<CourseDTO>> Create([FromBody] CourseForCreateRequest courseRequest)
         {
             var userId = User.GetUserId();
@@ -89,6 +90,7 @@ namespace CourseAPI.Controllers
         /// <param name="CoursesUpdateRequest"></param>
         /// <returns>an course</returns>
         [HttpPut()]
+        [Authorize(Roles = "Admin, Instructor")]
         public async Task<ActionResult<Response<CourseDTO>>> Update(Guid id, CourseForUpdateRequest CoursesUpdateRequest)
         {
             var userId = User.GetUserId();
@@ -105,6 +107,7 @@ namespace CourseAPI.Controllers
         /// <param name="id">Id Courses</param>
         /// <returns>true or false</returns>
         [HttpDelete()]
+        [Authorize(Roles = "Admin, Instructor")]
         public async Task<ActionResult<BaseResponse>> Delete(Guid id)
         {
             var userId = User.GetUserId();
@@ -132,6 +135,7 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <returns>List Courses</returns>
         [HttpGet("Get-all-my-course")]
+        [Authorize(Roles = "Admin, Instructor")]
         public async Task<ActionResult<Responses<CourseDTO>>> GetAllMyCoures()
         {
             var userId = User.GetUserId();
@@ -147,7 +151,6 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <returns>List Courses</returns>
         [HttpGet("Get-all-my-purchased")]
-        [Authorize(Roles = "Student")]
         public async Task<ActionResult<Responses<CourseDTO>>> GetAllMyPurchase()
         {
             var userId = User.GetUserId();

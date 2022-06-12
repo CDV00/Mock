@@ -30,10 +30,12 @@ namespace Course.DAL.Queries
             return this;
         }
 
-        public IUserQuery SortBySubscription()
+        public IUserQuery SortBySubscription(bool IsPopular)
         {
-            Query = Query.OrderByDescending(u => u.Subscriptions.Count());
+            if (!IsPopular)
+                return this;
 
+            Query = Query.OrderByDescending(u => u.Subscriptions.Count());
             return this;
         }
 
