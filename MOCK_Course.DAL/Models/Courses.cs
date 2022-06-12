@@ -33,6 +33,7 @@ namespace Course.DAL.Models
         public float AvgRate { get; set; } = 0;
         public int TotalReviews { get; set; } = 0;
         public int TotalEnrolls { get; set; } = 0;
+        public int TotalTime { get; set; } = 0;
 
         public Guid CategoryId { get; set; }
         public Category Category { get; set; }

@@ -86,7 +86,7 @@ namespace Course.BLL.Services
             {
                 var user = _mapper.Map<AppUser>(registerRequest);
                 user.Description = registerRequest.Description;
-                user.AvatarUrl = "https://gambolthemes.net/html-items/cursus_main_demo/images/hd_dp.jpg";
+                GetAvartarUser(user);
                 user.CreatedAt = DateTime.Now;
 
                 var result = await _userManager.CreateAsync(user, registerRequest.Password);
@@ -118,6 +118,19 @@ namespace Course.BLL.Services
             {
                 return new BaseResponse(false, ex.Message, null);
             }
+        }
+
+        private static void GetAvartarUser(AppUser user)
+        {
+            user.Fullname = user.Fullname.Trim();
+            string FirstLetter = user.Fullname.Split()[0][0].ToString();
+            var lastIndex = user.Fullname.Split().Length - 1;
+            string LastLetter = null;
+            if (lastIndex != 0)
+                LastLetter = user.Fullname.Split()[lastIndex][0].ToString();
+
+            var avartarUrl = "https://i2.wp.com/ui-avatars.com/api/" + FirstLetter + LastLetter + "/300/FF1493/fff";
+            user.AvatarUrl = avartarUrl;
         }
 
         private async Task AddInstructorRole(AppUser user)

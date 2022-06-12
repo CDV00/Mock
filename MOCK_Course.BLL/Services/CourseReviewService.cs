@@ -179,7 +179,7 @@ namespace Course.BLL.Services
             try
             {
                 var IsExistEnrolls = await _enrollmentRepository.BuildQuery()
-                                                                .FilterByUserId(userId)
+                                                                .FilterByCourseUserId(userId)
                                                                 .AnyAsync();
                 if (!IsExistEnrolls)
                     return new Response<int>(true, 0);

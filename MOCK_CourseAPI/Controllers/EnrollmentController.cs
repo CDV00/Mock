@@ -55,6 +55,11 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// if userId from query == null, It will get userId from token.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpGet("Get-total-enroll-of-instructor")]
         [AllowAnonymous]
         public async Task<ActionResult<Response<int>>> GetTotalOfInstructor(Guid? userId)

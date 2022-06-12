@@ -172,7 +172,7 @@ namespace Course.BLL.Services
         private async Task AddRate(CourseDTO course)
         {
             //course.Rating = (await _courseReviewService.GetAVGRatinng(course.Id, null)).data;
-            course.TotalEnroll = (await _enrollmentService.GetTotalEnrollOfCourse(course.Id)).data;
+            //course.TotalEnroll = (await _enrollmentService.GetTotalEnrollOfCourse(course.Id)).data;
         }
 
         public async Task<Response<CourseDTO>> Add(Guid userId, CourseForCreateRequest courseRequest)
@@ -185,7 +185,8 @@ namespace Course.BLL.Services
 
                 await _cousesRepository.CreateAsync(course);
 
-                #region add sub table
+                GetTotalTimeOfCourse(course);
+                #region add language, levels
                 List<AudioLanguage> audioLanguages = new();
                 if (courseRequest.AudioLanguageIds != null)
                 {
@@ -238,6 +239,61 @@ namespace Course.BLL.Services
             }
         }
 
+        private static void GetTotalTimeOfCourse(Courses course)
+        {
+            if (course.Sections == null)
+                return;
+            var courseTime = 0;
+            foreach (var section in course.Sections)
+            {
+                var sectionTime = 0;
+                if (section.Lectures == null)
+                    continue;
+
+                foreach (var lecture in section.Lectures)
+                {
+                    if (lecture == null || lecture.IsDeleted)
+                        continue;
+
+                    sectionTime += lecture.TotalTime;
+                    courseTime += lecture.TotalTime;
+                }
+
+                section.TotalTime = sectionTime;
+            }
+            course.TotalTime = courseTime;
+        }
+
+        //private static void UpdateTotalTimeOfCourse(Courses course)
+        //{
+        //    if (course.Sections == null)
+        //        return;
+        //    var courseTime = 0;
+        //    foreach (var section in course.Sections)
+        //    {
+        //        var sectionTime = 0;
+        //        if (section.Lectures == null)
+        //            continue;
+
+        //        foreach (var lecture in section.Lectures)
+        //        {
+        //            if (lecture == null)
+        //                continue;
+        //            if (lecture.IsDeleted)
+        //            {
+        //                sectionTime -= lecture.TotalTime;
+        //                courseTime -= lecture.TotalTime;
+        //                continue;
+        //            }
+
+        //            sectionTime += lecture.TotalTime;
+        //            courseTime += lecture.TotalTime;
+        //        }
+
+        //        section.TotalTime = sectionTime;
+        //    }
+        //    course.TotalTime = courseTime;
+        //}
 
         public async Task<BaseResponse> Remove(Guid idCourse, Guid userId)
         {
@@ -276,7 +332,6 @@ namespace Course.BLL.Services
                                                     //.IncludeSection()
                                                     .AsSelectorAsync(c => c);
 
-
                 if (course == null)
                 {
                     return new Response<CourseDTO>(false, "can't find course", null);
@@ -287,8 +342,10 @@ namespace Course.BLL.Services
                 AddNewSection(courseRequest);
                 _mapper.Map(courseRequest, course);
 
+
                 course.UpdatedAt = DateTime.Now;
                 course.UpdatedBy = id;
+                GetTotalTimeOfCourse(course);
 
                 #region
                 List<AudioLanguage> audioLanguages = new();
@@ -358,6 +415,17 @@ namespace Course.BLL.Services
             {
                 var section = sections[i];
 
+                if (section.IsDeleted)
+                {
+                    section = null;
+                    continue;
+                }
+
+                if (section.IsNew)
+                {
+                    section.Id = Guid.Empty;
+                }
+
                 var lectures = section.Lectures;
                 if (lectures != null)
                 {
@@ -365,17 +433,20 @@ namespace Course.BLL.Services
                     {
                         var lecture = lectures[j];
 
-                        if (!lecture.IsNew)
+                        if (lecture.IsDeleted)
+                        {
+                            lecture = null;
                             continue;
+                        }
 
-                        lecture.Id = Guid.Empty;
+                        if (lecture.IsNew)
+                        {
+                            lecture.Id = Guid.Empty;
+                        }
                     }
                 }
 
-                if (!section.IsNew)
-                    continue;
 
-                section.Id = Guid.Empty;
             }
         }
 

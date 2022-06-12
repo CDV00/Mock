@@ -7,6 +7,7 @@ namespace Course.BLL.Responses
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
+        public int TotalTime { get; set; } = 0;
 
         public IList<LectureDTO> Lectures { get; set; }
 

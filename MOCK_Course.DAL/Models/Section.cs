@@ -6,7 +6,7 @@ namespace Course.DAL.Models
     public class Section : BaseEntity<Guid>
     {
         public string Title { get; set; }
-        //public int? TotalTime { get; set; }
+        public int TotalTime { get; set; } = 0;
 
         public Guid CourseId { get; set; }
         public Courses Course { get; set; }
