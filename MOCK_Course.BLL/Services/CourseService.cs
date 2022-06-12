@@ -52,6 +52,7 @@ namespace Course.BLL.Services
                                                  .FilterByCloseCaptionIds(courseParameter.CloseCaptionIds)
                                                  .FilterByLevelIds(courseParameter.LevelIds)
                                                  .FilterByPrice(courseParameter.IsFree, courseParameter.IsDiscount, courseParameter.MinPrice, courseParameter.MaxPrice)
+                                                 .FilterByRating(courseParameter.Rate)
                                                  .ApplySort(courseParameter.Orderby)
                                                  .Skip((courseParameter.PageNumber - 1) * courseParameter.PageSize)
                                                  .Take(courseParameter.PageSize)

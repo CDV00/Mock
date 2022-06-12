@@ -55,6 +55,21 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
 
+        [HttpGet("Get-total-enroll-of-instructor")]
+        [AllowAnonymous]
+        public async Task<ActionResult<Response<int>>> GetTotalOfInstructor(Guid? userId)
+        {
+            if (userId == null)
+                userId = User.GetUserId();
+            if (userId == null)
+                return new Response<int>(false, "userId is null! need pass userId from Query or authentication", null);
+
+            var result = await _enrollmentService.GetTotalEnrollOfInstructor(userId.GetValueOrDefault());
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
         /// <summary>
         /// Get total enrollment of an course
         /// </summary>

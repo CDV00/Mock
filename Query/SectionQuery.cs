@@ -70,6 +70,12 @@ namespace Course.DAL.Queries
             return this;
         }
 
+        public ICourseReviewQuery FilterByUserIdOfCourse(Guid UserId)
+        {
+            Query = Query.Where(type => type.Enrollment.Courses.UserId == UserId);
+            return this;
+        }
+
 
         public ICourseReviewQuery GetById(Guid id)
         {

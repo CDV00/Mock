@@ -69,6 +69,21 @@ namespace Course.BLL.Services
             }
         }
 
+        public async Task<Response<int>> GetTotalEnrollOfInstructor(Guid userId)
+        {
+            try
+            {
+                var count = await _enrollmentRepository.BuildQuery()
+                                                       .FilterByCourseUserId(userId)
+                                                       .CountAsync();
+                return new Response<int>(true, count);
+            }
+            catch (Exception ex)
+            {
+                return new Response<int>(false, ex.Message, null);
+            }
+        }
+
         public async Task<Response<int>> GetTotalEnrollOfCourse(Guid courseId)
         {
             try

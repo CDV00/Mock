@@ -174,6 +174,27 @@ namespace Course.BLL.Services
             }
         }
 
+        public async Task<Response<int>> GetTotalReviewOfInstructor(Guid userId)
+        {
+            try
+            {
+                var IsExistEnrolls = await _enrollmentRepository.BuildQuery()
+                                                                .FilterByUserId(userId)
+                                                                .AnyAsync();
+                if (!IsExistEnrolls)
+                    return new Response<int>(true, 0);
+
+                var courses = await _courseReviewRepository.BuildQuery()
+                                                           .FilterByUserIdOfCourse(userId)
+                                                           .CountAsync();
+                return new Response<int>(true, courses);
+            }
+            catch (Exception ex)
+            {
+                return new Response<int>(false, ex.Message, null);
+            }
+        }
+
         public async Task<Response<int>> GetTotalReviewOfCourse(Guid courseId)
         {
             try

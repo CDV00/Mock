@@ -43,6 +43,16 @@ namespace Course.DAL.Queries
             return this;
         }
 
+        public IEnrollmentQuery FilterByCourseUserId(Guid? UserId)
+        {
+            if (UserId == null)
+                return this;
+
+            Query = Query.Where(type => type.Courses.UserId == UserId);
+            return this;
+        }
+
+
         public IEnrollmentQuery IncludeUser()
         {
             Query.Include(c => c.User).Load();

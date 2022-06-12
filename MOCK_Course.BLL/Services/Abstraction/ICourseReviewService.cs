@@ -22,5 +22,6 @@ namespace Course.BLL.Services.Abstraction
         Task<BaseResponse> IsCourseReview(Guid userId, Guid courseId);
         Task<BaseResponse> CheckUserCourseReview(Guid userId, Guid courseId);
         Task<Response<int>> GetTotalReviewOfCourse(Guid courseId);
+        Task<Response<int>> GetTotalReviewOfInstructor(Guid userId);
     }
 }

@@ -69,7 +69,6 @@ namespace Course.DAL.Queries
             if (isFree && isDiscount)
             {
                 Query = Query.Where(type => type.IsFree == isFree || type.Discounts.Any(d => d.EndDate > DateTime.Now));
-                Query = Query.Where(type => type.Price >= MinPrice && type.Price <= MaxPrice);
                 return this;
             }
 
@@ -78,11 +77,15 @@ namespace Course.DAL.Queries
                 Query = Query.Where(type => type.IsFree == isFree);
             }
 
+            if (!isFree || (isFree && isDiscount))
+            {
+                Query = Query.Where(type => type.Price >= MinPrice && type.Price <= MaxPrice);
+            }
+
 
             if (isDiscount)
             {
                 Query = Query.Where(type => type.Discounts.Any(d => d.EndDate > DateTime.Now));
-                Query = Query.Where(type => type.Price > MinPrice && type.Price < MaxPrice);
             }
 
             return this;
@@ -148,7 +151,7 @@ namespace Course.DAL.Queries
             if (Rate == null)
                 return this;
 
-            Query = Query.Where(c => c.Enrollments.SelectMany(e => e.CourseReviews).Average(e => e.Rating) > Rate);
+            Query = Query.Where(c => c.AvgRate >= Rate);
 
             return this;
         }
