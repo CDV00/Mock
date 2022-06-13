@@ -328,12 +328,13 @@ namespace Course.BLL.Services
         public async Task<PagedList<CourseReviewDTO>> GetAllCourseReviewOfIntructor(RequestParameters requestParameters, Guid userId)
         {
             var courseReview = await _courseReviewRepository.BuildQuery()
-                                                             .FilterCourseByUSer(userId)
-                                                             .IncludeEnrollment()
-                                                             .IncludeUser()
-                                                             .Skip((requestParameters.PageNumber - 1) * requestParameters.PageSize)
-                                                             .Take(requestParameters.PageSize)
-                                                             .ToListAsync(cr => _mapper.Map<CourseReviewDTO>(cr));
+                                                            .FilterCourseByUSer(userId)
+                                                            .IncludeEnrollment()
+                                                            .IncludeUser()
+                                                            .Skip((requestParameters.PageNumber - 1) * requestParameters.PageSize)
+                                                            .Take(requestParameters.PageSize)
+                                                            .ToListAsync(cr => _mapper.Map<CourseReviewDTO>(cr));
+
             var count = courseReview.Count;
             return new PagedList<CourseReviewDTO>(courseReview, count, requestParameters.PageNumber, requestParameters.PageSize);
         }

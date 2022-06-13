@@ -9,7 +9,7 @@ namespace CourseAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin, Instructor")]
+    [Authorize(Roles = "Admin, Instructor, Student")]
     public class UploadController : ControllerBase
     {
         private readonly IUploadService _uploadService;
