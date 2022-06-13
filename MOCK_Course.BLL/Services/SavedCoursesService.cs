@@ -32,6 +32,7 @@ namespace Course.BLL.Services
         {
             try
             {
+
                 var savecourse = new SavedCourses()
                 {
                     UserId = userId,
@@ -39,12 +40,19 @@ namespace Course.BLL.Services
                     CreatedAt = DateTime.Now
                 };
 
+                var check = await _savedCoursesRepository.BuildQuery()
+                                                         .FilterByUserId(userId)
+                                                         .FilterByCourseId(courseId)
+                                                         .AnyAsync();
+
+                if (check)
+                {
+                    return new Response<SavedCoursesDTO>(true, null);
+                }
+                var savecourseResponse = _mapper.Map<SavedCoursesDTO>(savecourse);
                 await _savedCoursesRepository.CreateAsync(savecourse);
                 await _unitOfWork.SaveChangesAsync();
-
-                var savecourseResponse = _mapper.Map<SavedCoursesDTO>(savecourse);
-                return new Response<SavedCoursesDTO>(
-                    true, savecourseResponse);
+                return new Response<SavedCoursesDTO>(true, savecourseResponse);
             }
             catch (Exception ex)
             {

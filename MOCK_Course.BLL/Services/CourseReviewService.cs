@@ -296,7 +296,7 @@ namespace Course.BLL.Services
                 return new BaseResponse(false, ex.Message, null);
             }
         }
-        public async Task<BaseResponse> CheckUserCourseReview(Guid userId, Guid courseId)
+        public async Task<Response<CourseReviewDTO>> CheckUserCourseReview(Guid userId, Guid courseId)
         {
             try
             {
@@ -306,22 +306,21 @@ namespace Course.BLL.Services
                                                          .FilterByCourseId(courseId)
                                                          .AnyAsync();
 
-                var IsExistCourse = await _enrollmentRepository.BuildQuery()
-                                                               .FilterByCourseId(courseId)
-                                                               .AnyAsync();
-                if (IsExistCourse)
+                var review = await _courseReviewRepository.BuildQuery()
+                                                         .FilterByUserId(userId)
+                                                         .FilterByCourseId(courseId)
+                                                         .IncludeEnrollment()
+                                                         .AsSelectorAsync(c =>                                                           _mapper.Map<CourseReviewDTO>(c));
+
+                if (check)
                 {
-                    if (check)
-                    {
-                        return new BaseResponse(false, "This user can only review once!", null);
-                    }
-                    return new BaseResponse(true, "This user has not reviewed this course!", null);
+                    return new Response<CourseReviewDTO>(true, review);
                 }
-                return new BaseResponse(false, "Course not found", null);
+                return new Response<CourseReviewDTO>(true, null);
             }
             catch (Exception ex)
             {
-                return new BaseResponse(false, ex.Message, null);
+                return new Response<CourseReviewDTO>(false, ex.Message, null);
             }
         }
         //
