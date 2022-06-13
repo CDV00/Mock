@@ -196,5 +196,23 @@ namespace CourseAPI.Controllers
 
             return Ok(new Responses<CourseReviewDTO>(true, result));
         }
+        /// <summary>
+        /// Get all review course of user
+        /// </summary>
+        /// <param name="courseReviewParameters"></param>
+        /// <returns></returns>
+        [HttpGet("Get-all-review-course-of-user")]
+        [AllowAnonymous]
+        public async Task<ActionResult<Responses<CourseReviewDTO>>> GetAllCourseReviewOfUser([FromQuery] CourseReviewParameters courseReviewParameters)
+        {
+            var userId = User.GetUserId();
+            var result = await _courseReviewService.GetAllCourseReviewOfUser(userId, courseReviewParameters);
+
+            Response.Headers.Add("X-Pagination",
+                                 JsonSerializer.Serialize(result.MetaData));
+
+            return Ok(new Responses<CourseReviewDTO>(true, result));
+        }
+
     }
 }

@@ -59,7 +59,7 @@ namespace CourseAPI.Controllers
 
         
         /// <summary>
-        /// Remove Saved Course
+        /// Remove Saved Course by Id
         /// https://gambolthemes.net/html-items/cursus_main_demo/shopping_cart.html
         /// </summary>
         /// <param name="Id"></param>
@@ -68,6 +68,19 @@ namespace CourseAPI.Controllers
         public async Task<ActionResult<BaseResponse>> Remove(Guid Id)
         {
             var result = await _savedCoursesService.Remove(Id);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
+        /// <summary>
+        /// Remove All Save Course By User
+        /// </summary>
+        /// <returns></returns>
+        [HttpDelete("remove-all")]
+        public async Task<ActionResult<BaseResponse>> RemoveAll()
+        {
+            var userId = User.GetUserId();
+            var result = await _savedCoursesService.RemoveAll(userId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
