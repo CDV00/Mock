@@ -4,6 +4,8 @@ using Course.BLL.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Course.BLL.Services.Abstraction;
+using System;
+using Course.BLL.Requests;
 
 namespace CourseAPI.Controllers
 {
@@ -31,50 +33,47 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
 
-        ///// <summary>
-        ///// Create new Category
-        ///// don't have Page yet
-        ///// </summary>
-        ///// <param name="categoryRequest">CategoryResponse</param>
-        ///// <returns></returns>
-        //[HttpPost]
-        //public async Task<ActionResult<Response<CategoryResponse>>> Add(CategoryRequest categoryRequest)
-        //{
-        //    var result = await _categoryService.Add(categoryRequest);
-        //    if (result.IsSuccess == false)
-        //        return BadRequest(result);
-        //    return Ok(result);
-        //}
+        /// <summary>
+        /// Create new Category
+        /// </summary>
+        /// <param name="categoryRequest">CategoryResponse</param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult<Response<CategoryDTO_>>> Add(CategoryRequest categoryRequest)
+        {
+            var result = await _categoryService.Add(categoryRequest);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
 
-        ///// <summary>
-        ///// Update an Category
-        ///// don't have Page yet
-        ///// </summary>
-        ///// <param name="id"></param>
-        ///// <param name="categoryUpdateRequest">CategoryUpdate</param>
-        ///// <returns></returns>
-        //[HttpPut("{id:guid}")]
-        //public async Task<ActionResult<Response<CategoryResponse>>> Update(Guid id, CategoryUpdateRequest categoryUpdateRequest)
-        //{
-        //    var result = await _categoryService.Update(id, categoryUpdateRequest);
-        //    if (result.IsSuccess == false)
-        //        return BadRequest(result);
-        //    return Ok(result);
-        //}
+        /// <summary>
+        /// Update an Category
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="categoryUpdateRequest">CategoryUpdate</param>
+        /// <returns></returns>
+        [HttpPut()]
+        public async Task<ActionResult<Response<CategoryDTO_>>> Update(Guid id, CategoryUpdateRequest categoryUpdateRequest)
+        {
+            var result = await _categoryService.Update(id, categoryUpdateRequest);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
 
-        ///// <summary>
-        ///// Delete an Category
-        ///// don't have Page yet
-        ///// </summary>
-        ///// <param name="Id">Id Category</param>
-        ///// <returns></returns>
-        //[HttpDelete("{id:guid}")]
-        //public async Task<ActionResult<BaseResponse>> Delete(Guid Id)
-        //{
-        //    var result = await _categoryService.remove(Id);
-        //    if (result.IsSuccess == false)
-        //        return BadRequest(result);
-        //    return Ok(result);
-        //}
+        /// <summary>
+        /// Delete an Category
+        /// </summary>
+        /// <param name="Id">Id Category</param>
+        /// <returns></returns>
+        [HttpDelete()]
+        public async Task<ActionResult<BaseResponse>> Delete(Guid Id)
+        {
+            var result = await _categoryService.remove(Id);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
     }
 }

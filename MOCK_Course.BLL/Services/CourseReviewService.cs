@@ -310,7 +310,7 @@ namespace Course.BLL.Services
                                                          .FilterByUserId(userId)
                                                          .FilterByCourseId(courseId)
                                                          .IncludeEnrollment()
-                                                         .AsSelectorAsync(c =>                                                           _mapper.Map<CourseReviewDTO>(c));
+                                                         .AsSelectorAsync(c => _mapper.Map<CourseReviewDTO>(c));
 
                 if (check)
                 {
