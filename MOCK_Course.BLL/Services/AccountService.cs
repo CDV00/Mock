@@ -129,7 +129,7 @@ namespace Course.BLL.Services
             if (lastIndex != 0)
                 LastLetter = user.Fullname.Split()[lastIndex][0].ToString();
 
-            var avartarUrl = "https://i2.wp.com/ui-avatars.com/api/" + FirstLetter + LastLetter + "/300/FF1493/fff";
+            var avartarUrl = "https://i2.wp.com/ui-avatars.com/api/" + FirstLetter + LastLetter + "/300/ed2a26/fff";
             user.AvatarUrl = avartarUrl;
         }
 
