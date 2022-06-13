@@ -337,5 +337,23 @@ namespace Course.BLL.Services
             var count = courseReview.Count;
             return new PagedList<CourseReviewDTO>(courseReview, count, requestParameters.PageNumber, requestParameters.PageSize);
         }
+        public async Task<PagedList<CourseReviewDTO>> GetAllCourseReviewOfUser(Guid userId, CourseReviewParameters courseReviewParameters)
+        {
+            var courseReview = await _courseReviewRepository.BuildQuery()
+                                                            .FilterByUserId(userId)
+                                                            .FilterByKeyword(courseReviewParameters.Keyword)
+                                                            .IncludeUser()
+                                                            .ApplySort(courseReviewParameters.Orderby)
+                                                            .Skip((courseReviewParameters.PageNumber - 1) * courseReviewParameters.PageSize)
+                                                            .Take(courseReviewParameters.PageSize)
+                                                            .ToListAsync(c => _mapper.Map<CourseReviewDTO>(c));
+
+            var count = await _courseReviewRepository.BuildQuery()
+                                                     .FilterByUserId(userId)
+                                                     .CountAsync();
+            var pageList = new PagedList<CourseReviewDTO>(courseReview, count, courseReviewParameters.PageNumber, courseReviewParameters.PageSize);
+
+            return pageList;
+        }
     }
 }

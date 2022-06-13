@@ -90,17 +90,33 @@ namespace Course.BLL.Services
         {
             try
             {
-                var cart = await _savedCoursesRepository.GetByIdAsync(Id);
-                if (cart is null)
+                var course = await _savedCoursesRepository.GetByIdAsync(Id);
+                if (course is null)
                 {
                     return new BaseResponse(false, null, "can't find course");
                 }
 
-                _savedCoursesRepository.Remove(cart, true);
+                _savedCoursesRepository.Remove(course, true);
                 await _unitOfWork.SaveChangesAsync();
 
                 return new BaseResponse { IsSuccess = true };
 
+            }
+            catch (Exception ex)
+            {
+                return new Responses<BaseResponse>(false, ex.Message, null);
+            }
+        }
+        public async Task<BaseResponse> RemoveAll(Guid userId)
+        {
+            try
+            {
+                var savedCourses = await _savedCoursesRepository.BuildQuery()
+                                                                .FilterByUserId(userId)
+                                                                .ToListAsync(c =>                                                               _mapper.Map<SavedCourses>(c));
+                _savedCoursesRepository.RemoveRange(savedCourses);
+                await _unitOfWork.SaveChangesAsync();
+                return new BaseResponse { IsSuccess = true };
             }
             catch (Exception ex)
             {

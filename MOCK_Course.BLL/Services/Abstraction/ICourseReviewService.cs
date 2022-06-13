@@ -24,5 +24,6 @@ namespace Course.BLL.Services.Abstraction
         Task<Response<int>> GetTotalReviewOfCourse(Guid courseId);
         Task<Response<int>> GetTotalReviewOfInstructor(Guid userId);
         Task<PagedList<CourseReviewDTO>> GetAllCourseReviewOfIntructor(RequestParameters requestParameters, Guid userId);
+        Task<PagedList<CourseReviewDTO>> GetAllCourseReviewOfUser(Guid userId, CourseReviewParameters courseReviewParameters);
     }
 }
