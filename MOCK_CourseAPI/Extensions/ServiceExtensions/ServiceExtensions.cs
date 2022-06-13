@@ -14,12 +14,15 @@ using Course.DAL.Repositories.Abstraction;
 using LoggerService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MOCK_Course.BLL.Services.Implementations;
+using Newtonsoft.Json;
 using Repository.Repositories;
 
 namespace CourseAPI.Extensions.ServiceExtensions
@@ -170,6 +173,7 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<ISectionRepositoty, SectionRepositoty>();
             services.AddScoped<ILectureRepository, LectureRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderItemRepository, OrderItemRepository>();
             services.AddScoped<ICourseReviewRepository, CourseReviewRepository>();
             services.AddScoped<ILectureRepository, LectureRepository>();
             services.AddScoped<IAudioLanguageRepository, AudioLanguageRepository>();
@@ -185,6 +189,7 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IDiscountRepository, DiscountRepository>();
             services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
             services.AddScoped<ISavedCoursesRepository, SavedCoursesRepository>();
+            services.AddScoped<IPaymentService, PaymentService>();
 
             services.AddScoped<IUserRepository, UserRepository>();
         }
@@ -224,6 +229,28 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IDiscountService, DiscountService>();
             services.AddScoped<ISubscriptionService, SubscriptionService>();
             services.AddScoped<ISavedCoursesService, SavedCoursesService>();
+        }
+        public static void ConfigureUpload(this IServiceCollection services)
+        {
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.MaxRequestBodySize = 837280000; // Limit on request body size
+            });
+            services.Configure<FormOptions>(x =>
+            {
+                x.ValueLengthLimit = int.MaxValue; // Limit on individual form values
+                x.MultipartBodyLengthLimit = int.MaxValue; // Limit on form body size
+                x.MultipartHeadersLengthLimit = int.MaxValue; // Limit on form header size
+            });
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.MaxRequestBodySize = 837280000; // Limit on request body size
+            });
+
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
         }
     }
 }

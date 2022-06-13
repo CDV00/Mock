@@ -6,6 +6,7 @@ namespace Course.BLL.DTO
     {
         public T data { get; set; }
 
+        public Response() { }
         public Response(bool isSuccess) : base(isSuccess)
         {
             this.data = data;

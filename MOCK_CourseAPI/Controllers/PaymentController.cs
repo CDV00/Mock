@@ -1,16 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Course.BLL.Requests;
+using Course.DAL.DTOs;
+using CourseAPI.Extensions.ControllerBase;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MOCK_Course.BLL.Services;
-using MOCK_Course.DAL.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using MOCK_Course.BLL.Services.Implementations;
 using System.Threading.Tasks;
 
 namespace MOCK_Course.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize()]
     public class PaymentController : ControllerBase
     {
         private readonly IPaymentService _paymentService;
@@ -18,11 +18,17 @@ namespace MOCK_Course.API.Controllers
         {
             _paymentService = paymentService;
         }
-        [Route("pay")]
+
         [HttpPost]
-        public async Task<dynamic> Payment(Payment payment)
+        public async Task<ActionResult<PaymentDTO>> Deposit(Payment payment)
         {
-            return await _paymentService.PayAsync(payment);
+            var userId = User.GetUserId();
+            var result = await _paymentService.Deposit(userId.ToString(), payment);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
     }
 }

@@ -7,6 +7,6 @@
         public int month { get; set; }
         public int year { get; set; }
         public string cvc { get; set; }
-        public int value { get; set; }
+        public int? value { get; set; }
     }
 }

@@ -25,10 +25,10 @@ namespace MOCK_Course.BLL.Services.Implementations
             }
 
             var user = await _userManager.FindByIdAsync(userId);
-            user.Balance += payment.value;
+            user.Balance += payment.value.GetValueOrDefault();
             await _userManager.UpdateAsync(user);
 
-            var paymentDTO = new PaymentDTO { AddedValue = payment.value };
+            var paymentDTO = new PaymentDTO { AddedValue = payment.value.GetValueOrDefault() };
             return new Response<PaymentDTO>(true, paymentDTO);
         }
 
@@ -36,7 +36,7 @@ namespace MOCK_Course.BLL.Services.Implementations
         {
             try
             {
-                StripeConfiguration.ApiKey = "sk_test_51L5pVeEbAgWO9RQtII0iYh6WFl9Zl4F30LOXH7xU3E0UoyBnlQhpuRQMSqy6GjNbdGZVOtII5WNXCybSfKqP74lb001fUsK8WB";
+                StripeConfiguration.ApiKey = "sk_test_51LA55GFiny4f5ziJDVSRjWn3IU4JtQh0f354rmiSuui6EM1pyHx9MpjLpqdsMX0n7ve6lTBSC6jjK2tV0jjn7mcu00GwPd1RrF";
 
                 var optionsToken = new TokenCreateOptions
                 {
@@ -66,10 +66,10 @@ namespace MOCK_Course.BLL.Services.Implementations
 
                 if (!charge.Paid)
                 {
-                    return new BaseResponse(true);
+                    return new BaseResponse(false);
                 }
 
-                return new BaseResponse(false);
+                return new BaseResponse(true);
             }
             catch (Exception ex)
             {
