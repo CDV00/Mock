@@ -113,7 +113,7 @@ namespace Course.BLL.Services
             {
                 var savedCourses = await _savedCoursesRepository.BuildQuery()
                                                                 .FilterByUserId(userId)
-                                                                .ToListAsync(c =>                                                               _mapper.Map<SavedCourses>(c));
+                                                                .ToListAsync(c => _mapper.Map<SavedCourses>(c));
                 _savedCoursesRepository.RemoveRange(savedCourses);
                 await _unitOfWork.SaveChangesAsync();
                 return new BaseResponse { IsSuccess = true };
