@@ -5,11 +5,16 @@ namespace Course.BLL.DTO
     public class Response<T> : BaseResponse
     {
         public T data { get; set; }
+
+        public Response(bool isSuccess) : base(isSuccess)
+        {
+            this.data = data;
+        }
         public Response(bool isSuccess, T data) : base(isSuccess)
         {
             this.data = data;
         }
-        public Response(bool isSuccess, string message,string error) : base(isSuccess, error, message)
+        public Response(bool isSuccess, string message, string error) : base(isSuccess, error, message)
         {
         }
     }

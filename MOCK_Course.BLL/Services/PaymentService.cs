@@ -16,27 +16,20 @@ namespace MOCK_Course.BLL.Services.Implementations
         {
             _userManager = userManager;
         }
-        public async Task<PaymentDTO> Deposit(string userId, Payment payment)
+        public async Task<Response<PaymentDTO>> Deposit(string userId, Payment payment)
         {
             var result = await PayAsync(payment);
-            if (!result.Equals("Success"))
+            if (!result.IsSuccess)
             {
-                return new PaymentDTO
-                {
-                    IsSuccess = false,
-                    Message = result
-                };
+                return new Response<PaymentDTO>(false);
             }
+
             var user = await _userManager.FindByIdAsync(userId);
             user.Balance += payment.value;
             await _userManager.UpdateAsync(user);
-            return new PaymentDTO()
-            {
-                AddedValue = payment.value,
-                IsSuccess = true,
-                Message = result
-            };
 
+            var paymentDTO = new PaymentDTO { AddedValue = payment.value };
+            return new Response<PaymentDTO>(true, paymentDTO);
         }
 
         public async Task<BaseResponse> PayAsync(Payment payment)
