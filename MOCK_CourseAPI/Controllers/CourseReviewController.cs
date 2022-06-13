@@ -197,13 +197,13 @@ namespace CourseAPI.Controllers
             return Ok(new Responses<CourseReviewDTO>(true, result));
         }
         /// <summary>
-        /// Get all review course of user
+        /// Get all review course of user has review
         /// </summary>
         /// <param name="courseReviewParameters"></param>
         /// <returns></returns>
         [HttpGet("Get-all-review-course-of-user")]
         [AllowAnonymous]
-        public async Task<ActionResult<Responses<CourseReviewDTO>>> GetAllCourseReviewOfUser([FromQuery] CourseReviewParameters courseReviewParameters)
+        public async Task<ActionResult<Responses<CourseReviewDTO>>> GetAllCourseReviewOfUserHasReview([FromQuery] CourseReviewParameters courseReviewParameters)
         {
             var userId = User.GetUserId();
             var result = await _courseReviewService.GetAllCourseReviewOfUser(userId, courseReviewParameters);

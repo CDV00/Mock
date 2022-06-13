@@ -350,6 +350,7 @@ namespace Course.BLL.Services
 
             var count = await _courseReviewRepository.BuildQuery()
                                                      .FilterByUserId(userId)
+                                                     .FilterByKeyword(courseReviewParameters.Keyword)
                                                      .CountAsync();
             var pageList = new PagedList<CourseReviewDTO>(courseReview, count, courseReviewParameters.PageNumber, courseReviewParameters.PageSize);
 

@@ -126,6 +126,9 @@ namespace Course.BLL.Services
                                              .FilterByName(userParameter.Keyword)
                                              .CountAsync();
 
+
+            // for(users)->user.totalSubscription = 
+
             var pageList = new PagedList<UserDTO>(users, count, userParameter.PageNumber, userParameter.PageSize);
             return pageList;
         }
