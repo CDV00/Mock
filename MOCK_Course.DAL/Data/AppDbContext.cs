@@ -21,6 +21,7 @@ namespace Course.DAL.Data
         public DbSet<ShoppingCart> Carts { get; set; }
         public DbSet<Section> Sections { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Discount> Discounts { get; set; }
         public DbSet<Lecture> Lectures { get; set; }
         public DbSet<Category> Categories { get; set; }

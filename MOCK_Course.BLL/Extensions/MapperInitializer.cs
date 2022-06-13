@@ -68,6 +68,7 @@ namespace Course.BLL.Extensions
             CreateMap<AppUser, ResetPasswordRequest>().ReverseMap();
 
             //Order
+            CreateMap<OrderItem, OrderItemDTO>().ReverseMap();
             CreateMap<Order, OrderRequest>().ReverseMap();
             CreateMap<Order, OrderDTO>().ReverseMap();
             CreateMap<Order, OrderUpdateRequest>().ReverseMap();

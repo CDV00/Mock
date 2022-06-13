@@ -4,6 +4,7 @@ using Course.DAL.Queries.Abstraction;
 using Microsoft.EntityFrameworkCore;
 using SES.HomeServices.Data.Queries.Abstractions;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Course.DAL.Queries
@@ -24,6 +25,12 @@ namespace Course.DAL.Queries
         public IShoppingCartQuery FilterByUserId(Guid userId)
         {
             Query = Query.Where(type => type.UserId == userId);
+            return this;
+        }
+
+        public IShoppingCartQuery FilterByIds(List<Guid> ids)
+        {
+            Query = Query.Where(type => ids.Contains(type.Id));
             return this;
         }
 
