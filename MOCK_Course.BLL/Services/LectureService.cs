@@ -105,5 +105,10 @@ namespace Course.BLL.Services
                 return new Response<LectureDTO>(false, ex.Message, null);
             }
         }
+        public async Task<int> totalLectureBySection(Guid sectionId)
+        {
+            var count =await _lectureRepositoty.BuildQuery().FilterBySectionId(sectionId).CountAsync();
+            return count;
+        }
     }
 }

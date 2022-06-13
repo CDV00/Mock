@@ -10,5 +10,6 @@ namespace Course.DAL.Queries.Abstraction
         ISavedCoursesQuery IncludeCourse();
         ISavedCoursesQuery IncludeUser();
         ISavedCoursesQuery IncludeDiscount();
+        ISavedCoursesQuery FilterByCourseId(Guid ucourseId);
     }
 }

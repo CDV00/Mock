@@ -17,14 +17,18 @@ namespace Course.BLL.Services
         private readonly ILectureRepository _lessonRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly ILectureService _lectureService;
+        private readonly ILectureCompletionService _lectureCompletionService;
         public SectionService(ISectionRepositoty sectionRepositoty,
             IMapper mapper,
-            IUnitOfWork unitOfWork, ILectureRepository lessonRepository)
+            IUnitOfWork unitOfWork, ILectureRepository lessonRepository, ILectureService lectureService, ILectureCompletionService lectureCompletionService)
         {
             _sectionRepositoty = sectionRepositoty;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _lessonRepository = lessonRepository;
+            _lectureService = lectureService;
+            _lectureCompletionService = lectureCompletionService;
         }
 
         public async Task<Response<int>> GetTotal(Guid courseId)
@@ -136,6 +140,42 @@ namespace Course.BLL.Services
             {
                 return new Response<SectionDTO>(false, ex.Message, null);
             }
+        }
+        //
+        public async Task<float> PercentCourseCompletion(Guid courseId, Guid userId)
+        {
+
+            int countCourses = GetTotal(courseId).Result.data;
+            float PercentCourseCompletion = 5/(countCourses * 100)/100;
+
+            /*var IsExistEnrolls = await __enrollmentRepository.BuildQuery()
+                                                            .FilterByCourseId(courseId)
+                                                            .FilterByUserId(userId)
+                                                            .AnyAsync();
+            if (!IsExistEnrolls)
+                return new Response<float>(true, 0);
+
+            var courses = await _courseReviewRepository.BuildQuery()
+                                                       .FilterByCourseId(courseId)
+                                                       .FilterByUserId(userId)
+                                                       .GetAvgRate();*/
+
+            return PercentCourseCompletion;
+
+        }
+        //
+        public async Task<float> PercentSectionCompletion(Guid sectionId)
+        {
+
+            int countTotalLecture = await _lectureService.totalLectureBySection(sectionId);
+            var ListLecture = await _lectureService.GetAll(sectionId);
+            //var countTotalLectureCompletion = await _lectureCompletionService.IsCompletion(ListLecture[1].)
+            float CourseCompletion = 5;
+
+            
+
+            return CourseCompletion;
+
         }
     }
 }

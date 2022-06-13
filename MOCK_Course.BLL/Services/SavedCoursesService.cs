@@ -99,6 +99,16 @@ namespace Course.BLL.Services
                 return new Responses<BaseResponse>(false, ex.Message, null);
             }
         }
+        //
+        public async Task<bool> IsSavedCourse(Guid userId, Guid courseId)
+        {
+            bool savedCourse = (await _savedCoursesRepository.BuildQuery()
+                                                        .FilterByUserId(userId)
+                                                        .FilterByCourseId(courseId)
+                                                        .AsSelectorAsync(e => _mapper.Map<SavedCoursesDTO>(e)) == null) ? false : true;
 
+            return savedCourse;
+        }
+        //
     }
 }

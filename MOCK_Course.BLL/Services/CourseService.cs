@@ -9,6 +9,7 @@ using Course.BLL.Responses;
 using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
 using Course.BLL.Share.RequestFeatures;
+using System.Linq;
 
 namespace Course.BLL.Services
 {
@@ -20,6 +21,8 @@ namespace Course.BLL.Services
         private readonly ILevelRepository _levelRepository;
         private readonly ICourseReviewService _courseReviewService;
         private readonly IEnrollmentService _enrollmentService;
+        private readonly ISavedCoursesService _savedCoursesService;
+        private readonly ISectionService _sectionService;
 
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -27,7 +30,7 @@ namespace Course.BLL.Services
         public CourseService(ICousesRepository cousesRepository,
             IMapper mapper,
             IUnitOfWork unitOfWork, IAudioLanguageRepository audioLanguageRepository,
-            ICloseCaptionRepository closeCaptionRepository, ILevelRepository levelRepository, ICourseReviewService courseReviewService, IEnrollmentService enrollmentService)
+            ICloseCaptionRepository closeCaptionRepository, ILevelRepository levelRepository, ICourseReviewService courseReviewService, IEnrollmentService enrollmentService, ISavedCoursesService savedCoursesService, ISectionService sectionService)
         {
             _cousesRepository = cousesRepository;
             _mapper = mapper;
@@ -37,6 +40,8 @@ namespace Course.BLL.Services
             _levelRepository = levelRepository;
             _courseReviewService = courseReviewService;
             _enrollmentService = enrollmentService;
+            _savedCoursesService = savedCoursesService;
+            _sectionService = sectionService;
         }
 
         public async Task<PagedList<CourseDTO>> GetCoursesAsync(CourseParameters courseParameter)
@@ -57,6 +62,10 @@ namespace Course.BLL.Services
                                                  .Skip((courseParameter.PageNumber - 1) * courseParameter.PageSize)
                                                  .Take(courseParameter.PageSize)
                                                  .ToListAsync(c => _mapper.Map<CourseDTO>(c));
+            /*if (courseParameter.userId != null)
+            {
+
+            }*/
 
             var count = await _cousesRepository.BuildQuery()
                                                .FilterByKeyword(courseParameter.Keyword)
@@ -70,12 +79,21 @@ namespace Course.BLL.Services
                                                .CountAsync();
 
             await AddRating(courses);
-
+            
+            
             var pageList = new PagedList<CourseDTO>(courses, count, courseParameter.PageNumber, courseParameter.PageSize);
 
             return pageList;
         }
-
+        private async Task checkisSave(List<CourseDTO> courses, Guid userId)
+        {
+            for (var i = 0; i < courses.Count; i++)
+            {
+                courses[i].IsSave = await _savedCoursesService.IsSavedCourse(userId,courses[i].Id);
+                courses[i].PercentComplete = _sectionService.Update
+            }
+        }
+        
         private async Task AddRating(List<CourseDTO> courses)
         {
             //for (var i = 0; i < courses.Count; i++)

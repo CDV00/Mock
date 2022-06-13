@@ -9,7 +9,7 @@ namespace Course.DAL.Models
         public int TotalTime { get; set; } = 0;
 
         public Guid CourseId { get; set; }
-        public Courses Course { get; set; }
+        public Courses Courses { get; set; }
 
         public List<Lecture> Lectures { get; set; }
     }

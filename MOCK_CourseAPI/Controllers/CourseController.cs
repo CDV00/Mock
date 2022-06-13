@@ -31,6 +31,7 @@ namespace CourseAPI.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<Responses<CourseDTO>>> GetAllCourses([FromQuery] CourseParameters courseParameters)
         {
+            courseParameters.userId = User.GetUserId();
             var result = await _coursesService.GetCoursesAsync(courseParameters);
 
             Response.Headers.Add("X-Pagination",
