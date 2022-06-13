@@ -109,5 +109,11 @@ namespace Course.DAL.Queries
             Query = Query.Where(c => c.Content.ToUpper().Contains(KEYWORD));
             return this;
         }
+        public ICourseReviewQuery FilterCourseByUSer(Guid userId)
+        {
+            Query.Include(cr => cr.Enrollment.Courses).Load();
+            Query = Query.Where(cr => cr.Enrollment.Courses.UserId == userId);
+            return this;
+        }
     }
 }
