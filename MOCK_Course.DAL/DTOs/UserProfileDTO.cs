@@ -15,7 +15,7 @@ namespace Course.BLL.DTO
         public string HeadLine { get; set; }
         public string Description { get; set; }
         public string Role { get; set; }
-
-        // total subscription, total course
+        public int TotalSubcripbers { get; set; }
+        public int TotalCourses { get; set; }
     }
 }

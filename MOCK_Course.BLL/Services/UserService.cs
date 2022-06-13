@@ -19,9 +19,11 @@ namespace Course.BLL.Services
         private readonly ICousesRepository _cousesRepository;
         private readonly ICourseReviewRepository _courseReviewRepository;
         private readonly ISubscriptionRepository _subscriptionRepository;
+        private readonly ISubscriptionService _subscriptionService;
+        private readonly ICourseService _courseService;
         private readonly IUserRepository _userRepository;
         public UserService(UserManager<AppUser> userManager,
-           IMapper mapper, IEnrollmentRepository enrollmentRepository, ICousesRepository cousesRepository, ICourseReviewRepository courseReviewRepository, ISubscriptionRepository subscriptionRepository, IUserRepository userRepository)
+           IMapper mapper, IEnrollmentRepository enrollmentRepository, ICousesRepository cousesRepository, ICourseReviewRepository courseReviewRepository, ISubscriptionRepository subscriptionRepository, IUserRepository userRepository, ISubscriptionService subscriptionService, ICourseService courseService)
         {
             _userManager = userManager;
             _mapper = mapper;
@@ -30,6 +32,8 @@ namespace Course.BLL.Services
             _courseReviewRepository = courseReviewRepository;
             _subscriptionRepository = subscriptionRepository;
             _userRepository = userRepository;
+            _subscriptionService = subscriptionService;
+            _courseService = courseService;
         }
         public async Task<Response<UserDTO>> GetUserProfile(Guid id)
         {
@@ -126,8 +130,12 @@ namespace Course.BLL.Services
                                              .FilterByName(userParameter.Keyword)
                                              .CountAsync();
 
-
-            // for(users)->user.totalSubscription = 
+            //Get Total Subcripbers & Total Courses
+            for (var i = 0; i < users.Count; i++)
+            {
+                users[i].TotalSubcripbers = (await _subscriptionService.GetTotalSubscriber(users[i].Id)).data;
+                users[i].TotalCourses = (await _courseService.GetTotalCourseOfUser(users[i].Id)).data;
+            }
 
             var pageList = new PagedList<UserDTO>(users, count, userParameter.PageNumber, userParameter.PageSize);
             return pageList;
