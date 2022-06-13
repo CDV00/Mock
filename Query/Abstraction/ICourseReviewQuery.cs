@@ -18,5 +18,6 @@ namespace Course.DAL.Queries.Abstraction
         ICourseReviewQuery FilterByUserId(Guid? userId);
         ICourseReviewQuery GetById(Guid id);
         ICourseReviewQuery FilterByUserIdOfCourse(Guid UserId);
+        ICourseReviewQuery FilterCourseByUSer(Guid userId);
     }
 }

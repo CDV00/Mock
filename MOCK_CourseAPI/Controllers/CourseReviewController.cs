@@ -9,6 +9,7 @@ using Course.BLL.Services.Abstraction;
 using CourseAPI.Extensions.ControllerBase;
 using System.Collections.Generic;
 using System.Text.Json;
+using Course.BLL.Share.RequestFeatures;
 
 namespace CourseAPI.Controllers
 {
@@ -183,6 +184,17 @@ namespace CourseAPI.Controllers
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
+        }
+        //
+        [HttpGet("Get-all-course-reviews-of-instructor")]
+        public async Task<ActionResult<Responses<CourseReviewDTO>>> GetAllCourseReviewsOfIntructor([FromQuery] RequestParameters requestParameters)
+        {
+            var userId = User.GetUserId();
+            var result = await _courseReviewService.GetAllCourseReviewOfIntructor(requestParameters, userId);
+            Response.Headers.Add("X-Pagination",
+                                JsonSerializer.Serialize(result.MetaData));
+
+            return Ok(new Responses<CourseReviewDTO>(true, result));
         }
     }
 }
