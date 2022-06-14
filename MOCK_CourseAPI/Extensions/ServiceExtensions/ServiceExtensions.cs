@@ -192,6 +192,8 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IPaymentService, PaymentService>();
 
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IAssignmentRepository, AssignmentRepository>();
+            services.AddScoped<IAttachmentRepository, AttachmentRepository>();
         }
         /// <summary>
         /// Configure Services
@@ -229,6 +231,9 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IDiscountService, DiscountService>();
             services.AddScoped<ISubscriptionService, SubscriptionService>();
             services.AddScoped<ISavedCoursesService, SavedCoursesService>();
+            services.AddScoped<IAssignmentService, AssignmentService>();
+            services.AddScoped<IAttachmentService, AttachmentService>();
+            services.AddScoped<IUploadFileService, UploadFileService>();
         }
         public static void ConfigureUpload(this IServiceCollection services)
         {
