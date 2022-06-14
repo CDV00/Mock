@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Course.DAL.Models
 {
@@ -35,12 +36,25 @@ namespace Course.DAL.Models
         public int TotalEnrolls { get; set; } = 0;
         public int TotalTime { get; set; } = 0;
 
+        public Status status { get; set; } = Status.Review;
         public Guid CategoryId { get; set; }
         public Category Category { get; set; }
         public Guid UserId { get; set; }
         public AppUser User { get; set; }
 
         public ICollection<Discount> Discounts { get; set; }
+
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public int TotalSection
+        {
+            get { return Sections.Count; }
+        }
+
+        public int TotalOrder
+        {
+            get { return Orders.Count; }
+        }
+
 
         public ICollection<Section> Sections { get; set; }
         public ICollection<CourseCompletion> CourseCompletions { get; set; }
@@ -51,5 +65,13 @@ namespace Course.DAL.Models
         public ICollection<Level> Levels { get; set; }
         public ICollection<AudioLanguage> AudioLanguages { get; set; }
         public ICollection<CloseCaption> CloseCaptions { get; set; }
+    }
+
+    public enum Status
+    {
+        Review,
+        Aprrove,
+        Reject,
+        Block
     }
 }

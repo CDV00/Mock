@@ -278,17 +278,25 @@ namespace Course.BLL.Services
 
         public async Task<Response<TokenDTO>> RefreshToken(TokenDTO tokenDto)
         {
-            var principal = GetPrincipalFromExpiredToken(tokenDto.AccessToken);
-            var user = await _userManager.FindByNameAsync(principal.Identity.Name);
+            try
+            {
+                var principal = GetPrincipalFromExpiredToken(tokenDto.AccessToken);
+                var user = await _userManager.FindByNameAsync(principal.Identity.Name);
 
-            if (user == null || user.RefreshToken != tokenDto.RefreshToken ||
-            user.RefreshTokenExpiryTime <= DateTime.Now)
-                new Response<TokenDTO>(false, "can't reset token", null);
+                if (user == null || user.RefreshToken != tokenDto.RefreshToken ||
+                user.RefreshTokenExpiryTime <= DateTime.Now)
+                    new Response<TokenDTO>(false, "can't reset token", null);
 
-            _user = user;
+                _user = user;
 
-            var token = await CreateToken(populateExp: false);
-            return new Response<TokenDTO>(true, token);
+                var token = await CreateToken(populateExp: false);
+                return new Response<TokenDTO>(true, token);
+
+            }
+            catch (Exception ex)
+            {
+                return new Response<TokenDTO>(false, ex.Message, null);
+            }
         }
         /// <summary>
         /// Forgot Passworrd

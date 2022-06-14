@@ -10,7 +10,6 @@ namespace CourseAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class TokenController : ControllerBase
     {
         public readonly IAuthenticationService _authenticationService;
@@ -25,12 +24,14 @@ namespace CourseAPI.Controllers
         /// <param name="tokenDto"></param>
         /// <returns></returns>
         [HttpPost("refresh")]
-        [AllowAnonymous]
         public async Task<ActionResult<Response<TokenDTO>>> Refresh([FromBody] TokenDTO tokenDto)
         {
-            var tokenDtoToReturn = await
+            var result = await
             _authenticationService.RefreshToken(tokenDto);
-            return tokenDtoToReturn;
+
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
         }
 
     }

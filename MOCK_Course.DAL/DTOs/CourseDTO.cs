@@ -1,5 +1,6 @@
 ﻿using Course.BLL.DTO;
 using Course.DAL.DTOs;
+using Course.DAL.Models;
 using System;
 using System.Collections.Generic;
 
@@ -33,9 +34,9 @@ namespace Course.BLL.Responses
         public float AvgRate { get; set; } = 0;
         public int TotalEnrolls { get; set; } = 0;
         public int TotalTime { get; set; } = 0;
-        // Percent completion
-        // isEnroll
-
+        public Status status { get; set; }
+        public int TotalSection { get; set; }
+        public int TotalOrder { get; set; }
 
         public float PercentComplete { get; set; }
         public DateTime CreatedAt { get; set; }

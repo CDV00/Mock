@@ -41,6 +41,12 @@ namespace Course.DAL.Queries
             Query = Query.Where(type => type.UserId == userId);
             return this;
         }
+        public ICourseQuery FilterByApprove()
+        {
+            Query = Query.Where(type => type.status == Status.Aprrove);
+            return this;
+        }
+
 
         /// <summary>
         /// FilterIsActive
@@ -219,6 +225,13 @@ namespace Course.DAL.Queries
         {
             Query.Include(c => c.Sections)
                  .ThenInclude(s => s.Lectures)
+                 .Load();
+            return this;
+        }
+
+        public ICourseQuery IncludeOrder()
+        {
+            Query.Include(c => c.Orders)
                  .Load();
             return this;
         }

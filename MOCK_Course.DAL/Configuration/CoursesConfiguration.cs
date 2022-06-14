@@ -26,6 +26,8 @@ namespace Course.DAL.Configuration
 
             builder.HasQueryFilter(u => !u.IsDeleted);
 
+            //builder.Property(c=>c.TotalSections)
+
 
         }
     }
