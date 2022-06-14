@@ -66,6 +66,7 @@ namespace Course.DAL.Queries
 
         public ICourseReviewQuery FilterByUserId(Guid UserId)
         {
+            Query.Include(cr => cr.Enrollment.Courses).Load();
             Query = Query.Where(type => type.Enrollment.UserId == UserId);
             return this;
         }

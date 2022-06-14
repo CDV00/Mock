@@ -16,13 +16,16 @@ namespace Course.BLL.Services
         private readonly ILectureRepository _lectureRepositoty;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly ILectureCompletionService _lectureCompletionService;
         public LectureService(ILectureRepository lectureRepositoty,
             IMapper mapper,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            ILectureCompletionService lectureCompletionService)
         {
             _lectureRepositoty = lectureRepositoty;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+             _lectureCompletionService = lectureCompletionService;
         }
         public async Task<Response<LectureDTO>> Add(LectureForCreateRequest LectureRequest)
         {
@@ -104,6 +107,31 @@ namespace Course.BLL.Services
             {
                 return new Response<LectureDTO>(false, ex.Message, null);
             }
+        }
+        public async Task<int> totalLectureBySection(Guid sectionId)
+        {
+            var count =await _lectureRepositoty.BuildQuery()
+                                               .FilterBySectionId(sectionId)
+                                               .CountAsync();
+            return count;
+        }
+        private async Task<int> totalLectureByCourse(Guid courseId)
+        {
+            var count = await _lectureRepositoty.BuildQuery()
+                                               .FilterLecturebyCourse(courseId)
+                                               .CountAsync();
+            return count;
+        }
+        //
+        public async Task<float> PercentCourseCompletion(Guid userId, Guid courseId)
+        {
+
+            int countCourses = await totalLectureByCourse(courseId);
+            float countTotalCompletionLeture = await _lectureCompletionService.totalLectureCompletionBycourse(userId, courseId);
+            float PercentCourseCompletion = countTotalCompletionLeture / countCourses*100;
+
+            return PercentCourseCompletion;
+
         }
     }
 }

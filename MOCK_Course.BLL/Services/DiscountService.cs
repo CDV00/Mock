@@ -27,10 +27,13 @@ namespace Course.BLL.Services
         {
             try
             {
+
                 var discount = _mapper.Map<Discount>(discountForCreateRequest);
+                if(await _discountRepository.CheckDiscount(discount))
+                {
+                    return new Response<DiscountDTO_>( false, "Discount was available during this time", null);
+                }
                 discount.CreatedAt = DateTime.Now;
-
-
                 await _discountRepository.CreateAsync(discount);
 
                 var result = await _unitOfWork.SaveChangesAsync();

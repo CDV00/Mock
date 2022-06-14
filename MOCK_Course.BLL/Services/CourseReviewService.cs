@@ -334,7 +334,9 @@ namespace Course.BLL.Services
                                                             .Take(requestParameters.PageSize)
                                                             .ToListAsync(cr => _mapper.Map<CourseReviewDTO>(cr));
 
-            var count = courseReview.Count;
+            var count = await _courseReviewRepository.BuildQuery()
+                                                     .FilterCourseByUSer(userId)
+                                                     .CountAsync();
             return new PagedList<CourseReviewDTO>(courseReview, count, requestParameters.PageNumber, requestParameters.PageSize);
         }
         public async Task<PagedList<CourseReviewDTO>> GetAllCourseReviewOfUser(Guid userId, CourseReviewParameters courseReviewParameters)

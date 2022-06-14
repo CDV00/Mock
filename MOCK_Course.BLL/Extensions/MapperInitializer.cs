@@ -114,6 +114,19 @@ namespace Course.BLL.Extensions
             CreateMap<SavedCourses, SavedCoursesDTO>().ReverseMap();
             CreateMap<SavedCourses, SavedCoursesRequest>().ReverseMap();
 
+            //map assignment
+
+            CreateMap<Assignment, AssignmentDTO>().ReverseMap();
+            CreateMap<Assignment, AssignmentRequest>().ReverseMap();
+            CreateMap<Assignment, AssignmentForCreateRequest>().ReverseMap();
+            
+
+            CreateMap<Attachment, AttachmentDTO>().ReverseMap();
+            CreateMap<Attachment, AttachmentRequest>().ReverseMap();
+            CreateMap<Attachment, AttachmentForCreateRequest>().ReverseMap();
+            CreateMap<AttachmentRequest, AttachmentDTO>().ReverseMap();
+            CreateMap<AttachmentForCreateRequest, AttachmentDTO>().ReverseMap();
+
         }
     }
 }

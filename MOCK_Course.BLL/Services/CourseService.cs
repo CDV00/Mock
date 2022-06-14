@@ -9,6 +9,7 @@ using Course.BLL.Responses;
 using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
 using Course.BLL.Share.RequestFeatures;
+using System.Linq;
 
 namespace Course.BLL.Services
 {
@@ -20,14 +21,17 @@ namespace Course.BLL.Services
         private readonly ILevelRepository _levelRepository;
         private readonly ICourseReviewService _courseReviewService;
         private readonly IEnrollmentService _enrollmentService;
+        private readonly ISavedCoursesService _savedCoursesService;
+        private readonly ISectionService _sectionService;
 
+        private readonly ILectureService _lectureService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public CourseService(ICousesRepository cousesRepository,
             IMapper mapper,
             IUnitOfWork unitOfWork, IAudioLanguageRepository audioLanguageRepository,
-            ICloseCaptionRepository closeCaptionRepository, ILevelRepository levelRepository, ICourseReviewService courseReviewService, IEnrollmentService enrollmentService)
+            ICloseCaptionRepository closeCaptionRepository, ILevelRepository levelRepository, ICourseReviewService courseReviewService, IEnrollmentService enrollmentService, ISavedCoursesService savedCoursesService, ISectionService sectionService, ILectureService lectureService)
         {
             _cousesRepository = cousesRepository;
             _mapper = mapper;
@@ -37,9 +41,12 @@ namespace Course.BLL.Services
             _levelRepository = levelRepository;
             _courseReviewService = courseReviewService;
             _enrollmentService = enrollmentService;
+            _savedCoursesService = savedCoursesService;
+            _sectionService = sectionService;
+            _lectureService = lectureService;
         }
 
-        public async Task<PagedList<CourseDTO>> GetCoursesAsync(CourseParameters courseParameter)
+        public async Task<PagedList<CourseDTO>> GetCoursesAsync(CourseParameters courseParameter, Guid? userId)
         {
             var courses = await _cousesRepository.BuildQuery()
                                                  .IncludeCategory()
@@ -58,6 +65,11 @@ namespace Course.BLL.Services
                                                  .Take(courseParameter.PageSize)
                                                  .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 
+            if (userId != null)
+            {
+                await AddLast(courses, userId);
+            }
+
             var count = await _cousesRepository.BuildQuery()
                                                .FilterByKeyword(courseParameter.Keyword)
                                                .FilterByUserId(courseParameter.userId)
@@ -70,12 +82,22 @@ namespace Course.BLL.Services
                                                .CountAsync();
 
             await AddRating(courses);
-
+            
+            
             var pageList = new PagedList<CourseDTO>(courses, count, courseParameter.PageNumber, courseParameter.PageSize);
 
             return pageList;
         }
 
+        //
+        private async Task AddLast(List<CourseDTO> courses, Guid? userId)
+        {
+            for (var i = 0; i < courses.Count; i++)
+            {
+                courses[i].IsSave = await _savedCoursesService.IsSavedCourse(userId.GetValueOrDefault(), courses[i].Id);
+                courses[i].PercentCompletion = await _lectureService.PercentCourseCompletion(userId.GetValueOrDefault(), courses[i].Id);
+            }
+        }
         private async Task AddRating(List<CourseDTO> courses)
         {
             //for (var i = 0; i < courses.Count; i++)
@@ -88,7 +110,7 @@ namespace Course.BLL.Services
         /// làm thêm phân trang và filter ở đâu
         /// </summary>
         /// <returns></returns>
-        public async Task<Response<CourseDTO>> GetAll()
+        public async Task<Response<CourseDTO>> GetAll(Guid? userId)
         {
             try
             {
@@ -97,7 +119,10 @@ namespace Course.BLL.Services
                                                      .IncludeUser()
                                                      .IncludeEnrolment()
                                                      .AsSelectorAsync(x => _mapper.Map<CourseDTO>(x));
-
+                /*if (userId != null)
+                {
+                    await AddLast(courses, userId);
+                }*/
                 return new Response<CourseDTO>(true, courses);
             }
             catch (Exception ex)

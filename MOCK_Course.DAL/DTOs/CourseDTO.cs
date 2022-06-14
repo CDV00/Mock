@@ -29,16 +29,21 @@ namespace Course.BLL.Responses
 
 
         public bool IsFree { get; set; }
+        public bool IsSave { get; set; }
 
         public decimal Price { get; set; }
         public float AvgRate { get; set; } = 0;
         public int TotalEnrolls { get; set; } = 0;
         public int TotalTime { get; set; } = 0;
+        // Percent completion
+        public float PercentCompletion { get; set; }
+        // isEnroll
+
         public Status Status { get; set; }
         public int TotalSection { get; set; }
         //public int TotalOrder { get; set; }
 
-        public float PercentComplete { get; set; }
+        //public float PercentComplete { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public bool IsActive { get; set; }

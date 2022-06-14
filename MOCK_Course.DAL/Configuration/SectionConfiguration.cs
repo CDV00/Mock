@@ -9,7 +9,7 @@ namespace Course.DAL.Configuration
         public void Configure(EntityTypeBuilder<Section> builder)
         {
             // 1-n:course-section
-            builder.HasOne(s => s.Course)
+            builder.HasOne(s => s.Courses)
                 .WithMany(c => c.Sections)
                 .HasForeignKey(s => s.CourseId).OnDelete(DeleteBehavior.Cascade);
 

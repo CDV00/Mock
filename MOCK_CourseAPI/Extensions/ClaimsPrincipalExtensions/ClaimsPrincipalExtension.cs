@@ -7,7 +7,10 @@ namespace CourseAPI.Extensions.ControllerBase
     {
         public static Guid GetUserId(this ClaimsPrincipal User)
         {
-            return Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier.ToString()));
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier.ToString());
+            if (userId == null)
+                return Guid.Empty;
+            return Guid.Parse(userId);
         }
     }
 }

@@ -177,6 +177,86 @@ namespace CourseAPI.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("Course.DAL.Models.Assignment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Index")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("SectionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SectionId");
+
+                    b.ToTable("Assignments");
+                });
+
+            modelBuilder.Entity("Course.DAL.Models.Attachment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AssignmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssignmentId");
+
+                    b.ToTable("Attachments");
+                });
+
             modelBuilder.Entity("Course.DAL.Models.AudioLanguage", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1093,6 +1173,28 @@ namespace CourseAPI.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("Course.DAL.Models.Assignment", b =>
+                {
+                    b.HasOne("Course.DAL.Models.Section", "Section")
+                        .WithMany("Assignments")
+                        .HasForeignKey("SectionId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Section");
+                });
+
+            modelBuilder.Entity("Course.DAL.Models.Attachment", b =>
+                {
+                    b.HasOne("Course.DAL.Models.Assignment", "Assignment")
+                        .WithMany("Attachments")
+                        .HasForeignKey("AssignmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Assignment");
+                });
+
             modelBuilder.Entity("Course.DAL.Models.Category", b =>
                 {
                     b.HasOne("Course.DAL.Models.Category", "ParentCategory")
@@ -1403,6 +1505,11 @@ namespace CourseAPI.Migrations
                     b.Navigation("Subscriptions");
                 });
 
+            modelBuilder.Entity("Course.DAL.Models.Assignment", b =>
+                {
+                    b.Navigation("Attachments");
+                });
+
             modelBuilder.Entity("Course.DAL.Models.Category", b =>
                 {
                     b.Navigation("Courses");
@@ -1451,6 +1558,8 @@ namespace CourseAPI.Migrations
 
             modelBuilder.Entity("Course.DAL.Models.Section", b =>
                 {
+                    b.Navigation("Assignments");
+
                     b.Navigation("Lectures");
                 });
 #pragma warning restore 612, 618
