@@ -57,7 +57,7 @@ namespace Course.BLL.Services
             {
                 if (!await ValidateUser(loginRequest))
                 {
-                    return new Response<LoginDTO>(false, "Email don't exist", null);
+                    return new Response<LoginDTO>(false, "Authentication failed. Wrong user name or password.", null);
                 }
 
                 _mapper.Map(_user, _userResponse);

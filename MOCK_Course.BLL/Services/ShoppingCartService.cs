@@ -6,37 +6,45 @@ using Course.BLL.Requests;
 using Course.BLL.Services.Abstraction;
 using Course.DAL.Models;
 using Course.DAL.Repositories.Abstraction;
+using Repository.Repositories;
 
 namespace Course.BLL.Services
 {
     public class ShoppingCartService : IShoppingCartService
     {
         private readonly IShoppingCartRepository _shoppingCartRepository;
+        private readonly ICousesRepository _cousesRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public ShoppingCartService(IShoppingCartRepository shoppingCartRepository,
             IMapper mapper,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            ICousesRepository cousesRepository)
         {
             _shoppingCartRepository = shoppingCartRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _cousesRepository = cousesRepository;
         }
 
         public async Task<Response<CartDTO>> Add(Guid userId, Guid courseId)
         {
             try
             {
-                if (await _shoppingCartRepository.checkPrice(courseId))
-                    return new Response<CartDTO>(false, "Can't add course with price is 0", null);
+                if (await _cousesRepository.BuildQuery()
+                    .FilterById(courseId)
+                    .AsSelectorAsync(c => c.Price) <= 0)
+                    return new Response<CartDTO>(false, "Can't add course with price == 0", null);
+
+                //TODO: CHECK EXIST CART
 
                 var cart = new ShoppingCart()
                 {
                     UserId = userId,
                     CourseId = courseId,
-                    CreatedAt = DateTime.Now
                 };
+
                 await _shoppingCartRepository.CreateAsync(cart);
                 await _unitOfWork.SaveChangesAsync();
 
@@ -50,7 +58,7 @@ namespace Course.BLL.Services
             }
         }
 
-        // todo:test
+        // TODO: Paging and filter by name course
         public async Task<Responses<CartDTO>> GetAll(Guid userId)
         {
             try
@@ -78,7 +86,7 @@ namespace Course.BLL.Services
 
                 if (cart == null)
                 {
-                    new Responses<CartDTO>(false, "can't find cart", null);
+                    new Responses<CartDTO>(false, "Can't find cart", null);
                 }
 
 
@@ -104,10 +112,12 @@ namespace Course.BLL.Services
                 var cart = await _shoppingCartRepository.GetByIdAsync(Id);
                 if (cart is null)
                 {
-                    return new BaseResponse(false, null, "can't find cart");
+                    return new BaseResponse(false, null, "Can't find cart");
                 }
+
                 if (cart.UserId != userId)
                     return new Response<BaseResponse>(false, "You aren't the owner of the shopping cart", null);
+
                 _shoppingCartRepository.Remove(cart, true);
                 await _unitOfWork.SaveChangesAsync();
 
@@ -119,6 +129,5 @@ namespace Course.BLL.Services
                 return new Responses<BaseResponse>(false, ex.Message, null);
             }
         }
-
     }
 }

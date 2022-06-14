@@ -31,5 +31,6 @@ namespace Course.DAL.Queries
         ICourseQuery FilterByPrice(bool isFree, bool isDiscount, decimal MinPrice, decimal MaxPrice);
         ICourseQuery FilterByApprove();
         ICourseQuery IncludeOrder();
+        ICourseQuery FilterByIds(List<Guid> Ids);
     }
 }

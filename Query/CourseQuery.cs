@@ -70,6 +70,12 @@ namespace Course.DAL.Queries
             return this;
         }
 
+        public ICourseQuery FilterByIds(List<Guid> Ids)
+        {
+            Query = Query.Where(type => Ids.Contains(type.Id));
+            return this;
+        }
+
         public ICourseQuery FilterByPrice(bool isFree, bool isDiscount, decimal MinPrice, decimal MaxPrice)
         {
             if (isFree && isDiscount)

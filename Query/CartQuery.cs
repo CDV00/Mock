@@ -28,9 +28,9 @@ namespace Course.DAL.Queries
             return this;
         }
 
-        public IShoppingCartQuery FilterByIds(List<Guid> ids)
+        public IShoppingCartQuery FilterByCourseIds(List<Guid> courseIds)
         {
-            Query = Query.Where(type => ids.Contains(type.Id));
+            Query = Query.Where(type => courseIds.Contains(type.CourseId));
             return this;
         }
 

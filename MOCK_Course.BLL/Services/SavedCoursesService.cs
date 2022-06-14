@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Course.BLL.DTO;
@@ -9,7 +7,6 @@ using Course.BLL.Services.Abstraction;
 using Course.BLL.Share.RequestFeatures;
 using Course.DAL.Models;
 using Course.DAL.Repositories.Abstraction;
-using Microsoft.EntityFrameworkCore;
 
 namespace Course.BLL.Services
 {
@@ -37,17 +34,16 @@ namespace Course.BLL.Services
                 {
                     UserId = userId,
                     CourseId = courseId,
-                    CreatedAt = DateTime.Now
                 };
 
-                var check = await _savedCoursesRepository.BuildQuery()
-                                                         .FilterByUserId(userId)
-                                                         .FilterByCourseId(courseId)
-                                                         .AnyAsync();
+                var CheckExistSaveCourse = await _savedCoursesRepository.BuildQuery()
+                                                                        .FilterByUserId(userId)
+                                                                        .FilterByCourseId(courseId)
+                                                                        .AnyAsync();
 
-                if (check)
+                if (CheckExistSaveCourse)
                 {
-                    return new Response<SavedCoursesDTO>(false, "already this course", null);
+                    return new Response<SavedCoursesDTO>(false, "Already saved this course", null);
                 }
 
                 var savecourseResponse = _mapper.Map<SavedCoursesDTO>(savecourse);
@@ -61,7 +57,6 @@ namespace Course.BLL.Services
             }
         }
 
-        // todo:test
         public async Task<PagedList<SavedCoursesDTO>> GetAll(Guid userId, SavedCoursesParameters savedCoursesParameters)
         {
 
@@ -115,7 +110,7 @@ namespace Course.BLL.Services
                 var course = await _savedCoursesRepository.GetByIdAsync(Id);
                 if (course is null)
                 {
-                    return new BaseResponse(false, null, "can't find course");
+                    return new BaseResponse(false, null, "Can't find course");
                 }
 
                 _savedCoursesRepository.Remove(course, true);

@@ -52,6 +52,7 @@ namespace Course.DAL.Data
             modelBuilder.ApplyConfiguration(new LectureCompletionConfiguration());
             modelBuilder.ApplyConfiguration(new LectureConfiguration());
             modelBuilder.ApplyConfiguration(new OrderConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderItemConfiguration());
             modelBuilder.ApplyConfiguration(new SectionConfiguration());
             modelBuilder.ApplyConfiguration(new ShoppingCartConfiguration());
             modelBuilder.ApplyConfiguration(new SubscriptionConfiguration());

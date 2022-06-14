@@ -46,7 +46,6 @@ namespace Course.BLL.Services
                 {
                     UserId = instructorId,
                     SubscriberId = userId,
-                    CreatedAt = DateTime.Now
                 };
 
                 await _subscriptionRepository.CreateAsync(subscription);

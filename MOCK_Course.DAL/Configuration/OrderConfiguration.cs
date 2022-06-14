@@ -31,4 +31,13 @@ namespace Course.DAL.Configuration
             builder.HasQueryFilter(u => !u.IsDeleted);
         }
     }
+
+    internal class OrderItemConfiguration : IEntityTypeConfiguration<OrderItem>
+    {
+        public void Configure(EntityTypeBuilder<OrderItem> builder)
+        {
+
+            builder.HasKey(c => new { c.CourseId, c.OrderId });
+        }
+    }
 }

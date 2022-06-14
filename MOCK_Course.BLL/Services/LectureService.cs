@@ -127,7 +127,7 @@ namespace Course.BLL.Services
         {
 
             int countCourses = await totalLectureByCourse(courseId);
-            float countTotalCompletionLeture = await _lectureCompletionService.totalLectureCompletionBycourse(userId, courseId);
+            float countTotalCompletionLeture = await _lectureCompletionService.TotalLectureCompletionBycourse(userId, courseId);
             float PercentCourseCompletion = countTotalCompletionLeture / countCourses*100;
 
             return PercentCourseCompletion;

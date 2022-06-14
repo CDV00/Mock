@@ -2,7 +2,7 @@
 
 namespace Course.DAL.Models
 {
-    public class CourseCompletion : BaseEntity<Guid>
+    public class CourseCompletion
     {
         public Guid UserId { get; set; }
         public Guid CourseId { get; set; }

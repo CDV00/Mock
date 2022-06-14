@@ -11,8 +11,7 @@ namespace Course.BLL.Requests
         public string Country { get; set; }
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
-        public List<Guid> CartIds { get; set; }
-
+        public List<Guid> CourseIds { get; set; }
         public Payment Payment { get; set; }
         public PaymentType PaymentType { get; set; }
     }

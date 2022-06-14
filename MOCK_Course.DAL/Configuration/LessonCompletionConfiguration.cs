@@ -8,20 +8,18 @@ namespace Course.DAL.Configuration
     {
         public void Configure(EntityTypeBuilder<LectureCompletion> builder)
         {
+            builder.HasKey(c => new { c.LectureId, c.UserId });
             // 1-n:user-lessonCompletion
             builder.HasOne(l => l.User)
                 .WithMany(u => u.LectureCompletions)
                 .HasForeignKey(l => l.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            // 1-n:lession-lessionCompletion
+            // 1-n:lecture-lessionCompletion
             builder.HasOne(lc => lc.Lecture)
-                .WithMany(l => l.LectureCompletions)
-                .HasForeignKey(lc => lc.LectureId)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            builder.HasQueryFilter(u => !u.IsDeleted);
-
+                   .WithMany(l => l.LectureCompletions)
+                   .HasForeignKey(lc => lc.LectureId)
+                   .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

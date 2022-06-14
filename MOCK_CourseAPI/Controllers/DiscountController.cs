@@ -26,7 +26,6 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [AllowAnonymous]
         public async Task<ActionResult<Responses<DiscountDTO_>>> GetAllDiscount()
         {
             var userId = User.GetUserId();

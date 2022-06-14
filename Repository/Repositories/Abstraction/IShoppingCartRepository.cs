@@ -8,6 +8,6 @@ namespace Course.DAL.Repositories.Abstraction
     public interface IShoppingCartRepository : IRepository<ShoppingCart>
     {
         IShoppingCartQuery BuildQuery();
-        Task<bool> checkPrice(Guid courseId);
+        Task<bool> CheckPriceGreaterThanZero(Guid courseId);
     }
 }

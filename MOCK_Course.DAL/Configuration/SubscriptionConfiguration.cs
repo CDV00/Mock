@@ -8,6 +8,7 @@ namespace Course.DAL.Configuration
     {
         public void Configure(EntityTypeBuilder<Subscription> builder)
         {
+            builder.HasKey(c => new { c.SubscriberId, c.UserId });
             // 1-n: user-subscription
             builder.HasOne(s => s.User)
                    .WithMany(u => u.Subscriptions)
@@ -18,8 +19,6 @@ namespace Course.DAL.Configuration
             //builder.HasOne(s => s.Subscriber)
             //    .WithMany(u => u.Subscriptions)
             //    .HasForeignKey(s => s.SubscriberId);
-
-            builder.HasQueryFilter(u => !u.IsDeleted);
         }
     }
 }

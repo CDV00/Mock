@@ -2,7 +2,7 @@
 
 namespace Course.DAL.Models
 {
-    public class ShoppingCart : BaseEntity<Guid>
+    public class ShoppingCart
     {
         public Guid CourseId { get; set; }
         public Guid UserId { get; set; }

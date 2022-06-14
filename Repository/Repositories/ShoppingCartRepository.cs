@@ -21,10 +21,11 @@ namespace Repository.Repositories
         {
             return new ShoppingCartQuery(_context.Carts.AsQueryable(), _context);
         }
-        public async Task<bool> checkPrice(Guid courseId)
+        public async Task<bool> CheckPriceGreaterThanZero(Guid courseId)
         {
             decimal price = await BuildQuery().FilterByCourseId(courseId)
-                                            .AsSelectorAsync(s=>s.Course.Price);
+                                              .IncludeCourse()
+                                              .AsSelectorAsync(s => s.Course.Price);
             if (price <= 0)
             {
                 return true;

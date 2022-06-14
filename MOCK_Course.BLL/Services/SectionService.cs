@@ -145,7 +145,7 @@ namespace Course.BLL.Services
         public async Task<float> PercentSectionCompletion(Guid userId, Guid sectionId)
         {
             int countTotalLecture = await _lectureService.totalLectureBySection(sectionId);
-            int countTotalLectureComletion = await _lectureCompletionService.totalLectureCompletionBySection(userId, sectionId);
+            int countTotalLectureComletion = await _lectureCompletionService.TotalLectureCompletionBySection(userId, sectionId);
             float CourseCompletion = countTotalLectureComletion/countTotalLecture*100;
             return CourseCompletion;
         }

@@ -43,15 +43,15 @@ namespace CourseAPI.Controllers
         /// https://gambolthemes.net/html-items/cursus_main_demo/student_courses.html
         /// </summary>
         /// <returns></returns>
-        [HttpGet()]
-        public async Task<ActionResult<Responses<OrderDTO>>> GetAll()
-        {
-            var userId = User.GetUserId();
-            var result = await _orderService.GetAll(userId);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
-            return Ok(result);
-        }
+        //[HttpGet()]
+        //public async Task<ActionResult<Responses<OrderDTO>>> GetAll()
+        //{
+        //    var userId = User.GetUserId();
+        //    var result = await _orderService.GetAll(userId);
+        //    if (result.IsSuccess == false)
+        //        return BadRequest(result);
+        //    return Ok(result);
+        //}
 
         /// <summary>
         /// Create new order record
@@ -73,13 +73,13 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete()]
-        public async Task<ActionResult<BaseResponse>> Delete([FromQuery] Guid id)
-        {
-            var result = await _orderService.Delete(id);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
-            return Ok(result);
-        }
+        //[HttpDelete()]
+        //public async Task<ActionResult<BaseResponse>> Delete([FromQuery] Guid id)
+        //{
+        //    var result = await _orderService.Delete(id);
+        //    if (result.IsSuccess == false)
+        //        return BadRequest(result);
+        //    return Ok(result);
+        //}
     }
 }

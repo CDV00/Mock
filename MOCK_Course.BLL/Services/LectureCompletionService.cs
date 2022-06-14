@@ -31,7 +31,6 @@ namespace Course.BLL.Services
                 var lessoncompletion = _mapper.Map<LectureCompletion>(lessonCompletionRequest);
 
                 lessoncompletion.UserId = userId;
-                lessoncompletion.CreatedAt = DateTime.Now;
 
                 await _lessonCompletionRepository.CreateAsync(lessoncompletion);
                 await _unitOfWork.SaveChangesAsync();
@@ -61,15 +60,14 @@ namespace Course.BLL.Services
             }
         }
 
-        //Lấy tí lệ khóa học đã hoàn thành; tong lecture * 100%/cac khoa hoc hoan thanh
-        public async Task<int> totalLectureCompletionBySection(Guid userId, Guid sectionId)
+        public async Task<int> TotalLectureCompletionBySection(Guid userId, Guid sectionId)
         {
             var count = await _lessonCompletionRepository.BuildQuery()
                                                          .FilterLectureCompletion(userId, sectionId)
                                                          .CountAsync();
             return count;
         }
-        public async Task<int> totalLectureCompletionBycourse(Guid userId, Guid courseId)
+        public async Task<int> TotalLectureCompletionBycourse(Guid userId, Guid courseId)
         {
             var count = await _lessonCompletionRepository.BuildQuery()
                                                          .FilterLectureCompletionCourse(userId, courseId)

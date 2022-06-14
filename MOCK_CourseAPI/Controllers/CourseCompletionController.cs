@@ -38,14 +38,14 @@ namespace CourseAPI.Controllers
         /// User finished all lesson of course
         /// </summary>
         /// <returns></returns>
-        [HttpPost]
-        public async Task<ActionResult<BaseResponse>> Create([FromBody] Guid courseId)
-        {
-            var userId = User.GetUserId();
-            var result = await _courseCompletionService.Add(userId, courseId);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
-            return Ok(result);
-        }
+        //[HttpPost]
+        //public async Task<ActionResult<BaseResponse>> Create([FromBody] Guid courseId)
+        //{
+        //    var userId = User.GetUserId();
+        //    var result = await _courseCompletionService.Add(userId, courseId);
+        //    if (result.IsSuccess == false)
+        //        return BadRequest(result);
+        //    return Ok(result);
+        //}
     }
 }

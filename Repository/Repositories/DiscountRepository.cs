@@ -27,7 +27,7 @@ namespace Repository.Repositories
             int discounts = await BuildQuery().FilterByCourseId(discount.CourseId)
                                               .checkDate(discount)
                                               .CountAsync();
-            if (discounts>0)
+            if (discounts > 0)
             {
                 return true;
             }
@@ -65,5 +65,5 @@ namespace Repository.Repositories
 
            return discount;
         }*/
-}
+    }
 }

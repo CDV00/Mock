@@ -8,6 +8,8 @@ namespace Course.DAL.Configuration
     {
         public void Configure(EntityTypeBuilder<SavedCourses> builder)
         {
+            builder.HasKey(c => new { c.CourseId, c.UserId });
+
             // 1-n:user-cart
             builder.HasOne(c => c.User)
                 .WithMany(u => u.SavedCourses)
@@ -19,8 +21,6 @@ namespace Course.DAL.Configuration
                 .HasForeignKey(ct => ct.CourseId).
                 OnDelete(DeleteBehavior.NoAction).
                 OnDelete(DeleteBehavior.NoAction);
-
-            builder.HasQueryFilter(u => !u.IsDeleted);
         }
     }
 }

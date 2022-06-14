@@ -2,7 +2,7 @@
 
 namespace Course.DAL.Models
 {
-    public class Subscription : BaseEntity<Guid>
+    public class Subscription
     {
         public Guid SubscriberId { get; set; }
         public AppUser Subscriber { get; set; }

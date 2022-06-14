@@ -5,7 +5,6 @@ namespace Course.BLL.Responses
 {
     public class OrderDTO
     {
-        public Guid Id { get; set; }
         public Guid UserId { get; set; }
         public List<OrderItemDTO> OrderItem { get; set; }
         public string FirstName { set; get; }

@@ -31,7 +31,7 @@ namespace Repository.Repositories
 
         public virtual void Remove(dynamic _object, bool? permanent)
         {
-            if(permanent == null || permanent == false)
+            if (permanent == null || permanent == false)
             {
                 _object.IsDeleted = true;
                 return;

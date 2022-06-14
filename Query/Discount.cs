@@ -42,9 +42,22 @@ namespace Course.Queries
             Query = Query.Where(type => type.CourseId == courseId);
             return this;
         }
+
+        public IDiscountQuery IncludeOrderItem()
+        {
+            Query.Include(d => d.OrderItems).Load();
+            return this;
+        }
+
         public IDiscountQuery checkDate(Discount discount)
         {
-            Query = Query.Where(d => (d.StartDate <= discount.StartDate && d.EndDate >= discount.StartDate)||(d.StartDate <= discount.EndDate && d.EndDate >= discount.EndDate));
+            Query = Query.Where(d => (d.StartDate <= discount.StartDate && d.EndDate >= discount.StartDate) || (d.StartDate <= discount.EndDate && d.EndDate >= discount.EndDate));
+            return this;
+        }
+
+        public IDiscountQuery CheckDuringDate()
+        {
+            Query = Query.Where(d => d.StartDate <= DateTime.Now && d.EndDate >= DateTime.Now);
             return this;
         }
     }

@@ -130,7 +130,7 @@ namespace Course.BLL.Services
                                              .FilterByName(userParameter.Keyword)
                                              .CountAsync();
 
-            //Get Total Subcripbers & Total Courses
+            //Get Total Subscribers & Total Courses
             for (var i = 0; i < users.Count; i++)
             {
                 users[i].TotalSubcripbers = (await _subscriptionService.GetTotalSubscriber(users[i].Id)).data;

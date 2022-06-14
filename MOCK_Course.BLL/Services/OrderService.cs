@@ -21,6 +21,7 @@ namespace Course.BLL.Services
         private readonly ICousesRepository _cousesRepository;
         private readonly IShoppingCartRepository _shoppingCartRepository;
         private readonly IOrderItemRepository _orderItemRepository;
+        private readonly IDiscountRepository _discountRepository;
         private readonly IEnrollmentRepository _enrollmentRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -35,7 +36,8 @@ namespace Course.BLL.Services
             IOrderItemRepository orderItemRepository,
             IPaymentService paymentService,
             IEnrollmentRepository enrollmentRepository,
-            UserManager<AppUser> userManager)
+            UserManager<AppUser> userManager,
+            IDiscountRepository discountRepository)
         {
             _userManager = userManager;
             _orderRepository = orderRepository;
@@ -46,6 +48,7 @@ namespace Course.BLL.Services
             _shoppingCartRepository = shoppingCartRepository;
             _orderItemRepository = orderItemRepository;
             _paymentService = paymentService;
+            _discountRepository = discountRepository;
         }
 
         public async Task<Response<int>> GetTotal(Guid courseId)
@@ -91,50 +94,37 @@ namespace Course.BLL.Services
         {
             try
             {
-                //var cartIDs = orderRequest.Carts.Select(x => x.Id);
-                var carts = await _shoppingCartRepository.BuildQuery()
-                                                         .FilterByIds(orderRequest.CartIds)
-                                                         .IncludeCourse()
-                                                         .IncludeDiscount()
-                                                         .ToListAsync(c => c);
+                var courses = await _cousesRepository.BuildQuery()
+                                                     .FilterByIds(orderRequest.CourseIds)
+                                                     .IncludeDiscount()
+                                                     .ToListAsync(c => c);
 
-                if (carts == null || carts.Count <= 0)
-                    return new Response<OrderDTO>(false, "don't have any course in cart", null);
+                if (courses == null || courses.Count <= 0)
+                    return new Response<OrderDTO>(false, "Don't have any course to payment", null);
 
                 var orderId = Guid.NewGuid();
                 var order = _mapper.Map<Order>(orderRequest);
                 order.UserId = userId;
                 order.Id = orderId;
                 decimal totalPrice = 0;
-                //var instructors = new List<Guid>();
 
                 var orderItems = new List<OrderItem>();
                 //Create Order
-                foreach (var cart in carts)
+                foreach (var course in courses)
                 {
-                    orderItems.Add(new OrderItem { CourseId = cart.CourseId, OrderId = orderId });
+                    var orderItem = new OrderItem { CourseId = course.Id, OrderId = orderId };
+                    orderItems.Add(orderItem);
 
-                    decimal discount = 0;
-                    if (cart.Course.Discounts.Any())
-                        discount = cart.Course.Discounts.FirstOrDefault().DiscountPercent;
+                    decimal discountPercent = await GetDiscountPercent(course, orderItem);
 
-                    var coursePrice = cart.Course.Price * (100 - discount) / 100;
+                    var coursePrice = course.Price * (100 - discountPercent) / 100;
                     totalPrice += coursePrice;
-                    //instructors.Add(cart.Course.User.Id);
 
-                    var enrollment = new Enrollment()
-                    {
-                        CourseId = cart.CourseId,
-                        UserId = userId
-                    };
-                    await _enrollmentRepository.CreateAsync(enrollment);
-
-                    var instructor = await _userManager.FindByIdAsync(cart.Course.UserId.ToString());
-                    instructor.Balance += coursePrice;
-                    await _userManager.UpdateAsync(instructor);
-
-                    _shoppingCartRepository.Remove(cart, true);
+                    await CreateEnroll(userId, course);
+                    await UpdateBalanceOfInstrucctor(course, coursePrice);
+                    await RemoveCart(userId, course);
                 }
+
                 order.OrderItem = orderItems;
                 order.TotalPrice = totalPrice;
                 orderRequest.Payment.value = (int)totalPrice;
@@ -142,28 +132,34 @@ namespace Course.BLL.Services
                 await _orderRepository.CreateAsync(order);
 
                 //payment stripe
-                if (orderRequest.PaymentType == PaymentType.Stripe)
+                switch (orderRequest.PaymentType)
                 {
-                    var resultPayment = await _paymentService.PayAsync(orderRequest.Payment);
-                    if (!resultPayment.IsSuccess)
-                    {
-                        return new Response<OrderDTO>(false, resultPayment.Message, resultPayment.Error);
-                    }
-                }
-                //Payment by Balance of User
-                else
-                {
-                    var user = await _userManager.FindByIdAsync(userId.ToString());
-                    user.Balance -= totalPrice;
-                    if (user.Balance < 0)
-                    {
-                        return new Response<OrderDTO>
+                    case PaymentType.Stripe:
                         {
-                            IsSuccess = false,
-                            Message = "you don't have enough money to payment"
-                        };
-                    }
-                    await _userManager.UpdateAsync(user);
+                            var resultPayment = await _paymentService.PayAsync(orderRequest.Payment);
+                            if (!resultPayment.IsSuccess)
+                            {
+                                return new Response<OrderDTO>(false, resultPayment.Message, resultPayment.Error);
+                            }
+
+                            break;
+                        }
+
+                    default:
+                        {
+                            var user = await _userManager.FindByIdAsync(userId.ToString());
+                            user.Balance -= totalPrice;
+                            if (user.Balance < 0)
+                            {
+                                return new Response<OrderDTO>
+                                {
+                                    IsSuccess = false,
+                                    Message = "You don't have enough money to payment"
+                                };
+                            }
+                            await _userManager.UpdateAsync(user);
+                            break;
+                        }
                 }
 
                 await _unitOfWork.SaveChangesAsync();
@@ -178,6 +174,56 @@ namespace Course.BLL.Services
             {
                 return new Response<OrderDTO>(false, ex.Message, null);
             }
+        }
+
+        private async Task RemoveCart(Guid userId, Courses course)
+        {
+            var cart = await _shoppingCartRepository.BuildQuery()
+                                              .FilterByCourseId(course.Id)
+                                              .FilterByUserId(userId)
+                                              .AsSelectorAsync(c => c);
+            if (cart != null)
+                _shoppingCartRepository.Remove(cart, true);
+        }
+
+        private async Task UpdateBalanceOfInstrucctor(Courses course, decimal coursePrice)
+        {
+            var instructor = await _userManager.FindByIdAsync(course.UserId.ToString());
+            instructor.Balance += coursePrice;
+            //await _userManager.UpdateAsync(instructor);
+        }
+
+        private async Task CreateEnroll(Guid userId, Courses course)
+        {
+            var enrollment = new Enrollment()
+            {
+                CourseId = course.Id,
+                UserId = userId
+            };
+
+            await _enrollmentRepository.CreateAsync(enrollment);
+        }
+
+        private async Task<decimal> GetDiscountPercent(Courses course, OrderItem orderItem)
+        {
+            decimal discountPercent = 0;
+            if (await _discountRepository.BuildQuery()
+                                         .FilterByCourseId(course.Id)
+                                         .CheckDuringDate()
+                                         .AnyAsync())
+            {
+                var discount = await _discountRepository.BuildQuery()
+                                                        .FilterByCourseId(course.Id)
+                                                        .CheckDuringDate()
+                                                        .IncludeOrderItem()
+                                                        .AsSelectorAsync(d => d);
+                discountPercent = discount.DiscountPercent;
+
+
+                discount.OrderItems.Add(orderItem);
+            }
+
+            return discountPercent;
         }
 
         /// <summary>

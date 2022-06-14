@@ -18,7 +18,7 @@ namespace Course.DAL.Models
         public ICollection<OrderItem> OrderItem { get; set; }
     }
 
-    public class OrderItem : BaseEntity<Guid>
+    public class OrderItem
     {
         public Guid OrderId { get; set; }
         public Order Order { get; set; }

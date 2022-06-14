@@ -32,15 +32,14 @@ namespace Course.BLL.Services
         {
             try
             {
-                if (checkPrice(CourseId).Result)
+                if (CheckPriceGreaterZero(CourseId).Result)
                 {
-                    return new Response<EnrollmentDTO>(false,"", null);
+                    return new Response<EnrollmentDTO>(false, "Can't add course with price lower 0", null);
                 }
                 var enrollment = new Enrollment()
                 {
                     UserId = userId,
-                    CourseId = CourseId,
-                    CreatedAt = DateTime.Now,
+                    CourseId = CourseId
                 };
 
                 await _enrollmentRepository.CreateAsync(enrollment);
@@ -59,15 +58,16 @@ namespace Course.BLL.Services
             }
         }
         //
-        private async Task<bool> checkPrice(Guid courseId)
+        private async Task<bool> CheckPriceGreaterZero(Guid courseId)
         {
             decimal price = await _cousesRepository.BuildQuery()
                                                    .FilterById(courseId)
                                                    .AsSelectorAsync(c => c.Price);
-            if (price == 0)
-                return true; 
+            if (price <= 0)
+                return true;
+
             return false;
-        } 
+        }
         public async Task<Response<int>> GetTotalEnrollOfUser(Guid userId)
         {
             try

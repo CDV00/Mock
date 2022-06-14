@@ -12,6 +12,6 @@ namespace Course.DAL.Models
         public DateTime EndDate { get; set; }
         public decimal DiscountPercent { get; set; }
 
-        public ICollection<Order> Orders { get; set; }
+        public ICollection<OrderItem> OrderItems { get; set; }
     }
 }
