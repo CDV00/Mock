@@ -1,31 +1,32 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="DataTransferObjects\**" />
-    <EmbeddedResource Remove="DataTransferObjects\**" />
-    <None Remove="DataTransferObjects\**" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="DataTransferObjects\**" />
+		<EmbeddedResource Remove="DataTransferObjects\**" />
+		<None Remove="DataTransferObjects\**" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
-    <PackageReference Include="CloudinaryDotNet" Version="1.16.0" />
-    <PackageReference Include="Google.Apis.Auth" Version="1.40.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="5.0.17" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Owin.Security.Facebook" Version="4.2.2" />
-    <PackageReference Include="Vimeo.Api" Version="1.0.6" />
-    <PackageReference Include="VimeoDotNet" Version="2.1.2" />
-    <PackageReference Include="ZendeskApi_v2" Version="3.12.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+		<PackageReference Include="CloudinaryDotNet" Version="1.16.0" />
+		<PackageReference Include="Google.Apis.Auth" Version="1.40.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="5.0.17" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Owin.Security.Facebook" Version="4.2.2" />
+		<PackageReference Include="Stripe.net" Version="27.25.1" />
+		<PackageReference Include="Vimeo.Api" Version="1.0.6" />
+		<PackageReference Include="VimeoDotNet" Version="2.1.2" />
+		<PackageReference Include="ZendeskApi_v2" Version="3.12.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\MOCK_Course.DAL\Course.DAL.csproj" />
-    <ProjectReference Include="..\Repository\Repository.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\MOCK_Course.DAL\Course.DAL.csproj" />
+		<ProjectReference Include="..\Repository\Repository.csproj" />
+	</ItemGroup>
 
 </Project>

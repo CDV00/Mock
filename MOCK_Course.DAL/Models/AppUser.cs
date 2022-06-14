@@ -18,6 +18,8 @@ namespace Course.DAL.Models
         public string Description { get; set; }
 
         public string RefreshToken { get; set; }
+        public decimal Balance { get; set; } = 0;
+
         public DateTime? RefreshTokenExpiryTime { get; set; }
 
         public Guid? CategoryId { get; set; }

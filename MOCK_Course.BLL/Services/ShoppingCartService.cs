@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Course.BLL.DTO;
@@ -8,7 +6,6 @@ using Course.BLL.Requests;
 using Course.BLL.Services.Abstraction;
 using Course.DAL.Models;
 using Course.DAL.Repositories.Abstraction;
-using Microsoft.EntityFrameworkCore;
 
 namespace Course.BLL.Services
 {
