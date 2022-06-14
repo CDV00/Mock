@@ -74,7 +74,8 @@ namespace CourseAPI.Controllers
         [HttpDelete()]
         public async Task<ActionResult<BaseResponse>> Remove(Guid Id)
         {
-            var result = await _shoppingCartService.Remove(Id);
+            Guid userId = User.GetUserId();
+            var result = await _shoppingCartService.Remove(Id, userId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);

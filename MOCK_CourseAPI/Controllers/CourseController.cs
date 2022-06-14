@@ -31,7 +31,11 @@ namespace CourseAPI.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<Responses<CourseDTO>>> GetAllCourses([FromQuery] CourseParameters courseParameters)
         {
-            var result = await _coursesService.GetCoursesAsync(courseParameters);
+            //courseParameters.userId = User.GetUserId() == Guid.Empty ? null : User.GetUserId();
+            Guid? userId = (User.GetUserId() == Guid.Empty) ? null : User.GetUserId();
+
+
+            var result = await _coursesService.GetCoursesAsync(courseParameters, userId);
 
             Response.Headers.Add("X-Pagination",
                                  JsonSerializer.Serialize(result.MetaData));
@@ -47,7 +51,9 @@ namespace CourseAPI.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<Responses<CourseDTO>>> GetAll()
         {
-            var result = await _coursesService.GetAll();
+
+            Guid? userId = (User.GetUserId() == Guid.Empty)? null: User.GetUserId();
+            var result = await _coursesService.GetAll(userId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);

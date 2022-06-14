@@ -57,6 +57,10 @@ namespace Course.DAL.Queries
             Query.Where(Type => Type.Course.Discounts.Any(d => d.EndDate > DateTime.Now));
             return this;
         }
-
+        public IShoppingCartQuery FilterByCourseId(Guid courseId)
+        {
+            Query = Query.Where(type => type.Course.Id == courseId);
+            return this;
+        }
     }
 }

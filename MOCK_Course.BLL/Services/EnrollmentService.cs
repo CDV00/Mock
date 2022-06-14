@@ -32,6 +32,10 @@ namespace Course.BLL.Services
         {
             try
             {
+                if (checkPrice(CourseId).Result)
+                {
+                    return new Response<EnrollmentDTO>(false,"", null);
+                }
                 var enrollment = new Enrollment()
                 {
                     UserId = userId,
@@ -54,6 +58,16 @@ namespace Course.BLL.Services
                 return new Response<EnrollmentDTO>(false, ex.Message, null);
             }
         }
+        //
+        private async Task<bool> checkPrice(Guid courseId)
+        {
+            decimal price = await _cousesRepository.BuildQuery()
+                                                   .FilterById(courseId)
+                                                   .AsSelectorAsync(c => c.Price);
+            if (price == 0)
+                return true; 
+            return false;
+        } 
         public async Task<Response<int>> GetTotalEnrollOfUser(Guid userId)
         {
             try

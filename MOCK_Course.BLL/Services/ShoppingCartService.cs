@@ -28,13 +28,14 @@ namespace Course.BLL.Services
         {
             try
             {
+                if(await _shoppingCartRepository.checkPrice(courseId))
+                    return new Response<CartDTO>(false, "Can't add course with price is 0", null);
                 var cart = new ShoppingCart()
                 {
                     UserId = userId,
                     CourseId = courseId,
                     CreatedAt = DateTime.Now
                 };
-
                 await _shoppingCartRepository.CreateAsync(cart);
                 await _unitOfWork.SaveChangesAsync();
 
@@ -95,7 +96,7 @@ namespace Course.BLL.Services
                 return new Response<CartDTO>(false, ex.Message, null);
             }
         }
-        public async Task<BaseResponse> Remove(Guid Id)
+        public async Task<BaseResponse> Remove(Guid Id, Guid userId)
         {
             try
             {
@@ -104,7 +105,8 @@ namespace Course.BLL.Services
                 {
                     return new BaseResponse(false, null, "can't find cart");
                 }
-
+                if (cart.UserId != userId)
+                    return new Response<BaseResponse>(false, "You are't the owner of the shopping cart", null);
                 _shoppingCartRepository.Remove(cart, true);
                 await _unitOfWork.SaveChangesAsync();
 

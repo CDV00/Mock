@@ -34,6 +34,11 @@ namespace Course.DAL.Queries
             Query = Query.Where(type => type.Course.Id == CourseId);
             return this;
         }
+        public ISavedCoursesQuery FilterByCourseId(Guid ucourseId)
+        {
+            Query = Query.Where(type => type.CourseId == ucourseId);
+            return this;
+        }
         public ISavedCoursesQuery IncludeUser()
         {
             Query.Include(type => type.Course.User).Load();

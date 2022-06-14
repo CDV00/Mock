@@ -17,14 +17,18 @@ namespace Course.BLL.Services
         private readonly ILectureRepository _lessonRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly ILectureService _lectureService;
+        private readonly ILectureCompletionService _lectureCompletionService;
         public SectionService(ISectionRepositoty sectionRepositoty,
             IMapper mapper,
-            IUnitOfWork unitOfWork, ILectureRepository lessonRepository)
+            IUnitOfWork unitOfWork, ILectureRepository lessonRepository, ILectureService lectureService, ILectureCompletionService lectureCompletionService)
         {
             _sectionRepositoty = sectionRepositoty;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _lessonRepository = lessonRepository;
+            _lectureService = lectureService;
+            _lectureCompletionService = lectureCompletionService;
         }
 
         public async Task<Response<int>> GetTotal(Guid courseId)
@@ -136,6 +140,14 @@ namespace Course.BLL.Services
             {
                 return new Response<SectionDTO>(false, ex.Message, null);
             }
+        }
+        //
+        public async Task<float> PercentSectionCompletion(Guid userId, Guid sectionId)
+        {
+            int countTotalLecture = await _lectureService.totalLectureBySection(sectionId);
+            int countTotalLectureComletion = await _lectureCompletionService.totalLectureCompletionBySection(userId, sectionId);
+            float CourseCompletion = countTotalLectureComletion/countTotalLecture*100;
+            return CourseCompletion;
         }
     }
 }
