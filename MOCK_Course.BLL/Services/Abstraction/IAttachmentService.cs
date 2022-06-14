@@ -10,6 +10,6 @@ namespace Course.BLL.Services.Abstraction
     public interface IAttachmentService
     {
         Task<Response<AttachmentDTO>> GetAll();
-        Task<Response<AttachmentDTO>> Add(AttachmentForCreateRequest attachmentForCreateRequest);
+        //Task<Response<AttachmentDTO>> Add(AttachmentForCreateRequest attachmentForCreateRequest);
     }
 }

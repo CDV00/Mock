@@ -15,7 +15,7 @@ namespace Course.BLL.Services
     public class AttachmentService : IAttachmentService
     {
         private readonly IAttachmentRepository _attachmentRepository;
-        private readonly IUploadFileService  _uploadFileService;
+        private readonly IUploadFileService _uploadFileService;
 
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -30,13 +30,13 @@ namespace Course.BLL.Services
             _unitOfWork = unitOfWork;
         }
 
-       
+
         public async Task<Response<AttachmentDTO>> GetAll()
         {
             try
             {
                 var attachment = await _attachmentRepository.BuildQuery()
-                                                     .AsSelectorAsync(x => _mapper.Map<AttachmentDTO>(x));
+                                                            .AsSelectorAsync(x => _mapper.Map<AttachmentDTO>(x));
 
                 return new Response<AttachmentDTO>(true, attachment);
             }
@@ -45,33 +45,31 @@ namespace Course.BLL.Services
                 return new Response<AttachmentDTO>(false, ex.Message, null);
             }
         }
-        public async Task<Response<AttachmentDTO>> Add(AttachmentForCreateRequest attachmentForCreateRequest)
-        {
-            try
-            {
-                var attachment = _mapper.Map<Attachment>(attachmentForCreateRequest);
-                var uploadResponse = await _uploadFileService.UploadFile(attachmentForCreateRequest.FileUrl);
-                if(uploadResponse.IsSuccess == true)
-                {
-                    attachment.FileUrl = uploadResponse.url;
-                }
-                else
-                {
-                    attachment.FileUrl = null;
-                }
-              //uploadResponse.IsSuccess ? uploadResponse.url : null;
+        //public async Task<Response<AttachmentDTO>> Add(AttachmentForCreateRequest attachmentForCreateRequest)
+        //{
+        //    try
+        //    {
+        //        var attachment = _mapper.Map<Attachment>(attachmentForCreateRequest);
+        //        var uploadResponse = await _uploadFileService.UploadFile(attachmentForCreateRequest.FileUrl);
+        //        if (uploadResponse.IsSuccess == true)
+        //        {
+        //            attachment.FileUrl = uploadResponse.url;
+        //        }
+        //        else
+        //        {
+        //            attachment.FileUrl = null;
+        //        }
+        //        //uploadResponse.IsSuccess ? uploadResponse.url : null;
 
-                await _attachmentRepository.CreateAsync(attachment);
+        //        await _attachmentRepository.CreateAsync(attachment);
 
-                await _unitOfWork.SaveChangesAsync();
-                return new Response<AttachmentDTO>(true, _mapper.Map<AttachmentDTO>(attachment));
-            }
-            catch (Exception ex)
-            {
-                return new Response<AttachmentDTO>(false, ex.Message, null);
-            }
-        }
-
-
+        //        await _unitOfWork.SaveChangesAsync();
+        //        return new Response<AttachmentDTO>(true, _mapper.Map<AttachmentDTO>(attachment));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new Response<AttachmentDTO>(false, ex.Message, null);
+        //    }
+        //}
     }
 }

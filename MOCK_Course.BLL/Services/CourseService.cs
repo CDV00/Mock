@@ -82,8 +82,8 @@ namespace Course.BLL.Services
                                                .CountAsync();
 
             await AddRating(courses);
-            
-            
+
+
             var pageList = new PagedList<CourseDTO>(courses, count, courseParameter.PageNumber, courseParameter.PageSize);
 
             return pageList;
@@ -144,7 +144,7 @@ namespace Course.BLL.Services
                                                      .FilterByUserId(userId)
                                                      //.FilterByApprove()
                                                      .IncludeCategory()
-                                                     .IncludeSection()
+                                                     //.IncludeSection()
                                                      //.IncludeOrder()
                                                      .IncludeUser()
                                                      .IncludeDiscount()

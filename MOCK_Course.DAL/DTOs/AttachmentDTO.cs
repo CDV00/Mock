@@ -11,6 +11,6 @@ namespace Course.BLL.DTO
     public class AttachmentDTO : BaseEntity<Guid>
     {
         public Guid AssignmentId { get; set; }
-        public IFormFile FileUrl { get; set; }
+        public string FileUrl { get; set; }
     }
 }

@@ -40,7 +40,7 @@ namespace Course.BLL.Responses
         // isEnroll
 
         public Status Status { get; set; }
-        public int TotalSection { get; set; }
+        //public int TotalSection { get; set; }
         //public int TotalOrder { get; set; }
 
         //public float PercentComplete { get; set; }
