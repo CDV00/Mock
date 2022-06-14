@@ -47,8 +47,9 @@ namespace Course.BLL.Services
 
                 if (check)
                 {
-                    return new Response<SavedCoursesDTO>(true, null);
+                    return new Response<SavedCoursesDTO>(false, "already this course", null);
                 }
+
                 var savecourseResponse = _mapper.Map<SavedCoursesDTO>(savecourse);
                 await _savedCoursesRepository.CreateAsync(savecourse);
                 await _unitOfWork.SaveChangesAsync();
@@ -73,9 +74,10 @@ namespace Course.BLL.Services
                                                             .Skip((savedCoursesParameters.PageNumber - 1) * savedCoursesParameters.PageSize)
                                                             .Take(savedCoursesParameters.PageSize)
                                                             .ToListAsync(c => _mapper.Map<SavedCoursesDTO>(c));
+
             var count = await _savedCoursesRepository.BuildQuery()
-                                                        .FilterByUserId(userId)
-                                                        .CountAsync();
+                                                     .FilterByUserId(userId)
+                                                     .CountAsync();
 
 
             // TODO: use For to add total enroll and rating of course
@@ -90,9 +92,9 @@ namespace Course.BLL.Services
             try
             {
                 var savedCourses = await _savedCoursesRepository.BuildQuery()
-                                                                    .FilterByUserId(userId)
-                                                                    .FilterByCourseId(courseId)
-                                                                    .AsSelectorAsync(c => _mapper.Map<SavedCoursesDTO>(c));
+                                                                .FilterByUserId(userId)
+                                                                .FilterByCourseId(courseId)
+                                                                .AsSelectorAsync(c => _mapper.Map<SavedCoursesDTO>(c));
 
                 if (savedCourses == null)
                     return new BaseResponse(false);
@@ -147,9 +149,9 @@ namespace Course.BLL.Services
         public async Task<bool> IsSavedCourse(Guid userId, Guid courseId)
         {
             bool savedCourse = (await _savedCoursesRepository.BuildQuery()
-                                                        .FilterByUserId(userId)
-                                                        .FilterByCourseId(courseId)
-                                                        .AsSelectorAsync(e => _mapper.Map<SavedCoursesDTO>(e)) == null) ? false : true;
+                                                             .FilterByUserId(userId)
+                                                             .FilterByCourseId(courseId)
+                                                             .AsSelectorAsync(e => _mapper.Map<SavedCoursesDTO>(e)) == null) ? false : true;
 
             return savedCourse;
         }
