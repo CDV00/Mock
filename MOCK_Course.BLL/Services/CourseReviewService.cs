@@ -296,7 +296,7 @@ namespace Course.BLL.Services
                 return new BaseResponse(false, ex.Message, null);
             }
         }
-        public async Task<BaseResponse> CheckUserCourseReview(Guid userId, Guid courseId)
+        public async Task<Response<CourseReviewDTO>> CheckUserCourseReview(Guid userId, Guid courseId)
         {
             try
             {
@@ -306,36 +306,55 @@ namespace Course.BLL.Services
                                                          .FilterByCourseId(courseId)
                                                          .AnyAsync();
 
-                var IsExistCourse = await _enrollmentRepository.BuildQuery()
-                                                               .FilterByCourseId(courseId)
-                                                               .AnyAsync();
-                if (IsExistCourse)
+                var review = await _courseReviewRepository.BuildQuery()
+                                                         .FilterByUserId(userId)
+                                                         .FilterByCourseId(courseId)
+                                                         .IncludeEnrollment()
+                                                         .AsSelectorAsync(c => _mapper.Map<CourseReviewDTO>(c));
+
+                if (check)
                 {
-                    if (check)
-                    {
-                        return new BaseResponse(false, "This user can only review once!", null);
-                    }
-                    return new BaseResponse(true, "This user has not reviewed this course!", null);
+                    return new Response<CourseReviewDTO>(true, review);
                 }
-                return new BaseResponse(false, "Course not found", null);
+                return new Response<CourseReviewDTO>(true, null);
             }
             catch (Exception ex)
             {
-                return new BaseResponse(false, ex.Message, null);
+                return new Response<CourseReviewDTO>(false, ex.Message, null);
             }
         }
         //
         public async Task<PagedList<CourseReviewDTO>> GetAllCourseReviewOfIntructor(RequestParameters requestParameters, Guid userId)
         {
             var courseReview = await _courseReviewRepository.BuildQuery()
-                                                             .FilterCourseByUSer(userId)
-                                                             .IncludeEnrollment()
-                                                             .IncludeUser()
-                                                             .Skip((requestParameters.PageNumber - 1) * requestParameters.PageSize)
-                                                             .Take(requestParameters.PageSize)
-                                                             .ToListAsync(cr => _mapper.Map<CourseReviewDTO>(cr));
+                                                            .FilterCourseByUSer(userId)
+                                                            .IncludeEnrollment()
+                                                            .IncludeUser()
+                                                            .Skip((requestParameters.PageNumber - 1) * requestParameters.PageSize)
+                                                            .Take(requestParameters.PageSize)
+                                                            .ToListAsync(cr => _mapper.Map<CourseReviewDTO>(cr));
+
             var count = courseReview.Count;
             return new PagedList<CourseReviewDTO>(courseReview, count, requestParameters.PageNumber, requestParameters.PageSize);
+        }
+        public async Task<PagedList<CourseReviewDTO>> GetAllCourseReviewOfUser(Guid userId, CourseReviewParameters courseReviewParameters)
+        {
+            var courseReview = await _courseReviewRepository.BuildQuery()
+                                                            .FilterByUserId(userId)
+                                                            .FilterByKeyword(courseReviewParameters.Keyword)
+                                                            .IncludeUser()
+                                                            .ApplySort(courseReviewParameters.Orderby)
+                                                            .Skip((courseReviewParameters.PageNumber - 1) * courseReviewParameters.PageSize)
+                                                            .Take(courseReviewParameters.PageSize)
+                                                            .ToListAsync(c => _mapper.Map<CourseReviewDTO>(c));
+
+            var count = await _courseReviewRepository.BuildQuery()
+                                                     .FilterByUserId(userId)
+                                                     .FilterByKeyword(courseReviewParameters.Keyword)
+                                                     .CountAsync();
+            var pageList = new PagedList<CourseReviewDTO>(courseReview, count, courseReviewParameters.PageNumber, courseReviewParameters.PageSize);
+
+            return pageList;
         }
     }
 }
