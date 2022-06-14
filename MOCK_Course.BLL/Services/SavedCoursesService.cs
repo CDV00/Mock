@@ -85,6 +85,26 @@ namespace Course.BLL.Services
             return pageList;
 
         }
+        public async Task<BaseResponse> IsSaveCourses(Guid userId, Guid courseId)
+        {
+            try
+            {
+                var savedCourses = await _savedCoursesRepository.BuildQuery()
+                                                                    .FilterByUserId(userId)
+                                                                    .FilterByCourseId(courseId)
+                                                                    .AsSelectorAsync(c => _mapper.Map<SavedCoursesDTO>(c));
+
+                if (savedCourses == null)
+                    return new BaseResponse(false);
+
+                return new BaseResponse(true);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse(false, ex.Message, null);
+            }
+        }
+
 
         public async Task<BaseResponse> Remove(Guid Id)
         {

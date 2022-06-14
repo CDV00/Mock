@@ -30,6 +30,8 @@ namespace Course.DAL.Data
         public DbSet<AudioLanguage> AudioLanguages { get; set; }
         public DbSet<CloseCaption> CloseCaptions { get; set; }
         public DbSet<Level> Levels { get; set; }
+        public DbSet<Assignment> Assignments { get; set; }
+        public DbSet<Attachment> Attachments { get; set; }
         #endregion
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
@@ -58,6 +60,9 @@ namespace Course.DAL.Data
             modelBuilder.ApplyConfiguration(new CourseLevelConfiguration());
             modelBuilder.ApplyConfiguration(new DiscountConfiguration());
             modelBuilder.ApplyConfiguration(new SavedCourseConfiguration());
+            modelBuilder.ApplyConfiguration(new AssignmentConfiguration());
+            modelBuilder.ApplyConfiguration(new AttachmentConfiguration());
+
 
             modelBuilder.ConfigTablesOfIdentity();
             //modelBuilder.SeedData();

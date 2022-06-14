@@ -30,6 +30,8 @@ namespace Course.BLL.Extensions
             services.AddScoped<IDiscountRepository, DiscountRepository>();
             services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
             services.AddScoped<ISavedCoursesRepository, SavedCoursesRepository>();
+            services.AddScoped<IAssignmentRepository, AssignmentRepository>();
+            services.AddScoped<IAttachmentRepository, AttachmentRepository>();
         }
         /// <summary>
         /// Configure Services
@@ -54,6 +56,9 @@ namespace Course.BLL.Extensions
             services.AddScoped<IDiscountService, DiscountService>();
             services.AddScoped<ISubscriptionService, SubscriptionService>();
             services.AddScoped<ISavedCoursesService, SavedCoursesService>();
+            services.AddScoped<IAssignmentService, AssignmentService>();
+            services.AddScoped<IAttachmentService, AttachmentService>();
+            services.AddScoped<IUploadFileService, UploadFileService>();
 
         }
     }
