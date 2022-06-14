@@ -50,10 +50,10 @@ namespace Course.DAL.Models
             get { return Sections.Count; }
         }
 
-        public int TotalOrder
-        {
-            get { return Orders.Count; }
-        }
+        //public int TotalOrder
+        //{
+        //    get { return Orders.Count; }
+        //}
 
 
         public ICollection<Section> Sections { get; set; }

@@ -108,6 +108,11 @@ namespace Course.BLL.Services
 
         public async Task<Responses<CourseDTO>> GetAllMyCoures(Guid userId)
         {
+            Func<Courses, CourseDTO> mapper = x =>
+            {
+                return null;
+            };
+
             try
             {
                 var courses = await _cousesRepository.BuildQuery()
@@ -115,7 +120,7 @@ namespace Course.BLL.Services
                                                      //.FilterByApprove()
                                                      .IncludeCategory()
                                                      .IncludeSection()
-                                                     .IncludeOrder()
+                                                     //.IncludeOrder()
                                                      .IncludeUser()
                                                      .IncludeDiscount()
                                                      .ToListAsync(c => _mapper.Map<CourseDTO>(c));

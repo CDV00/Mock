@@ -34,9 +34,9 @@ namespace Course.BLL.Responses
         public float AvgRate { get; set; } = 0;
         public int TotalEnrolls { get; set; } = 0;
         public int TotalTime { get; set; } = 0;
-        public Status status { get; set; }
+        public Status Status { get; set; }
         public int TotalSection { get; set; }
-        public int TotalOrder { get; set; }
+        //public int TotalOrder { get; set; }
 
         public float PercentComplete { get; set; }
         public DateTime CreatedAt { get; set; }
