@@ -24,13 +24,14 @@ namespace Course.BLL.Services
         private readonly ISavedCoursesService _savedCoursesService;
         private readonly ISectionService _sectionService;
 
+        private readonly ILectureService _lectureService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public CourseService(ICousesRepository cousesRepository,
             IMapper mapper,
             IUnitOfWork unitOfWork, IAudioLanguageRepository audioLanguageRepository,
-            ICloseCaptionRepository closeCaptionRepository, ILevelRepository levelRepository, ICourseReviewService courseReviewService, IEnrollmentService enrollmentService, ISavedCoursesService savedCoursesService, ISectionService sectionService)
+            ICloseCaptionRepository closeCaptionRepository, ILevelRepository levelRepository, ICourseReviewService courseReviewService, IEnrollmentService enrollmentService, ISavedCoursesService savedCoursesService, ISectionService sectionService, ILectureService lectureService)
         {
             _cousesRepository = cousesRepository;
             _mapper = mapper;
@@ -42,9 +43,10 @@ namespace Course.BLL.Services
             _enrollmentService = enrollmentService;
             _savedCoursesService = savedCoursesService;
             _sectionService = sectionService;
+            _lectureService = lectureService;
         }
 
-        public async Task<PagedList<CourseDTO>> GetCoursesAsync(CourseParameters courseParameter)
+        public async Task<PagedList<CourseDTO>> GetCoursesAsync(CourseParameters courseParameter, Guid? userId)
         {
             var courses = await _cousesRepository.BuildQuery()
                                                  .IncludeCategory()
@@ -62,10 +64,11 @@ namespace Course.BLL.Services
                                                  .Skip((courseParameter.PageNumber - 1) * courseParameter.PageSize)
                                                  .Take(courseParameter.PageSize)
                                                  .ToListAsync(c => _mapper.Map<CourseDTO>(c));
-            /*if (courseParameter.userId != null)
-            {
 
-            }*/
+            if (userId != null)
+            {
+                await AddLast(courses, userId);
+            }
 
             var count = await _cousesRepository.BuildQuery()
                                                .FilterByKeyword(courseParameter.Keyword)
@@ -85,15 +88,16 @@ namespace Course.BLL.Services
 
             return pageList;
         }
-        private async Task checkisSave(List<CourseDTO> courses, Guid userId)
+
+        //
+        private async Task AddLast(List<CourseDTO> courses, Guid? userId)
         {
             for (var i = 0; i < courses.Count; i++)
             {
-                courses[i].IsSave = await _savedCoursesService.IsSavedCourse(userId,courses[i].Id);
-                courses[i].PercentComplete = _sectionService.Update
+                courses[i].IsSave = await _savedCoursesService.IsSavedCourse(userId.GetValueOrDefault(), courses[i].Id);
+                courses[i].PercentCompletion = await _lectureService.PercentCourseCompletion(userId.GetValueOrDefault(), courses[i].Id);
             }
         }
-        
         private async Task AddRating(List<CourseDTO> courses)
         {
             //for (var i = 0; i < courses.Count; i++)
@@ -106,7 +110,7 @@ namespace Course.BLL.Services
         /// làm thêm phân trang và filter ở đâu
         /// </summary>
         /// <returns></returns>
-        public async Task<Response<CourseDTO>> GetAll()
+        public async Task<Response<CourseDTO>> GetAll(Guid? userId)
         {
             try
             {
@@ -115,7 +119,10 @@ namespace Course.BLL.Services
                                                      .IncludeUser()
                                                      .IncludeEnrolment()
                                                      .AsSelectorAsync(x => _mapper.Map<CourseDTO>(x));
-
+                /*if (userId != null)
+                {
+                    await AddLast(courses, userId);
+                }*/
                 return new Response<CourseDTO>(true, courses);
             }
             catch (Exception ex)

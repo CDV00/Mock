@@ -35,11 +35,11 @@ namespace Course.BLL.Responses
         public int TotalEnrolls { get; set; } = 0;
         public int TotalTime { get; set; } = 0;
         // Percent completion
-        public int PercentCompletion { get; set; }
+        public float PercentCompletion { get; set; }
         // isEnroll
 
 
-        public float PercentComplete { get; set; }
+        //public float PercentComplete { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public bool IsActive { get; set; }

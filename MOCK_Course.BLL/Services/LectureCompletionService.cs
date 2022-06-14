@@ -60,6 +60,21 @@ namespace Course.BLL.Services
                 return new BaseResponse(false, ex.Message, null);
             }
         }
+
         //Lấy tí lệ khóa học đã hoàn thành; tong lecture * 100%/cac khoa hoc hoan thanh
+        public async Task<int> totalLectureCompletionBySection(Guid userId, Guid sectionId)
+        {
+            var count = await _lessonCompletionRepository.BuildQuery()
+                                                         .FilterLectureCompletion(userId, sectionId)
+                                                         .CountAsync();
+            return count;
+        }
+        public async Task<int> totalLectureCompletionBycourse(Guid userId, Guid courseId)
+        {
+            var count = await _lessonCompletionRepository.BuildQuery()
+                                                         .FilterLectureCompletionCourse(userId, courseId)
+                                                         .CountAsync();
+            return count;
+        }
     }
 }

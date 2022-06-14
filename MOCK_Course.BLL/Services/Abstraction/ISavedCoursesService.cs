@@ -14,7 +14,7 @@ namespace Course.BLL.Services.Abstraction
         Task<BaseResponse> RemoveAll(Guid userId);
 
 
-        Task<BaseResponse> Remove(Guid userId);
+        //Task<BaseResponse> Remove(Guid userId);
         Task<bool> IsSavedCourse(Guid userId, Guid courseId);
 
     }

@@ -26,5 +26,11 @@ namespace Course.DAL.Queries
             Query = Query.Where(type => type.SectionId == sectionId);
             return this;
         }
+        public ILectureQuery FilterLecturebyCourse(Guid courseId)
+        {
+            Query.Include(l => l.Section).Load();
+            Query = Query.Where(l => l.Section.CourseId == courseId);
+            return this;
+        }
     }
 }

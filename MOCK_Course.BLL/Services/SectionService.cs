@@ -142,40 +142,12 @@ namespace Course.BLL.Services
             }
         }
         //
-        public async Task<float> PercentCourseCompletion(Guid courseId, Guid userId)
+        public async Task<float> PercentSectionCompletion(Guid userId, Guid sectionId)
         {
-
-            int countCourses = GetTotal(courseId).Result.data;
-            float PercentCourseCompletion = 5/(countCourses * 100)/100;
-
-            /*var IsExistEnrolls = await __enrollmentRepository.BuildQuery()
-                                                            .FilterByCourseId(courseId)
-                                                            .FilterByUserId(userId)
-                                                            .AnyAsync();
-            if (!IsExistEnrolls)
-                return new Response<float>(true, 0);
-
-            var courses = await _courseReviewRepository.BuildQuery()
-                                                       .FilterByCourseId(courseId)
-                                                       .FilterByUserId(userId)
-                                                       .GetAvgRate();*/
-
-            return PercentCourseCompletion;
-
-        }
-        //
-        public async Task<float> PercentSectionCompletion(Guid sectionId)
-        {
-
             int countTotalLecture = await _lectureService.totalLectureBySection(sectionId);
-            var ListLecture = await _lectureService.GetAll(sectionId);
-            //var countTotalLectureCompletion = await _lectureCompletionService.IsCompletion(ListLecture[1].)
-            float CourseCompletion = 5;
-
-            
-
+            int countTotalLectureComletion = await _lectureCompletionService.totalLectureCompletionBySection(userId, sectionId);
+            float CourseCompletion = countTotalLectureComletion/countTotalLecture*100;
             return CourseCompletion;
-
         }
     }
 }

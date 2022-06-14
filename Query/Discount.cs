@@ -33,5 +33,19 @@ namespace Course.Queries
             Query = Query.Where(type => type.Course.UserId == UserId);
             return this;
         }
+
+        public IDiscountQuery FilterByCourseId(Guid courseId)
+        {
+            //Query.Include(c => c.Course).Load();
+            //var course = Query.Where(type => type.Courses.UserId == UserId).ToList();
+
+            Query = Query.Where(type => type.CourseId == courseId);
+            return this;
+        }
+        public IDiscountQuery checkDate(Discount discount)
+        {
+            Query = Query.Where(d => (d.StartDate <= discount.StartDate && d.EndDate >= discount.StartDate)||(d.StartDate <= discount.EndDate && d.EndDate >= discount.EndDate));
+            return this;
+        }
     }
 }

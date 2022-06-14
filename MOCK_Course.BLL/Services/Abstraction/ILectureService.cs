@@ -13,5 +13,6 @@ namespace Course.BLL.Services.Abstraction
         Task<BaseResponse> Remove(Guid idLecture);
         Task<Response<LectureDTO>> Update(Guid id, LectureForUpdateRequest LectureRequest);
         Task<int> totalLectureBySection(Guid sectionId);
+        Task<float> PercentCourseCompletion(Guid userId, Guid courseId);
     }
 }

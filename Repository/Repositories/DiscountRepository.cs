@@ -5,6 +5,7 @@ using Course.DAL.Repositories.Abstraction;
 using Course.Queries;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Repository.Repositories
 {
@@ -21,6 +22,17 @@ namespace Repository.Repositories
             return new DiscountQuery(_context.Discounts.AsQueryable(), _context);
         }
 
+        public async Task<bool> CheckDiscount(Discount discount)
+        {
+            int discounts = await BuildQuery().FilterByCourseId(discount.CourseId)
+                                              .checkDate(discount)
+                                              .CountAsync();
+            if (discounts>0)
+            {
+                return true;
+            }
+            return false;
+        }
         //public async Task<List<DiscountDTO>> GetAllDiscount()
         //{
         //    var discount = await (from discounts in _context.Discounts
@@ -52,6 +64,6 @@ namespace Repository.Repositories
                                 }).ToListAsync();
 
            return discount;
-        } */
-    }
+        }*/
+}
 }
