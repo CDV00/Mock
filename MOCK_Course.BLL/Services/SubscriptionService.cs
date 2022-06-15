@@ -9,6 +9,7 @@ using Course.BLL.Services.Abstraction;
 using Course.BLL.Responses;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
+using Course.BLL.Share.RequestFeatures;
 
 namespace Course.BLL.Services
 {
@@ -126,38 +127,37 @@ namespace Course.BLL.Services
         }
 
 
-        public async Task<Responses<UserDTO>> GetAllSubscriber(Guid userId)
+        public async Task<PagedList<UserDTO>> GetAllSubscriber(Guid userId, SubscriptionParameters subscriptionParameters)
         {
-            try
-            {
-                var user = await _subscriptionRepository.BuildQuery()
-                                                        .FilterByUserId(userId)
-                                                        .IncludeSubcriber()
-                                                        .ToListAsync(u => _mapper.Map<UserDTO>(u.Subscriber));
+            var user = await _subscriptionRepository.BuildQuery()
+                                                    .FilterByUserId(userId)
+                                                    .FilterByUserByKeyword(subscriptionParameters.Keyword)
+                                                    .IncludeSubcriber()
+                                                    .ToListAsync(u => _mapper.Map<UserDTO>(u.Subscriber));
 
-                return new Responses<UserDTO>(true, user);
-            }
-            catch (Exception ex)
-            {
-                return new Responses<UserDTO>(false, ex.Message, null);
-            }
+            var count = await _subscriptionRepository.BuildQuery()
+                                                     .FilterByUserId(userId)
+                                                     .FilterByUserByKeyword(subscriptionParameters.Keyword)
+                                                     .CountAsync();
+
+            return new PagedList<UserDTO>(user, count, subscriptionParameters.PageNumber, subscriptionParameters.PageSize);
         }
 
-        public async Task<Responses<UserDTO>> GetAllInstructor(Guid userId)
+        public async Task<PagedList<UserDTO>> GetAllInstructor(SubscriptionParameters subscriptionParameters, Guid userId)
         {
-            try
-            {
-                var user = await _subscriptionRepository.BuildQuery()
-                                                        .FilterBySubscriberId(userId)
-                                                        .IncludeInstructor()
-                                                        .ToListAsync(u => _mapper.Map<UserDTO>(u.User));
+            var user = await _subscriptionRepository.BuildQuery()
+                                                    .FilterBySubscriberId(userId)
+                                                    .FilterBySubscriber(subscriptionParameters.Keyword)
+                                                    .IncludeInstructor()
+                                                    .ToListAsync(u => _mapper.Map<UserDTO>(u.User));
 
-                return new Responses<UserDTO>(true, user);
-            }
-            catch (Exception ex)
-            {
-                return new Responses<UserDTO>(false, ex.Message, null);
-            }
+            var count = await _subscriptionRepository.BuildQuery()
+                                                     .FilterBySubscriberId(userId)
+                                                     .FilterBySubscriber(subscriptionParameters.Keyword)
+                                                     .CountAsync();
+
+
+            return new PagedList<UserDTO>(user, count, subscriptionParameters.PageNumber, subscriptionParameters.PageSize);
         }
     }
 }

@@ -12,5 +12,13 @@ namespace Course.DAL.Queries
         ISubscriptionQuery IncludeSubcriber();
         ISubscriptionQuery FilterByRole(string RoleName);
         ISubscriptionQuery IncludeInstructor();
+
+        /// <summary>
+        /// filter by full name
+        /// </summary>
+        /// <param name="keyword"></param>
+        /// <returns></returns>
+        ISubscriptionQuery FilterBySubscriber(string keyword);
+        ISubscriptionQuery FilterByUserByKeyword(string keyword);
     }
 }

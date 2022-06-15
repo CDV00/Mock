@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Course.BLL.Responses;
 using CourseAPI.Extensions.ControllerBase;
 using Course.BLL.DTO;
+using Course.BLL.Requests;
+using System.Text.Json;
 
 namespace CourseAPI.Controllers
 {
@@ -103,12 +105,15 @@ namespace CourseAPI.Controllers
         /// <returns></returns>
         [HttpGet("Get-All-Subscriber")]
         [AllowAnonymous]
-        public async Task<ActionResult<UserDTO>> GetAllSubscriber(Guid userId)
+        public async Task<ActionResult<Responses<UserDTO>>> GetAllSubscriber([FromQuery] Guid userId,
+            [FromQuery] SubscriptionParameters subscriptionParameters)
         {
-            var result = await _subscriptionService.GetAllSubscriber(userId);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
-            return Ok(result);
+            var result = await _subscriptionService.GetAllSubscriber(userId, subscriptionParameters);
+
+            Response.Headers.Add("X-Pagination",
+                                JsonSerializer.Serialize(result.MetaData));
+
+            return Ok(new Responses<UserDTO>(true, result));
         }
 
 
@@ -118,14 +123,16 @@ namespace CourseAPI.Controllers
         /// <returns></returns>
         [HttpGet("Get-All-Subscription")]
         [AllowAnonymous]
-        public async Task<ActionResult<UserDTO>> GetAllInstructor()
+        public async Task<ActionResult<Response<UserDTO>>> GetAllInstructor([FromQuery] SubscriptionParameters subscriptionParameters)
         {
             var userId = User.GetUserId();
 
-            var result = await _subscriptionService.GetAllInstructor(userId);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
-            return Ok(result);
+            var result = await _subscriptionService.GetAllInstructor(subscriptionParameters, userId);
+
+            Response.Headers.Add("X-Pagination",
+                                 JsonSerializer.Serialize(result.MetaData));
+
+            return Ok(new Responses<UserDTO>(true, result));
         }
     }
 }
