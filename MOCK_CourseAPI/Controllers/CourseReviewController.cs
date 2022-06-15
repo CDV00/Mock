@@ -214,5 +214,35 @@ namespace CourseAPI.Controllers
             return Ok(new Responses<CourseReviewDTO>(true, result));
         }
 
+        /// <summary>
+        /// Get AVG Rating Of Intructor
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("Get-Avg-Rating-Of-Intructor")]
+        [AllowAnonymous]
+        public async Task<ActionResult<Response<List<float>>>> GetAvgRatingOfIntructor()
+        {
+            var userId = User.GetUserId();
+            var result = await _courseReviewService.GetAVGRatinngOfIntructor(userId);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Get Detail Percent Rating Of Intructor
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("Get-Detail-Rating-Of-intructor")]
+        [AllowAnonymous]
+        public async Task<ActionResult<Response<List<float>>>> GetDetailRatingOfIntructor()
+        {
+            var userId = User.GetUserId();
+            var result = await _courseReviewService.GetDetaiRateOfIntructor(userId);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
     }
 }
