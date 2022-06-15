@@ -358,5 +358,57 @@ namespace Course.BLL.Services
 
             return pageList;
         }
+        public async Task<Response<float>> GetAVGRatinngOfIntructor(Guid userId)
+        {
+            try
+            {
+                var IsExistEnrolls = await _enrollmentRepository.BuildQuery()
+                                                                .FilterByUserId(userId)
+                                                                .AnyAsync();
+                if (!IsExistEnrolls)
+                    return new Response<float>(true, 0);
+
+                var courses = await _courseReviewRepository.BuildQuery()
+                                                           .FilterByUserId(userId)
+                                                           .GetAvgRate();
+
+                return new Response<float>(true, courses);
+            }
+            catch (Exception ex)
+            {
+                return new Response<float>(false, ex.Message, null);
+            }
+        }
+        public async Task<Response<List<float>>> GetDetaiRateOfIntructor(Guid userId)
+        {
+            try
+            {
+                var IsExistEnrolls = await _enrollmentRepository.BuildQuery()
+                                                                .FilterByUserId(userId)
+                                                                .AnyAsync();
+                if (!IsExistEnrolls)
+                    return new Response<List<float>>(true, new() { 0, 0, 0, 0, 0 });
+
+                var sumRating = await _courseReviewRepository.BuildQuery()
+                                                             .FilterByUserId(userId)
+                                                             .CountAsync();
+
+                List<float> rates = new();
+
+                for (var i = 1; i <= 5; i++)
+                {
+                    rates.Add(await _courseReviewRepository.BuildQuery()
+                                                           .FilterByUserId(userId)
+                                                           .FilterByRating(i)
+                                                           .GetAvgRatePercent(sumRating));
+                }
+
+                return new Response<List<float>>(true, rates);
+            }
+            catch (Exception ex)
+            {
+                return new Response<List<float>>(false, ex.Message, null);
+            }
+        }
     }
 }
