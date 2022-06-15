@@ -36,6 +36,7 @@ namespace Course.BLL.Services
                 {
                     return new Response<EnrollmentDTO>(false, "Can't add course with price lower 0", null);
                 }
+
                 var enrollment = new Enrollment()
                 {
                     UserId = userId,

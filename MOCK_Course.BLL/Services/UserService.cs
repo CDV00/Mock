@@ -35,6 +35,10 @@ namespace Course.BLL.Services
             _subscriptionService = subscriptionService;
             _courseService = courseService;
         }
+
+
+        // Get All User(role):Full Name, Birthday,... IsActive
+        // Update User: Id, IsActive
         public async Task<Response<UserDTO>> GetUserProfile(Guid id)
         {
             try

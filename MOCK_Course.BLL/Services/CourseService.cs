@@ -133,16 +133,17 @@ namespace Course.BLL.Services
 
         public async Task<Responses<CourseDTO>> GetAllMyCoures(Guid userId)
         {
-            Func<Courses, CourseDTO> mapper = x =>
-            {
-                return null;
-            };
+            //Func<Courses, CourseDTO> mapper = x =>
+            //{
+            //    //x.RequireLogin = true;
+            //    //return null;
+            //};
 
             try
             {
                 var courses = await _cousesRepository.BuildQuery()
                                                      .FilterByUserId(userId)
-                                                     //.FilterByApprove()
+                                                     .FilterByApprove()
                                                      .IncludeCategory()
                                                      //.IncludeSection()
                                                      //.IncludeOrder()
@@ -158,6 +159,8 @@ namespace Course.BLL.Services
                 return new Responses<CourseDTO>(false, ex.Message, null);
             }
         }
+
+        // Upcoming courses: Review
 
         public async Task<Responses<CourseDTO>> GetAllMyPurchase(Guid userId)
         {
@@ -353,6 +356,8 @@ namespace Course.BLL.Services
             }
         }
 
+        // Upload status course: Id course, status
+
         public async Task<Response<CourseDTO>> Update(Guid id, CourseForUpdateRequest courseRequest, Guid userId)
         {
             try
@@ -370,7 +375,7 @@ namespace Course.BLL.Services
                     return new Response<CourseDTO>(false, "can't find course", null);
                 }
                 if (course.UserId != userId)
-                    return new Response<CourseDTO>(false, "You are't the owner of the course", null);
+                    return new Response<CourseDTO>(false, "You aren't the owner of the course", null);
 
                 AddNewSection(courseRequest);
                 _mapper.Map(courseRequest, course);

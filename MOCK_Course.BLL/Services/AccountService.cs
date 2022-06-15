@@ -62,10 +62,9 @@ namespace Course.BLL.Services
 
                 _mapper.Map(_user, _userResponse);
                 var token = await CreateToken(populateExp: true);
+                if (token == null)
+                    return new Response<LoginDTO>(false, "Authentication Error. User don't have any role, please create new account!", null);
 
-                //var userResponse = _mapper.Map<UserResponse>(_user);
-
-                //var roles = await _userManager.GetRolesAsync(_user);
 
                 return new Response<LoginDTO>(true, new LoginDTO(token, _userResponse));
             }
@@ -169,6 +168,9 @@ namespace Course.BLL.Services
             var signingCredentials = GetSigningCredentials();
 
             var claims = await GetClaims();
+            if (claims == null)
+                return null;
+
             var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
 
             // reset token
@@ -253,6 +255,11 @@ namespace Course.BLL.Services
                 new Claim(ClaimTypes.Name, _user.UserName),
             };
             var roles = await _userManager.GetRolesAsync(_user);
+
+            if (roles.Count == 0 || roles == null)
+            {
+                return null;
+            }
             _userResponse.Role = roles[0].ToString();
             foreach (var role in roles)
             {

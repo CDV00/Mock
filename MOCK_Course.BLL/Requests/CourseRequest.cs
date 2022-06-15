@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Course.DAL.Models;
+using System;
 using System.Collections.Generic;
 
 namespace Course.BLL.Requests
@@ -62,6 +63,7 @@ namespace Course.BLL.Requests
         public bool IsFree { get; set; }
 
         public decimal Price { get; set; }
+        public Status Status { get; set; }
 
         public Guid CategoryId { get; set; }
         public IList<Guid> AudioLanguageIds { get; set; }
