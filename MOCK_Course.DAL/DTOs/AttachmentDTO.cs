@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Course.BLL.DTO
+namespace Course.DAL.DTOs
 {
     public class AttachmentDTO : BaseEntity<Guid>
     {

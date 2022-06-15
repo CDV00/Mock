@@ -19,8 +19,8 @@ namespace Course.BLL.Requests
     {
         public string Title { get; set; }
         public string Content { get; set; }
-        //public IList<AttachmentRequest> Attachments { get; set; }
-        public Guid SectionId { get; set; }
+        public IList<AttachmentForCreateRequest> Attachments { get; set; }
+        //public Guid SectionId { get; set; }
         public int Index { get; set; }
     }
 

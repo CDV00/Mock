@@ -22,7 +22,7 @@ namespace Course.BLL.Services
             _configuration = configuration;
         }
 
-        /*public async Task<DownloadResponse> DownloadFile(string fileName)
+        public async Task<DownloadResponse> DownloadFile(string fileName)
         {
 
             try
@@ -49,7 +49,7 @@ namespace Course.BLL.Services
                     Message = ex.Message
                 };
             }
-        }*/
+        }
 
         public async Task<UploadResponse> UploadFile(IFormFile file)
         {
@@ -75,7 +75,7 @@ namespace Course.BLL.Services
             }
         }
 
-        /*public async Task<UploadResponse> UploadGoogleDrive(IFormFile file)
+        public async Task<UploadResponse> UploadGoogleDrive(IFormFile file)
         {
             try
             {
@@ -109,7 +109,7 @@ namespace Course.BLL.Services
                 };
             }
 
-        }*/
+        }
 
         public async Task<UploadResponse> UploadImage(IFormFile imageFile)
         {

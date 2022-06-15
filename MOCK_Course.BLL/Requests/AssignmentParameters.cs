@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Course.BLL.Requests
 {
-    public class AssignmentParameters : RequestParameters
+    public class QuizParameters : RequestParameters
     {
         public string Keyword { get; set; }
         public string Orderby { get; set; }

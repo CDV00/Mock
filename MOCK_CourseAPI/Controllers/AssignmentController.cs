@@ -10,6 +10,7 @@ using CourseAPI.Extensions.ControllerBase;
 using System.Collections.Generic;
 using System.Text.Json;
 using Course.BLL.Share.RequestFeatures;
+using Course.DAL.DTOs;
 
 namespace CourseAPI.Controllers
 {
