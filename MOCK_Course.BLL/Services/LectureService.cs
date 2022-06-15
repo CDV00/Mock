@@ -25,7 +25,7 @@ namespace Course.BLL.Services
             _lectureRepositoty = lectureRepositoty;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
-             _lectureCompletionService = lectureCompletionService;
+            _lectureCompletionService = lectureCompletionService;
         }
         public async Task<Response<LectureDTO>> Add(LectureForCreateRequest LectureRequest)
         {
@@ -110,7 +110,7 @@ namespace Course.BLL.Services
         }
         public async Task<int> totalLectureBySection(Guid sectionId)
         {
-            var count =await _lectureRepositoty.BuildQuery()
+            var count = await _lectureRepositoty.BuildQuery()
                                                .FilterBySectionId(sectionId)
                                                .CountAsync();
             return count;
@@ -118,8 +118,8 @@ namespace Course.BLL.Services
         private async Task<int> totalLectureByCourse(Guid courseId)
         {
             var count = await _lectureRepositoty.BuildQuery()
-                                               .FilterLecturebyCourse(courseId)
-                                               .CountAsync();
+                                                .FilterLecturebyCourse(courseId)
+                                                .CountAsync();
             return count;
         }
         //
@@ -127,8 +127,12 @@ namespace Course.BLL.Services
         {
 
             int countCourses = await totalLectureByCourse(courseId);
+            if (countCourses == 0)
+                return 0;
             float countTotalCompletionLeture = await _lectureCompletionService.TotalLectureCompletionBycourse(userId, courseId);
-            float PercentCourseCompletion = countTotalCompletionLeture / countCourses*100;
+            if (countTotalCompletionLeture == 0)
+                return 0;
+            float PercentCourseCompletion = countTotalCompletionLeture / countCourses * 100;
 
             return PercentCourseCompletion;
 

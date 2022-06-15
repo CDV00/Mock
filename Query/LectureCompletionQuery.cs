@@ -29,7 +29,7 @@ namespace Query
         }
         public ILectureCompletionQuery FilterLectureCompletionCourse(Guid userId, Guid courseId)
         {
-            Query.Include(lc => lc.Lecture).ThenInclude(l => l.Section).Load();
+            //Query.Include(lc => lc.Lecture).ThenInclude(l => l.Section).Load();
             Query = Query.Where(lc => lc.UserId == userId && lc.Lecture.Section.CourseId == courseId);
             return this;
         }

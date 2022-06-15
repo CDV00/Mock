@@ -81,12 +81,13 @@ namespace Course.BLL.Services
                                                .FilterByRating(courseParameter.Rate)
                                                .CountAsync();
 
-            await AddRating(courses);
+            //await AddRating(courses);
 
 
             var pageList = new PagedList<CourseDTO>(courses, count, courseParameter.PageNumber, courseParameter.PageSize);
 
             return pageList;
+
         }
 
         //
@@ -95,6 +96,7 @@ namespace Course.BLL.Services
             for (var i = 0; i < courses.Count; i++)
             {
                 courses[i].IsSave = await _savedCoursesService.IsSavedCourse(userId.GetValueOrDefault(), courses[i].Id);
+
                 courses[i].PercentCompletion = await _lectureService.PercentCourseCompletion(userId.GetValueOrDefault(), courses[i].Id);
             }
         }
@@ -119,10 +121,10 @@ namespace Course.BLL.Services
                                                      .IncludeUser()
                                                      .IncludeEnrolment()
                                                      .AsSelectorAsync(x => _mapper.Map<CourseDTO>(x));
-                /*if (userId != null)
+                if (userId != null)
                 {
-                    await AddLast(courses, userId);
-                }*/
+                    //await AddLast(courses, userId);
+                }
                 return new Response<CourseDTO>(true, courses);
             }
             catch (Exception ex)
