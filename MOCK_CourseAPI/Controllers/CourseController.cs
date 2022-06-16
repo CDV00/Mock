@@ -165,8 +165,25 @@ namespace CourseAPI.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
+        [HttpGet("Get-all-up-coming-Course")]
+        public async Task<ActionResult<Responses<CourseDTO>>> GetUpcomingCourse()
+        {
+            var userId = User.GetUserId();
+            var result = await _coursesService.UpcomingCourse(userId);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
 
-
+        [HttpPut("update-status")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<Response<CourseDTO>>> UpdateStatus(CourseStatusUpdateRequest courseStatusUpdateRequest)
+        {
+            var result = await _coursesService.UpdateStatus(courseStatusUpdateRequest);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
 
 
 

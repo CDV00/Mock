@@ -32,5 +32,6 @@ namespace Course.DAL.Queries
         ICourseQuery FilterByApprove();
         ICourseQuery IncludeOrder();
         ICourseQuery FilterByIds(List<Guid> Ids);
+        ICourseQuery FilterStatus(Status status);
     }
 }

@@ -38,7 +38,37 @@ namespace Course.BLL.Services
 
 
         // Get All User(role):Full Name, Birthday,... IsActive
+        public async Task<Responses<UserDTO>> GetAllUserByRole(String role)
+        {
+            try
+            {
+                var users = await _userRepository.BuildQuery()
+                                                 .FilterByRole(role)
+                                                 .ToListAsync(u=> _mapper.Map<UserDTO>(u));
+
+                return new Responses<UserDTO>(true, users);
+            }
+            catch(Exception ex)
+            {
+                return new Responses<UserDTO>(false, ex.Message, null);
+            }
+        }
         // Update User: Id, IsActive
+        public async Task<BaseResponse> UpdateActive(UpdateUserActiveRequest updateUserActiveRequest)
+        {
+            try
+            {
+                var user = await _userManager.FindByIdAsync(updateUserActiveRequest.Id.ToString());
+                user.IsActive = updateUserActiveRequest.IsActive;
+                await _userManager.UpdateAsync(user);
+                return new BaseResponse(true);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse(false, ex.Message, null);
+            }
+        }
+        //
         public async Task<Response<UserDTO>> GetUserProfile(Guid id)
         {
             try
@@ -83,7 +113,6 @@ namespace Course.BLL.Services
                 return new Responses<UserDTO>(false, ex.Message, null);
             }
         }
-
 
         public async Task<Response<UserDTO>> UpdateProfile(Guid id, UpdateProfileRequest updateProfileRequest)
         {
