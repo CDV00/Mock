@@ -32,6 +32,11 @@ namespace Course.DAL.Data
         public DbSet<Level> Levels { get; set; }
         public DbSet<Assignment> Assignments { get; set; }
         public DbSet<Attachment> Attachments { get; set; }
+
+        public DbSet<Quiz> Quizs { get; set; }
+        public DbSet<Question> Questions { get; set; }
+        public DbSet<QuizOption> QuizOptions { get; set; }
+        public DbSet<QuizSetting> QuizSettings { get; set; }
         #endregion
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)

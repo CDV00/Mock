@@ -13,7 +13,6 @@ namespace Course.BLL.Requests
     }
     public class AttachmentForCreateRequest
     {
-        public Guid AssignmentId { get; set; }
-        public IFormFile FileUrl { get; set; }
+        public string FileUrl { get; set; }
     }
 }

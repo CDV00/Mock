@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
 using Course.BLL.Share.RequestFeatures;
+using Course.DAL.DTOs;
 
 namespace Course.BLL.Services
 {
@@ -33,7 +34,7 @@ namespace Course.BLL.Services
             _mapper = mapper;
         }
 
-
+        //load attacment
         // Todo: filter and paging
         /// <summary>
         /// Get all course review
@@ -58,22 +59,26 @@ namespace Course.BLL.Services
 
             return pageList;
         }
-        public async Task<Response<AssignmentDTO>> Add(AssignmentForCreateRequest assignmentForCreateRequest)
-        {
-            try
-            {
-                var assignment = _mapper.Map<Assignment>(assignmentForCreateRequest);
-                assignment.CreatedAt = DateTime.Now;
-                await _assignmentRepository.CreateAsync(assignment);
+        ////public async Task<Response<AssignmentDTO>> Add(AssignmentForCreateRequest assignmentForCreateRequest)
+        ////{
+        ////    try
+        ////    {
+        ////        var assignment = _mapper.Map<Assignment>(assignmentForCreateRequest);
+        ////        assignment.CreatedAt = DateTime.Now;
+        ////        await _assignmentRepository.CreateAsync(assignment);
 
-                await _unitOfWork.SaveChangesAsync();
-                return new Response<AssignmentDTO>(true, _mapper.Map<AssignmentDTO>(assignment));
-            }
-            catch (Exception ex)
-            {
-                return new Response<AssignmentDTO>(false, ex.Message, null);
-            }
-        }
+        ////        await _unitOfWork.SaveChangesAsync();
+        ////        return new Response<AssignmentDTO>(true, _mapper.Map<AssignmentDTO>(assignment));
+        ////    }
+        ////    catch (Exception ex)
+        ////    {
+        ////        return new Response<AssignmentDTO>(false, ex.Message, null);
+        ////    }
+        ////}
+        ///
+        
+        //Quiz; Get all theo sectionid 
+
 
 
     }

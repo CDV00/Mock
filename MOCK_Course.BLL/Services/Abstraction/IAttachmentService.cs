@@ -4,6 +4,7 @@ using Course.BLL.Requests;
 using System;
 using Course.BLL.Responses;
 using Course.BLL.Share.RequestFeatures;
+using Course.DAL.DTOs;
 
 namespace Course.BLL.Services.Abstraction
 {
