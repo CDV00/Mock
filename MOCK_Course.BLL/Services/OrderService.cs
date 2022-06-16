@@ -18,7 +18,7 @@ namespace Course.BLL.Services
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository _orderRepository;
-        private readonly ICousesRepository _cousesRepository;
+        private readonly ICoursesRepository _cousesRepository;
         private readonly IShoppingCartRepository _shoppingCartRepository;
         private readonly IOrderItemRepository _orderItemRepository;
         private readonly IDiscountRepository _discountRepository;
@@ -31,7 +31,7 @@ namespace Course.BLL.Services
         public OrderService(IOrderRepository orderRepository,
             IMapper mapper,
             IUnitOfWork unitOfWork,
-            ICousesRepository cousesRepository,
+            ICoursesRepository cousesRepository,
             IShoppingCartRepository shoppingCartRepository,
             IOrderItemRepository orderItemRepository,
             IPaymentService paymentService,

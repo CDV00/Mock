@@ -17,7 +17,7 @@ namespace Course.BLL.Extensions
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
-            services.AddScoped<ICousesRepository, CousesRepository>();
+            services.AddScoped<ICoursesRepository, CoursesRepository>();
             services.AddScoped<ISectionRepositoty, SectionRepositoty>();
             services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
             services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
@@ -32,6 +32,10 @@ namespace Course.BLL.Extensions
             services.AddScoped<ISavedCoursesRepository, SavedCoursesRepository>();
             services.AddScoped<IAssignmentRepository, AssignmentRepository>();
             services.AddScoped<IAttachmentRepository, AttachmentRepository>();
+            services.AddScoped<IQuestionRepository, QuestionRepository>();
+            services.AddScoped<IQuizRepository, QuizRepository>();
+            services.AddScoped<IQuizOptionRepository, QuizOptionRepository>();
+            services.AddScoped<IQuizSettingRepository, QuizSettingRepository>();
         }
         /// <summary>
         /// Configure Services
@@ -59,6 +63,7 @@ namespace Course.BLL.Extensions
             services.AddScoped<IAssignmentService, AssignmentService>();
             services.AddScoped<IAttachmentService, AttachmentService>();
             services.AddScoped<IUploadFileService, UploadFileService>();
+            services.AddScoped<IQuizService,QuizService>();
 
         }
     }

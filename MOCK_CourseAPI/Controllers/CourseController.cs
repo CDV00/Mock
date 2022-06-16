@@ -52,7 +52,7 @@ namespace CourseAPI.Controllers
         public async Task<ActionResult<Responses<CourseDTO>>> GetAll()
         {
 
-            Guid? userId = (User.GetUserId() == Guid.Empty)? null: User.GetUserId();
+            Guid? userId = (User.GetUserId() == Guid.Empty) ? null : User.GetUserId();
             var result = await _coursesService.GetAll(userId);
             if (result.IsSuccess == false)
                 return BadRequest(result);

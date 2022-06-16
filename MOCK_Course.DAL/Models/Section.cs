@@ -12,6 +12,7 @@ namespace Course.DAL.Models
         public Courses Courses { get; set; }
 
         public List<Lecture> Lectures { get; set; }
-        public ICollection<Assignment> Assignments { get; set; }
+        public List<Assignment> Assignments { get; set; }
+        public List<Quiz> Quizzes { set; get; }
     }
 }

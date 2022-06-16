@@ -162,14 +162,14 @@ namespace CourseAPI.Extensions.ServiceExtensions
             });
         }
         public static void ConfigureLoggerService(this IServiceCollection services) =>
-            services.AddScoped<ILoggerManager, LoggerManager>();
+            services.AddSingleton<ILoggerManager, LoggerManager>();
         public static void ConfigureRepositories(this IServiceCollection services)
         {
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
-            services.AddScoped<ICousesRepository, CousesRepository>();
+            services.AddScoped<ICoursesRepository, CoursesRepository>();
             services.AddScoped<ISectionRepositoty, SectionRepositoty>();
             services.AddScoped<ILectureRepository, LectureRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
@@ -194,6 +194,10 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IAssignmentRepository, AssignmentRepository>();
             services.AddScoped<IAttachmentRepository, AttachmentRepository>();
+            services.AddScoped<IQuestionRepository, QuestionRepository>();
+            services.AddScoped<IQuizRepository, QuizRepository>();
+            services.AddScoped<IQuizOptionRepository, QuizOptionRepository>();
+            services.AddScoped<IQuizSettingRepository, QuizSettingRepository>();
         }
         /// <summary>
         /// Configure Services
@@ -234,6 +238,7 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IAssignmentService, AssignmentService>();
             services.AddScoped<IAttachmentService, AttachmentService>();
             services.AddScoped<IUploadFileService, UploadFileService>();
+            services.AddScoped<IQuizService, QuizService>();
         }
         public static void ConfigureUpload(this IServiceCollection services)
         {

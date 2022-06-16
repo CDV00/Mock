@@ -27,6 +27,15 @@ namespace Course.DAL.Queries
             return this;
         }
 
+        public ISubscriptionQuery FilterByUserByKeyword(string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(keyword))
+                return this;
+            Query = Query.Where(type => type.User.Fullname.Contains(keyword));
+            return this;
+        }
+
+
         //public ISubscriptionQuery FilterByRole(Guid UserId)
         //{
         //    Query.Where(type => type.User);
@@ -48,6 +57,15 @@ namespace Course.DAL.Queries
         public ISubscriptionQuery FilterBySubscriberId(Guid subscriberId)
         {
             Query = Query.Where(type => type.SubscriberId == subscriberId);
+            return this;
+        }
+
+       
+        public ISubscriptionQuery FilterBySubscriber(string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(keyword))
+                return this;
+            Query = Query.Where(type => type.Subscriber.Fullname.Contains(keyword));
             return this;
         }
 

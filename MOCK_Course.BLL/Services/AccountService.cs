@@ -53,32 +53,17 @@ namespace Course.BLL.Services
         }
         public async Task<Response<LoginDTO>> Login(LoginRequest loginRequest)
         {
-            try
+            if (!await ValidateUser(loginRequest))
             {
-                var user = await _userManager.FindByEmailAsync(loginRequest.Email);
-                if (user is null)
-                    return new Response<LoginDTO>(false, "Authentication failed. Unregistered email.", null);
-                if (user.IsActive == false)
-                {
-                    return new Response<LoginDTO>(false, "Authentication failed. You don't have enough access.", "403");
-                }
-                if (!await ValidateUser(loginRequest))
-                {
-                    return new Response<LoginDTO>(false, "Authentication failed. Wrong user name or password.", null);
-                }
-
-                _mapper.Map(_user, _userResponse);
-                var token = await CreateToken(populateExp: true);
-                if (token == null)
-                    return new Response<LoginDTO>(false, "Authentication Error. User don't have any role, please create new account!", null);
-
-
-                return new Response<LoginDTO>(true, new LoginDTO(token, _userResponse));
+                return new Response<LoginDTO>(false, "Authentication failed. Wrong user name or password.", null);
             }
-            catch (Exception ex)
-            {
-                return new Response<LoginDTO>(false, ex.Message, null);
-            }
+
+            _mapper.Map(_user, _userResponse);
+            var token = await CreateToken(populateExp: true);
+            if (token == null)
+                return new Response<LoginDTO>(false, "Authentication Error. User don't have any role, please create new account!", null);
+
+            return new Response<LoginDTO>(true, new LoginDTO(token, _userResponse));
         }
 
         /// <summary>

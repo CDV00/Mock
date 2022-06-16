@@ -20,11 +20,11 @@ namespace Repository.Repositories
         /// <summary>
         /// Dispose
         /// </summary>
-        public void Dispose()
-        {
-            GC.SuppressFinalize(this);
-            _context.Dispose();
-        }
+        //public void Dispose()
+        //{
+        //    GC.SuppressFinalize(this);
+        //    _context.Dispose();
+        //}
 
         /// <summary>
         /// Save all changes async

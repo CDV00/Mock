@@ -15,7 +15,7 @@ namespace Course.BLL.Services
 {
     public class CourseService : ICourseService
     {
-        private readonly ICousesRepository _cousesRepository;
+        private readonly ICoursesRepository _cousesRepository;
         private readonly IAudioLanguageRepository _audioLanguageRepository;
         private readonly ICloseCaptionRepository _closeCaptionRepository;
         private readonly ILevelRepository _levelRepository;
@@ -28,7 +28,7 @@ namespace Course.BLL.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public CourseService(ICousesRepository cousesRepository,
+        public CourseService(ICoursesRepository cousesRepository,
             IMapper mapper,
             IUnitOfWork unitOfWork, IAudioLanguageRepository audioLanguageRepository,
             ICloseCaptionRepository closeCaptionRepository, ILevelRepository levelRepository, ICourseReviewService courseReviewService, IEnrollmentService enrollmentService, ISavedCoursesService savedCoursesService, ISectionService sectionService, ILectureService lectureService)
@@ -65,10 +65,10 @@ namespace Course.BLL.Services
                                                  .Take(courseParameter.PageSize)
                                                  .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 
-            if (userId != null)
-            {
-                await AddLast(courses, userId);
-            }
+            //if (userId != null)
+            //{
+            //    await AddLast(courses, userId);
+            //}
 
             var count = await _cousesRepository.BuildQuery()
                                                .FilterByKeyword(courseParameter.Keyword)
@@ -81,7 +81,7 @@ namespace Course.BLL.Services
                                                .FilterByRating(courseParameter.Rate)
                                                .CountAsync();
 
-            await AddRating(courses);
+            //await AddRating(courses);
 
 
             var pageList = new PagedList<CourseDTO>(courses, count, courseParameter.PageNumber, courseParameter.PageSize);
@@ -95,6 +95,7 @@ namespace Course.BLL.Services
             for (var i = 0; i < courses.Count; i++)
             {
                 courses[i].IsSave = await _savedCoursesService.IsSavedCourse(userId.GetValueOrDefault(), courses[i].Id);
+
                 courses[i].PercentCompletion = await _lectureService.PercentCourseCompletion(userId.GetValueOrDefault(), courses[i].Id);
             }
         }
@@ -119,10 +120,10 @@ namespace Course.BLL.Services
                                                      .IncludeUser()
                                                      .IncludeEnrolment()
                                                      .AsSelectorAsync(x => _mapper.Map<CourseDTO>(x));
-                /*if (userId != null)
+                if (userId != null)
                 {
-                    await AddLast(courses, userId);
-                }*/
+                    //await AddLast(courses, userId);
+                }
                 return new Response<CourseDTO>(true, courses);
             }
             catch (Exception ex)

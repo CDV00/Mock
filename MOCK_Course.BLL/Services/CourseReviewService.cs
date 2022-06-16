@@ -14,7 +14,7 @@ namespace Course.BLL.Services
 {
     public class CourseReviewService : ICourseReviewService
     {
-        private readonly ICousesRepository _cousesRepository;
+        private readonly ICoursesRepository _cousesRepository;
         private readonly ICourseReviewRepository _courseReviewRepository;
         private readonly IEnrollmentRepository _enrollmentRepository;
         private readonly IUnitOfWork _unitOfWork;
@@ -26,7 +26,7 @@ namespace Course.BLL.Services
         /// <param name="courseReviewRepository"></param>
         /// <param name="unitOfWork"></param>
         /// <param name="mapper"></param>
-        public CourseReviewService(ICourseReviewRepository courseReviewRepository, ICousesRepository cousesRepository, IEnrollmentRepository enrollmentRepository, IUnitOfWork unitOfWork, IMapper mapper)
+        public CourseReviewService(ICourseReviewRepository courseReviewRepository, ICoursesRepository cousesRepository, IEnrollmentRepository enrollmentRepository, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _courseReviewRepository = courseReviewRepository;
             _unitOfWork = unitOfWork;
@@ -228,10 +228,15 @@ namespace Course.BLL.Services
                 if (!IsExistEnrolls)
                     return new Response<float>(true, 0);
 
+
                 var courses = await _courseReviewRepository.BuildQuery()
                                                            .FilterByCourseId(courseId)
                                                            .FilterByUserId(userId)
                                                            .GetAvgRate();
+                if (courses != 0)
+                {
+                    return new Response<float>(true, 0);
+                }
 
                 return new Response<float>(true, courses);
             }
@@ -255,6 +260,11 @@ namespace Course.BLL.Services
                                                              .FilterByCourseId(courseId)
                                                              .FilterByUserId(userId)
                                                              .CountAsync();
+
+                if (sumRating == 0)
+                {
+                    return new Response<List<float>>(true, new() { 0, 0, 0, 0, 0 });
+                }
 
                 List<float> rates = new();
 
@@ -358,7 +368,7 @@ namespace Course.BLL.Services
 
             return pageList;
         }
-        public async Task<Response<float>> GetAVGRatinngOfIntructor(Guid userId)
+        public async Task<Response<float>> GetAVGRatinngOfIntructor(Guid? userId)
         {
             try
             {
@@ -371,7 +381,10 @@ namespace Course.BLL.Services
                 var courses = await _courseReviewRepository.BuildQuery()
                                                            .FilterByUserId(userId)
                                                            .GetAvgRate();
-
+                if(courses != 0)
+                {
+                    return new Response<float>(true, 0);
+                }    
                 return new Response<float>(true, courses);
             }
             catch (Exception ex)
@@ -379,7 +392,7 @@ namespace Course.BLL.Services
                 return new Response<float>(false, ex.Message, null);
             }
         }
-        public async Task<Response<List<float>>> GetDetaiRateOfIntructor(Guid userId)
+        public async Task<Response<List<float>>> GetDetaiRateOfIntructor(Guid? userId)
         {
             try
             {
@@ -392,7 +405,12 @@ namespace Course.BLL.Services
                 var sumRating = await _courseReviewRepository.BuildQuery()
                                                              .FilterByUserId(userId)
                                                              .CountAsync();
-
+                
+                if(sumRating == 0)
+                {
+                    return new Response<List<float>>(true, new() { 0, 0, 0, 0, 0 });
+                }
+                
                 List<float> rates = new();
 
                 for (var i = 1; i <= 5; i++)

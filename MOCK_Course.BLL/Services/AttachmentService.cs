@@ -9,6 +9,7 @@ using Course.BLL.Responses;
 using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
 using Course.BLL.Share.RequestFeatures;
+using Course.DAL.DTOs;
 
 namespace Course.BLL.Services
 {

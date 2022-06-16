@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Course.DAL.DTOs;
+using System;
 using System.Collections.Generic;
 
 namespace Course.BLL.Responses
@@ -13,6 +14,8 @@ namespace Course.BLL.Responses
 
         public bool IsDeleted { get; set; }
         public bool IsNew { get; set; } = false;
+        public ICollection<AssignmentDTO> Assignments { set; get; }
+        public ICollection<QuizDTO> Quizzes { set; get; }
     }
 
 

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Course.BLL.Requests;
 using Course.BLL.DTO;
 using Course.BLL.Responses;
+using Course.BLL.Share.RequestFeatures;
 
 namespace Course.BLL.Services.Abstraction
 {
@@ -12,9 +13,8 @@ namespace Course.BLL.Services.Abstraction
         Task<BaseResponse> Delete(Guid userId, Guid subscripberId);
         Task<Response<int>> GetTotalSubscriber(Guid userId);
         Task<Response<SubscriptionDTO>> IsSubscription(Guid userId, Guid subscriberId);
-        Task<Responses<UserDTO>> GetAllSubscriber(Guid userId);
+        Task<PagedList<UserDTO>> GetAllSubscriber(Guid userId, SubscriptionParameters subscriptionParameters);
         Task<Response<int>> GetTotalInstructor(Guid subscriberId);
-        Task<Responses<UserDTO>> GetAllInstructor(Guid userId);
-        //Task<Responses<UserDTO>> GetPopularInstructor();
+        Task<PagedList<UserDTO>> GetAllInstructor(SubscriptionParameters subscriptionParameters,Guid userId);
     }
 }

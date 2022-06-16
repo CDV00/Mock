@@ -28,7 +28,7 @@ namespace Course.DAL.Queries
         }
         public ILectureQuery FilterLecturebyCourse(Guid courseId)
         {
-            Query.Include(l => l.Section).Load();
+            //Query.Include(l => l.Section).Load();
             Query = Query.Where(l => l.Section.CourseId == courseId);
             return this;
         }
