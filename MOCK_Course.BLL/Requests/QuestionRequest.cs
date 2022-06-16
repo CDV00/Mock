@@ -23,6 +23,7 @@ namespace Course.BLL.Requests
         public byte Score { get; set; }
         public string Type { get; set; }
         public IList<QuizOptionCreateForRequest> Options { get; set; }
+        public string TextAnswer { get; set; }
 
     }
 

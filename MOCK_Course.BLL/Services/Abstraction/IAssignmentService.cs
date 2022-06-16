@@ -10,7 +10,7 @@ namespace Course.BLL.Services.Abstraction
 {
     public interface IAssignmentService
     {
-        Task<PagedList<AssignmentDTO>> GetAll(Guid sectionId, AssignmentParameters assignmentParameters);
+        Task<PagedList<AssignmentDTO>> GetAll(AssignmentParameters assignmentParameters);
         //Task<Response<AssignmentDTO>> Add(AssignmentForCreateRequest assignmentForCreateRequest);
     }
 }

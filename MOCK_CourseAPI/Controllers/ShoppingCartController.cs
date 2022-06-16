@@ -56,9 +56,9 @@ namespace CourseAPI.Controllers
         /// <param name="cartUpdateRequest"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<ActionResult<Response<CartDTO>>> Update(Guid id, CartUpdateRequest cartUpdateRequest)
+        public async Task<ActionResult<Response<CartDTO>>> Update(Guid courseId, CartUpdateRequest cartUpdateRequest)
         {
-            var result = await _shoppingCartService.Update(id, cartUpdateRequest);
+            var result = await _shoppingCartService.Update(courseId, cartUpdateRequest);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
@@ -72,10 +72,10 @@ namespace CourseAPI.Controllers
         /// <param name="Id"></param>
         /// <returns></returns>
         [HttpDelete()]
-        public async Task<ActionResult<BaseResponse>> Remove(Guid Id)
+        public async Task<ActionResult<BaseResponse>> Remove(Guid courseId)
         {
             Guid userId = User.GetUserId();
-            var result = await _shoppingCartService.Remove(Id, userId);
+            var result = await _shoppingCartService.Remove(courseId, userId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);

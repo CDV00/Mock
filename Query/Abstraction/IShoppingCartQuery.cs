@@ -1,6 +1,7 @@
 ﻿using Course.DAL.Models;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Course.DAL.Queries.Abstraction
 {
@@ -13,5 +14,6 @@ namespace Course.DAL.Queries.Abstraction
         IShoppingCartQuery IncludeDiscount();
         IShoppingCartQuery FilterByCourseId(Guid courseId);
         IShoppingCartQuery FilterByCourseIds(List<Guid> courseIds);
+        Task<ShoppingCart> GetByCourseId(Guid courseId);
     }
 }

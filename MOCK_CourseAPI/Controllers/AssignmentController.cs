@@ -33,9 +33,9 @@ namespace CourseAPI.Controllers
         /// <returns></returns>
         [HttpGet("Get-all")]
         [AllowAnonymous]
-        public async Task<ActionResult<Responses<AssignmentDTO>>> GetAll([FromQuery] Guid sectionId, [FromQuery] AssignmentParameters assignmentParameters)
+        public async Task<ActionResult<Responses<AssignmentDTO>>> GetAll([FromQuery] AssignmentParameters assignmentParameters)
         {
-            var result = await _assignmentService.GetAll(sectionId, assignmentParameters);
+            var result = await _assignmentService.GetAll(assignmentParameters);
 
             Response.Headers.Add("X-Pagination",
                                  JsonSerializer.Serialize(result.MetaData));

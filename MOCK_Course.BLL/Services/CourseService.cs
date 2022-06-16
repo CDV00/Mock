@@ -218,6 +218,8 @@ namespace Course.BLL.Services
                                                     .IncludeLanguage()
                                                     .IncludeLevel()
                                                     .IncludeSection()
+                                                    .IncludeQuiz()
+                                                    .IncludeAssignment()
                                                     .IncludeUser()
                                                     .FilterById(id)
                                                     .AsSelectorAsync(x => _mapper.Map<CourseDTO>(x));

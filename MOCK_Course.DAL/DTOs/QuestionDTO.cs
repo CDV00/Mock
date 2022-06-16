@@ -14,6 +14,7 @@ namespace Course.DAL.DTOs
         public string Type { get; set; }
         public Guid QuizId { get; set; }
         public List<QuizOptionDTO> Options { get; set; }
+        public string TextAnswer { get; set; }
 
     }
 }

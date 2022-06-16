@@ -231,6 +231,30 @@ namespace Course.DAL.Queries
         {
             Query.Include(c => c.Sections)
                  .ThenInclude(s => s.Lectures)
+                 .Include(c=>c.Sections)
+                 .ThenInclude(s=>s.Assignments)
+                 .Include(c => c.Sections)
+                 .ThenInclude(s => s.Quizzes)
+                 .Load();
+            return this;
+        }
+        public ICourseQuery IncludeAssignment()
+        {
+            Query.Include(c => c.Sections)
+                 .ThenInclude(s => s.Assignments)
+                 .ThenInclude(a => a.Attachments)
+                 .Load();
+            return this;
+        }
+        public ICourseQuery IncludeQuiz()
+        {
+            Query.Include(c => c.Sections)
+                 .ThenInclude(s => s.Quizzes)
+                 .ThenInclude(q => q.Questions)
+                 .ThenInclude(qu => qu.Options)
+                 .Include(c => c.Sections)
+                 .ThenInclude(s => s.Quizzes)
+                 .ThenInclude(q => q.Settings)
                  .Load();
             return this;
         }
