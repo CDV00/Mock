@@ -7,6 +7,8 @@ using Course.DAL.Models;
 using Course.BLL.Responses;
 using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
+using Repository.Repositories;
+using CourseAPI.ErrorModel;
 
 namespace Course.BLL.Services
 {
@@ -14,40 +16,39 @@ namespace Course.BLL.Services
     {
         private readonly IDiscountRepository _discountRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ICoursesRepository _coursesRepository;
         private readonly IMapper _mapper;
 
-        public DiscountService(IDiscountRepository discountRepository, IMapper mapper, IUnitOfWork unitOfWork)
+        public DiscountService(ICoursesRepository coursesRepository, IDiscountRepository discountRepository, IMapper mapper, IUnitOfWork unitOfWork)
         {
             _discountRepository = discountRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _coursesRepository = coursesRepository;
         }
 
         public async Task<Response<DiscountDTO_>> Add(DiscountForCreateRequest discountForCreateRequest)
         {
-            try
+            if (!await _coursesRepository.BuildQuery()
+                                         .FilterById(discountForCreateRequest.CourseId)
+                                         .AnyAsync())
+                throw new CompanyNotFoundException(discountForCreateRequest.CourseId);
+
+            var discount = _mapper.Map<Discount>(discountForCreateRequest);
+            if (await _discountRepository.CheckDiscount(discount))
             {
+                return new Response<DiscountDTO_>(false, "Discount was available during this time", null);
+            }
+            discount.CreatedAt = DateTime.Now;
+            await _discountRepository.CreateAsync(discount);
 
-                var discount = _mapper.Map<Discount>(discountForCreateRequest);
-                if(await _discountRepository.CheckDiscount(discount))
-                {
-                    return new Response<DiscountDTO_>( false, "Discount was available during this time", null);
-                }
-                discount.CreatedAt = DateTime.Now;
-                await _discountRepository.CreateAsync(discount);
+            await _unitOfWork.SaveChangesAsync();
 
-                var result = await _unitOfWork.SaveChangesAsync();
-
-                var DiscountDTO_ = _mapper.Map<DiscountDTO_>(discount);
-                return new Response<DiscountDTO_>(
-                    true,
-                    DiscountDTO_
+            var DiscountDTO_ = _mapper.Map<DiscountDTO_>(discount);
+            return new Response<DiscountDTO_>(
+                true,
+                DiscountDTO_
                 );
-            }
-            catch (Exception ex)
-            {
-                return new Response<DiscountDTO_>(false, ex.Message, null);
-            }
         }
 
 

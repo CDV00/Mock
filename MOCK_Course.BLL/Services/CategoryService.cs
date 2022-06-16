@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Course.BLL.DTO;
 using Course.BLL.Requests;
 using Course.DAL.Models;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
 

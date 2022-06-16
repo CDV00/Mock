@@ -13,14 +13,14 @@ namespace Course.BLL.Services
     public class ShoppingCartService : IShoppingCartService
     {
         private readonly IShoppingCartRepository _shoppingCartRepository;
-        private readonly ICousesRepository _cousesRepository;
+        private readonly ICoursesRepository _cousesRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public ShoppingCartService(IShoppingCartRepository shoppingCartRepository,
             IMapper mapper,
             IUnitOfWork unitOfWork,
-            ICousesRepository cousesRepository)
+            ICoursesRepository cousesRepository)
         {
             _shoppingCartRepository = shoppingCartRepository;
             _mapper = mapper;
