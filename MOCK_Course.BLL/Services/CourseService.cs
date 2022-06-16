@@ -87,7 +87,6 @@ namespace Course.BLL.Services
             var pageList = new PagedList<CourseDTO>(courses, count, courseParameter.PageNumber, courseParameter.PageSize);
 
             return pageList;
-
         }
 
         //
