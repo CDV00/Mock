@@ -20,5 +20,7 @@ namespace Course.BLL.Services.Abstraction
         Task<Responses<CourseDTO>> GetAllMyPurchase(Guid userId);
         //Task<Responses<CourseDTO>> GetCoursesAsync(CourseParameters courseParameter);
         Task<PagedList<CourseDTO>> GetCoursesAsync(CourseParameters courseParameter, Guid? userId);
+        Task<BaseResponse> UpdateStatus(CourseStatusUpdateRequest courseStatusUpdateRequest);
+        Task<Responses<CourseDTO>> UpcomingCourse(Guid userId);
     }
 }
