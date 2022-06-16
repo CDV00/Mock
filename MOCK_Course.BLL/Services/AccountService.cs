@@ -53,6 +53,12 @@ namespace Course.BLL.Services
         }
         public async Task<Response<LoginDTO>> Login(LoginRequest loginRequest)
         {
+            var user = await _userManager.FindByEmailAsync(loginRequest.Email);
+            if(user is null)
+                return new Response<LoginDTO>(false, "Authentication failed. Wrong user name or password.", null);
+
+            if(!user.IsActive)
+                return new Response<LoginDTO>(false, "Authentication failed. Account has been blocked.", "403");
             if (!await ValidateUser(loginRequest))
             {
                 return new Response<LoginDTO>(false, "Authentication failed. Wrong user name or password.", null);
