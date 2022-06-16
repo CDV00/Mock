@@ -36,10 +36,5 @@ ILoggerManager logger)
 
             });
         }
-
-        //public static void ConfigureCustomExceptionMiddleware(this IApplicationBuilder app)
-        //{
-        //    app.UseMiddleware<ExceptionMiddleware>();
-        //}
     }
 }

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Course.DAL.Models
 {
@@ -19,5 +16,7 @@ namespace Course.DAL.Models
         public Guid QuizId { get; set; }
         public Quiz Quiz { get; set; }
         public List<QuizOption> Options { get; set; }
+        public List<Guid> CorrectAnswer { get; set; }
+        public string TextAnswer { get; set; }
     }
 }

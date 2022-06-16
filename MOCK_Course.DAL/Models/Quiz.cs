@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Course.DAL.Models
 {
@@ -21,6 +18,5 @@ namespace Course.DAL.Models
         public int Index { set; get; }
         public List<Question> Questions { get; set; }
         public QuizSetting Settings { get; set; }
-
     }
 }
