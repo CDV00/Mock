@@ -162,14 +162,14 @@ namespace CourseAPI.Extensions.ServiceExtensions
             });
         }
         public static void ConfigureLoggerService(this IServiceCollection services) =>
-            services.AddScoped<ILoggerManager, LoggerManager>();
+            services.AddSingleton<ILoggerManager, LoggerManager>();
         public static void ConfigureRepositories(this IServiceCollection services)
         {
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
-            services.AddScoped<ICousesRepository, CousesRepository>();
+            services.AddScoped<ICoursesRepository, CoursesRepository>();
             services.AddScoped<ISectionRepositoty, SectionRepositoty>();
             services.AddScoped<ILectureRepository, LectureRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();

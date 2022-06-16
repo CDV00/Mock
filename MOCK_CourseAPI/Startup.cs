@@ -1,5 +1,7 @@
 using System.IO;
+using Contracts;
 using Course.BLL.Extensions;
+using CourseAPI.Extensions.Middleware;
 using CourseAPI.Extensions.ServiceExtensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,6 +9,8 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Diagnostics;
+using System.Net;
 using NLog;
 
 namespace CourseAPI
@@ -45,8 +49,11 @@ namespace CourseAPI
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,ILoggerManager logger)
         {
+            //app.ConfigureExceptionHandler(logger);
+
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -59,8 +66,11 @@ namespace CourseAPI
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v2/swagger.json", "MOCK_CourseAPI v2"));
 
+            app.ConfigureExceptionHandler(logger);
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+
 
             app.UseCors("CorsPolicy");
 

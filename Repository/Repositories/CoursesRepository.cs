@@ -15,12 +15,12 @@ using System.Threading.Tasks;
 
 namespace Repository.Repositories
 {
-    public class CousesRepository : Repository<Courses>, ICousesRepository
+    public class CoursesRepository : Repository<Courses>, ICoursesRepository
     {
         private AppDbContext _context;
         private IMapper _mapper;
 
-        public CousesRepository(AppDbContext context, IMapper mapper) : base(context)
+        public CoursesRepository(AppDbContext context, IMapper mapper) : base(context)
         {
             _context = context;
             _mapper = mapper;

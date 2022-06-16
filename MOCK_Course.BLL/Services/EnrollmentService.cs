@@ -13,14 +13,14 @@ namespace Course.BLL.Services
     public class EnrollmentService : IEnrollmentService
     {
         private readonly IEnrollmentRepository _enrollmentRepository;
-        private readonly ICousesRepository _cousesRepository;
+        private readonly ICoursesRepository _cousesRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public EnrollmentService(IEnrollmentRepository enrollmentRepository,
             IMapper mapper,
             IUnitOfWork unitOfWork,
-            ICousesRepository cousesRepository)
+            ICoursesRepository cousesRepository)
         {
             _enrollmentRepository = enrollmentRepository;
             _mapper = mapper;

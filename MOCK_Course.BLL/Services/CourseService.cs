@@ -15,7 +15,7 @@ namespace Course.BLL.Services
 {
     public class CourseService : ICourseService
     {
-        private readonly ICousesRepository _cousesRepository;
+        private readonly ICoursesRepository _cousesRepository;
         private readonly IAudioLanguageRepository _audioLanguageRepository;
         private readonly ICloseCaptionRepository _closeCaptionRepository;
         private readonly ILevelRepository _levelRepository;
@@ -28,7 +28,7 @@ namespace Course.BLL.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public CourseService(ICousesRepository cousesRepository,
+        public CourseService(ICoursesRepository cousesRepository,
             IMapper mapper,
             IUnitOfWork unitOfWork, IAudioLanguageRepository audioLanguageRepository,
             ICloseCaptionRepository closeCaptionRepository, ILevelRepository levelRepository, ICourseReviewService courseReviewService, IEnrollmentService enrollmentService, ISavedCoursesService savedCoursesService, ISectionService sectionService, ILectureService lectureService)
