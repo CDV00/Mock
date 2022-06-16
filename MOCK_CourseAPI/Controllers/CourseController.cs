@@ -67,7 +67,9 @@ namespace CourseAPI.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<Response<CourseDTO>>> Get(Guid id)
         {
-            var course = await _coursesService.Get(id);
+            Guid? userId = (User.GetUserId() == Guid.Empty) ? null : User.GetUserId();
+            var course = await _coursesService.Get(id, userId);
+
             if (course.IsSuccess == false)
                 return BadRequest(course);
             return Ok(course);

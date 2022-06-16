@@ -10,6 +10,7 @@ using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
 using Course.BLL.Share.RequestFeatures;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace Course.BLL.Services
 {
@@ -65,10 +66,10 @@ namespace Course.BLL.Services
                                                  .Take(courseParameter.PageSize)
                                                  .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 
-            //if (userId != null)
-            //{
-            //    await AddLast(courses, userId);
-            //}
+            if (userId != null)
+            {
+                await AddLast(courses, userId);
+            }
 
             var count = await _cousesRepository.BuildQuery()
                                                .FilterByKeyword(courseParameter.Keyword)
@@ -97,6 +98,8 @@ namespace Course.BLL.Services
                 courses[i].IsSave = await _savedCoursesService.IsSavedCourse(userId.GetValueOrDefault(), courses[i].Id);
 
                 courses[i].PercentCompletion = await _lectureService.PercentCourseCompletion(userId.GetValueOrDefault(), courses[i].Id);
+
+                courses[i].IsEnroll = (await _enrollmentService.IsEnrollment(userId.GetValueOrDefault(), courses[i].Id)).data == null ? false : true;
             }
         }
         private async Task AddRating(List<CourseDTO> courses)
@@ -184,7 +187,7 @@ namespace Course.BLL.Services
         }
 
 
-        public async Task<Response<CourseDTO>> Get(Guid id)
+        public async Task<Response<CourseDTO>> Get(Guid id, Guid? userId)
         {
             try
             {
@@ -196,7 +199,8 @@ namespace Course.BLL.Services
                                                     .IncludeUser()
                                                     .FilterById(id)
                                                     .AsSelectorAsync(x => _mapper.Map<CourseDTO>(x));
-                await AddRate(course);
+                //await AddRate(course);
+                await AddLast(new List<CourseDTO> { course }, userId);
                 var courseResponse = _mapper.Map<CourseDTO>(course);
                 return new Response<CourseDTO>(true, courseResponse);
             }

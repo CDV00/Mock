@@ -8,7 +8,7 @@ namespace Course.DAL.Models
     {
         [Required]
         public string Title { get; set; }
-        //public bool IsCorrectAnswer { get; set; } = false;
+        public bool IsCorrectAnswer { get; set; } = false;
         [ForeignKey("Question")]
         public Guid QuestionId { get; set; }
         public Question Question { get; set; }

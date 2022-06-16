@@ -103,11 +103,14 @@ namespace Course.BLL.Services
         }
 
 
-        public async Task<BaseResponse> Remove(Guid Id)
+        public async Task<BaseResponse> Remove(Guid courseId, Guid userId)
         {
             try
             {
-                var course = await _savedCoursesRepository.GetByIdAsync(Id);
+                var course = await _savedCoursesRepository.BuildQuery()
+                                                          .FilterByUserId(userId)
+                                                          .FilterByCourseId(courseId)
+                                                          .AsSelectorAsync(c => c);
                 if (course is null)
                 {
                     return new BaseResponse(false, null, "Can't find course");

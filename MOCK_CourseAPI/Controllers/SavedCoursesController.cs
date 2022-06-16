@@ -33,7 +33,7 @@ namespace CourseAPI.Controllers
         public async Task<ActionResult<Responses<SavedCoursesDTO>>> GetAllSavedCourses([FromQuery] SavedCoursesParameters savedCoursesParameters)
         {
             var userId = User.GetUserId();
-            var result = await _savedCoursesService.GetAll(userId,savedCoursesParameters);
+            var result = await _savedCoursesService.GetAll(userId, savedCoursesParameters);
 
             Response.Headers.Add("X-Pagination",
                                  JsonSerializer.Serialize(result.MetaData));
@@ -41,7 +41,7 @@ namespace CourseAPI.Controllers
             return Ok(new Responses<SavedCoursesDTO>(true, result));
         }
 
-        
+
         /// <summary>
         /// Add Saved Courses
         /// </summary>
@@ -74,9 +74,10 @@ namespace CourseAPI.Controllers
         /// <param name="Id"></param>
         /// <returns></returns>
         [HttpDelete()]
-        public async Task<ActionResult<BaseResponse>> Remove(Guid Id)
+        public async Task<ActionResult<BaseResponse>> Remove(Guid courseId)
         {
-            var result = await _savedCoursesService.Remove(Id);
+            var userId = User.GetUserId();
+            var result = await _savedCoursesService.Remove(courseId, userId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
