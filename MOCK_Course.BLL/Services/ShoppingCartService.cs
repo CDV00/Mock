@@ -78,12 +78,14 @@ namespace Course.BLL.Services
                 return new Responses<CartDTO>(false, ex.Message, null);
             }
         }
-        public async Task<Response<CartDTO>> Update(Guid courseId, CartUpdateRequest cartUpdateRequest)
+        public async Task<Response<CartDTO>> Update(Guid userId, CartUpdateRequest cartUpdateRequest)
         {
             try
             {
-                var cart = await _shoppingCartRepository.BuildQuery().GetByCourseId(courseId);
-                
+                var cart = await _shoppingCartRepository.BuildQuery()
+                                                        .FilterByUserId(userId)
+                                                        .FilterByCourseId(cartUpdateRequest.CourseId)
+                                                        .AsSelectorAsync(c => c);
 
                 if (cart == null)
                 {
@@ -110,7 +112,10 @@ namespace Course.BLL.Services
         {
             try
             {
-                var cart = await _shoppingCartRepository.BuildQuery().GetByCourseId(courseId);
+                var cart = await _shoppingCartRepository.BuildQuery()
+                                                        .FilterByUserId(userId)
+                                                        .FilterByCourseId(courseId)
+                                                        .AsSelectorAsync(c => c);
                 if (cart is null)
                 {
                     return new BaseResponse(false, null, "Can't find cart");

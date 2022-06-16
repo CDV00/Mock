@@ -4,7 +4,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Course.DAL.Data;
-using Course.DAL.Models;
 using Course.DAL.Repositories.Abstraction;
 using Microsoft.EntityFrameworkCore;
 

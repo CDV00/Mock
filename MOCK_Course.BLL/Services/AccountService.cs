@@ -53,6 +53,12 @@ namespace Course.BLL.Services
         }
         public async Task<Response<LoginDTO>> Login(LoginRequest loginRequest)
         {
+            var user = await _userManager.FindByEmailAsync(loginRequest.Email);
+            if(user is null)
+                return new Response<LoginDTO>(false, "Authentication failed. Wrong user name or password.", null);
+
+            if(!user.IsActive)
+                return new Response<LoginDTO>(false, "Authentication failed. Account has been blocked.", "403");
             if (!await ValidateUser(loginRequest))
             {
                 return new Response<LoginDTO>(false, "Authentication failed. Wrong user name or password.", null);
@@ -302,7 +308,7 @@ namespace Course.BLL.Services
         /// </summary>
         /// <param name="email">abc@gmail.com</param>
         /// <returns></returns>
-        public async Task<Response<BaseResponse>> ForgetPassWord(string email)
+        public async Task<Response<BaseResponse>> ForgetPassWord(string email, string originValue)
         {
             try
             {
@@ -318,9 +324,8 @@ namespace Course.BLL.Services
                 // From Address
                 var senderEmail = _configurations["SMTP:Sender"];
                 //string url = $"{_configurations["AppUrl"]}/ResetPassword?email={email}&token={token}";
-                string url1 = $"http://localhost:3000/reset-password?email={email}&token={token}";
-                string url = $"https://cursus3.netlify.app/reset-password?email={email}&token={token}";
-                await _emailService.SendEmailAsync(senderEmail, user.Email, "FORGET PASSWORD", "<h1>Follow the instruction to reset your password</h1>" + $"<p>To reset your password <a href={url1}> click here localhost.</a></p>" +
+                string url = $"{originValue}/reset-password?email={email}&token={token}";
+                await _emailService.SendEmailAsync(senderEmail, user.Email, "FORGET PASSWORD", "<h1>Follow the instruction to reset your password</h1>" +
                     $"<p>To reset your password <a href={url}> click here.</a></p>");
 
                 return new Response<BaseResponse>(true, null, null);

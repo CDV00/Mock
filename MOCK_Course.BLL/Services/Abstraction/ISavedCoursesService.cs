@@ -10,7 +10,7 @@ namespace Course.BLL.Services.Abstraction
     {
         Task<PagedList<SavedCoursesDTO>> GetAll(Guid userId, SavedCoursesParameters savedCoursesParameters);
         Task<Response<SavedCoursesDTO>> Add(Guid userId, Guid courseId);
-        Task<BaseResponse> Remove(Guid Id);
+        Task<BaseResponse> Remove(Guid courseId, Guid userId);
         Task<BaseResponse> RemoveAll(Guid userId);
         Task<BaseResponse> IsSaveCourses(Guid userId, Guid courseId);
 

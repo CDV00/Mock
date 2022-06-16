@@ -11,6 +11,7 @@ namespace Course.BLL.Requests
     }
     public class CartUpdateRequest
     {
+        public Guid CourseId { get; set; }
         public bool IsActive { get; set; }
     }
 }
