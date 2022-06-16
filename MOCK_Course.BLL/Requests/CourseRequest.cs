@@ -72,4 +72,9 @@ namespace Course.BLL.Requests
 
         public IList<SectionUpdateRequest> Sections { get; set; }
     }
+    public class CourseStatusUpdateRequest
+    {
+        public Guid CourseId { get; set; }
+        public int status { get; set; }
+    }
 }

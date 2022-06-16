@@ -262,5 +262,10 @@ namespace Course.DAL.Queries
             Query = Query.Where(type => type.Id == Id);
             return Query.FirstOrDefaultAsync();
         }
+        public ICourseQuery FilterStatus(Status status)
+        {
+            Query = Query.Where(type => type.status == status);
+            return this;
+        }
     }
 }

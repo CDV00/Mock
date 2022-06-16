@@ -162,7 +162,29 @@ namespace Course.BLL.Services
         }
 
         // Upcoming courses: Review
+        public async Task<Responses<CourseDTO>> UpcomingCourse(Guid userId)
+        {
+            try
+            {
+                Status status = Status.Review;
+                var courses = await _cousesRepository.BuildQuery()
+                                                     .FilterByUserId(userId)
+                                                     .FilterStatus(status)
+                                                     .IncludeCategory()
+                                                     //.IncludeUser()
+                                                     //.IncludeDiscount()
+                                                     //.FilterByOrderd(userId)
+                                                     .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 
+                await AddRating(courses);
+                return new Responses<CourseDTO>(true, courses);
+            }
+            catch (Exception ex)
+            {
+                return new Responses<CourseDTO>(false, ex.Message, null);
+            }
+        }
+        //
         public async Task<Responses<CourseDTO>> GetAllMyPurchase(Guid userId)
         {
             try
@@ -358,6 +380,39 @@ namespace Course.BLL.Services
         }
 
         // Upload status course: Id course, status
+        public async Task<BaseResponse> UpdateStatus(CourseStatusUpdateRequest courseStatusUpdateRequest)
+        {
+            try
+            {
+                
+                var course = await _cousesRepository.BuildQuery()
+                                                    .FilterById(courseStatusUpdateRequest.CourseId)
+                                                    //.IncludeCategory()
+                                                    //.IncludeLevel()
+                                                    //.IncludeLanguage()
+                                                    //.IncludeSection()
+                                                    .AsSelectorAsync(c => c);
+
+                if (course == null)
+                {
+                    return new Response<BaseResponse>(false, "can't find course", null);
+                }
+                /*if (course.UserId != userId)
+                    return new Response<CourseDTO>(false, "You aren't the owner of the course", null);*/
+
+                course.status = (Status)courseStatusUpdateRequest.status;
+                await _unitOfWork.SaveChangesAsync();
+
+
+                return new Response<CourseDTO>(
+                    true
+                );
+            }
+            catch (Exception ex)
+            {
+                return new Response<CourseDTO>(false, ex.Message, null);
+            }
+        }
 
         public async Task<Response<CourseDTO>> Update(Guid id, CourseForUpdateRequest courseRequest, Guid userId)
         {
