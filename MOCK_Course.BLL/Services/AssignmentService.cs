@@ -40,11 +40,10 @@ namespace Course.BLL.Services
         /// Get all course review
         /// </summary>
         /// <returns></returns>
-        public async Task<PagedList<AssignmentDTO>> GetAll(Guid sectionId, AssignmentParameters assignmentParameters)
+        public async Task<PagedList<AssignmentDTO>> GetAll(AssignmentParameters assignmentParameters)
         {
             var assignment = await _assignmentRepository.BuildQuery()
                                                         .FilterByKeyword(assignmentParameters.Keyword)
-                                                        .FilterBySectionId(sectionId)
                                                         .IncludeSection()
                                                         .ApplySort(assignmentParameters.Orderby)
                                                         .Skip((assignmentParameters.PageNumber - 1) * assignmentParameters.PageSize)
@@ -53,7 +52,6 @@ namespace Course.BLL.Services
 
             var count = await _assignmentRepository.BuildQuery()
                                                    .FilterByKeyword(assignmentParameters.Keyword)
-                                                   .FilterBySectionId(sectionId)
                                                    .CountAsync();
             var pageList = new PagedList<AssignmentDTO>(assignment, count, assignmentParameters.PageNumber, assignmentParameters.PageSize);
 

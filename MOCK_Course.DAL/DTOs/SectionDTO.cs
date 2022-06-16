@@ -14,8 +14,8 @@ namespace Course.BLL.Responses
 
         public bool IsDeleted { get; set; }
         public bool IsNew { get; set; } = false;
-        public ICollection<AssignmentDTO> Assignments { set; get; }
-        public ICollection<QuizDTO> Quizzes { set; get; }
+        public IList<AssignmentDTO> Assignments { set; get; }
+        public IList<QuizDTO> Quizzes { set; get; }
     }
 
 

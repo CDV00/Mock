@@ -13,7 +13,7 @@ namespace Course.DAL.DTOs
         public string Title { get; set; }
         public string Description { get; set; }
         public List<QuestionDTO> Questions { get; set; }
-        public QuizSettingDTO Settings { get; set; }
+        public List<QuizSettingDTO> Settings { get; set; }
         public int Index { get; set; }
         //[JsonIgnore]
         //public QuizSettingDTO Settings { get; set; }

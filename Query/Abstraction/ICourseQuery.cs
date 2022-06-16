@@ -16,6 +16,8 @@ namespace Course.DAL.Queries
         ICourseQuery IncludeLanguage();
         ICourseQuery IncludeCategory();
         ICourseQuery IncludeSection();
+        ICourseQuery IncludeAssignment();
+        ICourseQuery IncludeQuiz();
         ICourseQuery IncludeEnrolment();
         ICourseQuery FilterByOrderd(Guid userId);
         ICourseQuery FilterByCategoryId(List<Guid?> categoryId);

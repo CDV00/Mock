@@ -3,6 +3,7 @@ using CloudinaryDotNet.Actions;
 using Course.BLL.DTO;
 using Dropbox.Api;
 using Dropbox.Api.Files;
+using Google.Apis.Download;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -50,7 +51,81 @@ namespace Course.BLL.Services
                 };
             }
         }
+        public async Task<DownloadResponse> DownloadFileGoogleDrive(string fileId)
+        {
+            try
+            {
+                var service = GoogleService.CreateService();
+                var response = new DownloadResponse()
+                {
+                    IsSuccess = true
+                };
+                var request = service.Files.Export(fileId, "application/pdf");
+                var stream = new MemoryStream();
 
+                // Add a handler which will be notified on progress changes.
+                // It will notify on each chunk download and when the
+                // download is completed or failed.
+
+                //request.MediaDownloader.ProgressChanged +=
+                //    progress =>
+                //    {
+                //        switch (progress.Status)
+                //        {
+
+                //            case DownloadStatus.Failed:
+                //                {
+                //                    response.IsSuccess = false;
+                //                    break;
+                //                }
+
+                //        }
+                //    };
+                request.MediaDownloader.ProgressChanged +=
+                    progress =>
+                    {
+                        switch (progress.Status)
+                        {
+                            case DownloadStatus.Downloading:
+                                {
+                                    Console.WriteLine(progress.BytesDownloaded);
+                                    break;
+                                }
+                            case DownloadStatus.Completed:
+                                {
+                                    Console.WriteLine("Download complete.");
+                                    break;
+                                }
+                            case DownloadStatus.Failed:
+                                {
+                                    Console.WriteLine("Download failed.");
+                                    break;
+                                }
+                        }
+                    };
+
+                request.Download(stream);
+                if (!response.IsSuccess)
+                {
+                    response.Message = "Upload failed";
+                }
+                else
+                {
+                    response.Message = "Upload Success";
+                    response.fileData = stream.ToArray();
+                }
+                return response;
+
+            }
+            catch (Exception ex)
+            {
+                return new DownloadResponse()
+                {
+                    IsSuccess = false,
+                    Message = ex.Message
+                };
+            }
+        }
         public async Task<UploadResponse> UploadFile(IFormFile file)
         {
             try

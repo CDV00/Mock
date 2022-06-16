@@ -9,6 +9,7 @@ namespace Course.BLL.DTO
         //public Guid CourseId { get; set; }
         public UserDTO User { get; set; }
         public CourseDTO Course { get; set; }
-        public bool IsActive { get; set; } = true;
+        public bool IsActive { get; set; }
     }
+
 }

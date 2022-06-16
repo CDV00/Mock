@@ -40,11 +40,10 @@ namespace Course.BLL.Services
         /// Get all course review
         /// </summary>
         /// <returns></returns>
-        public async Task<PagedList<QuizDTO>> GetAll(Guid sectionId, QuizParameters quizParameters)
+        public async Task<PagedList<QuizDTO>> GetAll(QuizParameters quizParameters)
         {
             var quiz = await _QuizRepository.BuildQuery()
                                             .FilterByKeyword(quizParameters.Keyword)
-                                            .FilterBySectionId(sectionId)
                                             .IncludeSection()
                                             .ApplySort(quizParameters.Orderby)
                                             .Skip((quizParameters.PageNumber - 1) * quizParameters.PageSize)
@@ -53,7 +52,6 @@ namespace Course.BLL.Services
 
             var count = await _QuizRepository.BuildQuery()
                                              .FilterByKeyword(quizParameters.Keyword)
-                                             .FilterBySectionId(sectionId)
                                              .CountAsync();
             var pageList = new PagedList<QuizDTO>(quiz, count, quizParameters.PageNumber, quizParameters.PageSize);
 

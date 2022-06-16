@@ -10,6 +10,6 @@ namespace Course.BLL.Services.Abstraction
 {
     public interface IQuizService
     {
-        Task<PagedList<QuizDTO>> GetAll(Guid sectionId, QuizParameters quizParameters);
+        Task<PagedList<QuizDTO>> GetAll(QuizParameters quizParameters);
     }
 }

@@ -33,9 +33,9 @@ namespace CourseAPI.Controllers
         /// <returns></returns>
         [HttpGet("Get-all-quiz")]
         [AllowAnonymous]
-        public async Task<ActionResult<Responses<QuizDTO>>> GetAll([FromQuery] Guid sectionId, [FromQuery] QuizParameters quizParameters)
+        public async Task<ActionResult<Responses<QuizDTO>>> GetAll([FromQuery] QuizParameters quizParameters)
         {
-            var result = await _quizService.GetAll(sectionId, quizParameters);
+            var result = await _quizService.GetAll(quizParameters);
 
             Response.Headers.Add("X-Pagination",
                                  JsonSerializer.Serialize(result.MetaData));

@@ -368,7 +368,7 @@ namespace Course.BLL.Services
 
             return pageList;
         }
-        public async Task<Response<float>> GetAVGRatinngOfIntructor(Guid? userId)
+        public async Task<Response<float>> GetAVGRatinngOfIntructor(Guid userId)
         {
             try
             {
@@ -384,7 +384,7 @@ namespace Course.BLL.Services
                 if(courses != 0)
                 {
                     return new Response<float>(true, 0);
-                }    
+                } 
                 return new Response<float>(true, courses);
             }
             catch (Exception ex)
@@ -392,7 +392,7 @@ namespace Course.BLL.Services
                 return new Response<float>(false, ex.Message, null);
             }
         }
-        public async Task<Response<List<float>>> GetDetaiRateOfIntructor(Guid? userId)
+        public async Task<Response<List<float>>> GetDetaiRateOfIntructor(Guid userId)
         {
             try
             {

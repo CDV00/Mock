@@ -6,6 +6,7 @@ using SES.HomeServices.Data.Queries.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Course.DAL.Queries
 {
@@ -61,6 +62,11 @@ namespace Course.DAL.Queries
         {
             Query = Query.Where(type => type.Course.Id == courseId);
             return this;
+        }
+        public Task<ShoppingCart> GetByCourseId(Guid courseId)
+        {
+            Query = Query.Where(type => type.Course.Id == courseId);
+            return Query.FirstOrDefaultAsync();
         }
     }
 }
