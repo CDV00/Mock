@@ -25,7 +25,7 @@ namespace Course.BLL.Services.Abstraction
         Task<Response<int>> GetTotalReviewOfInstructor(Guid userId);
         Task<PagedList<CourseReviewDTO>> GetAllCourseReviewOfIntructor(RequestParameters requestParameters, Guid userId);
         Task<PagedList<CourseReviewDTO>> GetAllCourseReviewOfUser(Guid userId, CourseReviewParameters courseReviewParameters);
-        Task<Response<float>> GetAVGRatinngOfIntructor(Guid userId);
-        Task<Response<List<float>>> GetDetaiRateOfIntructor(Guid userId);
+        Task<Response<float>> GetAVGRatinngOfIntructor(Guid? userId);
+        Task<Response<List<float>>> GetDetaiRateOfIntructor(Guid? userId);
     }
 }

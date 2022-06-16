@@ -3,6 +3,7 @@ using Course.BLL.DTO;
 using Course.BLL.Requests;
 using Course.DAL.Models;
 using Course.BLL.Responses;
+using Course.DAL.DTOs;
 
 namespace Course.BLL.Extensions
 {
@@ -126,6 +127,25 @@ namespace Course.BLL.Extensions
             CreateMap<Attachment, AttachmentForCreateRequest>().ReverseMap();
             CreateMap<AttachmentRequest, AttachmentDTO>().ReverseMap();
             CreateMap<AttachmentForCreateRequest, AttachmentDTO>().ReverseMap();
+
+            //map question
+            CreateMap<Question, QuestionDTO>().ReverseMap();
+            CreateMap<Question, QuestionRequest>().ReverseMap();
+            CreateMap<Question, QuestionForCreateRequest>().ReverseMap();
+
+            //map quiz
+            CreateMap<Quiz, QuizDTO>().ReverseMap();
+            CreateMap<Quiz, QuizRequest>().ReverseMap();
+            CreateMap<Quiz, QuizForCreateRequest>().ReverseMap();
+
+            //map quiz option
+            CreateMap<QuizOption, QuizOptionDTO>().ReverseMap();
+            CreateMap<QuizOption, QuizOptionCreateForRequest>().ReverseMap();
+
+            //map quiz setting
+            CreateMap<QuizSetting, QuizSettingDTO>().ReverseMap();
+            CreateMap<QuizSetting, QuizSettingRequest>().ReverseMap();
+            CreateMap<QuizSetting, QuizSettingForCreateRequest>().ReverseMap();
 
         }
     }

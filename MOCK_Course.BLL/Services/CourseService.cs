@@ -65,10 +65,10 @@ namespace Course.BLL.Services
                                                  .Take(courseParameter.PageSize)
                                                  .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 
-            if (userId != null)
-            {
-                await AddLast(courses, userId);
-            }
+            //if (userId != null)
+            //{
+            //    await AddLast(courses, userId);
+            //}
 
             var count = await _cousesRepository.BuildQuery()
                                                .FilterByKeyword(courseParameter.Keyword)

@@ -25,7 +25,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Migrations\" />
 		<Folder Include="Requests\" />
 		<Folder Include="wwwroot\" />
 	</ItemGroup>
