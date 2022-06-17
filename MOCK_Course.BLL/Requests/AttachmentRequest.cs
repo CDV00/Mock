@@ -15,4 +15,11 @@ namespace Course.BLL.Requests
     {
         public string FileUrl { get; set; }
     }
+    public class AttachmentForUpdateRequest
+    {
+        public Guid Id { get; set; }
+        public string FileUrl { get; set; }
+        public bool IsDeleted { get; set; }
+        public bool IsNew { get; set; }
+    }
 }

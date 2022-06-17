@@ -19,7 +19,7 @@ namespace Course.BLL.Services.Abstraction
         Task<Response<int>> GetTotalReviewOfUser(Guid userId);
         Task<Response<float>> GetAVGRatinng(Guid? courseId, Guid? userId);
         Task<Response<List<float>>> GetDetaiRate(Guid? courseId, Guid? userId);
-        Task<BaseResponse> IsCourseReview(Guid userId, Guid courseId);
+        Task<Response<BaseResponse>> IsCourseReview(Guid userId, Guid courseId);
         Task<Response<CourseReviewDTO>> CheckUserCourseReview(Guid userId, Guid courseId);
         Task<Response<int>> GetTotalReviewOfCourse(Guid courseId);
         Task<Response<int>> GetTotalReviewOfInstructor(Guid userId);

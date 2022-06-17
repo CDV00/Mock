@@ -11,4 +11,13 @@ namespace Course.BLL.Requests
         public string Title { get; set; }
         public bool IsCorrectAnswer { get; set; } = false;
     }
+    public class QuizOptionForUpdateRequest
+    {
+        public Guid Id { get; set; }
+        public string Title { get; set; }
+        public bool IsCorrectAnswer { get; set; } = false;
+        public bool IsDeleted { get; set; }
+        public bool IsNew { get; set; }
+    }
+
 }
