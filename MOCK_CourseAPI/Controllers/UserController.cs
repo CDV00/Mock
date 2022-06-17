@@ -95,7 +95,8 @@ namespace CourseAPI.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<Responses<UserDTO>>> GetPopularInstructor([FromQuery] UserParameter userParameter)
         {
-            var result = await _userService.GetPopularInstructor(userParameter);
+            var userId = User.GetUserId();
+            var result = await _userService.GetPopularInstructor(userParameter,userId);
 
             Response.Headers.Add("X-Pagination",
                                JsonSerializer.Serialize(result.MetaData));

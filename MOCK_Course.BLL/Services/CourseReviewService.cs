@@ -233,10 +233,6 @@ namespace Course.BLL.Services
                                                            .FilterByCourseId(courseId)
                                                            .FilterByUserId(userId)
                                                            .GetAvgRate();
-                if (courses != 0)
-                {
-                    return new Response<float>(true, 0);
-                }
 
                 return new Response<float>(true, courses);
             }

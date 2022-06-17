@@ -12,7 +12,7 @@ namespace Course.BLL.Services.Abstraction
         Task<Response<UserDTO>> UpdateProfile(Guid userId, UpdateProfileRequest updateProfileRequest);
         Task<BaseResponse> ChangePassword(Guid userId, ChangePasswordRequest changePasswordRequest);
         Task<BaseResponse> CheckExistEmail(string Email);
-        Task<PagedList<UserDTO>> GetPopularInstructor(UserParameter userParameter);
+        Task<PagedList<UserDTO>> GetPopularInstructor(UserParameter userParameter, Guid userid);
         Task<BaseResponse> UpdateActive(UpdateUserActiveRequest updateUserActiveRequest);
         Task<Responses<UserDTO>> GetAllUserByRole(string role);
     }
