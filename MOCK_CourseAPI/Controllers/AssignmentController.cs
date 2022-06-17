@@ -29,7 +29,6 @@ namespace CourseAPI.Controllers
         /// Get all Assignment of course. with paging and search
         /// https://gambolthemes.net/html-items/cursus_main_demo/course_detail_view.html
         /// </summary>
-        /// <param name="sectionId">Course Id</param>
         /// <returns></returns>
         [HttpGet("Get-all")]
         [AllowAnonymous]

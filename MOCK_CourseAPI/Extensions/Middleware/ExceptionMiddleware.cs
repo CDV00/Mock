@@ -25,29 +25,21 @@ namespace CourseAPI.Extensions.Middleware
             }
             catch (Exception ex)
             {
-                //_logger.LogError($"Something went wrong: {ex}");
+                _logger.LogError($"Something went wrong: {ex}");
                 await HandleExceptionAsync(httpContext, ex);
             }
         }
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
+            var response = context.Response;
+            response.StatusCode = (int)HttpStatusCode.InternalServerError;
             context.Response.ContentType = "application/json";
 
-            var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
-            if (contextFeature != null)
+            await context.Response.WriteAsync(new ErrorDetails()
             {
-                context.Response.StatusCode = contextFeature.Error switch
-                {
-                    NotFoundException => StatusCodes.Status404NotFound,
-                    _ => StatusCodes.Status500InternalServerError
-                };
-                _logger.LogError($"Something went wrong: {contextFeature.Error}");
-                await context.Response.WriteAsync(new ErrorDetails()
-                {
-                    StatusCode = context.Response.StatusCode,
-                    Message = contextFeature.Error.Message,
-                }.ToString());
-            }
+                StatusCode = context.Response.StatusCode,
+                Message = "Internal Server Error from the custom middleware."
+            }.ToString());
         }
     }
 }
