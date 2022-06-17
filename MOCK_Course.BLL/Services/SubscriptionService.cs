@@ -127,6 +127,7 @@ namespace Course.BLL.Services
         }
 
 
+
         public async Task<PagedList<UserDTO>> GetAllSubscriber(Guid userId, SubscriptionParameters subscriptionParameters)
         {
             var user = await _subscriptionRepository.BuildQuery()
@@ -159,5 +160,27 @@ namespace Course.BLL.Services
 
             return new PagedList<UserDTO>(user, count, subscriptionParameters.PageNumber, subscriptionParameters.PageSize);
         }
+        public async Task<Response<SubscriptionDTO>> IsSubscribed(Guid userId, Guid instructorId)
+        {
+            try
+            {
+                var subscription = await _subscriptionRepository.BuildQuery()
+                                                                .FilterByUserId(instructorId)
+                                                                .FilterBySubscriberId(userId)
+                                                                .AsSelectorAsync(s => _mapper.Map<SubscriptionDTO>(s));
+
+                if (subscription == null)
+                {
+                    return new Response<SubscriptionDTO>(false, subscription);
+                }
+
+                return new Response<SubscriptionDTO>(true, subscription);
+            }
+            catch (Exception ex)
+            {
+                return new Response<SubscriptionDTO>(false, ex.Message, null);
+            }
+        }
     }
+
 }
