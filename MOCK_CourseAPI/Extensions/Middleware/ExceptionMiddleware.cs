@@ -32,13 +32,20 @@ namespace CourseAPI.Extensions.Middleware
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             var response = context.Response;
-            response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
+            response.StatusCode = exception switch
+            {
+                NotFoundException => StatusCodes.Status404NotFound,
+                //BadRequestException => StatusCodes.Status400BadRequest,
+                _ => StatusCodes.Status500InternalServerError
+            };
+
             context.Response.ContentType = "application/json";
 
             await context.Response.WriteAsync(new ErrorDetails()
             {
                 StatusCode = context.Response.StatusCode,
-                Message = "Internal Server Error from the custom middleware."
+                Message = exception.Message
             }.ToString());
         }
     }

@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Net;
 using NLog;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CourseAPI
 {
@@ -43,8 +44,11 @@ namespace CourseAPI
 
             services.ConfigureSqlContext(Configuration);
             services.AddAutoMapper(typeof(MapperInitializer));
+            services.ConfigureInvalidFilter();
 
             services.AddControllers();
+
+
         }
 
 

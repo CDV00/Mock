@@ -4,6 +4,7 @@ using Course.BLL.Requests;
 using Course.DAL.Models;
 using Course.BLL.Responses;
 using Course.DAL.DTOs;
+using System;
 
 namespace Course.BLL.Extensions
 {
@@ -28,6 +29,7 @@ namespace Course.BLL.Extensions
             // lesion
             CreateMap<Lecture, LectureForCreateRequest>().ReverseMap();
             CreateMap<Lecture, LectureForUpdateRequest>().ReverseMap();
+            CreateMap<LectureForUpdateRequest, Lecture>().ForMember(des => des.Id, src => src.MapFrom(opt => opt.IsNew == true ? Guid.NewGuid() : opt.Id)).ReverseMap();
             CreateMap<Lecture, LectureDTO>().ReverseMap();
 
             // section

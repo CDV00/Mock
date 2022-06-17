@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -88,6 +89,14 @@ namespace CourseAPI.Extensions.ServiceExtensions
                 //CVPANHTNT6-59
                 options.UseSqlServer(configuration.GetConnectionString("MOCK_Course"), b =>
                 b.MigrationsAssembly("CourseAPI"));
+            });
+        }
+
+        public static void ConfigureInvalidFilter(this IServiceCollection services)
+        {
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
             });
         }
 
