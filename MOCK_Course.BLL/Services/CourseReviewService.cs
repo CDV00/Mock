@@ -285,7 +285,7 @@ namespace Course.BLL.Services
             }
         }
 
-        public async Task<BaseResponse> IsCourseReview(Guid userId, Guid courseId)
+        public async Task<Response<BaseResponse>> IsCourseReview(Guid userId, Guid courseId)
         {
             try
             {
@@ -296,14 +296,14 @@ namespace Course.BLL.Services
 
                 if (courseReview == null)
                 {
-                    return new BaseResponse(false);
+                    return new Response<BaseResponse>(false,null);
                 }
 
-                return new BaseResponse(true);
+                return new Response<BaseResponse>(true,null);
             }
             catch (Exception ex)
             {
-                return new BaseResponse(false, ex.Message, null);
+                return new Response<BaseResponse>(false, ex.Message, null);
             }
         }
         public async Task<Response<CourseReviewDTO>> CheckUserCourseReview(Guid userId, Guid courseId)

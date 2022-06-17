@@ -25,5 +25,16 @@ namespace Course.BLL.Requests
         public IList<QuizSettingForCreateRequest> Settings { get; set; }
         public int Index { get; set; }
     }
+    public class QuizForUpdateRequest
+    {
+        public Guid Id { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public IList<QuestionForUpdateRequest> Questions { get; set; }
+        public IList<QuizSettingForUpdateRequest> Settings { get; set; }
+        public int Index { get; set; }
+        public bool IsDeleted { get; set; }
+        public bool IsNew { get; set; }
+    }
 
 }
