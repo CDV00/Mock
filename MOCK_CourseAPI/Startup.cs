@@ -9,14 +9,10 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Diagnostics;
-using System.Net;
 using NLog;
-using Microsoft.AspNetCore.Mvc;
 
 namespace CourseAPI
 {
-    //Hello K
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -45,10 +41,12 @@ namespace CourseAPI
             services.ConfigureSqlContext(Configuration);
             services.AddAutoMapper(typeof(MapperInitializer));
             services.ConfigureInvalidFilter();
+            services.ConfigureUpload();
 
-            services.AddControllers();
-
-
+            services.AddControllers(config =>
+            {
+                //config.Filters.Add(new FilterDiscount());
+            });
         }
 
 

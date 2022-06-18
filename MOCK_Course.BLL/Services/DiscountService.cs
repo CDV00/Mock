@@ -7,8 +7,6 @@ using Course.DAL.Models;
 using Course.BLL.Responses;
 using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
-using Repository.Repositories;
-using CourseAPI.ErrorModel;
 
 namespace Course.BLL.Services
 {
@@ -16,10 +14,10 @@ namespace Course.BLL.Services
     {
         private readonly IDiscountRepository _discountRepository;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ICoursesRepository _coursesRepository;
+        private readonly ICourseRepository _coursesRepository;
         private readonly IMapper _mapper;
 
-        public DiscountService(ICoursesRepository coursesRepository, IDiscountRepository discountRepository, IMapper mapper, IUnitOfWork unitOfWork)
+        public DiscountService(ICourseRepository coursesRepository, IDiscountRepository discountRepository, IMapper mapper, IUnitOfWork unitOfWork)
         {
             _discountRepository = discountRepository;
             _mapper = mapper;
@@ -27,19 +25,12 @@ namespace Course.BLL.Services
             _coursesRepository = coursesRepository;
         }
 
-        public async Task<Response<DiscountDTO_>> Add(DiscountForCreateRequest discountForCreateRequest)
+        public async Task<Response<DiscountDTO_>> Add(DiscountForCreateRequest discountForCreateRequest, Courses course)
         {
-            if (!await _coursesRepository.BuildQuery()
-                                         .FilterById(discountForCreateRequest.CourseId)
-                                         .AnyAsync())
-                throw new CompanyNotFoundException(discountForCreateRequest.CourseId);
-
             var discount = _mapper.Map<Discount>(discountForCreateRequest);
-            if (await _discountRepository.CheckDiscount(discount))
-            {
-                return new Response<DiscountDTO_>(false, "Discount was available during this time", null);
-            }
+            discount.CourseId = course.Id;
             discount.CreatedAt = DateTime.Now;
+
             await _discountRepository.CreateAsync(discount);
 
             await _unitOfWork.SaveChangesAsync();
@@ -52,72 +43,35 @@ namespace Course.BLL.Services
         }
 
 
-        // Get All theo UserId !!!
         public async Task<Responses<DiscountDTO_>> GetAllDiscount(Guid UserId)
         {
-            try
-            {
-                var discounts = await _discountRepository.BuildQuery()
-                                                         .IncludeCourses()
-                                                         .FilterByUserId(UserId)
-                                                         .ToListAsync(d => _mapper.Map<DiscountDTO_>(d));
+            var discounts = await _discountRepository.BuildQuery()
+                                                     .IncludeCourses()
+                                                     .FilterByUserId(UserId)
+                                                     .ToListAsync(d => _mapper.Map<DiscountDTO_>(d));
 
-                return new Responses<DiscountDTO_>(true, discounts);
-            }
-            catch (Exception ex)
-            {
-                return new Responses<DiscountDTO_>(false, ex.Message, null);
-            }
+            return new Responses<DiscountDTO_>(true, discounts);
         }
 
-        public async Task<BaseResponse> Remove(Guid id)
+        public async Task<BaseResponse> Remove(Discount discount)
         {
-            try
-            {
-                var discount = await _discountRepository.GetByIdAsync(id);
-                if (discount == null)
-                {
-                    new Responses<BaseResponse>(false, "can't find discount", null);
-                }
+            _discountRepository.Remove(discount, false);
+            await _unitOfWork.SaveChangesAsync();
 
-                _discountRepository.Remove(discount, false);
-                await _unitOfWork.SaveChangesAsync();
-
-                return new BaseResponse(true, "Delete success", null);
-
-            }
-            catch (Exception ex)
-            {
-                return new Responses<BaseResponse>(false, ex.Message, null);
-            }
+            return new BaseResponse(true, "Delete success", null);
         }
 
-        public async Task<Response<DiscountDTO_>> Update(Guid id, DiscountForUpdateRequest discountForUpdateRequest)
+        public async Task<Response<DiscountDTO_>> Update(Discount discount, DiscountForUpdateRequest discountForUpdateRequest)
         {
-            try
-            {
-                var discount = await _discountRepository.GetByIdAsync(id);
-                if (discount == null)
-                {
-                    new Responses<DiscountDTO_>(false, "can't find discount", null);
-                }
+            _mapper.Map(discountForUpdateRequest, discount);
+            discount.UpdatedAt = DateTime.Now;
+            await _unitOfWork.SaveChangesAsync();
 
+            var DiscountResponse = _mapper.Map<DiscountDTO_>(discount);
 
-                _mapper.Map(discountForUpdateRequest, discount);
-                discount.UpdatedAt = DateTime.Now;
-                await _unitOfWork.SaveChangesAsync();
-
-                var DiscountResponse = _mapper.Map<DiscountDTO_>(discount);
-
-                return new Response<DiscountDTO_>(
-                    true,
-                    DiscountResponse
-                );
-            }
-            catch (Exception ex)
-            {
-                return new Response<DiscountDTO_>(false, ex.Message, null);
-            }
+            return new Response<DiscountDTO_>(
+                true,
+                DiscountResponse);
         }
     }
 }

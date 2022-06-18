@@ -16,14 +16,14 @@ namespace Course.BLL.Services
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
         private readonly IEnrollmentRepository _enrollmentRepository;
-        private readonly ICoursesRepository _cousesRepository;
+        private readonly ICourseRepository _cousesRepository;
         private readonly ICourseReviewRepository _courseReviewRepository;
         private readonly ISubscriptionRepository _subscriptionRepository;
         private readonly ISubscriptionService _subscriptionService;
         private readonly ICourseService _courseService;
         private readonly IUserRepository _userRepository;
         public UserService(UserManager<AppUser> userManager,
-           IMapper mapper, IEnrollmentRepository enrollmentRepository, ICoursesRepository cousesRepository, ICourseReviewRepository courseReviewRepository, ISubscriptionRepository subscriptionRepository, IUserRepository userRepository, ISubscriptionService subscriptionService, ICourseService courseService)
+           IMapper mapper, IEnrollmentRepository enrollmentRepository, ICourseRepository cousesRepository, ICourseReviewRepository courseReviewRepository, ISubscriptionRepository subscriptionRepository, IUserRepository userRepository, ISubscriptionService subscriptionService, ICourseService courseService)
         {
             _userManager = userManager;
             _mapper = mapper;

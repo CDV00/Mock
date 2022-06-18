@@ -17,7 +17,7 @@ namespace Course.BLL.Extensions
             CreateMap<Category, CategoryRequest>().ReverseMap();
             CreateMap<Category, CategoryUpdateRequest>().ReverseMap();
             CreateMap<DiscountDTO, Discount>().ReverseMap();
-            //CreateMap<DiscountDTO_, Discount>().ReverseMap();
+            CreateMap<DiscountDTO_, Discount>().ReverseMap();
 
 
             CreateMap<RegisterRequest, AppUser>().ForMember(des => des.UserName,
@@ -106,7 +106,6 @@ namespace Course.BLL.Extensions
             CreateMap<Subscription, SubscriptionDTO>().ReverseMap();
             CreateMap<Subscription, SubscriptionRequest>().ReverseMap();
 
-            CreateMap<Discount, DiscounRequest>().ReverseMap();
             CreateMap<UserDTO, Subscription>().ReverseMap();
 
             // map saved cart

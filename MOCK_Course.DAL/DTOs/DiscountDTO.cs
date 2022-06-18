@@ -16,7 +16,7 @@ namespace Course.BLL.Responses
     public class DiscountDTO_
     {
         public Guid Id { get; set; }
-        //public Guid CourseId { get; set; }
+        public Guid CourseId { get; set; }
         public CourseOfDiscountDTO Course { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
