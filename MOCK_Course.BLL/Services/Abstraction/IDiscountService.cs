@@ -10,7 +10,7 @@ namespace Course.BLL.Services.Abstraction
     public interface IDiscountService
     {
         Task<Response<DiscountDTO_>> Add(DiscountForCreateRequest discountForCreateRequest, Courses course);
-        Task<Response<DiscountDTO_>> Update(Discount discount, DiscountForUpdateRequest discountForUpdateRequest);
+        Task<Response<DiscountDTO_>> Update(Discount discount,Guid courseId, DiscountForUpdateRequest discountForUpdateRequest);
         Task<BaseResponse> Remove(Discount discount);
         Task<Responses<DiscountDTO_>> GetAllDiscount(Guid userId);
     }

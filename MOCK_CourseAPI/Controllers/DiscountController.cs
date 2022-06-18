@@ -48,7 +48,6 @@ namespace CourseAPI.Controllers
         [HttpPost]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [ServiceFilter(typeof(ValidationCourseForDiscountExistAttribute))]
-        [ServiceFilter(typeof(ValidationDateTimeForDiscountAttribute))]
         public async Task<ActionResult<Response<DiscountDTO_>>> Add(Guid courseId, DiscountForCreateRequest discount)
         {
             var course = HttpContext.Items["course"] as Courses;
@@ -65,11 +64,10 @@ namespace CourseAPI.Controllers
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [ServiceFilter(typeof(ValidationCourseForDiscountExistAttribute))]
         [ServiceFilter(typeof(ValidationDiscountExistAttribute))]
-        [ServiceFilter(typeof(ValidationDateTimeForDiscountAttribute))]
         public async Task<ActionResult<Response<DiscountDTO_>>> Update(Guid id, Guid courseId, DiscountForUpdateRequest discountForUpdate)
         {
             var discount = HttpContext.Items["Discount"] as Discount;
-            var result = await _discountService.Update(discount, discountForUpdate);
+            var result = await _discountService.Update(discount, courseId, discountForUpdate);
 
             return Ok(result);
         }

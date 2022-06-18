@@ -27,6 +27,13 @@ namespace Course.BLL.Services
 
         public async Task<Response<DiscountDTO_>> Add(DiscountForCreateRequest discountForCreateRequest, Courses course)
         {
+            var checkDateDiscoutExist = await _discountRepository.BuildQuery()
+                                                                 .FilterByCourseId(course.Id)
+                                                                 .CheckDateDiscountExist(discountForCreateRequest.StartDate, discountForCreateRequest.EndDate)
+                                                                 .CountAsync();
+            if (checkDateDiscoutExist > 0)
+                return new Response<DiscountDTO_>(false, "Already have discount available during this time", "1001");
+
             var discount = _mapper.Map<Discount>(discountForCreateRequest);
             discount.CourseId = course.Id;
             discount.CreatedAt = DateTime.Now;
@@ -61,8 +68,15 @@ namespace Course.BLL.Services
             return new BaseResponse(true, "Delete success", null);
         }
 
-        public async Task<Response<DiscountDTO_>> Update(Discount discount, DiscountForUpdateRequest discountForUpdateRequest)
+        public async Task<Response<DiscountDTO_>> Update(Discount discount, Guid courseId, DiscountForUpdateRequest discountForUpdateRequest)
         {
+            var checkDateDiscoutExist = await _discountRepository.BuildQuery()
+                                                                 .FilterByCourseId(courseId)
+                                                                 .CheckDateDiscountExist(discountForUpdateRequest.StartDate, discountForUpdateRequest.EndDate)
+                                                                 .CountAsync();
+            if (checkDateDiscoutExist > 0)
+                return new Response<DiscountDTO_>(false, "Already have discount available during this time", "1001");
+
             _mapper.Map(discountForUpdateRequest, discount);
             discount.UpdatedAt = DateTime.Now;
             await _unitOfWork.SaveChangesAsync();

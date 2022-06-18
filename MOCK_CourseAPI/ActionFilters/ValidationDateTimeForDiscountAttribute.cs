@@ -2,6 +2,7 @@
 using Course.BLL.Requests;
 using Course.DAL.Models;
 using Course.DAL.Repositories.Abstraction;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
@@ -36,7 +37,11 @@ namespace CourseAPI.ActionFilters
             if (discounts > 0)
             {
                 _logger.LogInfo($"Already have discount available during this time");
-                context.Result = new UnprocessableEntityObjectResult("Already have discount available during this time");
+                context.Result = // new StatusCodeResult(1001,"Already have discount available during this time");
+                new ObjectResult("Already have discount available during this time")
+                {
+                    StatusCode = 2078,
+                };
             }
             else
             {

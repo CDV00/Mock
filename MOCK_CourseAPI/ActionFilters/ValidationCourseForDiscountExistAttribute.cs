@@ -28,11 +28,12 @@ namespace CourseAPI.ActionFilters
                                                 .FilterById(courseId)
                                                 .FilterIsActive(true)
                                                 .FilterByApprove()
-                                                .AsSelectorAsync(c=>c);
+                                                .AsSelectorAsync(c => c);
+
             if (course == null)
             {
                 _logger.LogInfo($"course with id: {courseId} doesn't exist in the database.");
-               
+
                 context.Result = new NotFoundObjectResult($"Not found course with id: {courseId}");
                 return;
             }
