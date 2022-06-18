@@ -12,5 +12,6 @@ namespace Course.BLL.Services.Abstraction
         Task<Response<int>> GetTotalEnrollOfCourse(Guid courseId);
         Task<Response<EnrollmentDTO>> IsEnrollment(Guid userId, Guid courseId);
         Task<Response<int>> GetTotalEnrollOfInstructor(Guid userId);
+        Task<Response<EnrollmentDTO>> GetAll(Guid? userId);
     }
 }

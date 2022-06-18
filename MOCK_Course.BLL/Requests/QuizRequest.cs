@@ -22,7 +22,7 @@ namespace Course.BLL.Requests
         public string Title { get; set; }
         public string Description { get; set; }
         public IList<QuestionForCreateRequest> Questions { get; set; }
-        public IList<QuizSettingForCreateRequest> Settings { get; set; }
+        public QuizSettingForCreateRequest Settings { get; set; }
         public int Index { get; set; }
     }
     public class QuizForUpdateRequest
