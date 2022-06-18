@@ -12,11 +12,18 @@ namespace Course.DAL.Models
         public string Title { get; set; }
         [Required]
         public byte Score { get; set; }
-        public string Type { get; set; }
+        public TypeQuestion Type { get; set; }
         public Guid QuizId { get; set; }
         public Quiz Quiz { get; set; }
         public List<QuizOption> Options { get; set; }
         //public List<Guid> CorrectAnswer { get; set; }
         public string TextAnswer { get; set; }
+    }
+    public enum TypeQuestion
+    {
+        SingleChoice,
+        MultipleChoice,
+        SingleLineText,
+        MiltiText    
     }
 }

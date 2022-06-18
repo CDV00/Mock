@@ -104,5 +104,16 @@ namespace CourseAPI.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
+        [HttpGet("Get-all-errolment-course")]
+        [AllowAnonymous]
+        public async Task<ActionResult<Responses<EnrollmentDTO>>> GetAll()
+        {
+
+            Guid? userId = (User.GetUserId() == Guid.Empty) ? null : User.GetUserId();
+            var result = await _enrollmentService.GetAll(userId);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
     }
 }
