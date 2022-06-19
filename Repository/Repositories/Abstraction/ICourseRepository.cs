@@ -11,5 +11,6 @@ namespace Course.DAL.Repositories.Abstraction
     public interface ICourseRepository : IRepository<Courses>
     {
         ICourseQuery BuildQuery();
+        Task<bool> IsExist(Guid id);
     }
 }

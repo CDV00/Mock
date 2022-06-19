@@ -33,7 +33,7 @@ namespace Course.BLL.Services
         public CourseService(ICourseRepository cousesRepository,
             IMapper mapper,
             IUnitOfWork unitOfWork, IAudioLanguageRepository audioLanguageRepository,
-            ICloseCaptionRepository closeCaptionRepository, ILevelRepository levelRepository, ISectionRepositoty sectionRepositoty,ICourseReviewService courseReviewService, IEnrollmentService enrollmentService, ISavedCoursesService savedCoursesService, ISectionService sectionService, ILectureService lectureService)
+            ICloseCaptionRepository closeCaptionRepository, ILevelRepository levelRepository, ISectionRepositoty sectionRepositoty, ICourseReviewService courseReviewService, IEnrollmentService enrollmentService, ISavedCoursesService savedCoursesService, ISectionService sectionService, ILectureService lectureService)
         {
             _cousesRepository = cousesRepository;
             _mapper = mapper;
@@ -392,7 +392,7 @@ namespace Course.BLL.Services
         {
             try
             {
-                
+
                 var course = await _cousesRepository.BuildQuery()
                                                     .FilterById(courseStatusUpdateRequest.CourseId)
                                                     //.IncludeCategory()
@@ -598,11 +598,11 @@ namespace Course.BLL.Services
                 #endregion
                 #region Update Quizz
                 var quizzes = section.Quizzes;
-                    if (quizzes != null)
+                if (quizzes != null)
+                {
+                    for (var j = 0; j < quizzes.Count; j++)
                     {
-                        for (var j = 0; j < quizzes.Count; j++)
-                        {
-                            var quiz = quizzes[j];
+                        var quiz = quizzes[j];
 
                         #region Update Question
                         var questions = quiz.Questions;
@@ -673,21 +673,22 @@ namespace Course.BLL.Services
                         #endregion
 
                         if (quiz.IsDeleted)
-                            {
-                                quiz = null;
-                                continue;
-                            }
-
-                            if (quiz.IsNew)
-                            {
-                                quiz.Id = Guid.Empty;
-                            }
-
+                        {
+                            quiz = null;
+                            continue;
                         }
+
+                        if (quiz.IsNew)
+                        {
+                            quiz.Id = Guid.Empty;
+                        }
+
                     }
+                }
                 #endregion
             }
         }
+
 
         public async Task<Response<int>> GetTotalCourseOfUser(Guid userId)
         {

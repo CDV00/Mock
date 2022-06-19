@@ -10,6 +10,7 @@ namespace Course.DAL.Queries.Abstraction
         IDiscountQuery FilterByCourseId(Guid courseId);
         IDiscountQuery FilterById(Guid id);
         IDiscountQuery FilterByUserId(Guid UserId);
+        IDiscountQuery FilterIgnoreId(Guid? id);
         IDiscountQuery IncludeCourses();
         IDiscountQuery IncludeOrderItem();
     }

@@ -1,5 +1,9 @@
 ﻿using Contracts;
+using Course.BLL.Requests;
 using Course.DAL.Repositories.Abstraction;
+using CourseAPI.ErrorModel;
+using Entities.Constants;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
@@ -23,7 +27,8 @@ namespace CourseAPI.ActionFilters
         public async Task OnActionExecutionAsync(ActionExecutingContext context,
        ActionExecutionDelegate next)
         {
-            var courseId = (Guid)context.ActionArguments["courseId"];
+            Guid courseId = (context.ActionArguments[DiscountConstant.Name] as dynamic).CourseId;
+
             var course = await _courseRepository.BuildQuery()
                                                 .FilterById(courseId)
                                                 .FilterIsActive(true)
@@ -34,10 +39,14 @@ namespace CourseAPI.ActionFilters
             {
                 _logger.LogInfo($"course with id: {courseId} doesn't exist in the database.");
 
-                context.Result = new NotFoundObjectResult($"Not found course with id: {courseId}");
+                context.Result = new NotFoundObjectResult(new ErrorDetails
+                {
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = $"Not found course with id: {courseId}"
+                });
                 return;
             }
-            context.HttpContext.Items.Add("course", course);
+            context.HttpContext.Items.Add(CourseConstant.Name, course);
             await next();
         }
     }

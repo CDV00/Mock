@@ -7,6 +7,10 @@ using Course.DAL.Models;
 using Course.BLL.Responses;
 using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
+using Entities.Responses;
+using System.Linq;
+using Entities.Requests;
+using Course.BLL.Share.RequestFeatures;
 
 namespace Course.BLL.Services
 {
@@ -15,77 +19,79 @@ namespace Course.BLL.Services
         private readonly IDiscountRepository _discountRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICourseRepository _coursesRepository;
+        private readonly ICourseService _courseService;
         private readonly IMapper _mapper;
 
-        public DiscountService(ICourseRepository coursesRepository, IDiscountRepository discountRepository, IMapper mapper, IUnitOfWork unitOfWork)
+        public DiscountService(ICourseRepository coursesRepository, IDiscountRepository discountRepository, IMapper mapper, IUnitOfWork unitOfWork, ICourseService courseService)
         {
             _discountRepository = discountRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _coursesRepository = coursesRepository;
+            _courseService = courseService;
         }
 
-        public async Task<Response<DiscountDTO_>> Add(DiscountForCreateRequest discountForCreateRequest, Courses course)
+        public async Task<ApiBaseResponse> Add(DiscountForCreateRequest discount)
         {
-            var checkDateDiscoutExist = await _discountRepository.BuildQuery()
-                                                                 .FilterByCourseId(course.Id)
-                                                                 .CheckDateDiscountExist(discountForCreateRequest.StartDate, discountForCreateRequest.EndDate)
-                                                                 .CountAsync();
-            if (checkDateDiscoutExist > 0)
-                return new Response<DiscountDTO_>(false, "Already have discount available during this time", "1001");
+            if (!await _coursesRepository.IsExist(discount.CourseId))
+                return new CourseNotFoundResponse(discount.CourseId);
 
-            var discount = _mapper.Map<Discount>(discountForCreateRequest);
-            discount.CourseId = course.Id;
-            discount.CreatedAt = DateTime.Now;
+            if (await _discountRepository.CheckDiscountTimeExisting(discount.CourseId, discount.StartDate, discount.EndDate, null))
+                return new ExistDiscountTimeResponse(discount.StartDate, discount.EndDate, discount.CourseId);
 
-            await _discountRepository.CreateAsync(discount);
+            var discountEntity = _mapper.Map<Discount>(discount);
+            discountEntity.CreatedAt = DateTime.Now;
 
+            await _discountRepository.CreateAsync(discountEntity);
             await _unitOfWork.SaveChangesAsync();
 
-            var DiscountDTO_ = _mapper.Map<DiscountDTO_>(discount);
-            return new Response<DiscountDTO_>(
-                true,
-                DiscountDTO_
-                );
+            var discountDTO_ = _mapper.Map<DiscountDTO_>(discountEntity);
+            return new ApiOkResponse<DiscountDTO_>(discountDTO_);
         }
 
 
-        public async Task<Responses<DiscountDTO_>> GetAllDiscount(Guid UserId)
+        public async Task<ApiBaseResponse> GetAllDiscount(Guid UserId, DiscountParameters parameter)
         {
-            var discounts = await _discountRepository.BuildQuery()
-                                                     .IncludeCourses()
-                                                     .FilterByUserId(UserId)
-                                                     .ToListAsync(d => _mapper.Map<DiscountDTO_>(d));
+            var discounts = await _discountRepository.GetAllDiscount(UserId, parameter);
 
-            return new Responses<DiscountDTO_>(true, discounts);
+            return new ApiOkResponse<PagedList<DiscountDTO_>>(discounts);
         }
 
-        public async Task<BaseResponse> Remove(Discount discount)
+        public async Task<ApiBaseResponse> Remove(Guid id)
         {
-            _discountRepository.Remove(discount, false);
+            var discountEntity = await _discountRepository.GetByIdAsync(id);
+            if (discountEntity is null)
+                return new DiscountNotFound(id);
+
+            if (!await _coursesRepository.IsExist(discountEntity.CourseId))
+                return new CourseNotFoundResponse(discountEntity.CourseId);
+
+            _discountRepository.Remove(discountEntity, false);
             await _unitOfWork.SaveChangesAsync();
 
-            return new BaseResponse(true, "Delete success", null);
+            return new ApiBaseResponse(true);
         }
 
-        public async Task<Response<DiscountDTO_>> Update(Discount discount, Guid courseId, DiscountForUpdateRequest discountForUpdateRequest)
+        public async Task<ApiBaseResponse> Update(Guid id, DiscountForUpdateRequest discount)
         {
-            var checkDateDiscoutExist = await _discountRepository.BuildQuery()
-                                                                 .FilterByCourseId(courseId)
-                                                                 .CheckDateDiscountExist(discountForUpdateRequest.StartDate, discountForUpdateRequest.EndDate)
-                                                                 .CountAsync();
-            if (checkDateDiscoutExist > 0)
-                return new Response<DiscountDTO_>(false, "Already have discount available during this time", "1001");
+            var discountEntity = await _discountRepository.GetByIdAsync(id);
 
-            _mapper.Map(discountForUpdateRequest, discount);
-            discount.UpdatedAt = DateTime.Now;
+            if (discountEntity is null)
+                return new DiscountNotFound(id);
+
+            if (!await _coursesRepository.IsExist(discountEntity.CourseId))
+                return new CourseNotFoundResponse(discountEntity.CourseId);
+
+            if (await _discountRepository.CheckDiscountTimeExisting(discountEntity.CourseId, discount.StartDate, discount.EndDate, id))
+                return new ExistDiscountTimeResponse(discount.StartDate, discount.EndDate, discountEntity.CourseId);
+
+            _mapper.Map(discount, discountEntity);
+            discountEntity.UpdatedAt = DateTime.Now;
             await _unitOfWork.SaveChangesAsync();
 
-            var DiscountResponse = _mapper.Map<DiscountDTO_>(discount);
+            var DiscountDTO = _mapper.Map<DiscountDTO_>(discountEntity);
 
-            return new Response<DiscountDTO_>(
-                true,
-                DiscountResponse);
+            return new ApiOkResponse<DiscountDTO_>(DiscountDTO);
         }
     }
 }

@@ -1,17 +1,17 @@
 ﻿using System.Threading.Tasks;
-using Course.BLL.DTO;
 using Course.BLL.Requests;
 using System;
-using Course.BLL.Responses;
 using Course.DAL.Models;
+using Entities.Responses;
+using Entities.Requests;
 
 namespace Course.BLL.Services.Abstraction
 {
     public interface IDiscountService
     {
-        Task<Response<DiscountDTO_>> Add(DiscountForCreateRequest discountForCreateRequest, Courses course);
-        Task<Response<DiscountDTO_>> Update(Discount discount,Guid courseId, DiscountForUpdateRequest discountForUpdateRequest);
-        Task<BaseResponse> Remove(Discount discount);
-        Task<Responses<DiscountDTO_>> GetAllDiscount(Guid userId);
+        Task<ApiBaseResponse> Add(DiscountForCreateRequest discountForCreateRequest);
+        Task<ApiBaseResponse> Update(Guid id, DiscountForUpdateRequest discountForUpdateRequest);
+        Task<ApiBaseResponse> Remove(Guid id);
+        Task<ApiBaseResponse> GetAllDiscount(Guid userId, DiscountParameters parameter);
     }
 }

@@ -1,10 +1,11 @@
 ﻿using System;
+using System;
 
 namespace CourseAPI.ErrorModel
 {
-    public class CompanyNotFoundException : NotFoundException
+    public class CourseNotFoundException : NotFoundException
     {
-        public CompanyNotFoundException(Guid course)
+        public CourseNotFoundException(Guid course)
         : base($"The course with id: {course} doesn't exist in the database.")
         {
         }
