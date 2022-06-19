@@ -161,7 +161,13 @@ namespace Course.BLL.Services
                 return new CategoryNotFoundResponse(courseRequest.CategoryId);
 
             if (!await _audioLanguageRepository.CheckExists(courseRequest.AudioLanguageIds))
-                return new NotMathAudioLanguageResponse(string.Join(',', courseRequest.AudioLanguageIds));
+                return new NotMathIdResponse(nameof(AudioLanguage), string.Join(',', courseRequest.AudioLanguageIds));
+
+            if (!await _closeCaptionRepository.CheckExists(courseRequest.CloseCaptionIds))
+                return new NotMathIdResponse(nameof(CloseCaption), string.Join(',', courseRequest.AudioLanguageIds));
+
+            if (!await _levelRepository.CheckExists(courseRequest.LevelIds))
+                return new NotMathIdResponse(nameof(Level), string.Join(',', courseRequest.AudioLanguageIds));
 
             var course = _mapper.Map<Courses>(courseRequest);
             course.UserId = userId;

@@ -8,6 +8,8 @@ namespace Course.DAL.Configuration
     {
         public void Configure(EntityTypeBuilder<Assignment> builder)
         {
+            builder.HasQueryFilter(u => !u.IsDeleted);
+
             // 1-n:user-enrollment
             builder.HasOne(e => e.Section)
                 .WithMany(u => u.Assignments)

@@ -21,6 +21,8 @@ namespace Course.DAL.Configuration
                    .WithMany(c => c.Enrollments)
                    .HasForeignKey(e => e.CourseId)
                    .OnDelete(DeleteBehavior.NoAction);
+
+            builder.HasQueryFilter(u => !u.IsDeleted);
         }
     }
 }

@@ -9,6 +9,7 @@ namespace Course.DAL.Configuration
         public void Configure(EntityTypeBuilder<AudioLanguage> builder)
         {
 
+            builder.HasQueryFilter(u => !u.IsDeleted);
             //        builder.HasMany(c => c.Courses)
             //.WithMany(al => al.AudioLanguages)
             //.ToTable("CourseAudioLanguage");
