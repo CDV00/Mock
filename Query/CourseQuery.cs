@@ -211,15 +211,6 @@ namespace Course.DAL.Queries
             return this;
         }
 
-        //public ICourseQuery FilterByUserId(Guid? userId)
-        //{
-        //    if (userId == null)
-        //        return this;
-
-        //    Query = Query.Where(c => c.UserId == userId);
-        //    return this;
-        //}
-
 
         public ICourseQuery IncludeCategory()
         {

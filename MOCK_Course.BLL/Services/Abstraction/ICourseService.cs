@@ -11,8 +11,8 @@ namespace Course.BLL.Services.Abstraction
     public interface ICourseService
     {
         Task<ApiBaseResponse> Add(Guid userId, CourseForCreateRequest courseRequest);
-        Task<Response<CourseDTO>> Update(Guid id, CourseForUpdateRequest courseRequest, Guid userId);
-        Task<BaseResponse> Remove(Guid id, Guid userId);
+        Task<ApiBaseResponse> Update(Guid id, CourseForUpdateRequest courseRequest, Guid userId);
+        Task<ApiBaseResponse> Remove(Guid id, Guid userId);
         Task<Response<int>> GetTotalCourseOfUser(Guid userId);
         Task<Responses<CourseDTO>> GetAllMyCoures(Guid userId);
         //Task<Responses<UpcommingCourseDTO>> GetAllUpcomingCourses(Guid id);

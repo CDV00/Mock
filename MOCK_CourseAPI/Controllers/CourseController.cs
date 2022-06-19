@@ -80,6 +80,7 @@ namespace CourseAPI.Controllers
             var result = await _coursesService.Add(userId, course);
             if (!result.IsSuccess)
                 return ProcessError(result);
+
             return Ok(result);
         }
 
@@ -91,13 +92,14 @@ namespace CourseAPI.Controllers
         /// <returns>an course</returns>
         [HttpPut()]
         [Authorize(Roles = "Admin, Instructor")]
-        public async Task<ActionResult<Response<CourseDTO>>> Update(Guid id, CourseForUpdateRequest CoursesUpdateRequest)
+        public async Task<ActionResult<ApiOkResponse<CourseDTO>>> Update(Guid id, CourseForUpdateRequest CoursesUpdateRequest)
         {
             var userId = User.GetUserId();
 
             var result = await _coursesService.Update(id, CoursesUpdateRequest, userId);
             if (result.IsSuccess == false)
-                return BadRequest(result);
+                return ProcessError(result);
+
             return Ok(result);
         }
 
@@ -108,12 +110,13 @@ namespace CourseAPI.Controllers
         /// <returns>true or false</returns>
         [HttpDelete()]
         [Authorize(Roles = "Admin, Instructor")]
-        public async Task<ActionResult<BaseResponse>> Delete(Guid id)
+        public async Task<ActionResult<ApiBaseResponse>> Delete(Guid id)
         {
             var userId = User.GetUserId();
             var result = await _coursesService.Remove(id, userId);
             if (result.IsSuccess == false)
-                return BadRequest(result);
+                return ProcessError(result);
+
             return Ok(result);
         }
         /// <summary>

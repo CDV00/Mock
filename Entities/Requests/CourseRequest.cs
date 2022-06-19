@@ -63,11 +63,11 @@ namespace Course.BLL.Requests
         public Status Status { get; set; }
 
         public Guid CategoryId { get; set; }
-        public IList<Guid> AudioLanguageIds { get; set; }
-        public IList<Guid> CloseCaptionIds { get; set; }
-        public IList<Guid> LevelIds { get; set; }
+        public List<Guid> AudioLanguageIds { get; set; }
+        public List<Guid> CloseCaptionIds { get; set; }
+        public List<Guid> LevelIds { get; set; }
 
-        public IList<SectionUpdateRequest> Sections { get; set; }
+        public List<SectionUpdateRequest> Sections { get; set; }
     }
     public class CourseStatusUpdateRequest
     {

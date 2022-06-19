@@ -18,6 +18,8 @@ namespace Repository.Repositories
         }
         public async Task<bool> CheckExists(List<Guid> ids)
         {
+            if (ids == null)
+                return true;
             var countIs = await Entity().Where(a => ids.Contains(a.Id))
                                         .CountAsync();
             return ids.Count == countIs;
