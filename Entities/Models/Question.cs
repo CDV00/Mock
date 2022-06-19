@@ -16,7 +16,6 @@ namespace Course.DAL.Models
         public Guid QuizId { get; set; }
         public Quiz Quiz { get; set; }
         public List<QuizOption> Options { get; set; }
-        //public List<Guid> CorrectAnswer { get; set; }
         public string TextAnswer { get; set; }
     }
     public enum TypeQuestion
@@ -24,6 +23,6 @@ namespace Course.DAL.Models
         SingleChoice,
         MultipleChoice,
         SingleLineText,
-        MiltiText    
+        MiltiText
     }
 }

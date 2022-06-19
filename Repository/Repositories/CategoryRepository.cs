@@ -4,6 +4,7 @@ using Course.DAL.Queries;
 using Course.DAL.Queries.Abstraction;
 using Course.DAL.Repositories.Abstraction;
 using System;
+using System.Threading.Tasks;
 
 namespace Repository.Repositories
 {
@@ -20,5 +21,9 @@ namespace Repository.Repositories
             return new CategoryQuery(_context.Categories.AsQueryable(), _context);
         }
 
+        public async Task<bool> Existing(Guid id)
+        {
+            return await BuildQuery().FilterById(id).AnyAsync();
+        }
     }
 }

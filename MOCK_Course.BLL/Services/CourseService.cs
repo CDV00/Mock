@@ -9,14 +9,14 @@ using Course.BLL.Responses;
 using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
 using Course.BLL.Share.RequestFeatures;
-using System.Linq;
-using System.Linq.Expressions;
+using Entities.Responses;
 
 namespace Course.BLL.Services
 {
     public class CourseService : ICourseService
     {
         private readonly ICourseRepository _cousesRepository;
+        private readonly ICategoryRepository _categoryRepository;
         private readonly IAudioLanguageRepository _audioLanguageRepository;
         private readonly ICloseCaptionRepository _closeCaptionRepository;
         private readonly ILevelRepository _levelRepository;
@@ -31,9 +31,18 @@ namespace Course.BLL.Services
         private readonly IMapper _mapper;
 
         public CourseService(ICourseRepository cousesRepository,
-            IMapper mapper,
-            IUnitOfWork unitOfWork, IAudioLanguageRepository audioLanguageRepository,
-            ICloseCaptionRepository closeCaptionRepository, ILevelRepository levelRepository, ISectionRepositoty sectionRepositoty, ICourseReviewService courseReviewService, IEnrollmentService enrollmentService, ISavedCoursesService savedCoursesService, ISectionService sectionService, ILectureService lectureService)
+                             IMapper mapper,
+                             IUnitOfWork unitOfWork,
+                             IAudioLanguageRepository audioLanguageRepository,
+                             ICloseCaptionRepository closeCaptionRepository,
+                             ILevelRepository levelRepository,
+                             ISectionRepositoty sectionRepositoty,
+                             ICourseReviewService courseReviewService,
+                             IEnrollmentService enrollmentService,
+                             ISavedCoursesService savedCoursesService,
+                             ISectionService sectionService,
+                             ILectureService lectureService,
+                             ICategoryRepository categoryRepository)
         {
             _cousesRepository = cousesRepository;
             _mapper = mapper;
@@ -47,52 +56,17 @@ namespace Course.BLL.Services
             _savedCoursesService = savedCoursesService;
             _sectionService = sectionService;
             _lectureService = lectureService;
+            _categoryRepository = categoryRepository;
         }
 
-        public async Task<PagedList<CourseDTO>> GetCoursesAsync(CourseParameters courseParameter, Guid? userId)
+        public async Task<ApiBaseResponse> GetAllCourses(CourseParameters parameter, Guid? userId)
         {
-            var courses = await _cousesRepository.BuildQuery()
-                                                 .IncludeCategory()
-                                                 .IncludeUser()
-                                                 .IncludeDiscount()
-                                                 .FilterByKeyword(courseParameter.Keyword)
-                                                 .FilterByUserId(courseParameter.userId)
-                                                 .FilterByCategoryId(courseParameter.CategoryId)
-                                                 .FilterByAudioLanguageIds(courseParameter.AudioLanguageIds)
-                                                 .FilterByCloseCaptionIds(courseParameter.CloseCaptionIds)
-                                                 .FilterByLevelIds(courseParameter.LevelIds)
-                                                 .FilterByPrice(courseParameter.IsFree, courseParameter.IsDiscount, courseParameter.MinPrice, courseParameter.MaxPrice)
-                                                 .FilterByRating(courseParameter.Rate)
-                                                 .ApplySort(courseParameter.Orderby)
-                                                 .Skip((courseParameter.PageNumber - 1) * courseParameter.PageSize)
-                                                 .Take(courseParameter.PageSize)
-                                                 .ToListAsync(c => _mapper.Map<CourseDTO>(c));
+            var courses = await _cousesRepository.GetAllCourseAsync(parameter);
+            await AddLast(courses, userId);
 
-            if (userId != null)
-            {
-                await AddLast(courses, userId);
-            }
-
-            var count = await _cousesRepository.BuildQuery()
-                                               .FilterByKeyword(courseParameter.Keyword)
-                                               .FilterByUserId(courseParameter.userId)
-                                               .FilterByCategoryId(courseParameter.CategoryId)
-                                               .FilterByAudioLanguageIds(courseParameter.AudioLanguageIds)
-                                               .FilterByCloseCaptionIds(courseParameter.CloseCaptionIds)
-                                               .FilterByLevelIds(courseParameter.LevelIds)
-                                               .FilterByPrice(courseParameter.IsFree, courseParameter.IsDiscount, courseParameter.MinPrice, courseParameter.MaxPrice)
-                                               .FilterByRating(courseParameter.Rate)
-                                               .CountAsync();
-
-            //await AddRating(courses);
-
-
-            var pageList = new PagedList<CourseDTO>(courses, count, courseParameter.PageNumber, courseParameter.PageSize);
-
-            return pageList;
+            return new ApiOkResponse<PagedList<CourseDTO>>(courses);
         }
 
-        //
         private async Task AddLast(List<CourseDTO> courses, Guid? userId)
         {
             for (var i = 0; i < courses.Count; i++)
@@ -104,47 +78,9 @@ namespace Course.BLL.Services
                 courses[i].IsEnroll = (await _enrollmentService.IsEnrollment(userId.GetValueOrDefault(), courses[i].Id)).data == null ? false : true;
             }
         }
-        private async Task AddRating(List<CourseDTO> courses)
-        {
-            //for (var i = 0; i < courses.Count; i++)
-            //{
-            //courses[i].TotalEnroll = (await _enrollmentService.GetTotalEnrollOfCourse(courses[i].Id)).data;
-            //}
-        }
-
-        /// <summary>
-        /// làm thêm phân trang và filter ở đâu
-        /// </summary>
-        /// <returns></returns>
-        public async Task<Response<CourseDTO>> GetAll(Guid? userId)
-        {
-            try
-            {
-                var courses = await _cousesRepository.BuildQuery()
-                                                     .IncludeCategory()
-                                                     .IncludeUser()
-                                                     .IncludeEnrolment()
-                                                     .AsSelectorAsync(x => _mapper.Map<CourseDTO>(x));
-                if (userId != null)
-                {
-                    //await AddLast(courses, userId);
-                }
-                return new Response<CourseDTO>(true, courses);
-            }
-            catch (Exception ex)
-            {
-                return new Response<CourseDTO>(false, ex.Message, null);
-            }
-        }
 
         public async Task<Responses<CourseDTO>> GetAllMyCoures(Guid userId)
         {
-            //Func<Courses, CourseDTO> mapper = x =>
-            //{
-            //    //x.RequireLogin = true;
-            //    //return null;
-            //};
-
             try
             {
                 var courses = await _cousesRepository.BuildQuery()
@@ -157,7 +93,6 @@ namespace Course.BLL.Services
                                                      .IncludeDiscount()
                                                      .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 
-                await AddRating(courses);
                 return new Responses<CourseDTO>(true, courses);
             }
             catch (Exception ex)
@@ -181,7 +116,6 @@ namespace Course.BLL.Services
                                                      //.FilterByOrderd(userId)
                                                      .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 
-                await AddRating(courses);
                 return new Responses<CourseDTO>(true, courses);
             }
             catch (Exception ex)
@@ -201,7 +135,6 @@ namespace Course.BLL.Services
                                                      .FilterByOrderd(userId)
                                                      .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 
-                await AddRating(courses);
                 return new Responses<CourseDTO>(true, courses);
             }
             catch (Exception ex)
@@ -211,99 +144,71 @@ namespace Course.BLL.Services
         }
 
 
-        public async Task<Response<CourseDTO>> Get(Guid id, Guid? userId)
+        public async Task<ApiBaseResponse> GetDetail(Guid id, Guid? userId)
         {
-            try
-            {
-                var course = await _cousesRepository.BuildQuery()
-                                                    .IncludeCategory()
-                                                    .IncludeLanguage()
-                                                    .IncludeLevel()
-                                                    .IncludeSection()
-                                                    .IncludeQuiz()
-                                                    .IncludeAssignment()
-                                                    .IncludeUser()
-                                                    .FilterById(id)
-                                                    .AsSelectorAsync(x => _mapper.Map<CourseDTO>(x));
-                //await AddRate(course);
-                await AddLast(new List<CourseDTO> { course }, userId);
-                var courseResponse = _mapper.Map<CourseDTO>(course);
-                return new Response<CourseDTO>(true, courseResponse);
-            }
-            catch (Exception ex)
-            {
-                return new Response<CourseDTO>(false, ex.Message, null);
-            }
+            var course = await _cousesRepository.GetDetailCourseAsync(id);
+            if (course is null)
+                return new CourseNotFoundResponse(id);
+
+            await AddLast(new List<CourseDTO> { course }, userId);
+
+            return new ApiOkResponse<CourseDTO>(course);
         }
 
-        private async Task AddRate(CourseDTO course)
+        public async Task<ApiBaseResponse> Add(Guid userId, CourseForCreateRequest courseRequest)
         {
-            //course.Rating = (await _courseReviewService.GetAVGRatinng(course.Id, null)).data;
-            //course.TotalEnroll = (await _enrollmentService.GetTotalEnrollOfCourse(course.Id)).data;
-        }
+            if (!await _categoryRepository.Existing(courseRequest.CategoryId))
+                return new CategoryNotFoundResponse(courseRequest.CategoryId);
 
-        public async Task<Response<CourseDTO>> Add(Guid userId, CourseForCreateRequest courseRequest)
-        {
-            try
+            if (!await _audioLanguageRepository.CheckExists(courseRequest.AudioLanguageIds))
+                return new NotMathAudioLanguageResponse(string.Join(',', courseRequest.AudioLanguageIds));
+
+            var course = _mapper.Map<Courses>(courseRequest);
+            course.UserId = userId;
+            course.CreatedAt = DateTime.Now;
+
+            await _cousesRepository.CreateAsync(course);
+
+            GetTotalTimeOfCourse(course);
+            #region add language, levels
+            List<AudioLanguage> audioLanguages = new();
+            if (courseRequest.AudioLanguageIds != null)
             {
-                var course = _mapper.Map<Courses>(courseRequest);
-                course.UserId = userId;
-                course.CreatedAt = DateTime.Now;
-
-                await _cousesRepository.CreateAsync(course);
-
-                GetTotalTimeOfCourse(course);
-                #region add language, levels
-                List<AudioLanguage> audioLanguages = new();
-                if (courseRequest.AudioLanguageIds != null)
+                foreach (var id in courseRequest.AudioLanguageIds)
                 {
-                    foreach (var id in courseRequest.AudioLanguageIds)
-                    {
-                        var audioLanguage = await _audioLanguageRepository.GetByIdAsync(id);
-                        audioLanguages.Add(audioLanguage);
-                    }
-                    course.AudioLanguages = audioLanguages;
+                    var audioLanguage = await _audioLanguageRepository.GetByIdAsync(id);
+                    audioLanguages.Add(audioLanguage);
                 }
-
-                //course.AudioLanguages.Clear();
-
-                List<CloseCaption> closeCaptions = new();
-                if (courseRequest.CloseCaptionIds != null)
-                {
-                    foreach (var id in courseRequest.CloseCaptionIds)
-                    {
-                        var closeCaption = await _closeCaptionRepository.GetByIdAsync(id);
-                        closeCaptions.Add(closeCaption);
-                    }
-                    //course.CloseCaptions.Clear();
-                    course.CloseCaptions = closeCaptions;
-                }
-
-                List<Level> levels = new();
-                if (courseRequest.LevelIds != null)
-                {
-                    foreach (var id in courseRequest.LevelIds)
-                    {
-                        var level = await _levelRepository.GetByIdAsync(id);
-                        levels.Add(level);
-                    }
-                    //course.Levels.Clear();
-                    course.Levels = levels;
-                }
-                #endregion
-
-                var result = await _unitOfWork.SaveChangesAsync();
-
-                var CourseDTO = _mapper.Map<CourseDTO>(course);
-                return new Response<CourseDTO>(
-                    true,
-                    CourseDTO
-                );
+                course.AudioLanguages = audioLanguages;
             }
-            catch (Exception ex)
+
+            List<CloseCaption> closeCaptions = new();
+            if (courseRequest.CloseCaptionIds != null)
             {
-                return new Response<CourseDTO>(false, ex.Message, null);
+                foreach (var id in courseRequest.CloseCaptionIds)
+                {
+                    var closeCaption = await _closeCaptionRepository.GetByIdAsync(id);
+                    closeCaptions.Add(closeCaption);
+                }
+                course.CloseCaptions = closeCaptions;
             }
+
+            List<Level> levels = new();
+            if (courseRequest.LevelIds != null)
+            {
+                foreach (var id in courseRequest.LevelIds)
+                {
+                    var level = await _levelRepository.GetByIdAsync(id);
+                    levels.Add(level);
+                }
+                course.Levels = levels;
+            }
+            #endregion
+
+            await _unitOfWork.SaveChangesAsync();
+
+            var CourseDTO = _mapper.Map<CourseDTO>(course);
+            return new ApiOkResponse<CourseDTO>(CourseDTO);
         }
 
         private static void GetTotalTimeOfCourse(Courses course)
@@ -705,5 +610,31 @@ namespace Course.BLL.Services
                 return new Response<int>(false, ex.Message, null);
             }
         }
+
+
+        /// <summary>
+        /// làm thêm phân trang và filter ở đâu
+        /// </summary>
+        /// <returns></returns>
+        //public async Task<Response<CourseDTO>> GetAll(Guid? userId)
+        //{
+        //    try
+        //    {
+        //        var courses = await _cousesRepository.BuildQuery()
+        //                                             .IncludeCategory()
+        //                                             .IncludeUser()
+        //                                             .IncludeEnrolment()
+        //                                             .AsSelectorAsync(x => _mapper.Map<CourseDTO>(x));
+        //        if (userId != null)
+        //        {
+        //            //await AddLast(courses, userId);
+        //        }
+        //        return new Response<CourseDTO>(true, courses);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new Response<CourseDTO>(false, ex.Message, null);
+        //    }
+        //}
     }
 }

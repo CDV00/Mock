@@ -4,14 +4,13 @@ using Course.BLL.Requests;
 using System;
 using Course.BLL.Responses;
 using Course.BLL.Share.RequestFeatures;
+using Entities.Responses;
 
 namespace Course.BLL.Services.Abstraction
 {
     public interface ICourseService
     {
-        Task<Response<CourseDTO>> GetAll(Guid? userId);
-        Task<Response<CourseDTO>> Get(Guid id, Guid? userId);
-        Task<Response<CourseDTO>> Add(Guid userId, CourseForCreateRequest courseRequest);
+        Task<ApiBaseResponse> Add(Guid userId, CourseForCreateRequest courseRequest);
         Task<Response<CourseDTO>> Update(Guid id, CourseForUpdateRequest courseRequest, Guid userId);
         Task<BaseResponse> Remove(Guid id, Guid userId);
         Task<Response<int>> GetTotalCourseOfUser(Guid userId);
@@ -19,8 +18,9 @@ namespace Course.BLL.Services.Abstraction
         //Task<Responses<UpcommingCourseDTO>> GetAllUpcomingCourses(Guid id);
         Task<Responses<CourseDTO>> GetAllMyPurchase(Guid userId);
         //Task<Responses<CourseDTO>> GetCoursesAsync(CourseParameters courseParameter);
-        Task<PagedList<CourseDTO>> GetCoursesAsync(CourseParameters courseParameter, Guid? userId);
+        Task<ApiBaseResponse> GetAllCourses(CourseParameters courseParameter, Guid? userId);
         Task<BaseResponse> UpdateStatus(CourseStatusUpdateRequest courseStatusUpdateRequest);
         Task<Responses<CourseDTO>> UpcomingCourse(Guid userId);
+        Task<ApiBaseResponse> GetDetail(Guid id, Guid? userId);
     }
 }

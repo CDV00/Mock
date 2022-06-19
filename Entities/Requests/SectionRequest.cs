@@ -11,10 +11,6 @@ namespace Course.BLL.Requests
         public IList<LectureForCreateRequest> Lectures { get; set; }
         public IList<AssignmentForCreateRequest> Assignments { get; set; }
         public IList<QuizForCreateRequest> Quizzes { get; set; }
-
-
-        //them attachment, assignment, quiz (bỏ id)
-
     }
     public class SectionUpdateRequest
     {
