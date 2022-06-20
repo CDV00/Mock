@@ -3,6 +3,7 @@ using Course.BLL.Share.RequestFeatures;
 using Course.DAL.DTOs;
 using Course.DAL.Models;
 using Course.DAL.Queries.Abstraction;
+using Entities.ParameterRequest;
 using System;
 using System.Threading.Tasks;
 

@@ -7,6 +7,7 @@ using Course.DAL.Models;
 using Course.DAL.Queries;
 using Course.DAL.Queries.Abstraction;
 using Course.DAL.Repositories.Abstraction;
+using Entities.ParameterRequest;
 using System;
 using System.Threading.Tasks;
 
