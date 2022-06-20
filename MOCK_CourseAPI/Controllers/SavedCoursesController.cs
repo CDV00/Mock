@@ -7,13 +7,17 @@ using System.Threading.Tasks;
 using CourseAPI.Extensions.ControllerBase;
 using Course.BLL.Services.Abstraction;
 using System.Text.Json;
+using Entities.Responses;
+using CourseAPI.Presentation.Controllers;
+using Entities.Extension;
+using Course.BLL.Share.RequestFeatures;
 
 namespace CourseAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class SavedCoursesController : ControllerBase
+    public class SavedCoursesController : ApiControllerBase
     {
         private readonly ISavedCoursesService _savedCoursesService;
         public SavedCoursesController(ISavedCoursesService savedCoursesService)
@@ -30,16 +34,32 @@ namespace CourseAPI.Controllers
         /// <returns></returns>
         [HttpGet("Get-all-saved-courses")]
         [AllowAnonymous]
-        public async Task<ActionResult<Responses<SavedCoursesDTO>>> GetAllSavedCourses([FromQuery] SavedCoursesParameters savedCoursesParameters)
+        //public async Task<ActionResult<Responses<SavedCoursesDTO>>> GetAllSavedCourses([FromQuery] SavedCoursesParameters savedCoursesParameters)
+        //{
+        //    var userId = User.GetUserId();
+        //    var result = await _savedCoursesService.GetAll(userId, savedCoursesParameters);
+
+        //    Response.Headers.Add("X-Pagination",
+        //                         JsonSerializer.Serialize(result.MetaData));
+
+        //    return Ok(new Responses<SavedCoursesDTO>(true, result));
+        //}
+        public async Task<ActionResult<ApiOkResponse<SavedCoursesDTO>>> GetAllSavedCourses([FromQuery] SavedCoursesParameters parameters)
         {
-            var userId = User.GetUserId();
-            var result = await _savedCoursesService.GetAll(userId, savedCoursesParameters);
+            Guid userId = User.GetUserId();
+
+            var result = await _savedCoursesService.GetAll(userId,parameters);
+            if (!result.IsSuccess)
+                return ProcessError(result);
+
+            var coursePagedList = result.GetResult<PagedList<SavedCoursesDTO>>();
 
             Response.Headers.Add("X-Pagination",
-                                 JsonSerializer.Serialize(result.MetaData));
+                                 JsonSerializer.Serialize(coursePagedList.MetaData));
 
-            return Ok(new Responses<SavedCoursesDTO>(true, result));
+            return Ok(result);
         }
+
 
 
         /// <summary>

@@ -139,7 +139,7 @@ namespace Course.BLL.Services
                             var resultPayment = await _paymentService.PayAsync(orderRequest.Payment);
                             if (!resultPayment.IsSuccess)
                             {
-                                return new Response<OrderDTO>(false, resultPayment.Message, resultPayment.Error);
+                                return new Response<OrderDTO>(false, resultPayment.StatusCode, resultPayment.Message);
                             }
 
                             break;
@@ -154,7 +154,7 @@ namespace Course.BLL.Services
                                 return new Response<OrderDTO>
                                 {
                                     IsSuccess = false,
-                                    Message = "You don't have enough money to payment"
+                                    StatusCode = "You don't have enough money to payment"
                                 };
                             }
                             await _userManager.UpdateAsync(user);
