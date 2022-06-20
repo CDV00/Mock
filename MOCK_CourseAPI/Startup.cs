@@ -60,12 +60,16 @@ namespace CourseAPI
                 app.UseHsts();
             }
 
+            app.UseStaticFiles();
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v2/swagger.json", "MOCK_CourseAPI v2"));
+            app.UseSwaggerUI(options =>
+            {
+                options.InjectStylesheet("/swagger-ui/custom.css");
+                options.SwaggerEndpoint("/swagger/v2/swagger.json", "MOCK_CourseAPI v2");
+            });
 
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
 
             app.UseCors("CorsPolicy");
 

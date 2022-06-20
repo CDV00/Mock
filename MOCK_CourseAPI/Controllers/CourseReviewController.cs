@@ -141,15 +141,22 @@ namespace CourseAPI.Controllers
 
 
         /// <summary>
-        /// Can only pass userId or courseId!!!
-        /// Get Rating Percent from 1-5. if [0] = 1s, [1] = 2s,...
+        /// Get Rating Percent Of User or Course
         /// </summary>
+        /// <remarks>
+        /// ## REMARKS ###
+        /// Get Rating Percent from 1-5. if [0] = 1s, [1] = 2s,...
+        /// -  Can only pass userId or courseId
+        /// </remarks>
         /// <param name="courseId"></param>
         /// <returns>List float</returns>
         [HttpGet("Get-Rating")]
         [AllowAnonymous]
         public async Task<ActionResult<Response<List<float>>>> GetRating(Guid? courseId, Guid? userId)
         {
+            if (userId is null)
+                userId = User.GetUserId();
+
             var result = await _courseReviewService.GetDetaiRate(courseId, userId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
@@ -167,6 +174,9 @@ namespace CourseAPI.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<Response<List<float>>>> GetAvgRating(Guid? courseId, Guid? userId)
         {
+            if (userId is null)
+                userId = User.GetUserId();
+
             var result = await _courseReviewService.GetAVGRatinng(courseId, userId);
             if (result.IsSuccess == false)
                 return BadRequest(result);

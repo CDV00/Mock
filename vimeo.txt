@@ -1,0 +1,34 @@
+    /// <summary>
+        /// Gets a the list of entities and their descriptions from the Entity Service.
+        /// </summary>
+        /// <remarks>
+        /// ### REMARKS ###
+        /// Use this call to retrieve a list of entities and their descriptions. This is used when setting up a new ViewSet.
+        /// - Returns an array of **EntityDescription** objects.
+        /// - The array is `ordered alphabetically` by the Name property.
+        /// <!-- 
+        /// <code>
+        ///     // contrived code sample to demonstrate code block in swagger.
+        ///     for (i=0; i < 5; i++)
+        ///     {
+        ///         doesthiswork = yesitdoes;
+        ///     }
+        /// </code>
+        /// -->
+        /// </remarks>
+        /// <response code="200">OK</response>
+        /// <returns>An array of EntityDescription objects.</returns>
+
+
+
+/// <remarks>
+/// Sample request:
+///
+///     POST /Todo
+///     {
+///        "id": 1,
+///        "name": "Item #1",
+///        "isComplete": true
+///     }
+///
+/// </remarks>
