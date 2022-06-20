@@ -9,9 +9,9 @@ namespace Course.BLL.Services.Abstraction
 {
     public interface IShoppingCartService
     {
-        Task<BaseResponse> Remove(Guid courseId, Guid userId);
-        Task<Response<CartDTO>> Add(Guid userId, Guid courseId);
-        Task<Response<CartDTO>> Update(Guid userId, CartUpdateRequest cartUpdateRequest);
         Task<ApiBaseResponse> GetAllAsync(CartParameters parameters, Guid userId);
+        Task<ApiBaseResponse> Add(Guid userId, Guid courseId);
+        Task<ApiBaseResponse> Update(Guid userId, CartUpdateRequest cartUpdate);
+        Task<ApiBaseResponse> Remove(Guid courseId, Guid userId);
     }
 }

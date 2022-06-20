@@ -11,7 +11,6 @@ using Entities.Responses;
 using Entities.ParameterRequest;
 using Entities.Extension;
 using Course.BLL.Share.RequestFeatures;
-using Course.BLL.Responses;
 using Entities.Constants;
 using System.Text.Json;
 
@@ -54,29 +53,32 @@ namespace CourseAPI.Controllers
         /// <param name="courseId"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Responses<CartDTO>>> Create(Guid courseId)
+        public async Task<ActionResult<ApiOkResponse<CartDTO>>> Create(Guid courseId)
         {
             var userId = User.GetUserId();
             var result = await _shoppingCartService.Add(userId, courseId);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
-            return Ok(result);
-        }
-        /// <summary>
-        /// Update IsActive Shopping Cart 
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="cartUpdateRequest"></param>
-        /// <returns></returns>
-        [HttpPut]
-        public async Task<ActionResult<Response<CartDTO>>> Update(Guid courseId, CartUpdateRequest cartUpdateRequest)
-        {
-            var result = await _shoppingCartService.Update(courseId, cartUpdateRequest);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
+
+            if (!result.IsSuccess)
+                return ProcessError(result);
+
             return Ok(result);
         }
 
+        /// <summary>
+        /// Update IsActive Shopping Cart 
+        /// </summary>
+        /// <param name="cartUpdateRequest"></param>
+        /// <returns></returns>
+        [HttpPut]
+        public async Task<ActionResult<Response<CartDTO>>> Update(CartUpdateRequest cartUpdateRequest)
+        {
+            var userId = User.GetUserId();
+            var result = await _shoppingCartService.Update(userId, cartUpdateRequest);
+            if (!result.IsSuccess)
+                return ProcessError(result);
+
+            return Ok(result);
+        }
 
         /// <summary>
         /// Remove Shopping Cart
@@ -85,12 +87,13 @@ namespace CourseAPI.Controllers
         /// <param name="Id"></param>
         /// <returns></returns>
         [HttpDelete()]
-        public async Task<ActionResult<BaseResponse>> Remove(Guid courseId)
+        public async Task<ActionResult<ApiBaseResponse>> Remove(Guid courseId)
         {
             Guid userId = User.GetUserId();
             var result = await _shoppingCartService.Remove(courseId, userId);
             if (result.IsSuccess == false)
-                return BadRequest(result);
+                return ProcessError(result);
+
             return Ok(result);
         }
     }

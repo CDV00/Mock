@@ -31,32 +31,33 @@ namespace Course.BLL.Services
             _cousesRepository = cousesRepository;
         }
 
-        public async Task<Response<CartDTO>> Add(Guid userId, Guid courseId)
+        public async Task<ApiBaseResponse> Add(Guid userId, Guid courseId)
         {
-            try
+            var course = await _cousesRepository.GetByIdAsync(courseId);
+
+            if (course is null)
+                return new CourseNotFoundResponse(courseId);
+
+            if (course.Price <= 0)
+                return new InvalidPriceCartResponse(courseId);
+
+            if (await _shoppingCartRepository.BuildQuery()
+                                             .FilterByCourseId(courseId)
+                                             .FilterByUserId(userId)
+                                             .AnyAsync())
+                return new DuplicateCartResponse(courseId);
+
+            var cart = new ShoppingCart()
             {
-                if (await _cousesRepository.BuildQuery()
-                                           .FilterById(courseId)
-                                           .AsSelectorAsync(c => c.Price) <= 0)
-                    return new Response<CartDTO>(false, "Can't add course with price == 0", null);
+                UserId = userId,
+                CourseId = courseId,
+            };
 
-                var cart = new ShoppingCart()
-                {
-                    UserId = userId,
-                    CourseId = courseId,
-                };
+            await _shoppingCartRepository.CreateAsync(cart);
+            await _unitOfWork.SaveChangesAsync();
 
-                await _shoppingCartRepository.CreateAsync(cart);
-                await _unitOfWork.SaveChangesAsync();
-
-                var cartResponse = _mapper.Map<CartDTO>(cart);
-                return new Response<CartDTO>(
-                    true, cartResponse);
-            }
-            catch (Exception ex)
-            {
-                return new Response<CartDTO>(false, ex.Message, null);
-            }
+            var cartResponse = _mapper.Map<CartDTO>(cart);
+            return new ApiOkResponse<CartDTO>(cartResponse);
         }
 
         public async Task<ApiBaseResponse> GetAllAsync(CartParameters parameters, Guid userId)
@@ -65,62 +66,45 @@ namespace Course.BLL.Services
 
             return new ApiOkResponse<PagedList<CartDTO>>(carts);
         }
-        public async Task<Response<CartDTO>> Update(Guid userId, CartUpdateRequest cartUpdateRequest)
+        public async Task<ApiBaseResponse> Update(Guid userId, CartUpdateRequest cartUpdate)
         {
-            try
-            {
-                var cart = await _shoppingCartRepository.BuildQuery()
-                                                        .FilterByUserId(userId)
-                                                        .FilterByCourseId(cartUpdateRequest.CourseId)
-                                                        .AsSelectorAsync(c => c);
+            var courseId = cartUpdate.CourseId;
+            var course = await _cousesRepository.GetByIdAsync(courseId);
 
-                if (cart == null)
-                {
-                    new Responses<CartDTO>(false, "Can't find cart", null);
-                }
+            if (course is null)
+                return new CourseNotFoundResponse(courseId);
 
+            if (course.Price <= 0)
+                return new InvalidPriceCartResponse(courseId);
 
-                _mapper.Map(cartUpdateRequest, cart);
-                await _unitOfWork.SaveChangesAsync();
+            var cart = await _shoppingCartRepository.BuildQuery()
+                                                    .FilterByUserId(userId)
+                                                    .FilterByCourseId(cartUpdate.CourseId)
+                                                    .AsSelectorAsync(c => c);
 
-                var cartResponse = _mapper.Map<CartDTO>(cart);
+            _mapper.Map(cartUpdate, cart);
+            await _unitOfWork.SaveChangesAsync();
 
-                return new Response<CartDTO>(
-                    true,
-                    cartResponse
-                );
-            }
-            catch (Exception ex)
-            {
-                return new Response<CartDTO>(false, ex.Message, null);
-            }
+            var cartResponse = _mapper.Map<CartDTO>(cart);
+
+            return new ApiOkResponse<CartDTO>(cartResponse);
         }
-        public async Task<BaseResponse> Remove(Guid courseId, Guid userId)
+        public async Task<ApiBaseResponse> Remove(Guid courseId, Guid userId)
         {
-            try
-            {
-                var cart = await _shoppingCartRepository.BuildQuery()
-                                                        .FilterByUserId(userId)
-                                                        .FilterByCourseId(courseId)
-                                                        .AsSelectorAsync(c => c);
-                if (cart is null)
-                {
-                    return new BaseResponse(false, null, "Can't find cart");
-                }
+            var course = await _cousesRepository.GetByIdAsync(courseId);
 
-                if (cart.UserId != userId)
-                    return new Response<BaseResponse>(false, "You aren't the owner of the shopping cart", null);
+            if (course is null)
+                return new CourseNotFoundResponse(courseId);
 
-                _shoppingCartRepository.Remove(cart, true);
-                await _unitOfWork.SaveChangesAsync();
+            var cart = await _shoppingCartRepository.BuildQuery()
+                                                    .FilterByUserId(userId)
+                                                    .FilterByCourseId(courseId)
+                                                    .AsSelectorAsync(c => c);
 
-                return new BaseResponse { IsSuccess = true };
+            _shoppingCartRepository.Remove(cart, permanent: true);
+            await _unitOfWork.SaveChangesAsync();
 
-            }
-            catch (Exception ex)
-            {
-                return new Responses<BaseResponse>(false, ex.Message, null);
-            }
+            return new ApiBaseResponse(true);
         }
     }
 }
