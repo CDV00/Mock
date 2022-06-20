@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace Course.DAL.DTOs
 {
-    public class AssignmentDTO : BaseEntity<Guid>
+    public class AssignmentDTO
     {
+        public Guid Id { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
         public ICollection<AttachmentDTO> Attachments { get; set; }
