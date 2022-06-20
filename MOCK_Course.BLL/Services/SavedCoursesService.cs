@@ -14,48 +14,42 @@ namespace Course.BLL.Services
     public class SavedCoursesService : ISavedCoursesService
     {
         private readonly ISavedCoursesRepository _savedCoursesRepository;
+        private readonly ICourseRepository _coursesRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public SavedCoursesService(ISavedCoursesRepository savedCoursesRepository,
+        public SavedCoursesService(ISavedCoursesRepository savedCoursesRepository, ICourseRepository coursesRepository,
             IMapper mapper,
             IUnitOfWork unitOfWork)
         {
             _savedCoursesRepository = savedCoursesRepository;
+            _coursesRepository = coursesRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Response<SavedCoursesDTO>> Add(Guid userId, Guid courseId)
+        public async Task<ApiBaseResponse> Add(Guid userId, Guid courseId)
         {
-            try
-            {
+            if (!await _coursesRepository.IsExist(courseId))
+                    return new CourseNotFoundResponse(courseId);
 
-                var savecourse = new SavedCourses()
-                {
+            var savecourse = new SavedCourses()
+             {
                     UserId = userId,
                     CourseId = courseId,
-                };
+            };
 
-                var CheckExistSaveCourse = await _savedCoursesRepository.BuildQuery()
-                                                                        .FilterByUserId(userId)
-                                                                        .FilterByCourseId(courseId)
-                                                                        .AnyAsync();
+            if (await _savedCoursesRepository.CheckExistSaveCourse(courseId,userId))
+                return new ExistSaveCourseResponse(courseId, userId);
 
-                if (CheckExistSaveCourse)
-                {
-                    return new Response<SavedCoursesDTO>(false, "Already saved this course", null);
-                }
+            var savecourseEntity = _mapper.Map<SavedCourses>(savecourse);
 
-                var savecourseResponse = _mapper.Map<SavedCoursesDTO>(savecourse);
-                await _savedCoursesRepository.CreateAsync(savecourse);
-                await _unitOfWork.SaveChangesAsync();
-                return new Response<SavedCoursesDTO>(true, savecourseResponse);
-            }
-            catch (Exception ex)
-            {
-                return new Response<SavedCoursesDTO>(false, ex.Message, null);
-            }
+            await _savedCoursesRepository.CreateAsync(savecourseEntity);
+            await _unitOfWork.SaveChangesAsync();
+
+            var savecourseDTO = _mapper.Map<SavedCoursesDTO>(savecourseEntity);
+            return new ApiOkResponse<SavedCoursesDTO>(savecourseDTO);
+
         }
 
         //public async Task<PagedList<SavedCoursesDTO>> GetAll(Guid userId, SavedCoursesParameters savedCoursesParameters)
@@ -109,29 +103,42 @@ namespace Course.BLL.Services
         }
 
 
-        public async Task<BaseResponse> Remove(Guid courseId, Guid userId)
+        public async Task<ApiBaseResponse> Remove(Guid courseId, Guid userId)
         {
-            try
-            {
-                var course = await _savedCoursesRepository.BuildQuery()
-                                                          .FilterByUserId(userId)
-                                                          .FilterByCourseId(courseId)
-                                                          .AsSelectorAsync(c => c);
-                if (course is null)
-                {
-                    return new BaseResponse(false, null, "Can't find course");
-                }
+            //try
+            //{
+            //    var course = await _savedCoursesRepository.BuildQuery()
+            //                                              .FilterByUserId(userId)
+            //                                              .FilterByCourseId(courseId)
+            //                                              .AsSelectorAsync(c => c);
+            //    if (course is null)
+            //    {
+            //        return new BaseResponse(false, null, "Can't find course");
+            //    }
 
-                _savedCoursesRepository.Remove(course, true);
-                await _unitOfWork.SaveChangesAsync();
+            //    _savedCoursesRepository.Remove(course, true);
+            //    await _unitOfWork.SaveChangesAsync();
 
-                return new BaseResponse { IsSuccess = true };
+            //    return new BaseResponse { IsSuccess = true };
 
-            }
-            catch (Exception ex)
-            {
-                return new Responses<BaseResponse>(false, ex.Message, null);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    return new Responses<BaseResponse>(false, ex.Message, null);
+            //}
+
+            var savecourseEntity = await _savedCoursesRepository.BuildQuery()
+                                                                .FilterByUserId(userId)
+                                                                .FilterByCourseId(courseId)
+                                                                .AsSelectorAsync(c => c);
+
+            if (!await _coursesRepository.IsExist(courseId))
+                return new CourseNotFoundResponse(courseId);
+
+            _savedCoursesRepository.Remove(savecourseEntity, permanent: true);
+            await _unitOfWork.SaveChangesAsync();
+
+            return new ApiBaseResponse(true);
         }
         public async Task<BaseResponse> RemoveAll(Guid userId)
         {

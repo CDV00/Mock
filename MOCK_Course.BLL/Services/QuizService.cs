@@ -10,6 +10,7 @@ using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
 using Course.BLL.Share.RequestFeatures;
 using Course.DAL.DTOs;
+using Entities.Responses;
 
 namespace Course.BLL.Services
 {
@@ -40,23 +41,13 @@ namespace Course.BLL.Services
         /// Get all course review
         /// </summary>
         /// <returns></returns>
-        public async Task<PagedList<QuizDTO>> GetAll(QuizParameters quizParameters)
+        public async Task<ApiBaseResponse> GetAllQuiz(QuizParameters parameter)
         {
-            var quiz = await _QuizRepository.BuildQuery()
-                                            .FilterByKeyword(quizParameters.Keyword)
-                                            .IncludeSection()
-                                            .ApplySort(quizParameters.Orderby)
-                                            .Skip((quizParameters.PageNumber - 1) * quizParameters.PageSize)
-                                            .Take(quizParameters.PageSize)
-                                            .ToListAsync(c => _mapper.Map<QuizDTO>(c));
+            var quizzes = await _QuizRepository.GetAllQuiz(parameter);
 
-            var count = await _QuizRepository.BuildQuery()
-                                             .FilterByKeyword(quizParameters.Keyword)
-                                             .CountAsync();
-            var pageList = new PagedList<QuizDTO>(quiz, count, quizParameters.PageNumber, quizParameters.PageSize);
-
-            return pageList;
+            return new ApiOkResponse<PagedList<QuizDTO>>(quizzes);
         }
+
         ////public async Task<Response<QuizDTO>> Add(QuizForCreateRequest QuizForCreateRequest)
         ////{
         ////    try
@@ -74,7 +65,7 @@ namespace Course.BLL.Services
         ////    }
         ////}
         ///
-        
+
         //Quiz; Get all theo sectionid 
 
 

@@ -44,7 +44,7 @@ namespace CourseAPI.Controllers
 
         //    return Ok(new Responses<SavedCoursesDTO>(true, result));
         //}
-        public async Task<ActionResult<ApiOkResponse<SavedCoursesDTO>>> GetAllSavedCourses([FromQuery] SavedCoursesParameters parameters)
+        public async Task<ActionResult<ApiOkResponses<SavedCoursesDTO>>> GetAllSavedCourses([FromQuery] SavedCoursesParameters parameters)
         {
             Guid userId = User.GetUserId();
 
@@ -68,12 +68,17 @@ namespace CourseAPI.Controllers
         /// <param name="courseId"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Responses<SavedCoursesDTO>>> Create(Guid courseId)
+        public async Task<ActionResult<Response<SavedCoursesDTO>>> Create(Guid courseId)
         {
             var userId = User.GetUserId();
+            //var result = await _savedCoursesService.Add(userId, courseId);
+            //if (result.IsSuccess == false)
+            //    return BadRequest(result);
+            //return Ok(result);
             var result = await _savedCoursesService.Add(userId, courseId);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
+            if (!result.IsSuccess)
+                return ProcessError(result);
+
             return Ok(result);
         }
 
@@ -98,8 +103,9 @@ namespace CourseAPI.Controllers
         {
             var userId = User.GetUserId();
             var result = await _savedCoursesService.Remove(courseId, userId);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
+            if (!result.IsSuccess)
+                return ProcessError(result);
+
             return Ok(result);
         }
         /// <summary>

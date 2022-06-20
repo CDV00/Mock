@@ -28,6 +28,7 @@ namespace Repository.Repositories
 
         public virtual async Task CreateRangeAsync(List<T> _object) => await DbSet.AddRangeAsync(_object);
 
+      
         public virtual void Remove(dynamic _object, bool? permanent)
         {
             if (permanent == null || permanent == false)

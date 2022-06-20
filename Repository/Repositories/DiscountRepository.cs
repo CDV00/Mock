@@ -65,5 +65,6 @@ namespace Repository.Repositories
                                      .CheckDateDiscountExist(startDate, endDate)
                                      .CountAsync() > 0;
         }
+
     }
 }
