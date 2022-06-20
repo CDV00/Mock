@@ -139,37 +139,82 @@ namespace CourseAPI.Controllers
         /// <returns>List Courses</returns>
         [HttpGet("Get-all-my-course")]
         [Authorize(Roles = "Admin, Instructor")]
-        public async Task<ActionResult<Responses<CourseDTO>>> GetAllMyCoures()
+        /*public async Task<ActionResult<Responses<CourseDTO>>> GetAllMyCoures()
         {
             var userId = User.GetUserId();
             var result = await _coursesService.GetAllMyCoures(userId);
             if (result.IsSuccess == false)
                 return BadRequest(result);
             return Ok(result);
-        }
+        }*/
+        public async Task<ActionResult<ApiOkResponse<CourseDTO>>> GetAllMyCoures([FromQuery] CourseParameters parameters)
+        {
+            Guid? userId = (User.GetUserId() == Guid.Empty) ? null : User.GetUserId();
 
+            var result = await _coursesService.GetAllMyCoures(parameters, userId);
+            if (!result.IsSuccess)
+                return ProcessError(result);
+
+            var coursePagedList = result.GetResult<PagedList<CourseDTO>>();
+
+            Response.Headers.Add("X-Pagination",
+                                 JsonSerializer.Serialize(coursePagedList.MetaData));
+
+            return Ok(new Responses<CourseDTO>(true, coursePagedList));
+        }
 
         /// <summary>
         /// Get all Course, User already purchased
         /// </summary>
         /// <returns>List Courses</returns>
         [HttpGet("Get-all-my-purchased")]
-        public async Task<ActionResult<Responses<CourseDTO>>> GetAllMyPurchase()
+        //public async Task<ActionResult<Responses<CourseDTO>>> GetAllMyPurchase()
+        //{
+        //    var userId = User.GetUserId();
+        //    var result = await _coursesService.GetAllMyPurchase(userId);
+        //    if (result.IsSuccess == false)
+        //        return BadRequest(result);
+        //    return Ok(result);
+        //}
+        public async Task<ActionResult<ApiOkResponse<CourseDTO>>> GetAllMyPurchase([FromQuery] CourseParameters parameters)
         {
             var userId = User.GetUserId();
-            var result = await _coursesService.GetAllMyPurchase(userId);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
-            return Ok(result);
+
+            var result = await _coursesService.GetAllMyPurchase(parameters, userId);
+            if (!result.IsSuccess)
+                return ProcessError(result);
+
+            var coursePagedList = result.GetResult<PagedList<CourseDTO>>();
+
+            Response.Headers.Add("X-Pagination",
+                                 JsonSerializer.Serialize(coursePagedList.MetaData));
+
+            return Ok(new Responses<CourseDTO>(true, coursePagedList));
         }
+
         [HttpGet("Get-all-up-coming-Course")]
-        public async Task<ActionResult<Responses<CourseDTO>>> GetUpcomingCourse()
+        //public async Task<ActionResult<Responses<CourseDTO>>> GetUpcomingCourse()
+        //{
+        //    var userId = User.GetUserId();
+        //    var result = await _coursesService.UpcomingCourse(userId);
+        //    if (result.IsSuccess == false)
+        //        return BadRequest(result);
+        //    return Ok(result);
+        //}
+        public async Task<ActionResult<ApiOkResponse<CourseDTO>>> GetUpcomingCourse([FromQuery] CourseParameters parameters)
         {
-            var userId = User.GetUserId();
-            var result = await _coursesService.UpcomingCourse(userId);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
-            return Ok(result);
+            Guid? userId = (User.GetUserId() == Guid.Empty) ? null : User.GetUserId();
+
+            var result = await _coursesService.UpcomingCourse(parameters, userId);
+            if (!result.IsSuccess)
+                return ProcessError(result);
+
+            var coursePagedList = result.GetResult<PagedList<CourseDTO>>();
+
+            Response.Headers.Add("X-Pagination",
+                                 JsonSerializer.Serialize(coursePagedList.MetaData));
+
+            return Ok(new Responses<CourseDTO>(true, coursePagedList));
         }
 
         [HttpPut("update-status")]

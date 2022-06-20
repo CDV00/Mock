@@ -9,6 +9,7 @@ namespace Course.DAL.DTOs
 {
     public class QuestionDTO
     {
+        public Guid Id { get; set; }
         public string Image { get; set; }
         public string Title { get; set; }
         public byte Score { get; set; }

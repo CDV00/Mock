@@ -46,7 +46,7 @@ namespace CourseAPI.Controllers
         {
             var userId = User.GetUserId();
             var result = await _lessonCompletionService.IsCompletion(userId, lectureId);
-            if (result.IsSuccess == false && result.Message != null)
+            if (result.IsSuccess == false && result.StatusCode != null)
                 return BadRequest(result);
             return Ok(result);
         }

@@ -7,6 +7,7 @@ using Course.BLL.Services.Abstraction;
 using Course.BLL.Share.RequestFeatures;
 using Course.DAL.Models;
 using Course.DAL.Repositories.Abstraction;
+using Entities.Responses;
 
 namespace Course.BLL.Services
 {
@@ -57,31 +58,39 @@ namespace Course.BLL.Services
             }
         }
 
-        public async Task<PagedList<SavedCoursesDTO>> GetAll(Guid userId, SavedCoursesParameters savedCoursesParameters)
+        //public async Task<PagedList<SavedCoursesDTO>> GetAll(Guid userId, SavedCoursesParameters savedCoursesParameters)
+        //{
+
+        //    var savedCourses = await _savedCoursesRepository.BuildQuery()
+        //                                                    .FilterByUserId(userId)
+        //                                                    .IncludeCourse()
+        //                                                    .IncludeUser()
+        //                                                    .IncludeCategory()
+        //                                                    .IncludeDiscount()
+        //                                                    .Skip((savedCoursesParameters.PageNumber - 1) * savedCoursesParameters.PageSize)
+        //                                                    .Take(savedCoursesParameters.PageSize)
+        //                                                    .ToListAsync(c => _mapper.Map<SavedCoursesDTO>(c));
+
+        //    var count = await _savedCoursesRepository.BuildQuery()
+        //                                             .FilterByUserId(userId)
+        //                                             .CountAsync();
+
+
+        //TODO: use For to add total enroll and rating of course
+
+        //    var pageList = new PagedList<SavedCoursesDTO>(savedCourses, count, savedCoursesParameters.PageNumber, savedCoursesParameters.PageSize);
+
+        //    return pageList;
+
+        //}
+
+        public async Task<ApiBaseResponse> GetAll(Guid userId, SavedCoursesParameters parameters)
         {
+            var courses = await _savedCoursesRepository.GetAllSavedCourses(userId,parameters);
 
-            var savedCourses = await _savedCoursesRepository.BuildQuery()
-                                                            .FilterByUserId(userId)
-                                                            .IncludeCourse()
-                                                            .IncludeUser()
-                                                            .IncludeCategory()
-                                                            .IncludeDiscount()
-                                                            .Skip((savedCoursesParameters.PageNumber - 1) * savedCoursesParameters.PageSize)
-                                                            .Take(savedCoursesParameters.PageSize)
-                                                            .ToListAsync(c => _mapper.Map<SavedCoursesDTO>(c));
-
-            var count = await _savedCoursesRepository.BuildQuery()
-                                                     .FilterByUserId(userId)
-                                                     .CountAsync();
-
-
-            // TODO: use For to add total enroll and rating of course
-
-            var pageList = new PagedList<SavedCoursesDTO>(savedCourses, count, savedCoursesParameters.PageNumber, savedCoursesParameters.PageSize);
-
-            return pageList;
-
+            return new ApiOkResponse<PagedList<SavedCoursesDTO>>(courses);
         }
+
         public async Task<Response<bool>> IsSaveCourses(Guid userId, Guid courseId)
         {
             try

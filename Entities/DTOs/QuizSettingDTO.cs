@@ -8,6 +8,7 @@ namespace Course.DAL.DTOs
 {
     public class QuizSettingDTO
     {
+        public Guid Id { get; set; }
         public Guid QuizId { get; set; }
         public bool IsGradable { get; set; } = false;
         public bool IsShowTime { get; set; } = false;
