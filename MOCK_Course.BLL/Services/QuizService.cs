@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Course.BLL.Requests;
 using Course.BLL.Responses;
 using Course.BLL.DTO;
 using Course.DAL.Models;
@@ -10,7 +9,7 @@ using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
 using Course.BLL.Share.RequestFeatures;
 using Course.DAL.DTOs;
-using Entities.Responses;
+using Entities.ParameterRequest;
 
 namespace Course.BLL.Services
 {

@@ -13,10 +13,8 @@ using Course.DAL.Models;
 using CourseAPI.Presentation.Controllers;
 using Entities.Responses;
 using Entities.Constants;
-using Entities.Requests;
 using Course.BLL.Share.RequestFeatures;
-using System.Text.Json;
-using Entities.Extension;
+using Entities.ParameterRequest;
 
 namespace CourseAPI.Controllers
 {

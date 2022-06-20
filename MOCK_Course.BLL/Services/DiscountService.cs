@@ -9,8 +9,8 @@ using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
 using Entities.Responses;
 using System.Linq;
-using Entities.Requests;
 using Course.BLL.Share.RequestFeatures;
+using Entities.ParameterRequest;
 
 namespace Course.BLL.Services
 {

@@ -2,10 +2,10 @@
 
 namespace Entities.Responses
 {
-    public class CourseNotFoundResponse : ApiNotFoundResponse
+    public class CartNotFoundResponse : ApiNotFoundResponse
     {
-        public CourseNotFoundResponse(Guid id)
-        : base($"course with id: {id} is not found in db.")
+        public CartNotFoundResponse(Guid id)
+        : base($"cart with id: {id} is not found in db.")
         {
         }
     }

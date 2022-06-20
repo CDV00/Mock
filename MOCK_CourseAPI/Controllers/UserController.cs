@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using CourseAPI.Extensions.ControllerBase;
 using Course.BLL.Services.Abstraction;
 using System.Text.Json;
+using Entities.ParameterRequest;
 
 namespace CourseAPI.Controllers
 {

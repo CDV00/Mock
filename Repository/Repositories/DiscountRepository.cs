@@ -6,7 +6,7 @@ using Course.DAL.Models;
 using Course.DAL.Queries.Abstraction;
 using Course.DAL.Repositories.Abstraction;
 using Course.Queries;
-using Entities.Requests;
+using Entities.ParameterRequest;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

@@ -1,8 +1,8 @@
 ﻿using Course.BLL.DTO;
-using Course.BLL.Requests;
 using Course.BLL.Share.RequestFeatures;
 using Course.DAL.Models;
 using Course.DAL.Queries.Abstraction;
+using Entities.ParameterRequest;
 using System;
 using System.Threading.Tasks;
 
