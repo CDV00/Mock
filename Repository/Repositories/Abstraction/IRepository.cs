@@ -15,6 +15,11 @@ namespace Course.DAL.Repositories.Abstraction
         Task CreateAsync(T _object);
         Task CreateRangeAsync(List<T> _object);
         public bool Update(T _object);
+        /// <summary>
+        /// remove entity
+        /// </summary>
+        /// <param name="_object"></param>
+        /// <param name="permanent">if permanent == false, it will Set isDeleted = false, else it will delelete permanent</param>
         void Remove(object _object, bool? permanent);
         void RemoveRange(List<T> _object);
     }

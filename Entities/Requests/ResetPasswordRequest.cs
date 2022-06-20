@@ -9,7 +9,7 @@ namespace Course.BLL.Requests
     public class ResetPasswordRequest
     {
         public string email { get; set; }
-        public string token { get; set; }
+        public string codeNumber { get; set; }
         public string newPassword { get; set; }
         public string comfirmPassword { get; set; }
     }

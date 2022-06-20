@@ -11,5 +11,7 @@ namespace Course.DAL.Queries.Abstraction
         IQuizQuery FilterBySectionId(Guid? SectionId);
         IQuizQuery FilterByKeyword(string Keyword);
         IQuizQuery IncludeSection();
+        IQuizQuery IncludQuizSetting();
+        IQuizQuery IncludQuestion();
     }
 }

@@ -45,6 +45,11 @@ namespace Course.DAL.Queries
             Query.Include(c => c.Section).Load();
             return this;
         }
+        public IAssignmentQuery IncludeAttachment()
+        {
+            Query.Include(c => c.Attachments).Load();
+            return this;
+        }
 
     }
 }

@@ -44,6 +44,18 @@ namespace Course.DAL.Queries
             Query.Include(c => c.Section).Load();
             return this;
         }
+        public IQuizQuery IncludQuestion()
+        {
+            Query.Include(c => c.Questions)
+                .ThenInclude(o => o.Options)
+                .Load();
+            return this;
+        }
+        public IQuizQuery IncludQuizSetting()
+        {
+            Query.Include(c => c.Settings).Load();
+            return this;
+        }
 
 
     }

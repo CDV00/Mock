@@ -28,7 +28,7 @@ namespace Course.BLL.Services
                 };
                 using var client = new SmtpClient(_config["SMTP:Host"], int.Parse(_config["SMTP:Port"]))
                 {
-                    Credentials = new NetworkCredential(_config["SMTP:Sender"], _config["SMTP:Password"])
+                    Credentials = new NetworkCredential(_config["SMTP:APIKey"], _config["SMTP:Serect"])
                 };
 
                 client.EnableSsl = true;
