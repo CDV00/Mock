@@ -117,5 +117,29 @@ namespace CourseAPI.Controllers
             }
             return BadRequest(result);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="working"> Register, forget password</param>
+        /// <returns></returns>
+        [HttpGet("Reset-Code-Number")]
+        [AllowAnonymous]
+        public async Task<ActionResult> ResetCodeNumber(string email, string working)
+        {
+            var result = await _userService.ResetCodeNumber(email, working);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
+        [HttpPost("Confirm")]
+        [AllowAnonymous]
+        public async Task<ActionResult> Confirm(string email, string codeNumber)
+        {
+            var result = await _userService.Confirm(email, codeNumber);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
     }
 }

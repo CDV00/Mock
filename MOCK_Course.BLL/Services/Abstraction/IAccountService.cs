@@ -15,6 +15,7 @@ namespace Course.BLL.Services.Abstraction
         Task<Response<BaseResponse>> ForgetPassWord(string email, string originValue);
         Task<Response<BaseResponse>> ResetPassWord(ResetPasswordRequest resetPasswordRequest);
         Task<Response<LoginDTO>> ExternalLogin(ExternalLoginResquest externalLoginResquest);
-   
+        Task<BaseResponse> Confirm(string email, string codeNumber);
+        Task<BaseResponse> ResetCodeNumber(string email, string working);
     }
 }
