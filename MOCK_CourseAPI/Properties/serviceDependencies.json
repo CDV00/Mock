@@ -1,8 +1,17 @@
 {
   "dependencies": {
     "secrets1": {
+      "ignored": "true",
       "type": "secrets",
       "connectionId": null
+    },
+    "identityapp1": {
+      "ignored": "true",
+      "type": "identityapp"
+    },
+    "mssql2": {
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:MOCK_Course"
     }
   }
 }

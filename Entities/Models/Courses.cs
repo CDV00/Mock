@@ -41,8 +41,6 @@ namespace Course.DAL.Models
         public AppUser User { get; set; }
 
         public ICollection<Discount> Discounts { get; set; }
-
-
         public ICollection<Section> Sections { get; set; }
         public ICollection<CourseCompletion> CourseCompletions { get; set; }
         public ICollection<Enrollment> Enrollments { get; set; }

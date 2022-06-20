@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using AutoMapper;
-using Course.BLL.Requests;
 using Course.DAL.Models;
 using Course.BLL.DTO;
 using Course.DAL.Repositories.Abstraction;
@@ -10,6 +9,7 @@ using Course.BLL.Responses;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using Course.BLL.Share.RequestFeatures;
+using Entities.ParameterRequest;
 
 namespace Course.BLL.Services
 {

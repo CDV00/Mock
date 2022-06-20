@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Course.BLL.Requests;
 using Course.BLL.DTO;
 using Course.BLL.Responses;
 using Course.BLL.Share.RequestFeatures;
+using Entities.ParameterRequest;
 
 namespace Course.BLL.Services.Abstraction
 {

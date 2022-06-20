@@ -1,6 +1,6 @@
 ﻿using Course.BLL.Share.RequestFeatures;
 
-namespace Course.BLL.Requests
+namespace Entities.ParameterRequest
 {
     public class UserParameter : RequestParameters
     {

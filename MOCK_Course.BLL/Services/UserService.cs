@@ -5,6 +5,8 @@ using Course.BLL.Services.Abstraction;
 using Course.BLL.Share.RequestFeatures;
 using Course.DAL.Models;
 using Course.DAL.Repositories.Abstraction;
+using Entities.Constants;
+using Entities.ParameterRequest;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Threading.Tasks;
@@ -38,17 +40,17 @@ namespace Course.BLL.Services
 
 
         // Get All User(role):Full Name, Birthday,... IsActive
-        public async Task<Responses<UserDTO>> GetAllUserByRole(String role)
+        public async Task<Responses<UserDTO>> GetAllUserByRole(string role)
         {
             try
             {
                 var users = await _userRepository.BuildQuery()
                                                  .FilterByRole(role)
-                                                 .ToListAsync(u=> _mapper.Map<UserDTO>(u));
+                                                 .ToListAsync(u => _mapper.Map<UserDTO>(u));
 
                 return new Responses<UserDTO>(true, users);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new Responses<UserDTO>(false, ex.Message, null);
             }
@@ -149,7 +151,7 @@ namespace Course.BLL.Services
 
         public async Task<PagedList<UserDTO>> GetPopularInstructor(UserParameter userParameter, Guid userid)
         {
-            string RoleName = UserRoles.Instructor;
+            string RoleName = UserRolesConstant.Instructor;
             var users = await _userRepository.BuildQuery()
                                              .FilterByRole(RoleName)
                                              .FilterByName(userParameter.Keyword)
@@ -167,7 +169,7 @@ namespace Course.BLL.Services
             {
                 users[i].TotalSubcripbers = (await _subscriptionService.GetTotalSubscriber(users[i].Id)).data;
                 users[i].TotalCourses = (await _courseService.GetTotalCourseOfUser(users[i].Id)).data;
-                
+
                 users[i].isSubscribed = (await _subscriptionService.IsSubscribed(userid, users[i].Id)).data == null ? false : true;
             }
 

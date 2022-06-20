@@ -1,10 +1,8 @@
-﻿
-
-using Course.BLL.Share.RequestFeatures;
+﻿using Course.BLL.Share.RequestFeatures;
 using System;
 using System.Collections.Generic;
 
-namespace Course.BLL.Requests
+namespace Entities.ParameterRequest
 {
     public class SavedCoursesParameters : RequestParameters
     {

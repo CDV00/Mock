@@ -3,7 +3,7 @@ using Course.BLL.Requests;
 using System;
 using Course.DAL.Models;
 using Entities.Responses;
-using Entities.Requests;
+using Entities.ParameterRequest;
 
 namespace Course.BLL.Services.Abstraction
 {

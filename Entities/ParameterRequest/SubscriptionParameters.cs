@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Course.BLL.Requests
+namespace Entities.ParameterRequest
 {
     public class SubscriptionParameters : RequestParameters
     {

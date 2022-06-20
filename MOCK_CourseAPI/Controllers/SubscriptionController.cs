@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using Course.BLL.Responses;
 using CourseAPI.Extensions.ControllerBase;
 using Course.BLL.DTO;
-using Course.BLL.Requests;
 using System.Text.Json;
+using Entities.ParameterRequest;
 
 namespace CourseAPI.Controllers
 {
