@@ -36,12 +36,16 @@ namespace Course.Queries
 
         public IDiscountQuery FilterByCourseId(Guid courseId)
         {
-            //Query.Include(c => c.Course).Load();
-            //var course = Query.Where(type => type.Courses.UserId == UserId).ToList();
-
             Query = Query.Where(type => type.CourseId == courseId);
             return this;
         }
+
+        public IDiscountQuery FilterById(Guid id)
+        {
+            Query = Query.Where(type => type.Id == id);
+            return this;
+        }
+
 
         public IDiscountQuery IncludeOrderItem()
         {
@@ -49,9 +53,9 @@ namespace Course.Queries
             return this;
         }
 
-        public IDiscountQuery checkDate(Discount discount)
+        public IDiscountQuery CheckDateDiscountExist(DateTime StartDate, DateTime EndDate)
         {
-            Query = Query.Where(d => (d.StartDate <= discount.StartDate && d.EndDate >= discount.StartDate) || (d.StartDate <= discount.EndDate && d.EndDate >= discount.EndDate));
+            Query = Query.Where(d => (d.StartDate <= StartDate && d.EndDate >= StartDate) || (d.StartDate <= EndDate && d.EndDate >= EndDate));
             return this;
         }
 

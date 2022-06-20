@@ -3,7 +3,6 @@ using Course.BLL.Requests;
 using Course.BLL.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Course.BLL.DTO;
 using Course.BLL.Services.Abstraction;
 using System.Collections.Generic;
 using System.Linq;

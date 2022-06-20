@@ -17,5 +17,6 @@ namespace Course.BLL.DTO
         public string Role { get; set; }
         public int TotalSubcripbers { get; set; }
         public int TotalCourses { get; set; }
+        public bool isSubscribed { get; set; }
     }
 }

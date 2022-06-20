@@ -8,6 +8,6 @@ namespace Course.DAL.Repositories.Abstraction
     public interface IDiscountRepository : IRepository<Discount>
     {
         IDiscountQuery BuildQuery();
-        Task<bool> CheckDiscount(Discount discount);
+        Task<Discount> GetByIdAsync(Guid courseId, Guid Id);
     }
 }

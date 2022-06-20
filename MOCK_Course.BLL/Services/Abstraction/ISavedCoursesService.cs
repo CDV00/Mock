@@ -12,8 +12,7 @@ namespace Course.BLL.Services.Abstraction
         Task<Response<SavedCoursesDTO>> Add(Guid userId, Guid courseId);
         Task<BaseResponse> Remove(Guid courseId, Guid userId);
         Task<BaseResponse> RemoveAll(Guid userId);
-        Task<BaseResponse> IsSaveCourses(Guid userId, Guid courseId);
-
+        Task<Response<bool>> IsSaveCourses(Guid userId, Guid courseId);
 
         //Task<BaseResponse> Remove(Guid userId);
         Task<bool> IsSavedCourse(Guid userId, Guid courseId);

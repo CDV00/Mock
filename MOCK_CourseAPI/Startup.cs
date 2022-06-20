@@ -9,13 +9,10 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Diagnostics;
-using System.Net;
 using NLog;
 
 namespace CourseAPI
 {
-    //Hello K
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -43,13 +40,18 @@ namespace CourseAPI
 
             services.ConfigureSqlContext(Configuration);
             services.AddAutoMapper(typeof(MapperInitializer));
+            services.ConfigureInvalidFilter();
+            services.ConfigureUpload();
 
-            services.AddControllers();
+            services.AddControllers(config =>
+            {
+                //config.Filters.Add(new FilterDiscount());
+            });
         }
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,ILoggerManager logger)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerManager logger)
         {
             //app.ConfigureExceptionHandler(logger);
 
@@ -66,7 +68,8 @@ namespace CourseAPI
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v2/swagger.json", "MOCK_CourseAPI v2"));
 
-            app.ConfigureExceptionHandler(logger);
+            //app.ConfigureExceptionHandler(logger);
+            app.UseMiddleware<ExceptionMiddleware>();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

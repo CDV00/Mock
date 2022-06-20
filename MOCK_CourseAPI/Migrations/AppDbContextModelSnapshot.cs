@@ -598,6 +598,15 @@ namespace CourseAPI.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Index")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -797,8 +806,8 @@ namespace CourseAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -943,7 +952,8 @@ namespace CourseAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("QuizId");
+                    b.HasIndex("QuizId")
+                        .IsUnique();
 
                     b.ToTable("QuizSettings");
                 });
@@ -1430,8 +1440,8 @@ namespace CourseAPI.Migrations
             modelBuilder.Entity("Course.DAL.Models.QuizSetting", b =>
                 {
                     b.HasOne("Course.DAL.Models.Quiz", "Quiz")
-                        .WithMany("Settings")
-                        .HasForeignKey("QuizId")
+                        .WithOne("Settings")
+                        .HasForeignKey("Course.DAL.Models.QuizSetting", "QuizId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -11,11 +11,13 @@ using Course.DAL.ConfigurationModels;
 using Course.DAL.Data;
 using Course.DAL.Models;
 using Course.DAL.Repositories.Abstraction;
+using CourseAPI.ActionFilters;
 using LoggerService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -89,6 +91,20 @@ namespace CourseAPI.Extensions.ServiceExtensions
                 options.UseSqlServer(configuration.GetConnectionString("MOCK_Course"), b =>
                 b.MigrationsAssembly("CourseAPI"));
             });
+        }
+
+        public static void ConfigureInvalidFilter(this IServiceCollection services)
+        {
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
+
+            services.AddScoped<ValidationFilterAttribute>();
+            services.AddScoped<ValidationCourseExistAttribut>();
+            services.AddScoped<ValidationDiscountExistAttribute>();
+            services.AddScoped<ValidationCourseForDiscountExistAttribute>();
+            services.AddScoped<ValidationDateTimeForDiscountAttribute>();
         }
 
         public static void ConfigureJwt(this IServiceCollection services, IConfiguration configuration)
@@ -169,7 +185,7 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
-            services.AddScoped<ICoursesRepository, CoursesRepository>();
+            services.AddScoped<ICourseRepository, CourseRepository>();
             services.AddScoped<ISectionRepositoty, SectionRepositoty>();
             services.AddScoped<ILectureRepository, LectureRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
@@ -240,6 +256,7 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IUploadFileService, UploadFileService>();
             services.AddScoped<IQuizService, QuizService>();
         }
+
         public static void ConfigureUpload(this IServiceCollection services)
         {
             services.Configure<IISServerOptions>(options =>

@@ -4,6 +4,7 @@ using Course.BLL.Requests;
 using Course.DAL.Models;
 using Course.BLL.Responses;
 using Course.DAL.DTOs;
+using System;
 
 namespace Course.BLL.Extensions
 {
@@ -28,6 +29,7 @@ namespace Course.BLL.Extensions
             // lesion
             CreateMap<Lecture, LectureForCreateRequest>().ReverseMap();
             CreateMap<Lecture, LectureForUpdateRequest>().ReverseMap();
+            CreateMap<LectureForUpdateRequest, Lecture>().ForMember(des => des.Id, src => src.MapFrom(opt => opt.IsNew == true ? Guid.NewGuid() : opt.Id)).ReverseMap();
             CreateMap<Lecture, LectureDTO>().ReverseMap();
 
             // section
@@ -104,7 +106,6 @@ namespace Course.BLL.Extensions
             CreateMap<Subscription, SubscriptionDTO>().ReverseMap();
             CreateMap<Subscription, SubscriptionRequest>().ReverseMap();
 
-            CreateMap<Discount, DiscounRequest>().ReverseMap();
             CreateMap<UserDTO, Subscription>().ReverseMap();
 
             // map saved cart
@@ -120,11 +121,13 @@ namespace Course.BLL.Extensions
             CreateMap<Assignment, AssignmentDTO>().ReverseMap();
             CreateMap<Assignment, AssignmentRequest>().ReverseMap();
             CreateMap<Assignment, AssignmentForCreateRequest>().ReverseMap();
-            
+            CreateMap<Assignment, AssignmentForUpdateRequest>().ReverseMap();
+
 
             CreateMap<Attachment, AttachmentDTO>().ReverseMap();
             CreateMap<Attachment, AttachmentRequest>().ReverseMap();
             CreateMap<Attachment, AttachmentForCreateRequest>().ReverseMap();
+            CreateMap<Attachment, AttachmentForUpdateRequest>().ReverseMap();
             CreateMap<AttachmentRequest, AttachmentDTO>().ReverseMap();
             CreateMap<AttachmentForCreateRequest, AttachmentDTO>().ReverseMap();
 
@@ -132,20 +135,24 @@ namespace Course.BLL.Extensions
             CreateMap<Question, QuestionDTO>().ReverseMap();
             CreateMap<Question, QuestionRequest>().ReverseMap();
             CreateMap<Question, QuestionForCreateRequest>().ReverseMap();
+            CreateMap<Question, QuestionForUpdateRequest>().ReverseMap();
 
             //map quiz
             CreateMap<Quiz, QuizDTO>().ReverseMap();
             CreateMap<Quiz, QuizRequest>().ReverseMap();
             CreateMap<Quiz, QuizForCreateRequest>().ReverseMap();
+            CreateMap<Quiz, QuizForUpdateRequest>().ReverseMap();
 
             //map quiz option
             CreateMap<QuizOption, QuizOptionDTO>().ReverseMap();
             CreateMap<QuizOption, QuizOptionCreateForRequest>().ReverseMap();
+            CreateMap<QuizOption, QuizOptionForUpdateRequest>().ReverseMap();
 
             //map quiz setting
             CreateMap<QuizSetting, QuizSettingDTO>().ReverseMap();
             CreateMap<QuizSetting, QuizSettingRequest>().ReverseMap();
             CreateMap<QuizSetting, QuizSettingForCreateRequest>().ReverseMap();
+            CreateMap<QuizSetting, QuizOptionForUpdateRequest>().ReverseMap();
 
         }
     }

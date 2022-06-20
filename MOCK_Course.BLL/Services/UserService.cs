@@ -16,14 +16,14 @@ namespace Course.BLL.Services
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
         private readonly IEnrollmentRepository _enrollmentRepository;
-        private readonly ICoursesRepository _cousesRepository;
+        private readonly ICourseRepository _cousesRepository;
         private readonly ICourseReviewRepository _courseReviewRepository;
         private readonly ISubscriptionRepository _subscriptionRepository;
         private readonly ISubscriptionService _subscriptionService;
         private readonly ICourseService _courseService;
         private readonly IUserRepository _userRepository;
         public UserService(UserManager<AppUser> userManager,
-           IMapper mapper, IEnrollmentRepository enrollmentRepository, ICoursesRepository cousesRepository, ICourseReviewRepository courseReviewRepository, ISubscriptionRepository subscriptionRepository, IUserRepository userRepository, ISubscriptionService subscriptionService, ICourseService courseService)
+           IMapper mapper, IEnrollmentRepository enrollmentRepository, ICourseRepository cousesRepository, ICourseReviewRepository courseReviewRepository, ISubscriptionRepository subscriptionRepository, IUserRepository userRepository, ISubscriptionService subscriptionService, ICourseService courseService)
         {
             _userManager = userManager;
             _mapper = mapper;
@@ -68,7 +68,6 @@ namespace Course.BLL.Services
                 return new BaseResponse(false, ex.Message, null);
             }
         }
-        //
         public async Task<Response<UserDTO>> GetUserProfile(Guid id)
         {
             try
@@ -76,6 +75,7 @@ namespace Course.BLL.Services
                 var user = await _userManager.FindByIdAsync(id.ToString());
 
                 var userResponse = _mapper.Map<UserDTO>(user);
+                userResponse.isSubscribed = await _subscriptionService.IsSubscribed(userResponse.Id, userResponse.Id) == null ? false : true;
 
                 return new Response<UserDTO>(
                     true,
@@ -147,7 +147,7 @@ namespace Course.BLL.Services
             return new BaseResponse(true);
         }
 
-        public async Task<PagedList<UserDTO>> GetPopularInstructor(UserParameter userParameter)
+        public async Task<PagedList<UserDTO>> GetPopularInstructor(UserParameter userParameter, Guid userid)
         {
             string RoleName = UserRoles.Instructor;
             var users = await _userRepository.BuildQuery()
@@ -162,12 +162,13 @@ namespace Course.BLL.Services
                                              .FilterByRole(RoleName)
                                              .FilterByName(userParameter.Keyword)
                                              .CountAsync();
-
             //Get Total Subscribers & Total Courses
             for (var i = 0; i < users.Count; i++)
             {
                 users[i].TotalSubcripbers = (await _subscriptionService.GetTotalSubscriber(users[i].Id)).data;
                 users[i].TotalCourses = (await _courseService.GetTotalCourseOfUser(users[i].Id)).data;
+                
+                users[i].isSubscribed = (await _subscriptionService.IsSubscribed(userid, users[i].Id)).data == null ? false : true;
             }
 
             var pageList = new PagedList<UserDTO>(users, count, userParameter.PageNumber, userParameter.PageSize);

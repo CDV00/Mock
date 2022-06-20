@@ -14,7 +14,7 @@ namespace Course.BLL.Services
 {
     public class CourseReviewService : ICourseReviewService
     {
-        private readonly ICoursesRepository _cousesRepository;
+        private readonly ICourseRepository _cousesRepository;
         private readonly ICourseReviewRepository _courseReviewRepository;
         private readonly IEnrollmentRepository _enrollmentRepository;
         private readonly IUnitOfWork _unitOfWork;
@@ -26,7 +26,7 @@ namespace Course.BLL.Services
         /// <param name="courseReviewRepository"></param>
         /// <param name="unitOfWork"></param>
         /// <param name="mapper"></param>
-        public CourseReviewService(ICourseReviewRepository courseReviewRepository, ICoursesRepository cousesRepository, IEnrollmentRepository enrollmentRepository, IUnitOfWork unitOfWork, IMapper mapper)
+        public CourseReviewService(ICourseReviewRepository courseReviewRepository, ICourseRepository cousesRepository, IEnrollmentRepository enrollmentRepository, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _courseReviewRepository = courseReviewRepository;
             _unitOfWork = unitOfWork;
@@ -233,10 +233,6 @@ namespace Course.BLL.Services
                                                            .FilterByCourseId(courseId)
                                                            .FilterByUserId(userId)
                                                            .GetAvgRate();
-                if (courses != 0)
-                {
-                    return new Response<float>(true, 0);
-                }
 
                 return new Response<float>(true, courses);
             }
@@ -285,7 +281,7 @@ namespace Course.BLL.Services
             }
         }
 
-        public async Task<BaseResponse> IsCourseReview(Guid userId, Guid courseId)
+        public async Task<Response<BaseResponse>> IsCourseReview(Guid userId, Guid courseId)
         {
             try
             {
@@ -296,14 +292,14 @@ namespace Course.BLL.Services
 
                 if (courseReview == null)
                 {
-                    return new BaseResponse(false);
+                    return new Response<BaseResponse>(false,null);
                 }
 
-                return new BaseResponse(true);
+                return new Response<BaseResponse>(true,null);
             }
             catch (Exception ex)
             {
-                return new BaseResponse(false, ex.Message, null);
+                return new Response<BaseResponse>(false, ex.Message, null);
             }
         }
         public async Task<Response<CourseReviewDTO>> CheckUserCourseReview(Guid userId, Guid courseId)

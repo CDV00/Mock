@@ -7,20 +7,21 @@ using Course.BLL.Responses;
 using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
 using Repository.Repositories;
+using Course.BLL.Share.RequestFeatures;
 
 namespace Course.BLL.Services
 {
     public class EnrollmentService : IEnrollmentService
     {
         private readonly IEnrollmentRepository _enrollmentRepository;
-        private readonly ICoursesRepository _cousesRepository;
+        private readonly ICourseRepository _cousesRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public EnrollmentService(IEnrollmentRepository enrollmentRepository,
             IMapper mapper,
             IUnitOfWork unitOfWork,
-            ICoursesRepository cousesRepository)
+            ICourseRepository cousesRepository)
         {
             _enrollmentRepository = enrollmentRepository;
             _mapper = mapper;
@@ -127,6 +128,23 @@ namespace Course.BLL.Services
                 {
                     return new Response<EnrollmentDTO>(false, enrollment);
                 }
+
+                return new Response<EnrollmentDTO>(true, enrollment);
+            }
+            catch (Exception ex)
+            {
+                return new Response<EnrollmentDTO>(false, ex.Message, null);
+            }
+        }
+        public async Task<Response<EnrollmentDTO>> GetAll(Guid? userId)
+        {
+            try
+            {
+                var enrollment = await _enrollmentRepository.BuildQuery()
+                                                     .FilterByUserId(userId)
+                                                     .IncludeUser()
+                                                     .IncludeCourse()
+                                                     .AsSelectorAsync(x => _mapper.Map<EnrollmentDTO>(x));
 
                 return new Response<EnrollmentDTO>(true, enrollment);
             }

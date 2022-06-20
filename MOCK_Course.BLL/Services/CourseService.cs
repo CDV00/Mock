@@ -16,10 +16,11 @@ namespace Course.BLL.Services
 {
     public class CourseService : ICourseService
     {
-        private readonly ICoursesRepository _cousesRepository;
+        private readonly ICourseRepository _cousesRepository;
         private readonly IAudioLanguageRepository _audioLanguageRepository;
         private readonly ICloseCaptionRepository _closeCaptionRepository;
         private readonly ILevelRepository _levelRepository;
+        private readonly ISectionRepositoty _sectionRepositoty;
         private readonly ICourseReviewService _courseReviewService;
         private readonly IEnrollmentService _enrollmentService;
         private readonly ISavedCoursesService _savedCoursesService;
@@ -29,10 +30,10 @@ namespace Course.BLL.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public CourseService(ICoursesRepository cousesRepository,
+        public CourseService(ICourseRepository cousesRepository,
             IMapper mapper,
             IUnitOfWork unitOfWork, IAudioLanguageRepository audioLanguageRepository,
-            ICloseCaptionRepository closeCaptionRepository, ILevelRepository levelRepository, ICourseReviewService courseReviewService, IEnrollmentService enrollmentService, ISavedCoursesService savedCoursesService, ISectionService sectionService, ILectureService lectureService)
+            ICloseCaptionRepository closeCaptionRepository, ILevelRepository levelRepository, ISectionRepositoty sectionRepositoty,ICourseReviewService courseReviewService, IEnrollmentService enrollmentService, ISavedCoursesService savedCoursesService, ISectionService sectionService, ILectureService lectureService)
         {
             _cousesRepository = cousesRepository;
             _mapper = mapper;
@@ -40,6 +41,7 @@ namespace Course.BLL.Services
             _audioLanguageRepository = audioLanguageRepository;
             _closeCaptionRepository = closeCaptionRepository;
             _levelRepository = levelRepository;
+            _sectionRepositoty = sectionRepositoty;
             _courseReviewService = courseReviewService;
             _enrollmentService = enrollmentService;
             _savedCoursesService = savedCoursesService;
@@ -429,7 +431,9 @@ namespace Course.BLL.Services
                                                     .IncludeCategory()
                                                     .IncludeLevel()
                                                     .IncludeLanguage()
-                                                    //.IncludeSection()
+                                                    .IncludeSection()
+                                                    .IncludeAssignment()
+                                                    .IncludeQuiz()
                                                     .AsSelectorAsync(c => c);
 
                 if (course == null)
@@ -526,6 +530,7 @@ namespace Course.BLL.Services
                     section.Id = Guid.Empty;
                 }
 
+                #region Update Leacture
                 var lectures = section.Lectures;
                 if (lectures != null)
                 {
@@ -545,6 +550,142 @@ namespace Course.BLL.Services
                         }
                     }
                 }
+                #endregion
+                #region Update Assignment
+                var assignments = section.Assignments;
+                if (assignments != null)
+                {
+                    for (var j = 0; j < assignments.Count; j++)
+                    {
+                        var assignment = assignments[j];
+
+                        #region Update Attachment
+                        var attachments = assignment.Attachments;
+                        if (attachments != null)
+                        {
+                            for (var k = 0; k < attachments.Count; k++)
+                            {
+                                var attachment = attachments[k];
+
+                                if (attachment.IsDeleted)
+                                {
+                                    attachment = null;
+                                    continue;
+                                }
+
+                                if (attachment.IsNew)
+                                {
+                                    attachment.Id = Guid.Empty;
+                                }
+
+                            }
+
+                        }
+                        #endregion
+
+                        if (assignment.IsDeleted)
+                        {
+                            assignment = null;
+                            continue;
+                        }
+
+                        if (assignment.IsNew)
+                        {
+                            assignment.Id = Guid.Empty;
+                        }
+                    }
+                }
+                #endregion
+                #region Update Quizz
+                var quizzes = section.Quizzes;
+                    if (quizzes != null)
+                    {
+                        for (var j = 0; j < quizzes.Count; j++)
+                        {
+                            var quiz = quizzes[j];
+
+                        #region Update Question
+                        var questions = quiz.Questions;
+                        if (questions != null)
+                        {
+                            for (var k = 0; k < questions.Count; k++)
+                            {
+                                var question = questions[j];
+
+                                #region Update QuizOptions
+                                var quizoptions = question.Options;
+                                if (quizoptions != null)
+                                {
+                                    for (var l = 0; l < quizoptions.Count; l++)
+                                    {
+                                        var quizoption = quizoptions[l];
+
+                                        if (quizoption.IsDeleted)
+                                        {
+                                            quizoption = null;
+                                            continue;
+                                        }
+
+                                        if (quizoption.IsNew)
+                                        {
+                                            quizoption.Id = Guid.Empty;
+                                        }
+
+                                    }
+                                }
+                                #endregion
+                                if (question.IsDeleted)
+                                {
+                                    question = null;
+                                    continue;
+                                }
+
+                                if (question.IsNew)
+                                {
+                                    question.Id = Guid.Empty;
+                                }
+
+                            }
+                        }
+                        #endregion
+
+                        #region Update QuizSetting
+                        var settings = quiz.Settings;
+                        if (settings != null)
+                        {
+                            for (var k = 0; k < settings.Count; j++)
+                            {
+                                var setting = settings[j];
+
+                                if (setting.IsDeleted)
+                                {
+                                    setting = null;
+                                    continue;
+                                }
+
+                                if (setting.IsNew)
+                                {
+                                    setting.Id = Guid.Empty;
+                                }
+
+                            }
+                        }
+                        #endregion
+
+                        if (quiz.IsDeleted)
+                            {
+                                quiz = null;
+                                continue;
+                            }
+
+                            if (quiz.IsNew)
+                            {
+                                quiz.Id = Guid.Empty;
+                            }
+
+                        }
+                    }
+                #endregion
             }
         }
 

@@ -7,6 +7,9 @@ using Course.BLL.Requests;
 using System;
 using CourseAPI.Extensions.ControllerBase;
 using Course.BLL.Services.Abstraction;
+using Contracts;
+using CourseAPI.ActionFilters;
+using Course.DAL.Models;
 
 namespace CourseAPI.Controllers
 {
@@ -16,9 +19,11 @@ namespace CourseAPI.Controllers
     public class DiscountController : ControllerBase
     {
         private readonly IDiscountService _discountService;
-        public DiscountController(IDiscountService discountService)
+        private readonly ILoggerManager _logger;
+        public DiscountController(IDiscountService discountService, ILoggerManager logger)
         {
             _discountService = discountService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -38,14 +43,16 @@ namespace CourseAPI.Controllers
         /// <summary>
         /// Add Discount
         /// </summary>
-        /// <param name="discountCreateRequest"></param>
+        /// <param name="discount"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Response<DiscountDTO_>>> Add(DiscountForCreateRequest discountCreateRequest)
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [ServiceFilter(typeof(ValidationCourseForDiscountExistAttribute))]
+        public async Task<ActionResult<Response<DiscountDTO_>>> Add(Guid courseId, DiscountForCreateRequest discount)
         {
-            var result = await _discountService.Add(discountCreateRequest);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
+            var course = HttpContext.Items["course"] as Courses;
+            var result = await _discountService.Add(discount, course);
+
             return Ok(result);
         }
 
@@ -53,12 +60,15 @@ namespace CourseAPI.Controllers
         /// Update Discount
         /// </summary>
         /// <returns></returns>
-        [HttpPut()]
-        public async Task<ActionResult<Response<DiscountDTO_>>> Update(Guid id, DiscountForUpdateRequest discountUpdateRequest)
+        [HttpPut("{id}")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [ServiceFilter(typeof(ValidationCourseForDiscountExistAttribute))]
+        [ServiceFilter(typeof(ValidationDiscountExistAttribute))]
+        public async Task<ActionResult<Response<DiscountDTO_>>> Update(Guid id, Guid courseId, DiscountForUpdateRequest discountForUpdate)
         {
-            var result = await _discountService.Update(id, discountUpdateRequest);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
+            var discount = HttpContext.Items["Discount"] as Discount;
+            var result = await _discountService.Update(discount, courseId, discountForUpdate);
+
             return Ok(result);
         }
 
@@ -68,12 +78,14 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <param name="id">Id Discount</param>
         /// <returns></returns>
-        [HttpDelete()]
-        public async Task<ActionResult<BaseResponse>> Delete(Guid id)
+        [HttpDelete("{id}")]
+        [ServiceFilter(typeof(ValidationCourseForDiscountExistAttribute))]
+        [ServiceFilter(typeof(ValidationDiscountExistAttribute))]
+        public async Task<ActionResult<BaseResponse>> Delete(Guid id, Guid courseId)
         {
-            var result = await _discountService.Remove(id);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
+            var discount = HttpContext.Items["Discount"] as Discount;
+
+            var result = await _discountService.Remove(discount);
             return Ok(result);
         }
     }

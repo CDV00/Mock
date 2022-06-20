@@ -4,6 +4,7 @@ using Course.BLL.DTO;
 using Dropbox.Api;
 using Dropbox.Api.Files;
 using Google.Apis.Download;
+using Google.Apis.Upload;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -133,7 +134,6 @@ namespace Course.BLL.Services
                 var dbx = new DropboxClient(_configuration["DropboxServer:AppKey"]);
                 var filePath = _configuration["DropboxServer:folder"] + Guid.NewGuid() + file.FileName;
                 var uploadResult = await dbx.Files.UploadAsync(filePath, WriteMode.Add.Instance, body: file.OpenReadStream());
-
                 return new UploadResponse()
                 {
                     IsSuccess = true,
