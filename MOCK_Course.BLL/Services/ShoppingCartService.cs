@@ -4,8 +4,11 @@ using AutoMapper;
 using Course.BLL.DTO;
 using Course.BLL.Requests;
 using Course.BLL.Services.Abstraction;
+using Course.BLL.Share.RequestFeatures;
 using Course.DAL.Models;
 using Course.DAL.Repositories.Abstraction;
+using Entities.ParameterRequest;
+using Entities.Responses;
 using Repository.Repositories;
 
 namespace Course.BLL.Services
@@ -33,11 +36,9 @@ namespace Course.BLL.Services
             try
             {
                 if (await _cousesRepository.BuildQuery()
-                    .FilterById(courseId)
-                    .AsSelectorAsync(c => c.Price) <= 0)
+                                           .FilterById(courseId)
+                                           .AsSelectorAsync(c => c.Price) <= 0)
                     return new Response<CartDTO>(false, "Can't add course with price == 0", null);
-
-                //TODO: CHECK EXIST CART
 
                 var cart = new ShoppingCart()
                 {
@@ -58,25 +59,11 @@ namespace Course.BLL.Services
             }
         }
 
-        // TODO: Paging and filter by name course
-        public async Task<Responses<CartDTO>> GetAll(Guid userId)
+        public async Task<ApiBaseResponse> GetAllAsync(CartParameters parameters, Guid userId)
         {
-            try
-            {
-                var ShoppingCart = await _shoppingCartRepository.BuildQuery()
-                                                                .FilterByUserId(userId)
-                                                                .IncludeCourse()
-                                                                .IncludeUser()
-                                                                .IncludeCategory()
-                                                                .IncludeDiscount()
-                                                                .ToListAsync(c => _mapper.Map<CartDTO>(c));
+            var carts = await _shoppingCartRepository.GetAllAsync(parameters, userId);
 
-                return new Responses<CartDTO>(true, ShoppingCart);
-            }
-            catch (Exception ex)
-            {
-                return new Responses<CartDTO>(false, ex.Message, null);
-            }
+            return new ApiOkResponse<PagedList<CartDTO>>(carts);
         }
         public async Task<Response<CartDTO>> Update(Guid userId, CartUpdateRequest cartUpdateRequest)
         {

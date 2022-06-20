@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using Course.BLL.DTO;
-using Course.BLL.Requests;
 using Course.BLL.Share.RequestFeatures;
 using Course.DAL.Data;
 using Course.DAL.Models;
 using Course.DAL.Queries;
 using Course.DAL.Queries.Abstraction;
 using Course.DAL.Repositories.Abstraction;
+using Entities.ParameterRequest;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;

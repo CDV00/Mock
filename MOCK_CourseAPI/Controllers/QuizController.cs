@@ -1,5 +1,4 @@
-﻿using Course.BLL.Requests;
-using Course.BLL.Responses;
+﻿using Course.BLL.Responses;
 using Course.BLL.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +10,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using Course.BLL.Share.RequestFeatures;
 using Course.DAL.DTOs;
+using Entities.ParameterRequest;
 
 namespace CourseAPI.Controllers
 {

@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using Course.BLL.Requests;
 using Course.BLL.Responses;
 using Course.BLL.Share.RequestFeatures;
 using Course.DAL.Data;
 using Course.DAL.Models;
 using Course.DAL.Queries;
 using Course.DAL.Repositories.Abstraction;
+using Entities.ParameterRequest;
 using System;
 using System.Threading.Tasks;
 
@@ -116,8 +116,6 @@ namespace Repository.Repositories
         {
             Status status = Status.Review;
             var courses = await BuildQuery().IncludeCategory()
-                                            //.IncludeUser()
-                                            //.IncludeDiscount()
                                             .FilterByUserId(userId)
                                             .FilterStatus(status)
                                             .FilterByKeyword(parameters.Keyword)

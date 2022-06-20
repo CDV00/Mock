@@ -6,13 +6,21 @@ using System;
 using System.Threading.Tasks;
 using CourseAPI.Extensions.ControllerBase;
 using Course.BLL.Services.Abstraction;
+using CourseAPI.Presentation.Controllers;
+using Entities.Responses;
+using Entities.ParameterRequest;
+using Entities.Extension;
+using Course.BLL.Share.RequestFeatures;
+using Course.BLL.Responses;
+using Entities.Constants;
+using System.Text.Json;
 
 namespace CourseAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class ShoppingCartController : ControllerBase
+    public class ShoppingCartController : ApiControllerBase
     {
         private readonly IShoppingCartService _shoppingCartService;
         public ShoppingCartController(IShoppingCartService shoppingCartService)
@@ -26,12 +34,17 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<Responses<CartDTO>>> GetAll()
+        public async Task<ActionResult<ApiOkResponses<CartDTO>>> GetAll([FromQuery] CartParameters parameters)
         {
             var userId = User.GetUserId();
-            var result = await _shoppingCartService.GetAll(userId);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
+            var result = await _shoppingCartService.GetAllAsync(parameters, userId);
+            if (!result.IsSuccess)
+                return ProcessError(result);
+
+            var carts = result.GetResult<PagedList<CartDTO>>();
+            Response.Headers.Add(SystemConstant.PagedHeader,
+                               JsonSerializer.Serialize(carts.MetaData));
+
             return Ok(result);
         }
 

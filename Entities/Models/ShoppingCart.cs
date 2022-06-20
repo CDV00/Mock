@@ -9,5 +9,7 @@ namespace Course.DAL.Models
 
         public AppUser User { get; set; }
         public Courses Course { get; set; }
+
+        public bool IsActive { get; set; } = true;
     }
 }

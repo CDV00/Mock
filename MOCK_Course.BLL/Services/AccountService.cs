@@ -21,6 +21,7 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using static Course.BLL.Responses.FacebookApiDTO;
 using Course.BLL.Services.Abstraction;
+using Entities.Constants;
 
 namespace Course.BLL.Services
 {
@@ -434,7 +435,7 @@ namespace Course.BLL.Services
 
                 if (!result.Succeeded)
                     throw new Exception();
-                await _userManager.AddToRoleAsync(appUser, UserRoles.Student);
+                await _userManager.AddToRoleAsync(appUser, UserRolesConstant.Student);
             }
             // generate the jwt for the local user...
             user = await _userManager.FindByNameAsync(userInfo.Email);
@@ -451,7 +452,7 @@ namespace Course.BLL.Services
                {
                    FullName = user.Fullname,
                    Email = user.Email,
-                   Role = UserRoles.Student
+                   Role = UserRolesConstant.Student
                });
         }
 
@@ -481,7 +482,7 @@ namespace Course.BLL.Services
                     //Image = payload.Picture,
                 };
                 await _userManager.CreateAsync(user);
-                await _userManager.AddToRoleAsync(user, UserRoles.Student);
+                await _userManager.AddToRoleAsync(user, UserRolesConstant.Student);
             }
             user = await _userManager.FindByEmailAsync(payload.Email);
             var userRoles = await _userManager.GetRolesAsync(user);
@@ -493,7 +494,7 @@ namespace Course.BLL.Services
                 {
                     FullName = user.Fullname,
                     Email = user.Email,
-                    Role = UserRoles.Student
+                    Role = UserRolesConstant.Student
                 });
 
         }

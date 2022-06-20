@@ -12,6 +12,8 @@ using CourseAPI.Presentation.Controllers;
 using Entities.Responses;
 using Course.BLL.Share.RequestFeatures;
 using Entities.Extension;
+using Entities.Constants;
+using Entities.ParameterRequest;
 
 namespace CourseAPI.Controllers
 {
@@ -33,7 +35,7 @@ namespace CourseAPI.Controllers
         /// <returns>List of course</returns>
         [HttpGet("Get-all-course")]
         [AllowAnonymous]
-        public async Task<ActionResult<ApiOkResponse<CourseDTO>>> GetAllCourses([FromQuery] CourseParameters parameters)
+        public async Task<ActionResult<ApiOkResponses<CourseDTO>>> GetAllCourses([FromQuery] CourseParameters parameters)
         {
             Guid? userId = (User.GetUserId() == Guid.Empty) ? null : User.GetUserId();
 
@@ -43,10 +45,10 @@ namespace CourseAPI.Controllers
 
             var coursePagedList = result.GetResult<PagedList<CourseDTO>>();
 
-            Response.Headers.Add("X-Pagination",
+            Response.Headers.Add(SystemConstant.PagedHeader,
                                  JsonSerializer.Serialize(coursePagedList.MetaData));
 
-            return Ok(new Responses<CourseDTO>(true, coursePagedList));
+            return Ok(result);
         }
 
 

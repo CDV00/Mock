@@ -1,9 +1,9 @@
-﻿using Course.BLL.Requests;
-using Course.BLL.Responses;
+﻿using Course.BLL.Responses;
 using Course.BLL.Share.RequestFeatures;
 using Course.DAL.DTOs;
 using Course.DAL.Models;
 using Course.DAL.Queries;
+using Entities.ParameterRequest;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

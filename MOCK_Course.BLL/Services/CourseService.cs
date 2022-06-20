@@ -10,6 +10,7 @@ using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
 using Course.BLL.Share.RequestFeatures;
 using Entities.Responses;
+using Entities.ParameterRequest;
 
 namespace Course.BLL.Services
 {
@@ -104,7 +105,7 @@ namespace Course.BLL.Services
         //}
         public async Task<ApiBaseResponse> GetAllMyCoures(CourseParameters parameter, Guid? userId)
         {
-            var courses = await _cousesRepository.GetAllMyCoures(userId,parameter);
+            var courses = await _cousesRepository.GetAllMyCoures(userId, parameter);
             //await AddLast(courses, userId);
 
             return new ApiOkResponse<PagedList<CourseDTO>>(courses);
