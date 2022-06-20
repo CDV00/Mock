@@ -3,8 +3,8 @@
     public class BaseResponse
     {
         public bool IsSuccess { get; set; }
-        public string Error { get; set; }
         public string Message { get; set; }
+        public string StatusCode { get; set; }
         public BaseResponse()
         {
 
@@ -14,11 +14,11 @@
             IsSuccess = isSuccess;
         }
 
-        public BaseResponse(bool isSuccess, string error, string message)
+        public BaseResponse(bool isSuccess, string message, string statusCode)
         {
             IsSuccess = isSuccess;
-            Error = error;
             Message = message;
+            StatusCode = statusCode;
         }
     }
 }

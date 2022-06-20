@@ -38,7 +38,7 @@ namespace Course.BLL.Services
                     {
                         IsSuccess = true,
                         fileData = result,
-                        Message = "Download success"
+                        StatusCode = "Download success"
                     };
                 };
 
@@ -48,7 +48,7 @@ namespace Course.BLL.Services
                 return new DownloadResponse()
                 {
                     IsSuccess = false,
-                    Message = ex.Message
+                    StatusCode = ex.Message
                 };
             }
         }
@@ -108,11 +108,11 @@ namespace Course.BLL.Services
                 request.Download(stream);
                 if (!response.IsSuccess)
                 {
-                    response.Message = "Upload failed";
+                    response.StatusCode = "Upload failed";
                 }
                 else
                 {
-                    response.Message = "Upload Success";
+                    response.StatusCode = "Upload Success";
                     response.fileData = stream.ToArray();
                 }
                 return response;
@@ -123,7 +123,7 @@ namespace Course.BLL.Services
                 return new DownloadResponse()
                 {
                     IsSuccess = false,
-                    Message = ex.Message
+                    StatusCode = ex.Message
                 };
             }
         }
@@ -145,7 +145,7 @@ namespace Course.BLL.Services
                 return new UploadResponse()
                 {
                     IsSuccess = false,
-                    Message = ex.Message
+                    StatusCode = ex.Message
                 };
             }
         }
@@ -180,7 +180,7 @@ namespace Course.BLL.Services
                 return new UploadResponse()
                 {
                     IsSuccess = false,
-                    Message = ex.Message
+                    StatusCode = ex.Message
                 };
             }
 
@@ -201,7 +201,7 @@ namespace Course.BLL.Services
                     return new UploadResponse()
                     {
                         IsSuccess = false,
-                        Message = "Image null"
+                        StatusCode = "Image null"
                     };
                 }
                 var cloudinary = new Cloudinary(account);
@@ -230,7 +230,7 @@ namespace Course.BLL.Services
                 return new UploadResponse()
                 {
                     IsSuccess = false,
-                    Message = ex.Message.ToString()
+                    StatusCode = ex.Message.ToString()
                 };
             }
         }
@@ -274,7 +274,7 @@ namespace Course.BLL.Services
                 return new UploadResponse()
                 {
                     IsSuccess = false,
-                    Message = "file null"
+                    StatusCode = "file null"
                 };
 
             }
@@ -283,7 +283,7 @@ namespace Course.BLL.Services
                 return new UploadResponse()
                 {
                     IsSuccess = false,
-                    Message = ex.Message
+                    StatusCode = ex.Message
                 };
             }
         }

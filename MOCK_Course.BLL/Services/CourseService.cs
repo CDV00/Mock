@@ -81,70 +81,89 @@ namespace Course.BLL.Services
             }
         }
 
-        public async Task<Responses<CourseDTO>> GetAllMyCoures(Guid userId)
-        {
-            try
-            {
-                var courses = await _cousesRepository.BuildQuery()
-                                                     .FilterByUserId(userId)
-                                                     .FilterByApprove()
-                                                     .IncludeCategory()
-                                                     //.IncludeSection()
-                                                     //.IncludeOrder()
-                                                     .IncludeUser()
-                                                     .IncludeDiscount()
-                                                     .ToListAsync(c => _mapper.Map<CourseDTO>(c));
+        //public async Task<Responses<CourseDTO>> GetAllMyCoures(Guid userId)
+        //{
+        //    try
+        //    {
+        //        var courses = await _cousesRepository.BuildQuery()
+        //                                             .FilterByUserId(userId)
+        //                                             .FilterByApprove()
+        //                                             .IncludeCategory()
+        //                                             .IncludeSection()
+        //                                             .IncludeOrder()
+        //                                             .IncludeUser()
+        //                                             .IncludeDiscount()
+        //                                             .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 
-                return new Responses<CourseDTO>(true, courses);
-            }
-            catch (Exception ex)
-            {
-                return new Responses<CourseDTO>(false, ex.Message, null);
-            }
+        //        return new Responses<CourseDTO>(true, courses);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new Responses<CourseDTO>(false, ex.Message, null);
+        //    }
+        //}
+        public async Task<ApiBaseResponse> GetAllMyCoures(CourseParameters parameter, Guid? userId)
+        {
+            var courses = await _cousesRepository.GetAllMyCoures(userId,parameter);
+            //await AddLast(courses, userId);
+
+            return new ApiOkResponse<PagedList<CourseDTO>>(courses);
         }
 
         // Upcoming courses: Review
-        public async Task<Responses<CourseDTO>> UpcomingCourse(Guid userId)
-        {
-            try
-            {
-                Status status = Status.Review;
-                var courses = await _cousesRepository.BuildQuery()
-                                                     .FilterByUserId(userId)
-                                                     .FilterStatus(status)
-                                                     .IncludeCategory()
-                                                     //.IncludeUser()
-                                                     //.IncludeDiscount()
-                                                     //.FilterByOrderd(userId)
-                                                     .ToListAsync(c => _mapper.Map<CourseDTO>(c));
+        //public async Task<Responses<CourseDTO>> UpcomingCourse(Guid userId)
+        //{
+        //    try
+        //    {
+        //        Status status = Status.Review;
+        //        var courses = await _cousesRepository.BuildQuery()
+        //                                             .FilterByUserId(userId)
+        //                                             .FilterStatus(status)
+        //                                             .IncludeCategory()
+        //                                             .IncludeUser()
+        //                                             .IncludeDiscount()
+        //                                             .FilterByOrderd(userId)
+        //                                             .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 
-                return new Responses<CourseDTO>(true, courses);
-            }
-            catch (Exception ex)
-            {
-                return new Responses<CourseDTO>(false, ex.Message, null);
-            }
-        }
-        //
-        public async Task<Responses<CourseDTO>> GetAllMyPurchase(Guid userId)
+        //        return new Responses<CourseDTO>(true, courses);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new Responses<CourseDTO>(false, ex.Message, null);
+        //    }
+        //}
+        public async Task<ApiBaseResponse> UpcomingCourse(CourseParameters parameter, Guid? userId)
         {
-            try
-            {
-                var courses = await _cousesRepository.BuildQuery()
-                                                     .IncludeCategory()
-                                                     .IncludeUser()
-                                                     .IncludeDiscount()
-                                                     .FilterByOrderd(userId)
-                                                     .ToListAsync(c => _mapper.Map<CourseDTO>(c));
+            var courses = await _cousesRepository.UpcomingCourse(userId, parameter);
 
-                return new Responses<CourseDTO>(true, courses);
-            }
-            catch (Exception ex)
-            {
-                return new Responses<CourseDTO>(false, ex.Message, null);
-            }
+            return new ApiOkResponse<PagedList<CourseDTO>>(courses);
         }
 
+        //public async Task<Responses<CourseDTO>> GetAllMyPurchase(Guid userId)
+        //{
+        //    try
+        //    {
+        //        var courses = await _cousesRepository.BuildQuery()
+        //                                             .IncludeCategory()
+        //                                             .IncludeUser()
+        //                                             .IncludeDiscount()
+        //                                             .FilterByOrderd(userId)
+        //                                             .ToListAsync(c => _mapper.Map<CourseDTO>(c));
+
+        //        return new Responses<CourseDTO>(true, courses);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new Responses<CourseDTO>(false, ex.Message, null);
+        //    }
+        //}
+
+        public async Task<ApiBaseResponse> GetAllMyPurchase(CourseParameters parameter, Guid userId)
+        {
+            var courses = await _cousesRepository.GetAllMyPurchase(userId, parameter);
+
+            return new ApiOkResponse<PagedList<CourseDTO>>(courses);
+        }
 
         public async Task<ApiBaseResponse> GetDetail(Guid id, Guid? userId)
         {
