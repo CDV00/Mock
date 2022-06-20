@@ -47,7 +47,7 @@ namespace Course.BLL.Extensions
 
             //course
             CreateMap<Courses, CourseForCreateRequest>().ReverseMap();
-            CreateMap<Courses, CourseForUpdateRequest>().ReverseMap();
+            CreateMap<CourseForUpdateRequest, Courses>().ReverseMap();
 
             CreateMap<AppUser, UserDTO>().ReverseMap();
 

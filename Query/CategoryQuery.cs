@@ -46,5 +46,11 @@ namespace Course.DAL.Queries
             Query.Include(c => c.SubCategories).Load();
             return this;
         }
+
+        public ICategoryQuery FilterById(Guid id)
+        {
+            Query = Query.Where(c => c.Id == id);
+            return this;
+        }
     }
 }

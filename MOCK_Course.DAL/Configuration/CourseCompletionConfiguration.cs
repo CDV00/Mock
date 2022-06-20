@@ -20,6 +20,7 @@ namespace Course.DAL.Configuration
             builder.HasOne(cc => cc.User)
                 .WithMany(u => u.CourseCompletions)
                 .HasForeignKey(cc => cc.UserId);
+
         }
     }
 }

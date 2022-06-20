@@ -9,14 +9,14 @@ using Course.BLL.Responses;
 using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
 using Course.BLL.Share.RequestFeatures;
-using System.Linq;
-using System.Linq.Expressions;
+using Entities.Responses;
 
 namespace Course.BLL.Services
 {
     public class CourseService : ICourseService
     {
         private readonly ICourseRepository _cousesRepository;
+        private readonly ICategoryRepository _categoryRepository;
         private readonly IAudioLanguageRepository _audioLanguageRepository;
         private readonly ICloseCaptionRepository _closeCaptionRepository;
         private readonly ILevelRepository _levelRepository;
@@ -31,9 +31,18 @@ namespace Course.BLL.Services
         private readonly IMapper _mapper;
 
         public CourseService(ICourseRepository cousesRepository,
-            IMapper mapper,
-            IUnitOfWork unitOfWork, IAudioLanguageRepository audioLanguageRepository,
-            ICloseCaptionRepository closeCaptionRepository, ILevelRepository levelRepository, ISectionRepositoty sectionRepositoty,ICourseReviewService courseReviewService, IEnrollmentService enrollmentService, ISavedCoursesService savedCoursesService, ISectionService sectionService, ILectureService lectureService)
+                             IMapper mapper,
+                             IUnitOfWork unitOfWork,
+                             IAudioLanguageRepository audioLanguageRepository,
+                             ICloseCaptionRepository closeCaptionRepository,
+                             ILevelRepository levelRepository,
+                             ISectionRepositoty sectionRepositoty,
+                             ICourseReviewService courseReviewService,
+                             IEnrollmentService enrollmentService,
+                             ISavedCoursesService savedCoursesService,
+                             ISectionService sectionService,
+                             ILectureService lectureService,
+                             ICategoryRepository categoryRepository)
         {
             _cousesRepository = cousesRepository;
             _mapper = mapper;
@@ -47,54 +56,21 @@ namespace Course.BLL.Services
             _savedCoursesService = savedCoursesService;
             _sectionService = sectionService;
             _lectureService = lectureService;
+            _categoryRepository = categoryRepository;
         }
 
-        public async Task<PagedList<CourseDTO>> GetCoursesAsync(CourseParameters courseParameter, Guid? userId)
+        public async Task<ApiBaseResponse> GetAllCourses(CourseParameters parameter, Guid? userId)
         {
-            var courses = await _cousesRepository.BuildQuery()
-                                                 .IncludeCategory()
-                                                 .IncludeUser()
-                                                 .IncludeDiscount()
-                                                 .FilterByKeyword(courseParameter.Keyword)
-                                                 .FilterByUserId(courseParameter.userId)
-                                                 .FilterByCategoryId(courseParameter.CategoryId)
-                                                 .FilterByAudioLanguageIds(courseParameter.AudioLanguageIds)
-                                                 .FilterByCloseCaptionIds(courseParameter.CloseCaptionIds)
-                                                 .FilterByLevelIds(courseParameter.LevelIds)
-                                                 .FilterByPrice(courseParameter.IsFree, courseParameter.IsDiscount, courseParameter.MinPrice, courseParameter.MaxPrice)
-                                                 .FilterByRating(courseParameter.Rate)
-                                                 .ApplySort(courseParameter.Orderby)
-                                                 .Skip((courseParameter.PageNumber - 1) * courseParameter.PageSize)
-                                                 .Take(courseParameter.PageSize)
-                                                 .ToListAsync(c => _mapper.Map<CourseDTO>(c));
+            var courses = await _cousesRepository.GetAllCourseAsync(parameter);
+            await AddLast(courses, userId);
 
-            if (userId != null)
-            {
-                await AddLast(courses, userId);
-            }
-
-            var count = await _cousesRepository.BuildQuery()
-                                               .FilterByKeyword(courseParameter.Keyword)
-                                               .FilterByUserId(courseParameter.userId)
-                                               .FilterByCategoryId(courseParameter.CategoryId)
-                                               .FilterByAudioLanguageIds(courseParameter.AudioLanguageIds)
-                                               .FilterByCloseCaptionIds(courseParameter.CloseCaptionIds)
-                                               .FilterByLevelIds(courseParameter.LevelIds)
-                                               .FilterByPrice(courseParameter.IsFree, courseParameter.IsDiscount, courseParameter.MinPrice, courseParameter.MaxPrice)
-                                               .FilterByRating(courseParameter.Rate)
-                                               .CountAsync();
-
-            //await AddRating(courses);
-
-
-            var pageList = new PagedList<CourseDTO>(courses, count, courseParameter.PageNumber, courseParameter.PageSize);
-
-            return pageList;
+            return new ApiOkResponse<PagedList<CourseDTO>>(courses);
         }
 
-        //
         private async Task AddLast(List<CourseDTO> courses, Guid? userId)
         {
+            if (userId == null)
+                return;
             for (var i = 0; i < courses.Count; i++)
             {
                 courses[i].IsSave = await _savedCoursesService.IsSavedCourse(userId.GetValueOrDefault(), courses[i].Id);
@@ -104,47 +80,9 @@ namespace Course.BLL.Services
                 courses[i].IsEnroll = (await _enrollmentService.IsEnrollment(userId.GetValueOrDefault(), courses[i].Id)).data == null ? false : true;
             }
         }
-        private async Task AddRating(List<CourseDTO> courses)
-        {
-            //for (var i = 0; i < courses.Count; i++)
-            //{
-            //courses[i].TotalEnroll = (await _enrollmentService.GetTotalEnrollOfCourse(courses[i].Id)).data;
-            //}
-        }
-
-        /// <summary>
-        /// làm thêm phân trang và filter ở đâu
-        /// </summary>
-        /// <returns></returns>
-        public async Task<Response<CourseDTO>> GetAll(Guid? userId)
-        {
-            try
-            {
-                var courses = await _cousesRepository.BuildQuery()
-                                                     .IncludeCategory()
-                                                     .IncludeUser()
-                                                     .IncludeEnrolment()
-                                                     .AsSelectorAsync(x => _mapper.Map<CourseDTO>(x));
-                if (userId != null)
-                {
-                    //await AddLast(courses, userId);
-                }
-                return new Response<CourseDTO>(true, courses);
-            }
-            catch (Exception ex)
-            {
-                return new Response<CourseDTO>(false, ex.Message, null);
-            }
-        }
 
         public async Task<Responses<CourseDTO>> GetAllMyCoures(Guid userId)
         {
-            //Func<Courses, CourseDTO> mapper = x =>
-            //{
-            //    //x.RequireLogin = true;
-            //    //return null;
-            //};
-
             try
             {
                 var courses = await _cousesRepository.BuildQuery()
@@ -157,7 +95,6 @@ namespace Course.BLL.Services
                                                      .IncludeDiscount()
                                                      .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 
-                await AddRating(courses);
                 return new Responses<CourseDTO>(true, courses);
             }
             catch (Exception ex)
@@ -181,7 +118,6 @@ namespace Course.BLL.Services
                                                      //.FilterByOrderd(userId)
                                                      .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 
-                await AddRating(courses);
                 return new Responses<CourseDTO>(true, courses);
             }
             catch (Exception ex)
@@ -201,7 +137,6 @@ namespace Course.BLL.Services
                                                      .FilterByOrderd(userId)
                                                      .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 
-                await AddRating(courses);
                 return new Responses<CourseDTO>(true, courses);
             }
             catch (Exception ex)
@@ -211,99 +146,48 @@ namespace Course.BLL.Services
         }
 
 
-        public async Task<Response<CourseDTO>> Get(Guid id, Guid? userId)
+        public async Task<ApiBaseResponse> GetDetail(Guid id, Guid? userId)
         {
-            try
-            {
-                var course = await _cousesRepository.BuildQuery()
-                                                    .IncludeCategory()
-                                                    .IncludeLanguage()
-                                                    .IncludeLevel()
-                                                    .IncludeSection()
-                                                    .IncludeQuiz()
-                                                    .IncludeAssignment()
-                                                    .IncludeUser()
-                                                    .FilterById(id)
-                                                    .AsSelectorAsync(x => _mapper.Map<CourseDTO>(x));
-                //await AddRate(course);
-                await AddLast(new List<CourseDTO> { course }, userId);
-                var courseResponse = _mapper.Map<CourseDTO>(course);
-                return new Response<CourseDTO>(true, courseResponse);
-            }
-            catch (Exception ex)
-            {
-                return new Response<CourseDTO>(false, ex.Message, null);
-            }
+            var course = await _cousesRepository.GetDetailCourseAsync(id);
+            if (course is null)
+                return new CourseNotFoundResponse(id);
+
+            await AddLast(new List<CourseDTO> { course }, userId);
+
+            return new ApiOkResponse<CourseDTO>(course);
         }
 
-        private async Task AddRate(CourseDTO course)
+        public async Task<ApiBaseResponse> Add(Guid userId, CourseForCreateRequest courseRequest)
         {
-            //course.Rating = (await _courseReviewService.GetAVGRatinng(course.Id, null)).data;
-            //course.TotalEnroll = (await _enrollmentService.GetTotalEnrollOfCourse(course.Id)).data;
-        }
+            if (!await _categoryRepository.Existing(courseRequest.CategoryId))
+                return new CategoryNotFoundResponse(courseRequest.CategoryId);
 
-        public async Task<Response<CourseDTO>> Add(Guid userId, CourseForCreateRequest courseRequest)
-        {
-            try
-            {
-                var course = _mapper.Map<Courses>(courseRequest);
-                course.UserId = userId;
-                course.CreatedAt = DateTime.Now;
+            if (!await _audioLanguageRepository.CheckExists(courseRequest.AudioLanguageIds))
+                return new NotMathIdResponse(nameof(AudioLanguage), string.Join(',', courseRequest.AudioLanguageIds));
 
-                await _cousesRepository.CreateAsync(course);
+            if (!await _closeCaptionRepository.CheckExists(courseRequest.CloseCaptionIds))
+                return new NotMathIdResponse(nameof(CloseCaption), string.Join(',', courseRequest.AudioLanguageIds));
 
-                GetTotalTimeOfCourse(course);
-                #region add language, levels
-                List<AudioLanguage> audioLanguages = new();
-                if (courseRequest.AudioLanguageIds != null)
-                {
-                    foreach (var id in courseRequest.AudioLanguageIds)
-                    {
-                        var audioLanguage = await _audioLanguageRepository.GetByIdAsync(id);
-                        audioLanguages.Add(audioLanguage);
-                    }
-                    course.AudioLanguages = audioLanguages;
-                }
+            if (!await _levelRepository.CheckExists(courseRequest.LevelIds))
+                return new NotMathIdResponse(nameof(Level), string.Join(',', courseRequest.AudioLanguageIds));
 
-                //course.AudioLanguages.Clear();
+            var course = _mapper.Map<Courses>(courseRequest);
+            course.UserId = userId;
+            course.CreatedAt = DateTime.Now;
 
-                List<CloseCaption> closeCaptions = new();
-                if (courseRequest.CloseCaptionIds != null)
-                {
-                    foreach (var id in courseRequest.CloseCaptionIds)
-                    {
-                        var closeCaption = await _closeCaptionRepository.GetByIdAsync(id);
-                        closeCaptions.Add(closeCaption);
-                    }
-                    //course.CloseCaptions.Clear();
-                    course.CloseCaptions = closeCaptions;
-                }
+            await _cousesRepository.CreateAsync(course);
 
-                List<Level> levels = new();
-                if (courseRequest.LevelIds != null)
-                {
-                    foreach (var id in courseRequest.LevelIds)
-                    {
-                        var level = await _levelRepository.GetByIdAsync(id);
-                        levels.Add(level);
-                    }
-                    //course.Levels.Clear();
-                    course.Levels = levels;
-                }
-                #endregion
+            GetTotalTimeOfCourse(course);
 
-                var result = await _unitOfWork.SaveChangesAsync();
+            var audioLanguageIds = courseRequest.AudioLanguageIds;
+            var closeCaptionIds = courseRequest.CloseCaptionIds;
+            var levelIds = courseRequest.LevelIds;
+            await AddLanguages(audioLanguageIds, closeCaptionIds, levelIds, course);
 
-                var CourseDTO = _mapper.Map<CourseDTO>(course);
-                return new Response<CourseDTO>(
-                    true,
-                    CourseDTO
-                );
-            }
-            catch (Exception ex)
-            {
-                return new Response<CourseDTO>(false, ex.Message, null);
-            }
+            await _unitOfWork.SaveChangesAsync();
+
+            var CourseDTO = _mapper.Map<CourseDTO>(course);
+            return new ApiOkResponse<CourseDTO>(CourseDTO);
         }
 
         private static void GetTotalTimeOfCourse(Courses course)
@@ -331,60 +215,20 @@ namespace Course.BLL.Services
             course.TotalTime = courseTime;
         }
 
-        //private static void UpdateTotalTimeOfCourse(Courses course)
-        //{
-        //    if (course.Sections == null)
-        //        return;
-        //    var courseTime = 0;
-        //    foreach (var section in course.Sections)
-        //    {
-        //        var sectionTime = 0;
-        //        if (section.Lectures == null)
-        //            continue;
 
-        //        foreach (var lecture in section.Lectures)
-        //        {
-        //            if (lecture == null)
-        //                continue;
-        //            if (lecture.IsDeleted)
-        //            {
-        //                sectionTime -= lecture.TotalTime;
-        //                courseTime -= lecture.TotalTime;
-        //                continue;
-        //            }
-
-        //            sectionTime += lecture.TotalTime;
-        //            courseTime += lecture.TotalTime;
-        //        }
-
-        //        section.TotalTime = sectionTime;
-        //    }
-        //    course.TotalTime = courseTime;
-        //}
-
-        public async Task<BaseResponse> Remove(Guid idCourse, Guid userId)
+        public async Task<ApiBaseResponse> Remove(Guid idCourse, Guid userId)
         {
-            try
-            {
-                var course = await _cousesRepository.GetByIdAsync(idCourse);
-                if (course == null)
-                {
-                    new Responses<BaseResponse>(false, "can't find course", null);
-                }
+            var course = await _cousesRepository.GetByIdAsync(idCourse);
+            if (course is null)
+                return new CourseNotFoundResponse(idCourse);
 
-                if (course.UserId != userId)
-                    return new Response<CourseDTO>(false, "You are't the owner of the course", null);
+            if (course.UserId != userId)
+                return new NotOwnOfCourseResponse(idCourse);
 
-                _cousesRepository.Remove(course, false);
-                await _unitOfWork.SaveChangesAsync();
+            _cousesRepository.Remove(course, false);
+            await _unitOfWork.SaveChangesAsync();
 
-                return new BaseResponse(true);
-
-            }
-            catch (Exception ex)
-            {
-                return new Responses<BaseResponse>(false, ex.Message, null);
-            }
+            return new ApiBaseResponse(true);
         }
 
         // Upload status course: Id course, status
@@ -392,13 +236,9 @@ namespace Course.BLL.Services
         {
             try
             {
-                
+
                 var course = await _cousesRepository.BuildQuery()
                                                     .FilterById(courseStatusUpdateRequest.CourseId)
-                                                    //.IncludeCategory()
-                                                    //.IncludeLevel()
-                                                    //.IncludeLanguage()
-                                                    //.IncludeSection()
                                                     .AsSelectorAsync(c => c);
 
                 if (course == null)
@@ -422,90 +262,97 @@ namespace Course.BLL.Services
             }
         }
 
-        public async Task<Response<CourseDTO>> Update(Guid id, CourseForUpdateRequest courseRequest, Guid userId)
+        public async Task<ApiBaseResponse> Update(Guid id, CourseForUpdateRequest courseRequest, Guid userId)
         {
-            try
+            var course = await _cousesRepository.BuildQuery()
+                                                .FilterById(id)
+                                                .IncludeCategory()
+                                                .IncludeLevel()
+                                                .IncludeLanguage()
+                                                .IncludeSection()
+                                                .IncludeAssignment()
+                                                .IncludeQuiz()
+                                                .AsSelectorAsync(c => c);
+
+            if (course is null)
+                return new CourseNotFoundResponse(id);
+
+            if (course.UserId != userId)
+                return new NotOwnOfCourseResponse(id);
+
+            if (!await _audioLanguageRepository.CheckExists(courseRequest.AudioLanguageIds))
+                return new NotMathIdResponse(nameof(AudioLanguage), string.Join(',', courseRequest.AudioLanguageIds));
+
+            if (!await _categoryRepository.Existing(courseRequest.CategoryId))
+                return new CategoryNotFoundResponse(courseRequest.CategoryId);
+
+            if (!await _closeCaptionRepository.CheckExists(courseRequest.CloseCaptionIds))
+                return new NotMathIdResponse(nameof(CloseCaption), string.Join(',', courseRequest.AudioLanguageIds));
+
+            if (!await _levelRepository.CheckExists(courseRequest.LevelIds))
+                return new NotMathIdResponse(nameof(Level), string.Join(',', courseRequest.AudioLanguageIds));
+
+            AddNewSection(courseRequest);
+            _mapper.Map(courseRequest, course);
+
+            course.UpdatedAt = DateTime.Now;
+            course.UpdatedBy = id;
+            GetTotalTimeOfCourse(course);
+
+            var audioLanguageIds = courseRequest.AudioLanguageIds;
+            var closeCaptionIds = courseRequest.CloseCaptionIds;
+            var levelIds = courseRequest.LevelIds;
+            await AddLanguages(audioLanguageIds, closeCaptionIds, levelIds, course);
+
+            _cousesRepository.Update(course);
+            var CourseResponse = _mapper.Map<CourseDTO>(course);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return new ApiOkResponse<CourseDTO>(CourseResponse);
+        }
+
+        /// <summary>
+        /// Clear and add audio language, close caption, level
+        /// </summary>
+        /// <param name="audioLanguageIds"></param>
+        /// <param name="closeCaptionIds"></param>
+        /// <param name="levelIds"></param>
+        /// <param name="course"></param>
+        /// <returns></returns>
+        private async Task AddLanguages(List<Guid> audioLanguageIds, List<Guid> closeCaptionIds, List<Guid> levelIds, Courses course)
+        {
+            List<AudioLanguage> audioLanguages = new();
+            if (audioLanguageIds != null)
             {
-                var course = await _cousesRepository.BuildQuery()
-                                                    .FilterById(id)
-                                                    .IncludeCategory()
-                                                    .IncludeLevel()
-                                                    .IncludeLanguage()
-                                                    .IncludeSection()
-                                                    .IncludeAssignment()
-                                                    .IncludeQuiz()
-                                                    .AsSelectorAsync(c => c);
-
-                if (course == null)
+                foreach (var id in audioLanguageIds)
                 {
-                    return new Response<CourseDTO>(false, "can't find course", null);
+                    var audioLanguage = await _audioLanguageRepository.GetByIdAsync(id);
+                    audioLanguages.Add(audioLanguage);
                 }
-                if (course.UserId != userId)
-                    return new Response<CourseDTO>(false, "You aren't the owner of the course", null);
-
-                AddNewSection(courseRequest);
-                _mapper.Map(courseRequest, course);
-
-
-                course.UpdatedAt = DateTime.Now;
-                course.UpdatedBy = id;
-                GetTotalTimeOfCourse(course);
-
-                #region
-                List<AudioLanguage> audioLanguages = new();
-                if (courseRequest.AudioLanguageIds != null)
-                {
-                    foreach (var idcourse in courseRequest.AudioLanguageIds)
-                    {
-                        var audioLanguage = await _audioLanguageRepository.GetByIdAsync(idcourse);
-                        audioLanguages.Add(audioLanguage);
-                    }
-                    //course.AudioLanguages.Clear();
-
-                    course.AudioLanguages = audioLanguages;
-                }
-
-                //course.AudioLanguages.Clear();
-
-                List<CloseCaption> closeCaptions = new();
-                if (courseRequest.CloseCaptionIds != null)
-                {
-                    foreach (var idcourse in courseRequest.CloseCaptionIds)
-                    {
-                        var closeCaption = await _closeCaptionRepository.GetByIdAsync(idcourse);
-                        closeCaptions.Add(closeCaption);
-                    }
-                    //course.CloseCaptions.Clear();
-                    course.CloseCaptions = closeCaptions;
-                }
-
-                List<Level> levels = new();
-                if (courseRequest.LevelIds != null)
-                {
-                    foreach (var idcourse in courseRequest.LevelIds)
-                    {
-                        var level = await _levelRepository.GetByIdAsync(idcourse);
-                        levels.Add(level);
-                    }
-                    //course.Levels.Clear();
-                    course.Levels = levels;
-                }
-                #endregion
-
-                _cousesRepository.Update(course);
-                var CourseResponse = _mapper.Map<CourseDTO>(course);
-
-                await _unitOfWork.SaveChangesAsync();
-
-
-                return new Response<CourseDTO>(
-                    true,
-                    CourseResponse
-                );
+                course.AudioLanguages = audioLanguages;
             }
-            catch (Exception ex)
+
+            List<CloseCaption> closeCaptions = new();
+            if (closeCaptionIds != null)
             {
-                return new Response<CourseDTO>(false, ex.Message, null);
+                foreach (var id in closeCaptionIds)
+                {
+                    var closeCaption = await _closeCaptionRepository.GetByIdAsync(id);
+                    closeCaptions.Add(closeCaption);
+                }
+                course.CloseCaptions = closeCaptions;
+            }
+
+            List<Level> levels = new();
+            if (levelIds != null)
+            {
+                foreach (var idcourse in levelIds)
+                {
+                    var level = await _levelRepository.GetByIdAsync(idcourse);
+                    levels.Add(level);
+                }
+                course.Levels = levels;
             }
         }
 
@@ -519,12 +366,6 @@ namespace Course.BLL.Services
             {
                 var section = sections[i];
 
-                if (section.IsDeleted)
-                {
-                    section = null;
-                    continue;
-                }
-
                 if (section.IsNew)
                 {
                     section.Id = Guid.Empty;
@@ -537,12 +378,6 @@ namespace Course.BLL.Services
                     for (var j = 0; j < lectures.Count; j++)
                     {
                         var lecture = lectures[j];
-
-                        if (lecture.IsDeleted)
-                        {
-                            lecture = null;
-                            continue;
-                        }
 
                         if (lecture.IsNew)
                         {
@@ -567,27 +402,13 @@ namespace Course.BLL.Services
                             {
                                 var attachment = attachments[k];
 
-                                if (attachment.IsDeleted)
-                                {
-                                    attachment = null;
-                                    continue;
-                                }
-
                                 if (attachment.IsNew)
                                 {
                                     attachment.Id = Guid.Empty;
                                 }
-
                             }
-
                         }
                         #endregion
-
-                        if (assignment.IsDeleted)
-                        {
-                            assignment = null;
-                            continue;
-                        }
 
                         if (assignment.IsNew)
                         {
@@ -596,13 +417,13 @@ namespace Course.BLL.Services
                     }
                 }
                 #endregion
-                #region Update Quizz
+                #region Update Quiz
                 var quizzes = section.Quizzes;
-                    if (quizzes != null)
+                if (quizzes != null)
+                {
+                    for (var j = 0; j < quizzes.Count; j++)
                     {
-                        for (var j = 0; j < quizzes.Count; j++)
-                        {
-                            var quiz = quizzes[j];
+                        var quiz = quizzes[j];
 
                         #region Update Question
                         var questions = quiz.Questions;
@@ -620,31 +441,17 @@ namespace Course.BLL.Services
                                     {
                                         var quizoption = quizoptions[l];
 
-                                        if (quizoption.IsDeleted)
-                                        {
-                                            quizoption = null;
-                                            continue;
-                                        }
-
                                         if (quizoption.IsNew)
                                         {
                                             quizoption.Id = Guid.Empty;
                                         }
-
                                     }
                                 }
                                 #endregion
-                                if (question.IsDeleted)
-                                {
-                                    question = null;
-                                    continue;
-                                }
-
                                 if (question.IsNew)
                                 {
                                     question.Id = Guid.Empty;
                                 }
-
                             }
                         }
                         #endregion
@@ -657,34 +464,20 @@ namespace Course.BLL.Services
                             {
                                 var setting = settings[j];
 
-                                if (setting.IsDeleted)
-                                {
-                                    setting = null;
-                                    continue;
-                                }
-
                                 if (setting.IsNew)
                                 {
                                     setting.Id = Guid.Empty;
                                 }
-
                             }
                         }
                         #endregion
 
-                        if (quiz.IsDeleted)
-                            {
-                                quiz = null;
-                                continue;
-                            }
-
-                            if (quiz.IsNew)
-                            {
-                                quiz.Id = Guid.Empty;
-                            }
-
+                        if (quiz.IsNew)
+                        {
+                            quiz.Id = Guid.Empty;
                         }
                     }
+                }
                 #endregion
             }
         }
@@ -704,5 +497,31 @@ namespace Course.BLL.Services
                 return new Response<int>(false, ex.Message, null);
             }
         }
+
+
+        /// <summary>
+        /// làm thêm phân trang và filter ở đâu
+        /// </summary>
+        /// <returns></returns>
+        //public async Task<Response<CourseDTO>> GetAll(Guid? userId)
+        //{
+        //    try
+        //    {
+        //        var courses = await _cousesRepository.BuildQuery()
+        //                                             .IncludeCategory()
+        //                                             .IncludeUser()
+        //                                             .IncludeEnrolment()
+        //                                             .AsSelectorAsync(x => _mapper.Map<CourseDTO>(x));
+        //        if (userId != null)
+        //        {
+        //            //await AddLast(courses, userId);
+        //        }
+        //        return new Response<CourseDTO>(true, courses);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new Response<CourseDTO>(false, ex.Message, null);
+        //    }
+        //}
     }
 }

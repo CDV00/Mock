@@ -97,7 +97,7 @@ namespace CourseAPI.Extensions.ServiceExtensions
         {
             services.Configure<ApiBehaviorOptions>(options =>
             {
-                options.SuppressModelStateInvalidFilter = true;
+                //options.SuppressModelStateInvalidFilter = true;
             });
 
             services.AddScoped<ValidationFilterAttribute>();

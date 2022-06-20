@@ -10,11 +10,11 @@ namespace CourseAPI.Migrations
                 name: "IX_QuizSettings_QuizId",
                 table: "QuizSettings");
 
-            migrationBuilder.AddColumn<string>(
-                name: "TextAnswer",
-                table: "Questions",
-                type: "nvarchar(max)",
-                nullable: true);
+            //migrationBuilder.AddColumn<string>(
+            //    name: "TextAnswer",
+            //    table: "Questions",
+            //    type: "nvarchar(max)",
+            //    nullable: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_QuizSettings_QuizId",

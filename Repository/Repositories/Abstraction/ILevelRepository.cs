@@ -8,6 +8,7 @@ namespace Course.DAL.Repositories.Abstraction
 {
     public interface ILevelRepository : IRepository<Level>
     {
+        Task<bool> CheckExists(List<Guid> ids);
         Task<IList<LevelDTO>> GetAll();
     }
 }

@@ -9,6 +9,7 @@ namespace Course.DAL.Configuration
         public void Configure(EntityTypeBuilder<CloseCaption> builder)
         {
 
+            builder.HasQueryFilter(u => !u.IsDeleted);
             //builder.HasKey(al => new { al.CourseId, al.LanguageId });
 
             //builder.HasOne(c => c.Course)

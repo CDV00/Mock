@@ -22,5 +22,14 @@ namespace Repository.Repositories
         {
             return await GetAll().Select(l => new LevelDTO() { Id = l.Id, Name = l.Name }).ToListAsync();
         }
+
+        public async Task<bool> CheckExists(List<Guid> ids)
+        {
+            if (ids == null)
+                return true;
+
+            var countIs = await Entity().Where(a => ids.Contains(a.Id)).CountAsync();
+            return ids.Count == countIs;
+        }
     }
 }

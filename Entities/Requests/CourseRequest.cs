@@ -30,15 +30,12 @@ namespace Course.BLL.Requests
         public bool IsFree { get; set; }
 
         public decimal Price { get; set; }
-        //public decimal DiscountPrice { get; set; }
-
         public Guid CategoryId { get; set; }
+        public List<Guid> AudioLanguageIds { get; set; }
+        public List<Guid> CloseCaptionIds { get; set; }
+        public List<Guid> LevelIds { get; set; }
 
-        public IList<Guid> AudioLanguageIds { get; set; }
-        public IList<Guid> CloseCaptionIds { get; set; }
-        public IList<Guid> LevelIds { get; set; }
-
-        public IList<SectionCreateRequest> Sections { get; set; }
+        public List<SectionCreateRequest> Sections { get; set; }
     }
     public class CourseForUpdateRequest
     {
@@ -66,11 +63,11 @@ namespace Course.BLL.Requests
         public Status Status { get; set; }
 
         public Guid CategoryId { get; set; }
-        public IList<Guid> AudioLanguageIds { get; set; }
-        public IList<Guid> CloseCaptionIds { get; set; }
-        public IList<Guid> LevelIds { get; set; }
+        public List<Guid> AudioLanguageIds { get; set; }
+        public List<Guid> CloseCaptionIds { get; set; }
+        public List<Guid> LevelIds { get; set; }
 
-        public IList<SectionUpdateRequest> Sections { get; set; }
+        public List<SectionUpdateRequest> Sections { get; set; }
     }
     public class CourseStatusUpdateRequest
     {

@@ -46,6 +46,14 @@ namespace Course.Queries
             return this;
         }
 
+        public IDiscountQuery FilterIgnoreId(Guid? id)
+        {
+            if (id is null)
+                return this;
+            Query = Query.Where(type => type.Id != id);
+            return this;
+        }
+
 
         public IDiscountQuery IncludeOrderItem()
         {

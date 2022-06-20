@@ -42,17 +42,6 @@ namespace Course.DAL.Models
 
         public ICollection<Discount> Discounts { get; set; }
 
-        //[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        //public int TotalSection
-        //{
-        //    get { return Sections.Count; }
-        //}
-
-        //public int TotalOrder
-        //{
-        //    get { return Orders.Count; }
-        //}
-
 
         public ICollection<Section> Sections { get; set; }
         public ICollection<CourseCompletion> CourseCompletions { get; set; }

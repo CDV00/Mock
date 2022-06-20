@@ -10,13 +10,18 @@ using Course.BLL.Services.Abstraction;
 using Contracts;
 using CourseAPI.ActionFilters;
 using Course.DAL.Models;
+using CourseAPI.Presentation.Controllers;
+using Entities.Responses;
+using Entities.Constants;
+using Entities.Requests;
+using Course.BLL.Share.RequestFeatures;
 
 namespace CourseAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = "Admin, Instructor")]
-    public class DiscountController : ControllerBase
+    public class DiscountController : ApiControllerBase
     {
         private readonly IDiscountService _discountService;
         private readonly ILoggerManager _logger;
@@ -31,27 +36,31 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<Responses<DiscountDTO_>>> GetAllDiscount()
+        public async Task<ActionResult<ApiOkResponses<PagedList<DiscountDTO_>>>> GetAllDiscount([FromQuery] DiscountParameters parameter)
         {
             var userId = User.GetUserId();
-            var result = await _discountService.GetAllDiscount(userId);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
+            var result = await _discountService.GetAllDiscount(userId, parameter);
+            if (!result.IsSuccess)
+                return ProcessError(result);
+
             return Ok(result);
         }
 
         /// <summary>
-        /// Add Discount
+        /// Add new Discount
         /// </summary>
         /// <param name="discount"></param>
         /// <returns></returns>
+        /// <response code="1013">If Already have discount in the period of time</response>
         [HttpPost]
-        [ServiceFilter(typeof(ValidationFilterAttribute))]
-        [ServiceFilter(typeof(ValidationCourseForDiscountExistAttribute))]
-        public async Task<ActionResult<Response<DiscountDTO_>>> Add(Guid courseId, DiscountForCreateRequest discount)
+        [ProducesResponseType(1013)]
+        //[ServiceFilter(typeof(ValidationCourseForDiscountExistAttribute))]
+        //[ServiceFilter(typeof(ValidationDateTimeForDiscountAttribute))]
+        public async Task<ActionResult<Response<DiscountDTO_>>> Add(DiscountForCreateRequest discount)
         {
-            var course = HttpContext.Items["course"] as Courses;
-            var result = await _discountService.Add(discount, course);
+            var result = await _discountService.Add(discount);
+            if (!result.IsSuccess)
+                return ProcessError(result);
 
             return Ok(result);
         }
@@ -60,14 +69,17 @@ namespace CourseAPI.Controllers
         /// Update Discount
         /// </summary>
         /// <returns></returns>
-        [HttpPut("{id}")]
-        [ServiceFilter(typeof(ValidationFilterAttribute))]
-        [ServiceFilter(typeof(ValidationCourseForDiscountExistAttribute))]
-        [ServiceFilter(typeof(ValidationDiscountExistAttribute))]
-        public async Task<ActionResult<Response<DiscountDTO_>>> Update(Guid id, Guid courseId, DiscountForUpdateRequest discountForUpdate)
+        /// <response code="1013">If Already have discount in the period of time</response>
+        [HttpPut()]
+        [ProducesResponseType(1013)]
+        //[ServiceFilter(typeof(ValidationCourseForDiscountExistAttribute))]
+        //[ServiceFilter(typeof(ValidationDiscountExistAttribute))]
+        public async Task<ActionResult<Response<DiscountDTO_>>> Update(Guid id, DiscountForUpdateRequest discountForUpdate)
         {
-            var discount = HttpContext.Items["Discount"] as Discount;
-            var result = await _discountService.Update(discount, courseId, discountForUpdate);
+            //var discount = HttpContext.Items[DiscountConstant.Name] as Discount;
+            var result = await _discountService.Update(id, discountForUpdate);
+            if (!result.IsSuccess)
+                return ProcessError(result);
 
             return Ok(result);
         }
@@ -78,14 +90,16 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <param name="id">Id Discount</param>
         /// <returns></returns>
-        [HttpDelete("{id}")]
-        [ServiceFilter(typeof(ValidationCourseForDiscountExistAttribute))]
-        [ServiceFilter(typeof(ValidationDiscountExistAttribute))]
-        public async Task<ActionResult<BaseResponse>> Delete(Guid id, Guid courseId)
+        [HttpDelete()]
+        //[ServiceFilter(typeof(ValidationCourseForDiscountExistAttribute))]
+        //[ServiceFilter(typeof(ValidationDiscountExistAttribute))]
+        public async Task<ActionResult<BaseResponse>> Delete(Guid id)
         {
-            var discount = HttpContext.Items["Discount"] as Discount;
+            //var discount = HttpContext.Items[DiscountConstant.Name] as Discount;
+            var result = await _discountService.Remove(id);
+            if (!result.IsSuccess)
+                return ProcessError(result);
 
-            var result = await _discountService.Remove(discount);
             return Ok(result);
         }
     }

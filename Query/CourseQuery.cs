@@ -211,15 +211,6 @@ namespace Course.DAL.Queries
             return this;
         }
 
-        //public ICourseQuery FilterByUserId(Guid? userId)
-        //{
-        //    if (userId == null)
-        //        return this;
-
-        //    Query = Query.Where(c => c.UserId == userId);
-        //    return this;
-        //}
-
 
         public ICourseQuery IncludeCategory()
         {
@@ -231,11 +222,8 @@ namespace Course.DAL.Queries
         {
             Query.Include(c => c.Sections)
                  .ThenInclude(s => s.Lectures)
-                 .Include(c=>c.Sections)
-                 .ThenInclude(s=>s.Assignments)
-                 .Include(c => c.Sections)
-                 .ThenInclude(s => s.Quizzes)
                  .Load();
+
             return this;
         }
         public ICourseQuery IncludeAssignment()

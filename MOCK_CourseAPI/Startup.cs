@@ -25,7 +25,6 @@ namespace CourseAPI
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureCos();
@@ -45,7 +44,6 @@ namespace CourseAPI
 
             services.AddControllers(config =>
             {
-                //config.Filters.Add(new FilterDiscount());
             });
         }
 
@@ -53,9 +51,6 @@ namespace CourseAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerManager logger)
         {
-            //app.ConfigureExceptionHandler(logger);
-
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -68,12 +63,9 @@ namespace CourseAPI
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v2/swagger.json", "MOCK_CourseAPI v2"));
 
-            //app.ConfigureExceptionHandler(logger);
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
-
 
             app.UseCors("CorsPolicy");
 

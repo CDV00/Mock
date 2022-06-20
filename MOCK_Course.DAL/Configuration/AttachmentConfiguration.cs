@@ -13,6 +13,8 @@ namespace Course.DAL.Configuration
     {
         public void Configure(EntityTypeBuilder<Attachment> builder)
         {
+            builder.HasQueryFilter(u => !u.IsDeleted);
+
             builder.HasOne(a => a.Assignment)
                 .WithMany(a => a.Attachments)
                 .HasForeignKey(a => a.AssignmentId);

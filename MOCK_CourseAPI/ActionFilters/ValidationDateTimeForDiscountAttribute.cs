@@ -1,8 +1,8 @@
 ﻿using Contracts;
 using Course.BLL.Requests;
-using Course.DAL.Models;
 using Course.DAL.Repositories.Abstraction;
-using Microsoft.AspNetCore.Http;
+using CourseAPI.ErrorModel;
+using Entities.Constants;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
@@ -24,24 +24,22 @@ namespace CourseAPI.ActionFilters
         public async Task OnActionExecutionAsync(ActionExecutingContext context,
        ActionExecutionDelegate next)
         {
-            var courseId = (Guid)context.ActionArguments["courseId"];
-            var discount = context.ActionArguments["discount"] as DiscountForCreateRequest;
-            if (discount == null)
-                discount = context.ActionArguments["discount"] as DiscountForUpdateRequest;
+            var discount = (context.ActionArguments[DiscountConstant.Name] as dynamic);
 
             int discounts = await _discountRepository.BuildQuery()
-                                                     .FilterByCourseId(courseId)
+                                                     .FilterByCourseId(discount.courseId)
                                                      .CheckDateDiscountExist(discount.StartDate, discount.EndDate)
                                                      .CountAsync();
 
             if (discounts > 0)
             {
                 _logger.LogInfo($"Already have discount available during this time");
-                context.Result = // new StatusCodeResult(1001,"Already have discount available during this time");
-                new ObjectResult("Already have discount available during this time")
-                {
-                    StatusCode = 2078,
-                };
+                context.Result =
+                        new UnprocessableEntityObjectResult(new ErrorDetails
+                        {
+                            StatusCode = 1013,
+                            Message = $"Already have discount with start date: {discount.StartDate} and end day: {discount.EndDate}"
+                        });
             }
             else
             {

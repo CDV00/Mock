@@ -8,13 +8,17 @@ using Microsoft.AspNetCore.Authorization;
 using CourseAPI.Extensions.ControllerBase;
 using Course.BLL.Services.Abstraction;
 using System.Text.Json;
+using CourseAPI.Presentation.Controllers;
+using Entities.Responses;
+using Course.BLL.Share.RequestFeatures;
+using Entities.Extension;
 
 namespace CourseAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = "Admin, Instructor, Student")]
-    public class CourseController : ControllerBase
+    public class CourseController : ApiControllerBase
     {
         private readonly ICourseService _coursesService;
         public CourseController(ICourseService coursesService)
@@ -25,39 +29,26 @@ namespace CourseAPI.Controllers
         /// <summary>
         /// Get all course with paging and filter
         /// </summary>
-        /// <param name="courseParameters"></param>
+        /// <param name="parameters"></param>
         /// <returns>List of course</returns>
         [HttpGet("Get-all-course")]
         [AllowAnonymous]
-        public async Task<ActionResult<Responses<CourseDTO>>> GetAllCourses([FromQuery] CourseParameters courseParameters)
+        public async Task<ActionResult<ApiOkResponse<CourseDTO>>> GetAllCourses([FromQuery] CourseParameters parameters)
         {
-            //courseParameters.userId = User.GetUserId() == Guid.Empty ? null : User.GetUserId();
             Guid? userId = (User.GetUserId() == Guid.Empty) ? null : User.GetUserId();
 
+            var result = await _coursesService.GetAllCourses(parameters, userId);
+            if (!result.IsSuccess)
+                return ProcessError(result);
 
-            var result = await _coursesService.GetCoursesAsync(courseParameters, userId);
+            var coursePagedList = result.GetResult<PagedList<CourseDTO>>();
 
             Response.Headers.Add("X-Pagination",
-                                 JsonSerializer.Serialize(result.MetaData));
+                                 JsonSerializer.Serialize(coursePagedList.MetaData));
 
-            return Ok(new Responses<CourseDTO>(true, result));
+            return Ok(new Responses<CourseDTO>(true, coursePagedList));
         }
 
-        /// <summary>
-        /// Get all course! This API is old, need use Get-all-course to paging and filter
-        /// </summary>
-        /// <returns>List of course</returns>
-        [HttpGet("Get-all")]
-        [AllowAnonymous]
-        public async Task<ActionResult<Responses<CourseDTO>>> GetAll()
-        {
-
-            Guid? userId = (User.GetUserId() == Guid.Empty) ? null : User.GetUserId();
-            var result = await _coursesService.GetAll(userId);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
-            return Ok(result);
-        }
 
         /// <summary>
         /// Get Detail course Include User, Category, Language, Levels 
@@ -65,29 +56,31 @@ namespace CourseAPI.Controllers
         /// <returns>an course</returns>
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<Response<CourseDTO>>> Get(Guid id)
+        public async Task<ActionResult<ApiOkResponse<CourseDTO>>> Get(Guid id)
         {
             Guid? userId = (User.GetUserId() == Guid.Empty) ? null : User.GetUserId();
-            var course = await _coursesService.Get(id, userId);
 
-            if (course.IsSuccess == false)
-                return BadRequest(course);
-            return Ok(course);
+            var result = await _coursesService.GetDetail(id, userId);
+            if (!result.IsSuccess)
+                return ProcessError(result);
+
+            return Ok(result);
         }
 
         /// <summary>
         /// Create new course Include Sections, lecture 
         /// </summary>
-        /// <param name="courseRequest"></param>
+        /// <param name="course"></param>
         /// <returns></returns>
         [HttpPost]
         [Authorize(Roles = "Admin, Instructor")]
-        public async Task<ActionResult<CourseDTO>> Create([FromBody] CourseForCreateRequest courseRequest)
+        public async Task<ActionResult<ApiOkResponse<CourseDTO>>> Create([FromBody] CourseForCreateRequest course)
         {
             var userId = User.GetUserId();
-            var result = await _coursesService.Add(userId, courseRequest);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
+            var result = await _coursesService.Add(userId, course);
+            if (!result.IsSuccess)
+                return ProcessError(result);
+
             return Ok(result);
         }
 
@@ -99,13 +92,14 @@ namespace CourseAPI.Controllers
         /// <returns>an course</returns>
         [HttpPut()]
         [Authorize(Roles = "Admin, Instructor")]
-        public async Task<ActionResult<Response<CourseDTO>>> Update(Guid id, CourseForUpdateRequest CoursesUpdateRequest)
+        public async Task<ActionResult<ApiOkResponse<CourseDTO>>> Update(Guid id, CourseForUpdateRequest CoursesUpdateRequest)
         {
             var userId = User.GetUserId();
 
             var result = await _coursesService.Update(id, CoursesUpdateRequest, userId);
             if (result.IsSuccess == false)
-                return BadRequest(result);
+                return ProcessError(result);
+
             return Ok(result);
         }
 
@@ -116,12 +110,13 @@ namespace CourseAPI.Controllers
         /// <returns>true or false</returns>
         [HttpDelete()]
         [Authorize(Roles = "Admin, Instructor")]
-        public async Task<ActionResult<BaseResponse>> Delete(Guid id)
+        public async Task<ActionResult<ApiBaseResponse>> Delete(Guid id)
         {
             var userId = User.GetUserId();
             var result = await _coursesService.Remove(id, userId);
             if (result.IsSuccess == false)
-                return BadRequest(result);
+                return ProcessError(result);
+
             return Ok(result);
         }
         /// <summary>
@@ -249,6 +244,22 @@ namespace CourseAPI.Controllers
         //public async Task<ActionResult<Responses<CousrsePagingDTO>>> GetByFilteringCousrse(string key)
         //{
         //    var result = await _coursesService.GetByFilteringCousrse(key);
+        //    if (result.IsSuccess == false)
+        //        return BadRequest(result);
+        //    return Ok(result);
+        //}
+
+        /// <summary>
+        /// Get all course! This API is old, need use Get-all-course to paging and filter
+        /// </summary>
+        /// <returns>List of course</returns>
+        //[HttpGet("Get-all")]
+        //[AllowAnonymous]
+        //public async Task<ActionResult<Responses<CourseDTO>>> GetAll()
+        //{
+
+        //    Guid? userId = (User.GetUserId() == Guid.Empty) ? null : User.GetUserId();
+        //    var result = await _coursesService.GetAll(userId);
         //    if (result.IsSuccess == false)
         //        return BadRequest(result);
         //    return Ok(result);

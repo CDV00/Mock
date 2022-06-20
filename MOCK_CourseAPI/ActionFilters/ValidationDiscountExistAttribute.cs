@@ -1,5 +1,8 @@
 ﻿using Contracts;
 using Course.DAL.Repositories.Abstraction;
+using CourseAPI.ErrorModel;
+using Entities.Constants;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
@@ -20,17 +23,22 @@ namespace CourseAPI.ActionFilters
         public async Task OnActionExecutionAsync(ActionExecutingContext context,
        ActionExecutionDelegate next)
         {
-            var id = (Guid)context.ActionArguments["id"];
-            var courseId = (Guid)context.ActionArguments["courseId"];
+            var id = (Guid)context.ActionArguments[BaseEntityConstant.Id];
+            var courseId = (Guid)context.ActionArguments[CourseConstant.courseId];
             var Discount = await _repository.GetByIdAsync(courseId, id);
             if (Discount == null)
             {
                 _logger.LogInfo($"Discount with id: {id} doesn't exist in the database.");
-                context.Result = new NotFoundObjectResult($"Not found discount with id: {id}.");
+                context.Result = new NotFoundObjectResult(
+                    new ErrorDetails
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        Message = $"Not found discount with id: {id}."
+                    });
             }
             else
             {
-                context.HttpContext.Items.Add("Discount", Discount);
+                context.HttpContext.Items.Add(DiscountConstant.Name, Discount);
                 await next();
             }
         }
