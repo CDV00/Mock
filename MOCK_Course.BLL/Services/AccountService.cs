@@ -55,10 +55,10 @@ namespace Course.BLL.Services
         public async Task<Response<LoginDTO>> Login(LoginRequest loginRequest)
         {
             var user = await _userManager.FindByEmailAsync(loginRequest.Email);
-            if(user is null)
+            if (user is null)
                 return new Response<LoginDTO>(false, "Authentication failed. Wrong user name or password.", null);
 
-            if(!user.IsActive)
+            if (!user.IsActive)
                 return new Response<LoginDTO>(false, "Authentication failed. Account has been blocked.", "403");
             if (!await ValidateUser(loginRequest))
             {
@@ -109,6 +109,9 @@ namespace Course.BLL.Services
                 var roles = await _userManager.GetRolesAsync(user);
                 userResponse.Role = string.Join(",", roles);
 
+                string codeNumber = CreateCodeNumber().Result.ToString();
+                await AddCodeNumber(user.Email, codeNumber);
+                await SendEmailConfirm(user.Email, "Register", codeNumber);
                 return new BaseResponse(true);
 
             }
@@ -116,6 +119,23 @@ namespace Course.BLL.Services
             {
                 return new BaseResponse(false, ex.Message, null);
             }
+        }
+        /// <summary>
+        /// condirm 
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="codeNumber"></param>
+        /// <returns></returns>
+        public async Task<BaseResponse> Confirm(string email, string codeNumber)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user.CodeNumber != codeNumber || DateTime.Now >= user.UpdatedAt.Value.AddMinutes(3))
+            {
+                return new Response<BaseResponse>(false, "Something went wrong!", null);
+            }
+            user.EmailConfirmed = true;
+            await _userManager.UpdateAsync(user);
+            return new BaseResponse(true);
         }
 
         private static void GetAvartarUser(AppUser user)
@@ -304,6 +324,59 @@ namespace Course.BLL.Services
                 return new Response<TokenDTO>(false, ex.Message, null);
             }
         }
+        //send email
+        private async Task<Response<BaseResponse>> SendEmailConfirm(string email, string working, string codeNumber)
+        {
+
+            string subjects;
+            string message;
+            switch (working.ToUpper())
+            {
+                case "FORGET PASSWORD":
+                    {
+                        subjects = "FORGET PASSWORD";
+                        message = $"<p>Your verification code {codeNumber}</a></p>";
+                        break;
+                    }
+                case "REGISTER":
+                    {
+                        subjects = "CONFIRM REGISTRATION";
+                        message = $"<p>Your verification code {codeNumber}</a></p>";
+                        break;
+                    }
+                default: throw new Exception("Provider cannot find out");
+            }
+            var senderEmail = _configurations["SMTP:Sender"];
+            await _emailService.SendEmailAsync(senderEmail, email, subjects, message);
+            return new Response<BaseResponse>(true);
+        }
+        //
+        private async Task AddCodeNumber(string email, string codeNumber)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                throw new Exception("No user associated with email");
+            }
+            user.CodeNumber = codeNumber;
+            user.UpdatedAt = DateTime.Now;
+            await _userManager.UpdateAsync(user);
+        }
+        //
+        private async Task<string> CreateCodeNumber()
+        {
+            Random random = new Random();
+            string codeNumber = random.Next(1000, 9999).ToString();
+            return codeNumber;
+        }
+        //
+        public async Task<BaseResponse> ResetCodeNumber(string email, string working)
+        {
+            string codeNumber = CreateCodeNumber().Result.ToString();
+            AddCodeNumber(email, codeNumber);
+            SendEmailConfirm(email, working, codeNumber);
+            return new BaseResponse(true);
+        }
         /// <summary>
         /// Forgot Passworrd
         /// </summary>
@@ -318,17 +391,9 @@ namespace Course.BLL.Services
                 {
                     return new Response<BaseResponse>(false, "No user associated with email", null);
                 }
-                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                //var encodedToken = Encoding.UTF8.GetBytes(token);
-                //var validToken = WebEncoders.Base64UrlEncode(encodedToken);
-                //_userManager.toke
-                // From Address
-                var senderEmail = _configurations["SMTP:Sender"];
-                //string url = $"{_configurations["AppUrl"]}/ResetPassword?email={email}&token={token}";
-                string url = $"{originValue}/reset-password?email={email}&token={token}";
-                await _emailService.SendEmailAsync(senderEmail, user.Email, "FORGET PASSWORD", "<h1>Follow the instruction to reset your password</h1>" +
-                    $"<p>To reset your password <a href={url}> click here.</a></p>");
-
+                string codeNumber = CreateCodeNumber().Result.ToString();
+                await AddCodeNumber(email, codeNumber);
+                await SendEmailConfirm(user.Email, "Forget PassWord", codeNumber);
                 return new Response<BaseResponse>(true, null, null);
             }
             catch (Exception ex)
@@ -346,11 +411,16 @@ namespace Course.BLL.Services
                 {
                     return new Response<BaseResponse>(false, "No user associated with email", null);
                 }
+                if (user.CodeNumber != resetPasswordRequest.codeNumber || DateTime.Now >= user.UpdatedAt.Value.AddMinutes(3))
+                {
+                    return new Response<BaseResponse>(false, "Something went wrong!", null);
+                }
                 if (resetPasswordRequest.newPassword != resetPasswordRequest.comfirmPassword)
                 {
                     return new Response<BaseResponse>(false, "Password doesn't match its confirmation", null);
                 }
-                var Result = await _userManager.ResetPasswordAsync(user, resetPasswordRequest.token, resetPasswordRequest.newPassword);
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var Result = await _userManager.ResetPasswordAsync(user, token, resetPasswordRequest.newPassword);
                 if (!Result.Succeeded)
                 {
                     return new Response<BaseResponse>(false, "Something went wrong!", null);
@@ -396,24 +466,27 @@ namespace Course.BLL.Services
         /// <exception cref="NotImplementedException"></exception>
         private async Task<LoginDTO> FacebookLogin(ExternalLoginResquest externalLoginResquest)
         {
+
             string AppId = _configurations["Authentication:Facebook:AppId"];
             string AppSecret = _configurations["Authentication:Facebook:AppSecret"];
-            string url = $"https://graph.facebook.com/oauth/access_token?client_id={AppId}&client_secret={AppSecret}&grant_type=client_credentials";
+            var url = new Uri($"https://graph.facebook.com/oauth/access_token?client_id={AppId}&client_secret={AppSecret}&grant_type=client_credentials");
+
+
             // 1.generate an app access token
-            var appAccessTokenResponse = await Client.GetStringAsync(url);
+            var httpClient = new HttpClient();
+            var appAccessTokenResponse = await httpClient.GetStringAsync(url);
             var appAccessToken = JsonConvert.DeserializeObject<FacebookAppAccessToken>(appAccessTokenResponse);
             // 2. validate the user access token
-            var userAccessTokenValidationResponse = await Client.GetStringAsync($"https://graph.facebook.com/debug_token?input_token={externalLoginResquest.Token}&access_token={appAccessToken.AccessToken}");
+            var userAccessTokenValidationResponse = await httpClient.GetStringAsync($"https://graph.facebook.com/debug_token?input_token={externalLoginResquest.Token}&access_token={appAccessToken.AccessToken}");
             var userAccessTokenValidation = JsonConvert.DeserializeObject<FacebookUserAccessTokenValidation>(userAccessTokenValidationResponse);
 
             if (!userAccessTokenValidation.Data.IsValid)
             {
                 throw new Exception();
-                //return BadRequest(Errors.AddErrorToModelState("login_failure", "Invalid facebook token.", ModelState));
             }
 
             // 3. we've got a valid token so we can request user data from fb
-            var userInfoResponse = await Client.GetStringAsync($"https://graph.facebook.com/v14.0/me?fields=id,email,first_name,last_name,name,gender,locale,birthday,picture&access_token={externalLoginResquest.Token}");
+            var userInfoResponse = await httpClient.GetStringAsync($"https://graph.facebook.com/v2.8/me?fields=id,email,first_name,last_name,name,gender,locale,birthday,picture&access_token={externalLoginResquest.Token}");
             var userInfo = JsonConvert.DeserializeObject<FacebookUserData>(userInfoResponse);
 
             // 4. ready to create the local user account (if necessary) and jwt
@@ -428,15 +501,17 @@ namespace Course.BLL.Services
                     Fullname = userInfo.Name,
                     FacebookLink = userInfo.Id,
                     Email = userInfo.Email,
-                    UserName = userInfo.Email
+                    UserName = userInfo.Email,
+                    AvatarUrl = userInfo.Picture.Data.Url
                 };
 
-                var result = await _userManager.CreateAsync(appUser, Convert.ToBase64String(Guid.NewGuid().ToByteArray())[..8]);
+                var result = await _userManager.CreateAsync(appUser);
 
                 if (!result.Succeeded)
                     throw new Exception();
                 await _userManager.AddToRoleAsync(appUser, UserRolesConstant.Student);
             }
+
             // generate the jwt for the local user...
             user = await _userManager.FindByNameAsync(userInfo.Email);
             user.Fullname = userInfo.Name;
@@ -446,6 +521,7 @@ namespace Course.BLL.Services
             await _userManager.UpdateAsync(user);
             UserDTO userWithRole = _mapper.Map<UserDTO>(user);
             userWithRole.Role = userRole.FirstOrDefault();
+
             return new LoginDTO(
                token,
                new UserDTO()
@@ -473,16 +549,19 @@ namespace Course.BLL.Services
 
             if (user is null)
             {
-                user = new AppUser()
+                var appUser = new AppUser()
                 {
+                    Id = new Guid(),
                     UserName = payload.Email,
                     Email = payload.Email,
                     Fullname = payload.Name,
                     EmailConfirmed = true,
-                    //Image = payload.Picture,
+                    AvatarUrl = payload.Picture
                 };
-                await _userManager.CreateAsync(user);
-                await _userManager.AddToRoleAsync(user, UserRolesConstant.Student);
+                var result = await _userManager.CreateAsync(appUser);
+                if (!result.Succeeded)
+                    throw new Exception();
+                await _userManager.AddToRoleAsync(appUser, UserRoles.Student);
             }
             user = await _userManager.FindByEmailAsync(payload.Email);
             var userRoles = await _userManager.GetRolesAsync(user);
@@ -508,8 +587,7 @@ namespace Course.BLL.Services
         {
             try
             {
-                var googleAuth = _configurations.GetSection("AuthSettings:Google");
-
+                var googleAuth = _configurations.GetSection("Authentication:Google");
                 var settings = new GoogleJsonWebSignature.ValidationSettings()
                 {
                     Audience = new List<string>() { googleAuth["ClientId"] }
@@ -522,5 +600,6 @@ namespace Course.BLL.Services
                 throw new Exception(ex.Message);
             }
         }
+
     }
 }
