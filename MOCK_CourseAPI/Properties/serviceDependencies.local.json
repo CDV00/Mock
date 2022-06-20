@@ -5,6 +5,12 @@
       "resourceId": null,
       "type": "secrets.user",
       "connectionId": null
+    },
+    "mssql2": {
+      "secretStore": "LocalSecretsFile",
+      "type": "mssql.onprem",
+      "connectionId": "ConnectionStrings:MOCK_Course",
+      "dynamicId": null
     }
   }
 }

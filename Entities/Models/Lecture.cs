@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Course.DAL.Models
 {
     public class Lecture : BaseEntity<Guid>
     {
         public string Title { get; set; }
+        [MaxLength]
         public string Description { get; set; }
         public string VideoUrl { get; set; }
         public string VideoExternalUrl { get; set; }
