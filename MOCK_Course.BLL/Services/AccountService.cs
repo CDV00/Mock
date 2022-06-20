@@ -116,6 +116,18 @@ namespace Course.BLL.Services
                 return new BaseResponse(false, ex.Message, null);
             }
         }
+        public async Task<BaseResponse> Confirm(string email, string codeNumber)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user.CodeNumber != codeNumber || DateTime.Now >= user.UpdatedAt.Value.AddMinutes(3))
+            {
+                return new Response<BaseResponse>(false, "Something went wrong!", null);
+            }
+
+            user.EmailConfirmed = true;
+            await _userManager.UpdateAsync(user);
+            return new BaseResponse(true);
+        }
 
         private static void GetAvartarUser(AppUser user)
         {
@@ -318,7 +330,31 @@ namespace Course.BLL.Services
                 return new Response<BaseResponse>(false, ex.Message, null);
             }
         }
-        
+        //
+        private async Task AddCodeNumber(string email, string codeNumber)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                throw new Exception("No user associated with email");
+            }
+            user.CodeNumber = codeNumber;
+            user.UpdatedAt = DateTime.Now;
+            await _userManager.UpdateAsync(user);
+        }
+        //
+        private async Task<string> CreateCodeNumber()
+        {
+            Random random = new Random();
+            string codeNumber = random.Next(1000, 9999).ToString();
+            return codeNumber;
+        }
+        //
+        public async Task ResetCodeNumber(string email)
+        {
+            string codeNumber =  CreateCodeNumber().ToString();
+            AddCodeNumber(email, codeNumber);
+        }
         /// <summary>
         /// Forgot Passworrd
         /// </summary>
@@ -334,16 +370,16 @@ namespace Course.BLL.Services
                     return new Response<BaseResponse>(false, "No user associated with email", null);
                 }
                 //var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                Random random = new Random();
-                string codeNumber = random.Next(1000, 9999).ToString();
+
                 //var encodedToken = Encoding.UTF8.GetBytes(token);
                 //var validToken = WebEncoders.Base64UrlEncode(encodedToken);
                 //_userManager.toke
-                
+                string codeNumber = CreateCodeNumber().ToString();
+                await AddCodeNumber(email, codeNumber);
                 //string url = $"{_configurations["AppUrl"]}/ResetPassword?email={email}&token={token}";
                 //string url = $"{originValue}/reset-password?email={email}&token={token}";
                 string subjects = "FORGET PASSWORD";
-                string message = "<h1>Follow the instruction to reset your password</h1>" + $"<p>Your verification code {codeNumber}</a></p>";
+                string message = $"<p>Your verification code {codeNumber}</a></p>";
                 //await _emailService.SendEmailAsync(senderEmail, user.Email, subjects, message);
                 await SendEmail(user.Email, subjects, message);
                 return new Response<BaseResponse>(true, null, null);
@@ -363,11 +399,16 @@ namespace Course.BLL.Services
                 {
                     return new Response<BaseResponse>(false, "No user associated with email", null);
                 }
+                if (user.CodeNumber != resetPasswordRequest.codeNumber || DateTime.Now >= user.UpdatedAt.Value.AddMinutes(3))
+                {
+                    return new Response<BaseResponse>(false, "Something went wrong!", null);
+                }
                 if (resetPasswordRequest.newPassword != resetPasswordRequest.comfirmPassword)
                 {
                     return new Response<BaseResponse>(false, "Password doesn't match its confirmation", null);
                 }
-                var Result = await _userManager.ResetPasswordAsync(user, resetPasswordRequest.token, resetPasswordRequest.newPassword);
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var Result = await _userManager.ResetPasswordAsync(user, token, resetPasswordRequest.newPassword);
                 if (!Result.Succeeded)
                 {
                     return new Response<BaseResponse>(false, "Something went wrong!", null);
@@ -547,5 +588,6 @@ namespace Course.BLL.Services
                 throw new Exception(ex.Message);
             }
         }
+
     }
 }
