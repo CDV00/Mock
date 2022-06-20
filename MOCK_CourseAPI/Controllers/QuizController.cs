@@ -11,13 +11,16 @@ using System.Text.Json;
 using Course.BLL.Share.RequestFeatures;
 using Course.DAL.DTOs;
 using Entities.ParameterRequest;
+using Entities.Responses;
+using CourseAPI.Presentation.Controllers;
+using Entities.Extension;
 
 namespace CourseAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class QuizController : ControllerBase
+    public class QuizController : ApiControllerBase
     {
         private readonly IQuizService _quizService;
         public QuizController(IQuizService quizService)
@@ -33,16 +36,20 @@ namespace CourseAPI.Controllers
         /// <returns></returns>
         [HttpGet("Get-all-quiz")]
         [AllowAnonymous]
-        public async Task<ActionResult<Responses<QuizDTO>>> GetAll([FromQuery] QuizParameters quizParameters)
+        
+        public async Task<ActionResult<ApiOkResponses<QuizDTO>>> GetAll([FromQuery] QuizParameters parameters)
         {
-            var result = await _quizService.GetAll(quizParameters);
+            var result = await _quizService.GetAllQuiz(parameters);
+            if (!result.IsSuccess)
+                return ProcessError(result);
+
+            var coursePagedList = result.GetResult<PagedList<QuizDTO>>();
 
             Response.Headers.Add("X-Pagination",
-                                 JsonSerializer.Serialize(result.MetaData));
+                                 JsonSerializer.Serialize(coursePagedList.MetaData));
 
-            return Ok(new Responses<QuizDTO>(true, result));
+            return Ok(new Responses<QuizDTO>(true, coursePagedList));
         }
-
         //[HttpPost]
         //public async Task<ActionResult<Response<QuizDTO>>> Add(QuizForCreateRequest QuizForCreateRequest)
         //{

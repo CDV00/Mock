@@ -74,7 +74,7 @@ namespace Course.BLL.Services
                 return;
             for (var i = 0; i < courses.Count; i++)
             {
-                courses[i].IsSave = await _savedCoursesService.IsSavedCourse(userId.GetValueOrDefault(), courses[i].Id);
+                courses[i].IsSave = (await _savedCoursesService.IsSaveCourses(userId.GetValueOrDefault(), courses[i].Id)).data;
 
                 courses[i].PercentCompletion = await _lectureService.PercentCourseCompletion(userId.GetValueOrDefault(), courses[i].Id);
 

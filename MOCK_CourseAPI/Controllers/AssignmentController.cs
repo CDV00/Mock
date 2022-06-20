@@ -11,13 +11,16 @@ using System.Collections.Generic;
 using System.Text.Json;
 using Course.BLL.Share.RequestFeatures;
 using Course.DAL.DTOs;
+using Entities.Responses;
+using Entities.Extension;
+using CourseAPI.Presentation.Controllers;
 
 namespace CourseAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class AssignmentController : ControllerBase
+    public class AssignmentController : ApiControllerBase
     {
         private readonly IAssignmentService _assignmentService;
         public AssignmentController(IAssignmentService assignmentService)
@@ -32,14 +35,17 @@ namespace CourseAPI.Controllers
         /// <returns></returns>
         [HttpGet("Get-all")]
         [AllowAnonymous]
-        public async Task<ActionResult<Responses<AssignmentDTO>>> GetAll([FromQuery] AssignmentParameters assignmentParameters)
+        public async Task<ActionResult<ApiOkResponses<AssignmentDTO>>> GetAllAssignment([FromQuery] AssignmentParameters parameter)
         {
-            var result = await _assignmentService.GetAll(assignmentParameters);
+            var result = await _assignmentService.GetAllAssignment(parameter);
+            if (!result.IsSuccess)
+                return ProcessError(result);
+            var coursePagedList = result.GetResult<PagedList<AssignmentDTO>>();
 
             Response.Headers.Add("X-Pagination",
-                                 JsonSerializer.Serialize(result.MetaData));
+                              JsonSerializer.Serialize(coursePagedList.MetaData));
 
-            return Ok(new Responses<AssignmentDTO>(true, result));
+            return Ok(result);
         }
 
         //[HttpPost]

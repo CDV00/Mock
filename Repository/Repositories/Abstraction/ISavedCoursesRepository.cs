@@ -11,6 +11,7 @@ namespace Course.DAL.Repositories.Abstraction
     public interface ISavedCoursesRepository : IRepository<SavedCourses>
     {
         ISavedCoursesQuery BuildQuery();
+        Task<bool> CheckExistSaveCourse(Guid courseId, Guid userId);
         Task<PagedList<SavedCoursesDTO>> GetAllSavedCourses(Guid userId, SavedCoursesParameters savedCoursesParameters);
     }
 }
