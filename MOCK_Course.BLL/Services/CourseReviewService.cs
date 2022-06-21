@@ -191,12 +191,12 @@ namespace Course.BLL.Services
             {
                 if (courseId is null && userId == Guid.Empty)
                     return new Response<float>(false, "must pass userId or CourseId", "400");
-                var IsExistEnrolls = await _enrollmentRepository.BuildQuery()
-                                                                .FilterByCourseId(courseId)
-                                                                .FilterByUserId(userId)
-                                                                .AnyAsync();
-                if (!IsExistEnrolls)
-                    return new Response<float>(true, 0);
+                //var IsExistEnrolls = await _enrollmentRepository.BuildQuery()
+                //                                                .FilterByCourseId(courseId)
+                //                                                .FilterByUserId(userId)
+                //                                                .AnyAsync();
+                //if (!IsExistEnrolls)
+                //    return new Response<float>(true, 0);
 
 
                 var courses = await _courseReviewRepository.BuildQuery()
@@ -218,12 +218,12 @@ namespace Course.BLL.Services
                 if (courseId is null && userId == Guid.Empty)
                     return new Response<List<float>>(false, "must pass userId or CourseId", "400");
 
-                var IsExistEnrolls = await _enrollmentRepository.BuildQuery()
-                                                                .FilterByCourseId(courseId)
-                                                                .FilterByUserId(userId)
-                                                                .AnyAsync();
-                if (!IsExistEnrolls)
-                    return new Response<List<float>>(true, new() { 0, 0, 0, 0, 0 });
+                //var IsExistEnrolls = await _enrollmentRepository.BuildQuery()
+                //                                                .FilterByCourseId(courseId)
+                //                                                .FilterByUserId(userId)
+                //                                                .AnyAsync();
+                //if (!IsExistEnrolls)
+                //    return new Response<List<float>>(true, new() { 0, 0, 0, 0, 0 });
 
                 var sumRating = await _courseReviewRepository.BuildQuery()
                                                              .FilterByCourseId(courseId)
