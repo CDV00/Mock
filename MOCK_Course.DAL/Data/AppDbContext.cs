@@ -71,7 +71,10 @@ namespace Course.DAL.Data
             modelBuilder.ApplyConfiguration(new SavedCourseConfiguration());
             modelBuilder.ApplyConfiguration(new AssignmentConfiguration());
             modelBuilder.ApplyConfiguration(new AttachmentConfiguration());
-
+            modelBuilder.ApplyConfiguration(new QuizSettingConfiguration());
+            modelBuilder.ApplyConfiguration(new QuizOptionConfiguration());
+            modelBuilder.ApplyConfiguration(new QuestionConfiguration());
+            modelBuilder.ApplyConfiguration(new QuizConfiguration());
 
             modelBuilder.ConfigTablesOfIdentity();
             //modelBuilder.SeedData();

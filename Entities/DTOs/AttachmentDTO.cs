@@ -8,5 +8,8 @@ namespace Course.DAL.DTOs
         public Guid Id { get; set; }
         public Guid AssignmentId { get; set; }
         public string FileUrl { get; set; }
+
+        public bool IsDeleted { get; set; }
+        public bool IsNew { get; set; } = false;
     }
 }

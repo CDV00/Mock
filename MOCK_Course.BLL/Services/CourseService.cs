@@ -286,12 +286,12 @@ namespace Course.BLL.Services
         {
             var course = await _cousesRepository.BuildQuery()
                                                 .FilterById(id)
-                                                .IncludeCategory()
+                                                //.IncludeCategory()
                                                 .IncludeLevel()
                                                 .IncludeLanguage()
-                                                .IncludeSection()
-                                                .IncludeAssignment()
-                                                .IncludeQuiz()
+                                                //.IncludeSection()
+                                                //.IncludeAssignment()
+                                                //.IncludeQuiz()
                                                 .AsSelectorAsync(c => c);
 
             if (course is null)

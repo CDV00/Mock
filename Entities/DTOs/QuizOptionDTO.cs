@@ -12,5 +12,8 @@ namespace Course.DAL.DTOs
         public string Title { get; set; }
         public bool IsCorrectAnswer { get; set; } = false;
         public Guid QuestionId { get; set; }
+
+        public bool IsDeleted { get; set; }
+        public bool IsNew { get; set; } = false;
     }
 }

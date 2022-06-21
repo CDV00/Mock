@@ -28,10 +28,8 @@ namespace Course.BLL.Extensions
             // lesion
             CreateMap<Lecture, LectureForCreateRequest>().ReverseMap();
             CreateMap<Lecture, LectureForUpdateRequest>().ReverseMap();
-            CreateMap<LectureForUpdateRequest, Lecture>().ForMember(des => des.Id, src => src.MapFrom(opt => opt.IsNew == true ? Guid.NewGuid() : opt.Id)).ReverseMap();
+            CreateMap<LectureForUpdateRequest, Lecture>().ForMember(des => des.Id, src => src.MapFrom(opt => opt.IsNew == true ? Guid.Empty : opt.Id)).ReverseMap();
             CreateMap<Lecture, LectureDTO>().ReverseMap();
-
-
 
             // language
             CreateMap<AudioLanguage, AudioLanguageForCreateRequest>().ReverseMap();
@@ -39,8 +37,6 @@ namespace Course.BLL.Extensions
             CreateMap<CloseCaption, CloseCaptionForCreateRequest>().ReverseMap();
             CreateMap<CloseCaption, CloseCaptionDTO>().ReverseMap();
             CreateMap<CourseLevelForCreateRequest, Level>().ReverseMap();
-
-
 
             CreateMap<AppUser, UserDTO>().ReverseMap();
 

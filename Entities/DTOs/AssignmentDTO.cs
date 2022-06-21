@@ -15,5 +15,8 @@ namespace Course.DAL.DTOs
         public ICollection<AttachmentDTO> Attachments { get; set; }
         public Guid SectionId { get; set; }
         public int Index { get; set; }
+
+        public bool IsDeleted { get; set; }
+        public bool IsNew { get; set; } = false;
     }
 }

@@ -11,11 +11,10 @@ namespace Course.BLL.Responses
         public int TotalTime { get; set; } = 0;
 
         public IList<LectureDTO> Lectures { get; set; }
-
-        public bool IsDeleted { get; set; }
-        public bool IsNew { get; set; } = false;
         public IList<AssignmentDTO> Assignments { set; get; }
         public IList<QuizDTO> Quizzes { set; get; }
+        public bool IsDeleted { get; set; } = false;
+        public bool IsNew { get; set; } = false;
     }
 
 
@@ -32,7 +31,7 @@ namespace Course.BLL.Responses
         public bool IsPreview { get; set; }
         public int TotalTime { get; set; }
 
-        public bool IsDeleted { get; set; }
+        public bool IsDeleted { get; set; } = false;
         public bool IsNew { get; set; } = false;
     }
 
