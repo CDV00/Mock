@@ -85,7 +85,7 @@ namespace Course.BLL.Services
                 var user = _mapper.Map<AppUser>(registerRequest);
                 user.Description = registerRequest.Description;
                 GetAvartarUser(user);
-                user.CreatedAt = DateTime.Now;
+                user.CreatedAt = DateTime.Now;//await AddCodeNumber(user.Email, codeNumber);
 
                 var result = await _userManager.CreateAsync(user, registerRequest.Password);
 
@@ -110,7 +110,11 @@ namespace Course.BLL.Services
                 userResponse.Role = string.Join(",", roles);
 
                 string codeNumber = CreateCodeNumber().Result.ToString();
-                await AddCodeNumber(user.Email, codeNumber);
+                bool isAddCodeNumber = await AddCodeNumber(user.Email, codeNumber);
+                if (!isAddCodeNumber)
+                {
+                    return new BaseResponse(false, "Something went wrong!", null);
+                }
                 await SendEmailConfirm(user.Email, "Register", codeNumber);
                 return new BaseResponse(true);
 
@@ -129,6 +133,7 @@ namespace Course.BLL.Services
         public async Task<BaseResponse> Confirm(string email, string codeNumber)
         {
             var user = await _userManager.FindByEmailAsync(email);
+            DateTime dateLast = (user.UpdatedAt != null) ? user.UpdatedAt.Value.AddMinutes(3) : user.CreatedAt.AddMinutes(3);
             if (user.CodeNumber != codeNumber || DateTime.Now >= user.UpdatedAt.Value.AddMinutes(3))
             {
                 return new Response<BaseResponse>(false, "Something went wrong!", null);
@@ -351,7 +356,7 @@ namespace Course.BLL.Services
             return new Response<BaseResponse>(true);
         }
         //
-        private async Task AddCodeNumber(string email, string codeNumber)
+        private async Task<bool> AddCodeNumber(string email, string codeNumber)
         {
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
@@ -360,7 +365,8 @@ namespace Course.BLL.Services
             }
             user.CodeNumber = codeNumber;
             user.UpdatedAt = DateTime.Now;
-            await _userManager.UpdateAsync(user);
+            var result = await _userManager.UpdateAsync(user);
+            return result.Succeeded;
         }
         //
         private async Task<string> CreateCodeNumber()
