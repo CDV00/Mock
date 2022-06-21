@@ -36,7 +36,7 @@ namespace Course.DAL.Queries
 
         public IEnrollmentQuery FilterByUserId(Guid? UserId)
         {
-            if (UserId == null)
+            if (UserId == Guid.Empty)
                 return this;
 
             Query = Query.Where(type => type.User.Id == UserId);

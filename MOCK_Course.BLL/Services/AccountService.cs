@@ -84,28 +84,10 @@ namespace Course.BLL.Services
         /// <returns></returns>
         public async Task<BaseResponse> Register(RegisterRequest registerRequest)
         {
-            try
-            {
-                var user = await _userManager.FindByEmailAsync(registerRequest.Email);
-                //check Email Confirmed
-                if (!user.EmailConfirmed)
-                {
-                    return new Response<LoginDTO>(false, "Authentication failed. You have not confirmed email.", "403");
-                }
-
-                _mapper.Map(registerRequest, user);
-                user.Description = registerRequest.Description;
-                GetAvartarUser(user);
-                user.UpdatedAt = DateTime.Now;
-
-                //var user = _mapper.Map<AppUser>(registerRequest);
-                //user.Description = registerRequest.Description;
-                //GetAvartarUser(user);
-                //user.CreatedAt = DateTime.Now;//await AddCodeNumber(user.Email, codeNumber);
-                //var result = await _userManager.CreateAsync(user, registerRequest.Password);
-
-                await _userManager.AddPasswordAsync(user, registerRequest.Password);
-                var result = await _userManager.UpdateAsync(user);
+            var user = _mapper.Map<AppUser>(registerRequest);
+            user.Description = registerRequest.Description;
+            GetAvartarUser(user);
+            user.CreatedAt = DateTime.Now;//await AddCodeNumber(user.Email, codeNumber);
 
 
             if (!result.Succeeded)
@@ -128,25 +110,10 @@ namespace Course.BLL.Services
             var roles = await _userManager.GetRolesAsync(user);
             userResponse.Role = string.Join(",", roles);
 
-                /*string codeNumber = CreateCodeNumber().Result.ToString();
-                bool isAddCodeNumber = await AddCodeNumber(user.Email, codeNumber);
-                if (!isAddCodeNumber)
-                {
-                    return new Response<BaseResponse>(false, "Add Code Number went wrong!", null);
-                }
-                var isSendEmailConfirm = await SendEmailConfirm(user.Email, "Register", codeNumber);
-                if (!isSendEmailConfirm.IsSuccess)
-                {
-                    return new Response<BaseResponse>(false, "Send Email went wrong!", null);
-                }*/
-                
-                return new BaseResponse(true);
-
-            }
-            catch (Exception ex)
-            {
-                return new BaseResponse(false, ex.Message, null);
-            }
+            string codeNumber = CreateCodeNumber().Result.ToString();
+            await AddCodeNumber(user.Email, codeNumber);
+            await SendEmailConfirm(user.Email, "Register", codeNumber);
+            return new BaseResponse(true);
         }
         /// <summary>
         /// condirm 
@@ -167,7 +134,7 @@ namespace Course.BLL.Services
             //
             codeNumber = CreateCodeNumber().Result.ToString();
             await AddCodeNumber(user.Email, codeNumber);
-            
+
             return new BaseResponse(true);
         }
 
@@ -452,12 +419,7 @@ namespace Course.BLL.Services
                 bool isAddCodeNumber = await AddCodeNumber(user.Email, codeNumber);
                 if (!isAddCodeNumber)
                 {
-                    return new Response<BaseResponse>(false, "Add Code Number went wrong!", null);
-                }
-                var isSendEmailConfirm = await SendEmailConfirm(user.Email, "Forget PassWord", codeNumber);
-                if (!isSendEmailConfirm.IsSuccess)
-                {
-                    return new Response<BaseResponse>(false, "Send Email went wrong!", null);
+                    return new Response<BaseResponse>(false, "Something went wrong!", null);
                 }
                 return new Response<BaseResponse>(true, null, null);
             }

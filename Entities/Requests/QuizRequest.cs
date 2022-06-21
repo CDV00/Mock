@@ -31,7 +31,7 @@ namespace Course.BLL.Requests
         public string Title { get; set; }
         public string Description { get; set; }
         public IList<QuestionForUpdateRequest> Questions { get; set; }
-        public IList<QuizSettingForUpdateRequest> Settings { get; set; }
+        public QuizSettingForUpdateRequest Settings { get; set; }
         public int Index { get; set; }
         public bool IsDeleted { get; set; }
         public bool IsNew { get; set; }

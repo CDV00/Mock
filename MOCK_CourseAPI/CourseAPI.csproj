@@ -31,11 +31,14 @@
 		</PackageReference>
 		<PackageReference Include="Microsoft.Owin.Security.Facebook" Version="4.2.2" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+		<PackageReference Include="NLog.Extensions.Logging" Version="5.0.0" />
 		<PackageReference Include="Swashbuckle" Version="5.6.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+		<PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<Folder Include="internal_logs\logs\" />
 		<Folder Include="Requests\" />
 	</ItemGroup>
 

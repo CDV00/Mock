@@ -325,9 +325,9 @@ namespace Course.BLL.Services
             await AddLanguages(audioLanguageIds, closeCaptionIds, levelIds, course);
 
             _cousesRepository.Update(course);
-            var CourseResponse = _mapper.Map<CourseDTO>(course);
 
             await _unitOfWork.SaveChangesAsync();
+            var CourseResponse = _mapper.Map<CourseDTO>(course);
 
             return new ApiOkResponse<CourseDTO>(CourseResponse);
         }
@@ -391,7 +391,7 @@ namespace Course.BLL.Services
                     section.Id = Guid.Empty;
                 }
 
-                #region Update Leacture
+                #region Update Lecture
                 var lectures = section.Lectures;
                 if (lectures != null)
                 {
@@ -451,7 +451,7 @@ namespace Course.BLL.Services
                         {
                             for (var k = 0; k < questions.Count; k++)
                             {
-                                var question = questions[j];
+                                var question = questions[k];
 
                                 #region Update QuizOptions
                                 var quizoptions = question.Options;
@@ -477,18 +477,10 @@ namespace Course.BLL.Services
                         #endregion
 
                         #region Update QuizSetting
-                        var settings = quiz.Settings;
-                        if (settings != null)
+                        var setting = quiz.Settings;
+                        if (setting.IsNew)
                         {
-                            for (var k = 0; k < settings.Count; j++)
-                            {
-                                var setting = settings[j];
-
-                                if (setting.IsNew)
-                                {
-                                    setting.Id = Guid.Empty;
-                                }
-                            }
+                            setting.Id = Guid.Empty;
                         }
                         #endregion
 

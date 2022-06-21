@@ -16,7 +16,7 @@ namespace Course.DAL.Models
         public Guid SectionId { get; set; }
         public Section Section { get; set; }
         public int Index { set; get; }
-        public List<Question> Questions { get; set; }
+        public IList<Question> Questions { get; set; }
         public QuizSetting Settings { get; set; }
     }
 }
