@@ -136,22 +136,15 @@ namespace Course.BLL.Services
                 return new Response<EnrollmentDTO>(false, ex.Message, null);
             }
         }
-        public async Task<Response<EnrollmentDTO>> GetAll(Guid? userId)
+        public async Task<Responses<EnrollmentDTO>> GetAll(Guid? userId)
         {
-            try
-            {
-                var enrollment = await _enrollmentRepository.BuildQuery()
-                                                     .FilterByUserId(userId)
-                                                     .IncludeUser()
-                                                     .IncludeCourse()
-                                                     .AsSelectorAsync(x => _mapper.Map<EnrollmentDTO>(x));
+            var enrollments = await _enrollmentRepository.BuildQuery()
+                                                         .FilterByUserId(userId)
+                                                         .IncludeUser()
+                                                         .IncludeCourse()
+                                                         .ToListAsync(x => _mapper.Map<EnrollmentDTO>(x));
 
-                return new Response<EnrollmentDTO>(true, enrollment);
-            }
-            catch (Exception ex)
-            {
-                return new Response<EnrollmentDTO>(false, ex.Message, null);
-            }
+            return new Responses<EnrollmentDTO>(true, enrollments);
         }
     }
 }

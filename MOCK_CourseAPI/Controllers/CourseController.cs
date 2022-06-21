@@ -70,8 +70,16 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// Create new course Include Sections, lecture 
+        /// Create new course  
         /// </summary>
+        /// <remarks>
+        /// ### Remark ###
+        /// Type Question:
+        /// - 0: SingleChoice
+        /// - 1: MultipleChoice
+        /// - 2: SingleLineText
+        /// - 3: MiltiText
+        /// </remarks>
         /// <param name="course"></param>
         /// <returns></returns>
         [HttpPost]

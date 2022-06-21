@@ -80,45 +80,37 @@ namespace Course.BLL.Services
         /// <returns></returns>
         public async Task<BaseResponse> Register(RegisterRequest registerRequest)
         {
-            try
+            var user = _mapper.Map<AppUser>(registerRequest);
+            user.Description = registerRequest.Description;
+            GetAvartarUser(user);
+            user.CreatedAt = DateTime.Now;
+
+            var result = await _userManager.CreateAsync(user, registerRequest.Password);
+
+            if (!result.Succeeded)
             {
-                var user = _mapper.Map<AppUser>(registerRequest);
-                user.Description = registerRequest.Description;
-                GetAvartarUser(user);
-                user.CreatedAt = DateTime.Now;
-
-                var result = await _userManager.CreateAsync(user, registerRequest.Password);
-
-                if (!result.Succeeded)
-                {
-                    return new BaseResponse(false, result.Errors.ToList()[0].Description, result.Errors.ToList()[0].Code);
-                }
-
-                if (registerRequest.CategoryId == null)
-                {
-                    await AddStudentRole(user);
-                }
-
-                if (registerRequest.CategoryId != null)
-                {
-                    await AddInstructorRole(user);
-                }
-
-                var userResponse = _mapper.Map<UserDTO>(user);
-
-                var roles = await _userManager.GetRolesAsync(user);
-                userResponse.Role = string.Join(",", roles);
-
-                string codeNumber = CreateCodeNumber().Result.ToString();
-                await AddCodeNumber(user.Email, codeNumber);
-                await SendEmailConfirm(user.Email, "Register", codeNumber);
-                return new BaseResponse(true);
-
+                return new BaseResponse(false, result.Errors.ToList()[0].Description, result.Errors.ToList()[0].Code);
             }
-            catch (Exception ex)
+
+            if (registerRequest.CategoryId == null)
             {
-                return new BaseResponse(false, ex.Message, null);
+                await AddStudentRole(user);
             }
+
+            if (registerRequest.CategoryId != null)
+            {
+                await AddInstructorRole(user);
+            }
+
+            var userResponse = _mapper.Map<UserDTO>(user);
+
+            var roles = await _userManager.GetRolesAsync(user);
+            userResponse.Role = string.Join(",", roles);
+
+            string codeNumber = CreateCodeNumber().Result.ToString();
+            await AddCodeNumber(user.Email, codeNumber);
+            await SendEmailConfirm(user.Email, "Register", codeNumber);
+            return new BaseResponse(true);
         }
         /// <summary>
         /// condirm 
