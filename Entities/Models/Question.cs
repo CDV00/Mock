@@ -15,7 +15,7 @@ namespace Course.DAL.Models
         public TypeQuestion Type { get; set; }
         public Guid QuizId { get; set; }
         public Quiz Quiz { get; set; }
-        public List<QuizOption> Options { get; set; }
+        public IList<QuizOption> Options { get; set; }
         public string TextAnswer { get; set; }
     }
     public enum TypeQuestion
