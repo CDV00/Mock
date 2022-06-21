@@ -10,6 +10,7 @@ using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
 using Course.BLL.Share.RequestFeatures;
 using Entities.ParameterRequest;
+using Entities.Responses;
 
 namespace Course.BLL.Services
 {
@@ -42,29 +43,15 @@ namespace Course.BLL.Services
         /// Get all course review
         /// </summary>
         /// <returns></returns>
-        public async Task<PagedList<CourseReviewDTO>> GetAll(Guid courseId, CourseReviewParameters courseReviewParameters)
+        public async Task<ApiBaseResponse> GetAll(Guid courseId, CourseReviewParameters parameter)
         {
-            var courseReview = await _courseReviewRepository.BuildQuery()
-                                                            .FilterByCourseId(courseId)
-                                                            .FilterByKeyword(courseReviewParameters.Keyword)
-                                                            .IncludeUser()
-                                                            .ApplySort(courseReviewParameters.Orderby)
-                                                            .Skip((courseReviewParameters.PageNumber - 1) * courseReviewParameters.PageSize)
-                                                            .Take(courseReviewParameters.PageSize)
-                                                            .ToListAsync(c => _mapper.Map<CourseReviewDTO>(c));
+            var coursereview = await _courseReviewRepository.GetAllCourseReview(courseId, parameter);
 
-            var count = await _courseReviewRepository.BuildQuery()
-                                                     .FilterByCourseId(courseId)
-                                                     .CountAsync();
-            var pageList = new PagedList<CourseReviewDTO>(courseReview, count, courseReviewParameters.PageNumber, courseReviewParameters.PageSize);
-
-            return pageList;
+            return new ApiOkResponse<PagedList<CourseReviewDTO>>(coursereview);
         }
 
-        public async Task<Response<CourseReviewDTO>> Add(CourseReviewRequest courseReviewRequest)
+        public async Task<ApiBaseResponse> Add(CourseReviewRequest courseReviewRequest)
         {
-            try
-            {
                 var courseReview = _mapper.Map<CourseReview>(courseReviewRequest);
                 courseReview.CreatedAt = DateTime.Now;
                 await _courseReviewRepository.CreateAsync(courseReview);
@@ -76,30 +63,24 @@ namespace Course.BLL.Services
                 course.AvgRate = course.SumRates / course.TotalReviews;
 
                 await _unitOfWork.SaveChangesAsync();
-                return new Response<CourseReviewDTO>(true, _mapper.Map<CourseReviewDTO>(courseReview));
-            }
-            catch (Exception ex)
-            {
-                return new Response<CourseReviewDTO>(false, ex.Message, null);
-            }
+                var courseReviewDTO = _mapper.Map<CourseReviewDTO>(courseReview);
+                return new ApiOkResponse<CourseReviewDTO>(courseReviewDTO);
         }
         /// <summary>
         /// update course review
         /// </summary>
         /// <param name="courseReviewUpdateRequest"></param>
         /// <returns></returns>
-        public async Task<Response<CourseReviewDTO>> Update(Guid id, CourseReviewUpdateRequest courseReviewUpdateRequest)
+        public async Task<ApiBaseResponse> Update(Guid id, CourseReviewUpdateRequest courseReviewUpdateRequest)
         {
-            try
-            {
                 var courseReview = await _courseReviewRepository.BuildQuery()
                                                                 .GetById(id)
                                                                 .IncludeEnrollment()
                                                                 .AsSelectorAsync(c => c);
 
                 if (courseReview == null)
-                    return new Response<CourseReviewDTO>(true, "Don't have this reviews", null);
-
+                    return new CourseReviewNotFound(id);
+                    
                 courseReview.UpdatedAt = DateTime.Now;
 
                 var course = await _cousesRepository.GetByIdAsync(courseReview.Enrollment.CourseId);
@@ -109,31 +90,22 @@ namespace Course.BLL.Services
 
                 _mapper.Map(courseReviewUpdateRequest, courseReview);
                 await _unitOfWork.SaveChangesAsync();
-                return new Response<CourseReviewDTO>(
-                    true,
-                    _mapper.Map<CourseReviewDTO>(courseReview)
-                );
-            }
-            catch (Exception ex)
-            {
-                return new Response<CourseReviewDTO>(false, ex.Message, null);
-            }
+                var courseReviewDTO = _mapper.Map<CourseReviewDTO>(courseReview);
+                return new ApiOkResponse<CourseReviewDTO>(courseReviewDTO);
         }
         /// <summary>
         /// delete course review
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<BaseResponse> Delete(Guid id)
+        public async Task<ApiBaseResponse> Delete(Guid id)
         {
-            try
-            {
                 var courseReview = await _courseReviewRepository.BuildQuery()
                                                                 .GetById(id)
                                                                 .IncludeEnrollment()
                                                                 .AsSelectorAsync(c => c);
                 if (courseReview == null)
-                    return new BaseResponse(true, "Don't have this reviews", null);
+                    return new CourseReviewNotFound(id);
 
                 var course = await _cousesRepository.GetByIdAsync(courseReview.Enrollment.CourseId);
                 course.SumRates -= courseReview.Rating;
@@ -142,13 +114,8 @@ namespace Course.BLL.Services
 
                 _courseReviewRepository.Remove(courseReview, true);
                 await _unitOfWork.SaveChangesAsync();
-                return new BaseResponse(true, "Delete success", null);
+                return new ApiBaseResponse(true);
             }
-            catch (Exception ex)
-            {
-                return new BaseResponse(false, ex.Message, null);
-            }
-        }
         // <summary>
         // Get total review of course
         // </summary>
