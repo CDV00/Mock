@@ -1,4 +1,5 @@
 ﻿using Course.BLL.Share.RequestFeatures;
+using Course.DAL.Models;
 using System;
 using System.Collections.Generic;
 
@@ -12,6 +13,7 @@ namespace Entities.ParameterRequest
         public List<Guid?> AudioLanguageIds { get; set; }
         public List<Guid?> CloseCaptionIds { get; set; }
         public List<Guid?> LevelIds { get; set; }
+        public Status status { get; set; }
         public int? Rate { get; set; }
         public string Orderby { get; set; }
         public bool IsDiscount { get; set; } = false;
