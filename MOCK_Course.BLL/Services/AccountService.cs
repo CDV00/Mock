@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -419,7 +419,12 @@ namespace Course.BLL.Services
                 bool isAddCodeNumber = await AddCodeNumber(user.Email, codeNumber);
                 if (!isAddCodeNumber)
                 {
-                    return new Response<BaseResponse>(false, "Something went wrong!", null);
+                    return new Response<BaseResponse>(false, "Add Code Number went wrong!", null);
+                }
+                var isSendEmailConfirm = await SendEmailConfirm(user.Email, "Forget PassWord", codeNumber);
+                if (!isSendEmailConfirm.IsSuccess)
+                {
+                    return new Response<BaseResponse>(false, "Send Email went wrong!", null);
                 }
                 return new Response<BaseResponse>(true, null, null);
             }
