@@ -87,27 +87,27 @@ namespace Course.BLL.Services
                 GetAvartarUser(user);
                 user.CreatedAt = DateTime.Now;//await AddCodeNumber(user.Email, codeNumber);
 
-                var result = await _userManager.CreateAsync(user, registerRequest.Password);
+            var result = await _userManager.CreateAsync(user, registerRequest.Password);
 
-                if (!result.Succeeded)
-                {
-                    return new BaseResponse(false, result.Errors.ToList()[0].Description, result.Errors.ToList()[0].Code);
-                }
+            if (!result.Succeeded)
+            {
+                return new BaseResponse(false, result.Errors.ToList()[0].Description, result.Errors.ToList()[0].Code);
+            }
 
-                if (registerRequest.CategoryId == null)
-                {
-                    await AddStudentRole(user);
-                }
+            if (registerRequest.CategoryId == null)
+            {
+                await AddStudentRole(user);
+            }
 
-                if (registerRequest.CategoryId != null)
-                {
-                    await AddInstructorRole(user);
-                }
+            if (registerRequest.CategoryId != null)
+            {
+                await AddInstructorRole(user);
+            }
 
-                var userResponse = _mapper.Map<UserDTO>(user);
+            var userResponse = _mapper.Map<UserDTO>(user);
 
-                var roles = await _userManager.GetRolesAsync(user);
-                userResponse.Role = string.Join(",", roles);
+            var roles = await _userManager.GetRolesAsync(user);
+            userResponse.Role = string.Join(",", roles);
 
                 string codeNumber = CreateCodeNumber().Result.ToString();
                 bool isAddCodeNumber = await AddCodeNumber(user.Email, codeNumber);

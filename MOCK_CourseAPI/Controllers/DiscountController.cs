@@ -44,7 +44,7 @@ namespace CourseAPI.Controllers
             var result = await _discountService.GetAllDiscount(userId, parameter);
             if (!result.IsSuccess)
                 return ProcessError(result);
-            var coursePagedList = result.GetResult<PagedList<SavedCoursesDTO>>();
+            var coursePagedList = result.GetResult<PagedList<DiscountDTO_>>();
 
             Response.Headers.Add("X-Pagination",
                               JsonSerializer.Serialize(coursePagedList.MetaData));
