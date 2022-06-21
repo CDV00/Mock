@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Course.DAL.Configuration;
 using Course.DAL.Extensions;
 using Course.DAL.Models;
+using Entities.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -37,6 +38,8 @@ namespace Course.DAL.Data
         public DbSet<Question> Questions { get; set; }
         public DbSet<QuizOption> QuizOptions { get; set; }
         public DbSet<QuizSetting> QuizSettings { get; set; }
+
+        public DbSet<Logs> Logs { get; set; }
         #endregion
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
