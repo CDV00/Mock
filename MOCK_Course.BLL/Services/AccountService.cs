@@ -57,7 +57,11 @@ namespace Course.BLL.Services
             var user = await _userManager.FindByEmailAsync(loginRequest.Email);
             if (user is null)
                 return new Response<LoginDTO>(false, "Authentication failed. Wrong user name or password.", null);
-
+            //check Email Confirmed
+            //if (!user.EmailConfirmed)
+            //{
+            //    return new Response<LoginDTO>(false, "Authentication failed. You have not confirmed email.", "403");
+            //}
             if (!user.IsActive)
                 return new Response<LoginDTO>(false, "Authentication failed. Account has been blocked.", "403");
             if (!await ValidateUser(loginRequest))
@@ -85,7 +89,6 @@ namespace Course.BLL.Services
             GetAvartarUser(user);
             user.CreatedAt = DateTime.Now;//await AddCodeNumber(user.Email, codeNumber);
 
-            var result = await _userManager.CreateAsync(user, registerRequest.Password);
 
             if (!result.Succeeded)
             {
@@ -344,7 +347,12 @@ namespace Course.BLL.Services
                 default: throw new Exception("Provider cannot find out");
             }
             var senderEmail = _configurations["SMTP:Sender"];
-            await _emailService.SendEmailAsync(senderEmail, email, subjects, message);
+            var result = (await _emailService.SendEmailAsync(senderEmail, email, subjects, message));
+            if(!result.IsSuccess)
+            {
+                return new Response<BaseResponse>(false);
+            }
+            
             return new Response<BaseResponse>(true);
         }
         //
@@ -353,7 +361,17 @@ namespace Course.BLL.Services
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
             {
-                throw new Exception("No user associated with email");
+                RegisterRequest registerRequest = new RegisterRequest();
+
+                registerRequest.Email = email;
+                var users = _mapper.Map<AppUser>(registerRequest);
+                users.Description = users.Description;
+                //GetAvartarUser(users);
+                users.CreatedAt = DateTime.Now;
+                
+                await _userManager.CreateAsync(users);
+                user = await _userManager.FindByEmailAsync(email);
+                //throw new Exception("No user associated with email");
             }
             user.CodeNumber = codeNumber;
             user.UpdatedAt = DateTime.Now;
@@ -374,9 +392,13 @@ namespace Course.BLL.Services
             bool isAddCodeNumber = await AddCodeNumber(email, codeNumber);
             if (!isAddCodeNumber)
             {
-                return new Response<BaseResponse>(false, "Something went wrong!", null);
+                return new Response<BaseResponse>(false, "Add Code Number went wrong!", null);
             }
-            SendEmailConfirm(email, working, codeNumber);
+            var isSendEmailConfirm = await SendEmailConfirm(email, working, codeNumber);
+            if (!isSendEmailConfirm.IsSuccess)
+            {
+                return new Response<BaseResponse>(false, "Send Email went wrong!", null);
+            }
             return new BaseResponse(true);
         }
         /// <summary>
@@ -399,7 +421,6 @@ namespace Course.BLL.Services
                 {
                     return new Response<BaseResponse>(false, "Something went wrong!", null);
                 }
-                await SendEmailConfirm(user.Email, "Forget PassWord", codeNumber);
                 return new Response<BaseResponse>(true, null, null);
             }
             catch (Exception ex)
