@@ -52,19 +52,19 @@ namespace Course.BLL.Services
 
         public async Task<ApiBaseResponse> Add(CourseReviewRequest courseReviewRequest)
         {
-                var courseReview = _mapper.Map<CourseReview>(courseReviewRequest);
-                courseReview.CreatedAt = DateTime.Now;
-                await _courseReviewRepository.CreateAsync(courseReview);
+            var courseReview = _mapper.Map<CourseReview>(courseReviewRequest);
+            courseReview.CreatedAt = DateTime.Now;
+            await _courseReviewRepository.CreateAsync(courseReview);
 
-                var enrollment = await _enrollmentRepository.GetByIdAsync(courseReviewRequest.EnrollmentId);
-                var course = await _cousesRepository.GetByIdAsync(enrollment.CourseId);
-                course.SumRates += courseReview.Rating;
-                course.TotalReviews++;
-                course.AvgRate = course.SumRates / course.TotalReviews;
+            var enrollment = await _enrollmentRepository.GetByIdAsync(courseReviewRequest.EnrollmentId);
+            var course = await _cousesRepository.GetByIdAsync(enrollment.CourseId);
+            course.SumRates += courseReview.Rating;
+            course.TotalReviews++;
+            course.AvgRate = course.SumRates / course.TotalReviews;
 
-                await _unitOfWork.SaveChangesAsync();
-                var courseReviewDTO = _mapper.Map<CourseReviewDTO>(courseReview);
-                return new ApiOkResponse<CourseReviewDTO>(courseReviewDTO);
+            await _unitOfWork.SaveChangesAsync();
+            var courseReviewDTO = _mapper.Map<CourseReviewDTO>(courseReview);
+            return new ApiOkResponse<CourseReviewDTO>(courseReviewDTO);
         }
         /// <summary>
         /// update course review
@@ -73,25 +73,25 @@ namespace Course.BLL.Services
         /// <returns></returns>
         public async Task<ApiBaseResponse> Update(Guid id, CourseReviewUpdateRequest courseReviewUpdateRequest)
         {
-                var courseReview = await _courseReviewRepository.BuildQuery()
-                                                                .GetById(id)
-                                                                .IncludeEnrollment()
-                                                                .AsSelectorAsync(c => c);
+            var courseReview = await _courseReviewRepository.BuildQuery()
+                                                            .GetById(id)
+                                                            .IncludeEnrollment()
+                                                            .AsSelectorAsync(c => c);
 
-                if (courseReview == null)
-                    return new CourseReviewNotFound(id);
-                    
-                courseReview.UpdatedAt = DateTime.Now;
+            if (courseReview == null)
+                return new CourseReviewNotFound(id);
 
-                var course = await _cousesRepository.GetByIdAsync(courseReview.Enrollment.CourseId);
-                course.SumRates -= courseReview.Rating;
-                course.SumRates += courseReviewUpdateRequest.Rating;
-                course.AvgRate = course.SumRates / course.TotalReviews;
+            courseReview.UpdatedAt = DateTime.Now;
 
-                _mapper.Map(courseReviewUpdateRequest, courseReview);
-                await _unitOfWork.SaveChangesAsync();
-                var courseReviewDTO = _mapper.Map<CourseReviewDTO>(courseReview);
-                return new ApiOkResponse<CourseReviewDTO>(courseReviewDTO);
+            var course = await _cousesRepository.GetByIdAsync(courseReview.Enrollment.CourseId);
+            course.SumRates -= courseReview.Rating;
+            course.SumRates += courseReviewUpdateRequest.Rating;
+            course.AvgRate = course.SumRates / course.TotalReviews;
+
+            _mapper.Map(courseReviewUpdateRequest, courseReview);
+            await _unitOfWork.SaveChangesAsync();
+            var courseReviewDTO = _mapper.Map<CourseReviewDTO>(courseReview);
+            return new ApiOkResponse<CourseReviewDTO>(courseReviewDTO);
         }
         /// <summary>
         /// delete course review
@@ -100,22 +100,22 @@ namespace Course.BLL.Services
         /// <returns></returns>
         public async Task<ApiBaseResponse> Delete(Guid id)
         {
-                var courseReview = await _courseReviewRepository.BuildQuery()
-                                                                .GetById(id)
-                                                                .IncludeEnrollment()
-                                                                .AsSelectorAsync(c => c);
-                if (courseReview == null)
-                    return new CourseReviewNotFound(id);
+            var courseReview = await _courseReviewRepository.BuildQuery()
+                                                            .GetById(id)
+                                                            .IncludeEnrollment()
+                                                            .AsSelectorAsync(c => c);
+            if (courseReview == null)
+                return new CourseReviewNotFound(id);
 
-                var course = await _cousesRepository.GetByIdAsync(courseReview.Enrollment.CourseId);
-                course.SumRates -= courseReview.Rating;
-                course.TotalReviews--;
-                course.AvgRate = course.SumRates / course.TotalReviews;
+            var course = await _cousesRepository.GetByIdAsync(courseReview.Enrollment.CourseId);
+            course.SumRates -= courseReview.Rating;
+            course.TotalReviews--;
+            course.AvgRate = course.SumRates / course.TotalReviews;
 
-                _courseReviewRepository.Remove(courseReview, true);
-                await _unitOfWork.SaveChangesAsync();
-                return new ApiBaseResponse(true);
-            }
+            _courseReviewRepository.Remove(courseReview, true);
+            await _unitOfWork.SaveChangesAsync();
+            return new ApiBaseResponse(true);
+        }
         // <summary>
         // Get total review of course
         // </summary>
@@ -189,7 +189,7 @@ namespace Course.BLL.Services
         {
             try
             {
-                if (courseId is null && userId is null)
+                if (courseId is null && userId == Guid.Empty)
                     return new Response<float>(false, "must pass userId or CourseId", "400");
                 var IsExistEnrolls = await _enrollmentRepository.BuildQuery()
                                                                 .FilterByCourseId(courseId)
@@ -215,7 +215,7 @@ namespace Course.BLL.Services
         {
             try
             {
-                if (courseId is null && userId is null)
+                if (courseId is null && userId == Guid.Empty)
                     return new Response<List<float>>(false, "must pass userId or CourseId", "400");
 
                 var IsExistEnrolls = await _enrollmentRepository.BuildQuery()

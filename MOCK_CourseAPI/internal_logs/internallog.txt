@@ -13920,3 +13920,110 @@
 2022-06-21 14:28:33.1380 Debug Logger LoggerService.LoggerManager [Warn] => logfile
 2022-06-21 14:28:33.1380 Debug Logger LoggerService.LoggerManager [Error] => logfile
 2022-06-21 14:28:33.1380 Debug Logger LoggerService.LoggerManager [Fatal] => logfile
+2022-06-21 16:14:05.8529 Info Message Template Auto Format enabled
+2022-06-21 16:14:05.9335 Debug ScanAssembly('NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c')
+2022-06-21 16:14:06.1120 Debug Setting 'NLog.Targets.FileTarget.name' to 'logfile'
+2022-06-21 16:14:06.1227 Debug Setting 'NLog.Targets.FileTarget.fileName' to 'E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\internal_logs\logs\${shortdate}_logfile.txt'
+2022-06-21 16:14:06.1422 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2022-06-21 16:14:06.1558 Trace Scanning ShortDateLayoutRenderer 'Layout Renderer: ${shortdate}'
+2022-06-21 16:14:06.1558 Debug Setting 'NLog.Targets.FileTarget.layout' to '${longdate} ${level:uppercase=true} ${message}'
+2022-06-21 16:14:06.1558 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2022-06-21 16:14:06.1558 Trace Scanning LongDateLayoutRenderer 'Layout Renderer: ${longdate}'
+2022-06-21 16:14:06.1727 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2022-06-21 16:14:06.1727 Trace Scanning LevelLayoutRenderer 'Layout Renderer: ${level}'
+2022-06-21 16:14:06.1727 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2022-06-21 16:14:06.1727 Trace Scanning MessageLayoutRenderer 'Layout Renderer: ${message}'
+2022-06-21 16:14:06.1727 Info Adding target FileTarget(Name=logfile)
+2022-06-21 16:14:06.1727 Debug Registered target logfile: NLog.Targets.FileTarget
+2022-06-21 16:16:11.0887 Info Message Template Auto Format enabled
+2022-06-21 16:16:11.3834 Debug ScanAssembly('NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c')
+2022-06-21 16:16:11.5279 Debug Setting 'NLog.Targets.FileTarget.name' to 'logfile'
+2022-06-21 16:16:11.5547 Debug Setting 'NLog.Targets.FileTarget.fileName' to 'E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\internal_logs\logs\${shortdate}_logfile.txt'
+2022-06-21 16:16:11.5678 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2022-06-21 16:16:11.5678 Trace Scanning ShortDateLayoutRenderer 'Layout Renderer: ${shortdate}'
+2022-06-21 16:16:11.5802 Debug Setting 'NLog.Targets.FileTarget.layout' to '${longdate} ${level:uppercase=true} ${message}'
+2022-06-21 16:16:11.5802 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2022-06-21 16:16:11.5802 Trace Scanning LongDateLayoutRenderer 'Layout Renderer: ${longdate}'
+2022-06-21 16:16:11.5802 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2022-06-21 16:16:11.5802 Trace Scanning LevelLayoutRenderer 'Layout Renderer: ${level}'
+2022-06-21 16:16:11.5802 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2022-06-21 16:16:11.5802 Trace Scanning MessageLayoutRenderer 'Layout Renderer: ${message}'
+2022-06-21 16:16:11.5946 Info Adding target FileTarget(Name=logfile)
+2022-06-21 16:16:11.5946 Debug Registered target logfile: NLog.Targets.FileTarget
+2022-06-21 16:16:11.5946 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Failed to create Target of type: Database
+ ---> System.ArgumentException: Target symbol-name is unknown: 'Database'. Extension NLog.Database not included?
+   at NLog.Config.Factory`2.CreateInstance(String itemName)
+   at NLog.Config.LoggingConfigurationParser.FactoryCreateInstance[T](String classType, INamedItemFactory`2 factory)
+   --- End of inner exception stack trace ---
+2022-06-21 16:16:11.6862 Trace ParseRulesElement
+2022-06-21 16:16:11.7002 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'database' not found for logging rule: *.
+2022-06-21 16:16:11.7154 Debug Watching file-filter 'nlog.config' in directory: E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI
+2022-06-21 16:16:11.7154 Debug --- NLog configuration dump ---
+2022-06-21 16:16:11.7191 Debug Targets:
+2022-06-21 16:16:11.7191 Debug FileTarget(Name=logfile)
+2022-06-21 16:16:11.7191 Debug Rules:
+2022-06-21 16:16:11.7191 Debug logNamePattern: (:All) levels: [ Debug Info Warn Error Fatal ] writeTo: [ logfile ]
+2022-06-21 16:16:11.7191 Debug logNamePattern: (:All) levels: [ Error Fatal ] writeTo: [ ]
+2022-06-21 16:16:11.7191 Debug --- End of NLog configuration dump ---
+2022-06-21 16:16:11.7349 Trace FindReachableObject<System.Object>:
+2022-06-21 16:16:11.7349 Trace Scanning LoggingRule 'logNamePattern: (:All) levels: [ Debug Info Warn Error Fatal ] writeTo: [ logfile ]'
+2022-06-21 16:16:11.7349 Trace  Scanning Property Targets 'System.Collections.Generic.List`1[NLog.Targets.Target]' System.Collections.Generic
+2022-06-21 16:16:11.7349 Trace  Scanning FileTarget 'FileTarget(Name=logfile)'
+2022-06-21 16:16:11.7509 Trace   Scanning Property FileName 'E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\internal_logs\logs\${shortdate}_logfile.txt' NLog.Layouts
+2022-06-21 16:16:11.7509 Trace   Scanning SimpleLayout 'E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\internal_logs\logs\${shortdate}_logfile.txt'
+2022-06-21 16:16:11.7509 Trace    Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic
+2022-06-21 16:16:11.7509 Trace    Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2022-06-21 16:16:11.7509 Trace    Scanning ShortDateLayoutRenderer 'Layout Renderer: ${shortdate}'
+2022-06-21 16:16:11.7509 Trace    Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2022-06-21 16:16:11.7509 Trace   Scanning Property Layout '${longdate} ${level:uppercase=true} ${message}' NLog.Layouts
+2022-06-21 16:16:11.7509 Trace   Scanning SimpleLayout '${longdate} ${level:uppercase=true} ${message}'
+2022-06-21 16:16:11.7509 Trace    Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic
+2022-06-21 16:16:11.7509 Trace    Scanning LongDateLayoutRenderer 'Layout Renderer: ${longdate}'
+2022-06-21 16:16:11.7509 Trace    Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2022-06-21 16:16:11.7509 Trace    Scanning LevelLayoutRenderer 'Layout Renderer: ${level}'
+2022-06-21 16:16:11.7658 Trace    Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2022-06-21 16:16:11.7658 Trace    Scanning MessageLayoutRenderer 'Layout Renderer: ${message}'
+2022-06-21 16:16:11.7658 Trace   Scanning Property LineEnding 'Default' NLog.Targets
+2022-06-21 16:16:11.7658 Trace  Scanning Property ChildRules 'System.Collections.Generic.List`1[NLog.Config.LoggingRule]' System.Collections.Generic
+2022-06-21 16:16:11.7658 Trace  Scanning Property Filters 'System.Collections.Generic.List`1[NLog.Filters.Filter]' System.Collections.Generic
+2022-06-21 16:16:11.7658 Trace Scanning LoggingRule 'logNamePattern: (:All) levels: [ Error Fatal ] writeTo: [ ]'
+2022-06-21 16:16:11.7658 Trace  Scanning Property Targets 'System.Collections.Generic.List`1[NLog.Targets.Target]' System.Collections.Generic
+2022-06-21 16:16:11.7829 Trace  Scanning Property ChildRules 'System.Collections.Generic.List`1[NLog.Config.LoggingRule]' System.Collections.Generic
+2022-06-21 16:16:11.7829 Trace  Scanning Property Filters 'System.Collections.Generic.List`1[NLog.Filters.Filter]' System.Collections.Generic
+2022-06-21 16:16:11.7829 Info Validating config: TargetNames=logfile, ConfigItems=13, FilePath=E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\nlog.config
+2022-06-21 16:16:11.7829 Debug Unused target checking is started... Rule Count: 2, Target Count: 1
+2022-06-21 16:16:11.8105 Debug Unused target checking is completed. Total Rule Count: 2, Total Target Count: 1, Unused Target Count: 0
+2022-06-21 16:16:11.8129 Trace Initializing Layout Renderer: ${message}
+2022-06-21 16:16:11.8129 Trace Initializing Layout Renderer: ${literal}
+2022-06-21 16:16:11.8129 Trace Initializing Layout Renderer: ${level}
+2022-06-21 16:16:11.8129 Trace Initializing Layout Renderer: ${literal}
+2022-06-21 16:16:11.8129 Trace Initializing Layout Renderer: ${longdate}
+2022-06-21 16:16:11.8129 Trace Initializing ${longdate} ${level:uppercase=true} ${message}
+2022-06-21 16:16:11.8292 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2022-06-21 16:16:11.8292 Trace Scanning SimpleLayout '${longdate} ${level:uppercase=true} ${message}'
+2022-06-21 16:16:11.8292 Trace  Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic
+2022-06-21 16:16:11.8292 Trace  Scanning LongDateLayoutRenderer 'Layout Renderer: ${longdate}'
+2022-06-21 16:16:11.8292 Trace  Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2022-06-21 16:16:11.8292 Trace  Scanning LevelLayoutRenderer 'Layout Renderer: ${level}'
+2022-06-21 16:16:11.8292 Trace  Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2022-06-21 16:16:11.8292 Trace  Scanning MessageLayoutRenderer 'Layout Renderer: ${message}'
+2022-06-21 16:16:11.8477 Trace Initializing Layout Renderer: ${literal}
+2022-06-21 16:16:11.8477 Trace Initializing Layout Renderer: ${shortdate}
+2022-06-21 16:16:11.8477 Trace Initializing Layout Renderer: ${literal}
+2022-06-21 16:16:11.8477 Trace Initializing E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\internal_logs\logs\${shortdate}_logfile.txt
+2022-06-21 16:16:11.8477 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2022-06-21 16:16:11.8477 Trace Scanning SimpleLayout 'E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\internal_logs\logs\${shortdate}_logfile.txt'
+2022-06-21 16:16:11.8589 Trace  Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic
+2022-06-21 16:16:11.8589 Trace  Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2022-06-21 16:16:11.8589 Trace  Scanning ShortDateLayoutRenderer 'Layout Renderer: ${shortdate}'
+2022-06-21 16:16:11.8589 Trace  Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2022-06-21 16:16:11.8589 Trace Initializing FileTarget(Name=logfile)
+2022-06-21 16:16:11.8589 Trace FindReachableObject<NLog.Layouts.Layout>:
+2022-06-21 16:16:11.8589 Trace Scanning FileTarget 'FileTarget(Name=logfile)'
+2022-06-21 16:16:11.8589 Trace  Scanning Property FileName 'E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\internal_logs\logs\${shortdate}_logfile.txt' NLog.Layouts
+2022-06-21 16:16:11.8589 Trace  Scanning SimpleLayout 'E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\internal_logs\logs\${shortdate}_logfile.txt'
+2022-06-21 16:16:11.8589 Trace  Scanning Property Layout '${longdate} ${level:uppercase=true} ${message}' NLog.Layouts
+2022-06-21 16:16:11.8751 Trace  Scanning SimpleLayout '${longdate} ${level:uppercase=true} ${message}'
+2022-06-21 16:16:11.8751 Trace  Scanning Property LineEnding 'Default' NLog.Targets
+2022-06-21 16:16:11.8751 Trace FileTarget(Name=logfile) has 2 layouts
+2022-06-21 16:16:11.8751 Trace FileTarget(Name=logfile): Using appenderFactory: NLog.Internal.FileAppenders.SingleProcessFileAppender+Factory
