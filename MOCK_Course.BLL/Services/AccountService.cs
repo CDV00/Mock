@@ -113,9 +113,14 @@ namespace Course.BLL.Services
                 bool isAddCodeNumber = await AddCodeNumber(user.Email, codeNumber);
                 if (!isAddCodeNumber)
                 {
-                    return new BaseResponse(false, "Something went wrong!", null);
+                    return new Response<BaseResponse>(false, "Add Code Number went wrong!", null);
                 }
-                await SendEmailConfirm(user.Email, "Register", codeNumber);
+                var isSendEmailConfirm = await SendEmailConfirm(user.Email, "Register", codeNumber);
+                if (!isSendEmailConfirm.IsSuccess)
+                {
+                    return new Response<BaseResponse>(false, "Send Email went wrong!", null);
+                }
+                
                 return new BaseResponse(true);
 
             }
@@ -356,7 +361,12 @@ namespace Course.BLL.Services
                 default: throw new Exception("Provider cannot find out");
             }
             var senderEmail = _configurations["SMTP:Sender"];
-            await _emailService.SendEmailAsync(senderEmail, email, subjects, message);
+            var result = (await _emailService.SendEmailAsync(senderEmail, email, subjects, message));
+            if(!result.IsSuccess)
+            {
+                return new Response<BaseResponse>(false);
+            }
+            
             return new Response<BaseResponse>(true);
         }
         //
@@ -386,9 +396,13 @@ namespace Course.BLL.Services
             bool isAddCodeNumber = await AddCodeNumber(email, codeNumber);
             if (!isAddCodeNumber)
             {
-                return new Response<BaseResponse>(false, "Something went wrong!", null);
+                return new Response<BaseResponse>(false, "Add Code Number went wrong!", null);
             }
-            SendEmailConfirm(email, working, codeNumber);
+            var isSendEmailConfirm = await SendEmailConfirm(email, working, codeNumber);
+            if (!isSendEmailConfirm.IsSuccess)
+            {
+                return new Response<BaseResponse>(false, "Send Email went wrong!", null);
+            }
             return new BaseResponse(true);
         }
         /// <summary>
@@ -409,9 +423,13 @@ namespace Course.BLL.Services
                 bool isAddCodeNumber = await AddCodeNumber(user.Email, codeNumber);
                 if (!isAddCodeNumber)
                 {
-                    return new Response<BaseResponse>(false, "Something went wrong!",null);
+                    return new Response<BaseResponse>(false, "Add Code Number went wrong!", null);
                 }
-                await SendEmailConfirm(user.Email, "Forget PassWord", codeNumber);
+                var isSendEmailConfirm = await SendEmailConfirm(user.Email, "Forget PassWord", codeNumber);
+                if (!isSendEmailConfirm.IsSuccess)
+                {
+                    return new Response<BaseResponse>(false, "Send Email went wrong!", null);
+                }
                 return new Response<BaseResponse>(true, null, null);
             }
             catch (Exception ex)
