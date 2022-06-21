@@ -286,12 +286,8 @@ namespace Course.BLL.Services
         {
             var course = await _cousesRepository.BuildQuery()
                                                 .FilterById(id)
-                                                //.IncludeCategory()
                                                 .IncludeLevel()
                                                 .IncludeLanguage()
-                                                //.IncludeSection()
-                                                //.IncludeAssignment()
-                                                //.IncludeQuiz()
                                                 .AsSelectorAsync(c => c);
 
             if (course is null)
@@ -376,123 +372,7 @@ namespace Course.BLL.Services
             }
         }
 
-        private static void AddNewSection(CourseForUpdateRequest courseRequest)
-        {
-            var sections = courseRequest.Sections;
-            if (sections == null)
-                return;
 
-            for (var i = 0; i < sections.Count; i++)
-            {
-                var section = sections[i];
-
-                if (section.IsNew)
-                {
-                    section.Id = Guid.Empty;
-                }
-
-                #region Update Lecture
-                var lectures = section.Lectures;
-                if (lectures != null)
-                {
-                    for (var j = 0; j < lectures.Count; j++)
-                    {
-                        var lecture = lectures[j];
-
-                        if (lecture.IsNew)
-                        {
-                            lecture.Id = Guid.Empty;
-                        }
-                    }
-                }
-                #endregion
-                #region Update Assignment
-                var assignments = section.Assignments;
-                if (assignments != null)
-                {
-                    for (var j = 0; j < assignments.Count; j++)
-                    {
-                        var assignment = assignments[j];
-
-                        #region Update Attachment
-                        var attachments = assignment.Attachments;
-                        if (attachments != null)
-                        {
-                            for (var k = 0; k < attachments.Count; k++)
-                            {
-                                var attachment = attachments[k];
-
-                                if (attachment.IsNew)
-                                {
-                                    attachment.Id = Guid.Empty;
-                                }
-                            }
-                        }
-                        #endregion
-
-                        if (assignment.IsNew)
-                        {
-                            assignment.Id = Guid.Empty;
-                        }
-                    }
-                }
-                #endregion
-                #region Update Quiz
-                var quizzes = section.Quizzes;
-                if (quizzes != null)
-                {
-                    for (var j = 0; j < quizzes.Count; j++)
-                    {
-                        var quiz = quizzes[j];
-
-                        #region Update Question
-                        var questions = quiz.Questions;
-                        if (questions != null)
-                        {
-                            for (var k = 0; k < questions.Count; k++)
-                            {
-                                var question = questions[k];
-
-                                #region Update QuizOptions
-                                var quizoptions = question.Options;
-                                if (quizoptions != null)
-                                {
-                                    for (var l = 0; l < quizoptions.Count; l++)
-                                    {
-                                        var quizoption = quizoptions[l];
-
-                                        if (quizoption.IsNew)
-                                        {
-                                            quizoption.Id = Guid.Empty;
-                                        }
-                                    }
-                                }
-                                #endregion
-                                if (question.IsNew)
-                                {
-                                    question.Id = Guid.Empty;
-                                }
-                            }
-                        }
-                        #endregion
-
-                        #region Update QuizSetting
-                        var setting = quiz.Settings;
-                        if (setting.IsNew)
-                        {
-                            setting.Id = Guid.Empty;
-                        }
-                        #endregion
-
-                        if (quiz.IsNew)
-                        {
-                            quiz.Id = Guid.Empty;
-                        }
-                    }
-                }
-                #endregion
-            }
-        }
 
         public async Task<Response<int>> GetTotalCourseOfUser(Guid userId)
         {
@@ -535,5 +415,177 @@ namespace Course.BLL.Services
         //        return new Response<CourseDTO>(false, ex.Message, null);
         //    }
         //}
+
+
+
+
+
+
+
+
+
+
+
+
+
+        private static void AddNewSection(CourseForUpdateRequest courseRequest)
+        {
+            var sections = courseRequest.Sections;
+            if (sections == null)
+                return;
+
+            for (var i = 0; i < sections.Count; i++)
+            {
+                var section = sections[i];
+
+                if (section.IsDeleted && section.IsNew)
+                {
+                    sections.Remove(section);
+                    continue;
+                }
+
+                if (section.IsNew)
+                {
+                    section.Id = Guid.Empty;
+                }
+
+                NewLecture(section);
+                NewAssignment(section);
+                NewQuiz(section);
+            }
+        }
+
+        private static void NewQuiz(SectionUpdateRequest section)
+        {
+            var quizzes = section.Quizzes;
+            if (quizzes != null)
+            {
+                for (var j = 0; j < quizzes.Count; j++)
+                {
+                    var quiz = quizzes[j];
+                    if (quiz.IsDeleted && quiz.IsNew)
+                    {
+                        quizzes.Remove(quiz);
+                        continue;
+                    }
+                    if (quiz.IsNew || section.IsNew)
+                    {
+                        quiz.Id = Guid.Empty;
+                    }
+
+                    #region Update Question
+                    var questions = quiz.Questions;
+                    if (questions != null)
+                    {
+                        for (var k = 0; k < questions.Count; k++)
+                        {
+                            var question = questions[k];
+                            if (question.IsDeleted && question.IsNew)
+                            {
+                                questions.Remove(question);
+                                continue;
+                            }
+                            if (question.IsNew || quiz.IsNew)
+                            {
+                                question.Id = Guid.Empty;
+                            }
+
+                            NewQuizOption(question);
+                            #endregion
+                        }
+                    }
+                }
+            }
+        }
+
+        private static void NewQuizOption(QuestionForUpdateRequest question)
+        {
+            var quizoptions = question.Options;
+            if (quizoptions != null)
+            {
+                for (var l = 0; l < quizoptions.Count; l++)
+                {
+                    var quizoption = quizoptions[l];
+                    if (quizoption.IsDeleted && quizoption.IsNew)
+                    {
+                        quizoptions.Remove(quizoption);
+                        continue;
+                    }
+                    if (quizoption.IsNew || question.IsNew)
+                    {
+                        quizoption.Id = Guid.Empty;
+                    }
+                }
+            }
+        }
+
+        private static void NewAssignment(SectionUpdateRequest section)
+        {
+            var assignments = section.Assignments;
+            if (assignments != null)
+            {
+                for (var j = 0; j < assignments.Count; j++)
+                {
+                    var assignment = assignments[j];
+
+                    if (assignment.IsDeleted && assignment.IsNew)
+                    {
+                        assignments.Remove(assignment);
+                        continue;
+                    }
+                    if (assignment.IsNew || section.IsNew)
+                    {
+                        assignment.Id = Guid.Empty;
+                    }
+
+                    NewAttachment(section, assignment);
+                }
+            }
+        }
+
+        private static void NewAttachment(SectionUpdateRequest section, AssignmentForUpdateRequest assignment)
+        {
+            var attachments = assignment.Attachments;
+            if (attachments != null)
+            {
+                for (var k = 0; k < attachments.Count; k++)
+                {
+                    var attachment = attachments[k];
+
+                    if (attachment.IsDeleted && attachment.IsNew)
+                    {
+                        attachments.Remove(attachment);
+                        continue;
+                    }
+                    if (attachment.IsNew || assignment.IsNew)
+                    {
+                        attachment.Id = Guid.Empty;
+                    }
+                }
+            }
+        }
+
+        private static void NewLecture(SectionUpdateRequest section)
+        {
+            var lectures = section.Lectures;
+            if (lectures != null)
+            {
+                for (var j = 0; j < lectures.Count; j++)
+                {
+                    var lecture = lectures[j];
+
+                    if (lecture.IsDeleted && lecture.IsNew)
+                    {
+                        lectures.Remove(lecture);
+                        continue;
+                    }
+
+                    if (lecture.IsNew || section.IsNew)
+                    {
+                        lecture.Id = Guid.Empty;
+                    }
+                }
+            }
+        }
     }
 }

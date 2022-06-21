@@ -13,7 +13,6 @@ namespace Course.BLL.Requests
         public long TimeLimit { get; set; }
         public byte PassingScore { get; set; }
         public uint QuestionsLimit { get; set; }
-
     }
     public class QuizSettingForCreateRequest
     {
@@ -31,7 +30,7 @@ namespace Course.BLL.Requests
         public long TimeLimit { get; set; }
         public byte PassingScore { get; set; }
         public uint QuestionsLimit { get; set; }
-        public bool IsDeleted { get; set; }
-        public bool IsNew { get; set; }
+        public bool IsDeleted { get; set; } = false;
+        public bool IsNew { get; set; } = true;
     }
 }

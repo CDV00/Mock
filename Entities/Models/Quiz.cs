@@ -17,6 +17,12 @@ namespace Course.DAL.Models
         public Section Section { get; set; }
         public int Index { set; get; }
         public IList<Question> Questions { get; set; }
-        public QuizSetting Settings { get; set; }
+
+        public bool IsShowTime { get; set; } = true;
+        [Required]
+        public long TimeLimit { get; set; } = 999999;
+        [Required]
+        public byte PassingScore { get; set; } = 100;
+        public uint QuestionsLimit { get; set; } = 10;
     }
 }

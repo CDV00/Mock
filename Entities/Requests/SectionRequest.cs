@@ -20,6 +20,6 @@ namespace Course.BLL.Requests
         public IList<AssignmentForUpdateRequest> Assignments { get; set; }
         public IList<QuizForUpdateRequest> Quizzes { get; set; }
         public bool IsDeleted { get; set; } = false;
-        public bool IsNew { get; set; }
+        public bool IsNew { get; set; } = true;
     }
 }

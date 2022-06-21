@@ -10,5 +10,7 @@ namespace Course.BLL.DTO
     public class DownloadResponse : BaseResponse
     {
         public byte[] fileData { set; get; }
+        public byte[] FileData { get; set; }
+        public string Name { get; set; }
     }
 }

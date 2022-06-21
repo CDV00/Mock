@@ -7,6 +7,7 @@ using Google.Apis.Download;
 using Google.Apis.Upload;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using MOCK_Course.BLL.Services.Implementations;
 using System;
 using System.IO;
 using System.Linq;
@@ -19,9 +20,11 @@ namespace Course.BLL.Services
     public class UploadFileService : IUploadFileService
     {
         private readonly IConfiguration _configuration;
-        public UploadFileService(IConfiguration configuration)
+        private readonly IGoogleService _googleService;
+        public UploadFileService(IConfiguration configuration, IGoogleService googleService)
         {
             _configuration = configuration;
+            _googleService = googleService;
         }
 
         public async Task<DownloadResponse> DownloadFile(string fileName)
@@ -32,7 +35,7 @@ namespace Course.BLL.Services
                 var dbx = new DropboxClient(_configuration["DropboxServer:accessToken"]);
                 using (var response = await dbx.Files.DownloadAsync(_configuration["DropboxServer:folder"] + fileName))
                 {
-                    var result =  await response.GetContentAsByteArrayAsync();
+                    var result = await response.GetContentAsByteArrayAsync();
                     Console.WriteLine(response.Response.IsDownloadable.ToString());
                     return new DownloadResponse()
                     {
@@ -52,81 +55,55 @@ namespace Course.BLL.Services
                 };
             }
         }
-        public async Task<DownloadResponse> DownloadFileGoogleDrive(string fileId)
+        public async Task<UploadResponse> UploadGoogleDrive(IFormFile file)
         {
             try
             {
-                var service = GoogleService.CreateService();
-                var response = new DownloadResponse()
+                var serviceGoogle = await _googleService.CreateDriveService();
+
+                var fileList = serviceGoogle.Files.List();
+
+
+                var driveFile = new Google.Apis.Drive.v3.Data.File
                 {
-                    IsSuccess = true
+                    Name = file.FileName,
+                    Parents = new String[]
+                {
+                    "15S5mwYkKEt7q8oaP_JIOxcorsAuTRZln"
+                }
                 };
-                var request = service.Files.Export(fileId, "application/pdf");
-                var stream = new MemoryStream();
-
-                // Add a handler which will be notified on progress changes.
-                // It will notify on each chunk download and when the
-                // download is completed or failed.
-
-                //request.MediaDownloader.ProgressChanged +=
-                //    progress =>
-                //    {
-                //        switch (progress.Status)
-                //        {
-
-                //            case DownloadStatus.Failed:
-                //                {
-                //                    response.IsSuccess = false;
-                //                    break;
-                //                }
-
-                //        }
-                //    };
-                request.MediaDownloader.ProgressChanged +=
-                    progress =>
+                var request = serviceGoogle.Files.Create(driveFile, file.OpenReadStream(), "application/zip");
+                request.Fields = "id";
+                var response = await request.UploadAsync();
+                if (response.Status == UploadStatus.Failed)
+                {
+                    return new UploadResponse()
                     {
-                        switch (progress.Status)
-                        {
-                            case DownloadStatus.Downloading:
-                                {
-                                    Console.WriteLine(progress.BytesDownloaded);
-                                    break;
-                                }
-                            case DownloadStatus.Completed:
-                                {
-                                    Console.WriteLine("Download complete.");
-                                    break;
-                                }
-                            case DownloadStatus.Failed:
-                                {
-                                    Console.WriteLine("Download failed.");
-                                    break;
-                                }
-                        }
+                        IsSuccess = false,
+                        Message = "Upload failed"
                     };
+                }
 
-                request.Download(stream);
-                if (!response.IsSuccess)
+                var fileRequest = request.ResponseBody;
+
+                return new UploadResponse()
                 {
-                    response.StatusCode = "Upload failed";
-                }
-                else
-                {
-                    response.StatusCode = "Upload Success";
-                    response.fileData = stream.ToArray();
-                }
-                return response;
+                    IsSuccess = true,
+                    url = fileRequest.Id
+                };
 
             }
             catch (Exception ex)
             {
-                return new DownloadResponse()
+                return new UploadResponse()
                 {
                     IsSuccess = false,
-                    StatusCode = ex.Message
+                    Message = ex.Message
                 };
             }
+
         }
+
         public async Task<UploadResponse> UploadFile(IFormFile file)
         {
             try
@@ -149,42 +126,97 @@ namespace Course.BLL.Services
                 };
             }
         }
-
-        public async Task<UploadResponse> UploadGoogleDrive(IFormFile file)
+        public async Task<DownloadResponse> DownloadFileGoogleDrive(string fileId)
         {
             try
             {
-                var serviceGoogle = GoogleService.CreateService();
+                var service = await _googleService.CreateDriveService();
 
-                var fileList = serviceGoogle.Files.List();
+                var request = service.Files.Get(fileId);
 
+                var file = await request.ExecuteAsync();
+                request.MediaDownloader.ProgressChanged +=
+                    progress =>
+                    {
+                        switch (progress.Status)
+                        {
 
-                var driveFile = new Google.Apis.Drive.v3.Data.File();
-                driveFile.Name = file.FileName;
-                driveFile.Parents = new String[]
+                            case DownloadStatus.Failed:
+                                {
+                                    throw new Exception("Download Failed");
+                                }
+                        }
+                    };
+                var stream = new MemoryStream();
+                await request.DownloadAsync(stream);
+                var fileName = file.Name;
+                var FileData = stream.ToArray();
+                return new DownloadResponse()
                 {
-                    "1VTJ8KaO4cL6fYi-8I_-6k9G2U7ByGcFT"
+                    IsSuccess = true,
+                    fileData = FileData,
+                    Name = fileName,
                 };
-                var request = serviceGoogle.Files.Create(driveFile, file.OpenReadStream(), null);
-                request.Fields = "id";
-                var response = await request.UploadAsync();
-                return new UploadResponse()
-                {
-                    IsSuccess = false,
-                    url = response.Status.ToString()
 
-                };
             }
             catch (Exception ex)
             {
-                return new UploadResponse()
+                return new DownloadResponse()
                 {
                     IsSuccess = false,
-                    StatusCode = ex.Message
+                    Message = ex.Message
                 };
             }
-
         }
+
+
+        //public async Task<UploadResponse> UploadGoogleDrive(IFormFile file)
+        //{
+        //    try
+        //    {
+        //        var serviceGoogle = await _googleService.CreateDriveService();
+
+        //        var fileList = serviceGoogle.Files.List();
+
+
+        //        var driveFile = new Google.Apis.Drive.v3.Data.File
+        //        {
+        //            Name = file.FileName,
+        //            Parents = new String[]
+        //        {
+        //            "15S5mwYkKEt7q8oaP_JIOxcorsAuTRZln"
+        //        }
+        //        };
+        //        var request = serviceGoogle.Files.Create(driveFile, file.OpenReadStream(), "application/zip");
+        //        request.Fields = "id";
+        //        var response = await request.UploadAsync();
+        //        if (response.Status == UploadStatus.Failed)
+        //        {
+        //            return new UploadResponse()
+        //            {
+        //                IsSuccess = false,
+        //                Message = "Upload failed"
+        //            };
+        //        }
+
+        //        var fileRequest = request.ResponseBody;
+
+        //        return new UploadResponse()
+        //        {
+        //            IsSuccess = true,
+        //            url = fileRequest.Id
+        //        };
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new UploadResponse()
+        //        {
+        //            IsSuccess = false,
+        //            StatusCode = ex.Message
+        //        };
+        //    }
+
+        //}
 
         public async Task<UploadResponse> UploadImage(IFormFile imageFile)
         {

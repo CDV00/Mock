@@ -22,8 +22,14 @@ namespace Course.BLL.Requests
         public string Title { get; set; }
         public string Description { get; set; }
         public IList<QuestionForCreateRequest> Questions { get; set; }
-        public QuizSettingForCreateRequest Settings { get; set; }
         public int Index { get; set; }
+
+        public bool IsShowTime { get; set; } = true;
+        [Required]
+        public long TimeLimit { get; set; } = 999999;
+        [Required]
+        public byte PassingScore { get; set; } = 100;
+        public uint QuestionsLimit { get; set; } = 10;
     }
     public class QuizForUpdateRequest
     {
@@ -31,10 +37,16 @@ namespace Course.BLL.Requests
         public string Title { get; set; }
         public string Description { get; set; }
         public IList<QuestionForUpdateRequest> Questions { get; set; }
-        public QuizSettingForUpdateRequest Settings { get; set; }
         public int Index { get; set; }
-        public bool IsDeleted { get; set; }
-        public bool IsNew { get; set; }
+        public bool IsDeleted { get; set; } = false;
+        public bool IsNew { get; set; } = true;
+
+        public bool IsShowTime { get; set; } = true;
+        [Required]
+        public long TimeLimit { get; set; } = 999999;
+        [Required]
+        public byte PassingScore { get; set; } = 100;
+        public uint QuestionsLimit { get; set; } = 10;
     }
 
 }

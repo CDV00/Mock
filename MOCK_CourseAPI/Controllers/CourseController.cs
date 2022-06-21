@@ -69,19 +69,22 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
 
+        #region document
         /// <summary>
         /// Create new course  
         /// </summary>
         /// <remarks>
-        /// ### Remark ###
+        /// ## Remark
         /// Type Question:
         /// - 0: SingleChoice
         /// - 1: MultipleChoice
         /// - 2: SingleLineText
         /// - 3: MiltiText
+        /// Category: 9e47da02-3d3e-248d-a207-d53908753582
         /// </remarks>
         /// <param name="course"></param>
         /// <returns></returns>
+        #endregion
         [HttpPost]
         [Authorize(Roles = "Admin, Instructor")]
         public async Task<ActionResult<ApiOkResponse<CourseDTO>>> Create([FromBody] CourseForCreateRequest course)
@@ -95,8 +98,13 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// Update course by Id
+        /// Update course
         /// </summary>
+        /// <remarks>
+        /// ## Remarks
+        /// When add new records in course like section, quiz, lecture,...
+        /// user must pass IsNew = true. if you want deleted it, just set IsDeleted = true
+        /// </remarks>
         /// <param name="id"></param>
         /// <param name="CoursesUpdateRequest"></param>
         /// <returns>an course</returns>

@@ -27,7 +27,7 @@ namespace Course.BLL.Requests
         public int Index { get; set; }
         public bool IsPreview { get; set; }
         public int TotalTime { get; set; }
-        public bool IsDeleted { get; set; }
-        public bool IsNew { get; set; }
+        public bool IsDeleted { get; set; } = false;
+        public bool IsNew { get; set; } = true;
     }
 }

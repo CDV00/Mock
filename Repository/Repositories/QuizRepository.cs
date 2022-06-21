@@ -33,7 +33,6 @@ namespace Repository.Repositories
             var quizzes = await BuildQuery().FilterByKeyword(parameter.Keyword)
                                             .IncludeSection()
                                             .IncludQuestion()
-                                            .IncludQuizSetting()
                                             .ApplySort(parameter.Orderby)
                                             .Skip((parameter.PageNumber - 1) * parameter.PageSize)
                                             .Take(parameter.PageSize)

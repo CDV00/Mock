@@ -51,12 +51,5 @@ namespace Course.DAL.Queries
                 .Load();
             return this;
         }
-        public IQuizQuery IncludQuizSetting()
-        {
-            Query.Include(c => c.Settings).Load();
-            return this;
-        }
-
-
     }
 }

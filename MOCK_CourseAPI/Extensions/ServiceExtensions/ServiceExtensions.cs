@@ -214,7 +214,6 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IQuestionRepository, QuestionRepository>();
             services.AddScoped<IQuizRepository, QuizRepository>();
             services.AddScoped<IQuizOptionRepository, QuizOptionRepository>();
-            services.AddScoped<IQuizSettingRepository, QuizSettingRepository>();
         }
         /// <summary>
         /// Configure Services
@@ -256,6 +255,7 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IAttachmentService, AttachmentService>();
             services.AddScoped<IUploadFileService, UploadFileService>();
             services.AddScoped<IQuizService, QuizService>();
+            services.AddScoped<IGoogleService, GoogleService>();
         }
 
         public static void ConfigureUpload(this IServiceCollection services)

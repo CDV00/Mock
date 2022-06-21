@@ -242,7 +242,6 @@ namespace Course.DAL.Queries
                  .ThenInclude(qu => qu.Options)
                  .Include(c => c.Sections)
                  .ThenInclude(s => s.Quizzes)
-                 .ThenInclude(q => q.Settings)
                  .Load();
             return this;
         }
