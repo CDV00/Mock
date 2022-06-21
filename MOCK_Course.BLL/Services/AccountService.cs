@@ -567,7 +567,7 @@ namespace Course.BLL.Services
                 var result = await _userManager.CreateAsync(appUser);
                 if (!result.Succeeded)
                     throw new Exception();
-                await _userManager.AddToRoleAsync(appUser, UserRoles.Student);
+                await _userManager.AddToRoleAsync(appUser, UserRolesConstant.Student);
             }
             user = await _userManager.FindByEmailAsync(payload.Email);
             var userRoles = await _userManager.GetRolesAsync(user);

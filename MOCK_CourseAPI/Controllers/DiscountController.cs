@@ -15,6 +15,8 @@ using Entities.Responses;
 using Entities.Constants;
 using Course.BLL.Share.RequestFeatures;
 using Entities.ParameterRequest;
+using System.Text.Json;
+using Entities.Extension;
 
 namespace CourseAPI.Controllers
 {
@@ -36,12 +38,16 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<ApiOkResponses<PagedList<DiscountDTO_>>>> GetAllDiscount([FromQuery] DiscountParameters parameter)
+        public async Task<ActionResult<ApiOkResponses<DiscountDTO_>>> GetAllDiscount([FromQuery] DiscountParameters parameter)
         {
             var userId = User.GetUserId();
             var result = await _discountService.GetAllDiscount(userId, parameter);
             if (!result.IsSuccess)
                 return ProcessError(result);
+            var coursePagedList = result.GetResult<PagedList<SavedCoursesDTO>>();
+
+            Response.Headers.Add("X-Pagination",
+                              JsonSerializer.Serialize(coursePagedList.MetaData));
 
             return Ok(result);
         }

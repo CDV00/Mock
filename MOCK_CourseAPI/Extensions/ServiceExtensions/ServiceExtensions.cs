@@ -154,6 +154,7 @@ namespace CourseAPI.Extensions.ServiceExtensions
                     Scheme = "Bearer"
                 });
 
+
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {

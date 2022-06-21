@@ -10,6 +10,7 @@ using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
 using Course.BLL.Share.RequestFeatures;
 using Course.DAL.DTOs;
+using Entities.Responses;
 
 namespace Course.BLL.Services
 {
@@ -37,25 +38,14 @@ namespace Course.BLL.Services
         //load attacment
         // Todo: filter and paging
         /// <summary>
-        /// Get all course review
+        /// Get all assignment
         /// </summary>
         /// <returns></returns>
-        public async Task<PagedList<AssignmentDTO>> GetAll(AssignmentParameters assignmentParameters)
+        public async Task<ApiBaseResponse> GetAllAssignment(AssignmentParameters parameter)
         {
-            var assignment = await _assignmentRepository.BuildQuery()
-                                                        .FilterByKeyword(assignmentParameters.Keyword)
-                                                        .IncludeSection()
-                                                        .ApplySort(assignmentParameters.Orderby)
-                                                        .Skip((assignmentParameters.PageNumber - 1) * assignmentParameters.PageSize)
-                                                        .Take(assignmentParameters.PageSize)
-                                                        .ToListAsync(c => _mapper.Map<AssignmentDTO>(c));
+            var assignments = await _assignmentRepository.GetAllAssignment(parameter);
 
-            var count = await _assignmentRepository.BuildQuery()
-                                                   .FilterByKeyword(assignmentParameters.Keyword)
-                                                   .CountAsync();
-            var pageList = new PagedList<AssignmentDTO>(assignment, count, assignmentParameters.PageNumber, assignmentParameters.PageSize);
-
-            return pageList;
+            return new ApiOkResponse<PagedList<AssignmentDTO>>(assignments);
         }
         ////public async Task<Response<AssignmentDTO>> Add(AssignmentForCreateRequest assignmentForCreateRequest)
         ////{
@@ -74,7 +64,7 @@ namespace Course.BLL.Services
         ////    }
         ////}
         ///
-        
+
         //Quiz; Get all theo sectionid 
 
 

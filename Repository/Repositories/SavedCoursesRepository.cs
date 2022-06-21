@@ -43,5 +43,11 @@ namespace Repository.Repositories
 
             return new PagedList<SavedCoursesDTO>(savedCourses, count, savedCoursesParameters.PageNumber, savedCoursesParameters.PageSize);
         }
+        public async Task<bool> CheckExistSaveCourse(Guid courseId, Guid userId)
+        {
+            return await BuildQuery().FilterByUserId(userId)
+                                     .FilterByCourseId(courseId)
+                                     .AnyAsync();
+        }
     }
 }

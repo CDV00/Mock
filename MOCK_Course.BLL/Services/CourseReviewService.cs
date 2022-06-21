@@ -222,6 +222,8 @@ namespace Course.BLL.Services
         {
             try
             {
+                if (courseId is null && userId is null)
+                    return new Response<float>(false, "must pass userId or CourseId", "400");
                 var IsExistEnrolls = await _enrollmentRepository.BuildQuery()
                                                                 .FilterByCourseId(courseId)
                                                                 .FilterByUserId(userId)
@@ -246,6 +248,9 @@ namespace Course.BLL.Services
         {
             try
             {
+                if (courseId is null && userId is null)
+                    return new Response<List<float>>(false, "must pass userId or CourseId", "400");
+
                 var IsExistEnrolls = await _enrollmentRepository.BuildQuery()
                                                                 .FilterByCourseId(courseId)
                                                                 .FilterByUserId(userId)
@@ -293,10 +298,10 @@ namespace Course.BLL.Services
 
                 if (courseReview == null)
                 {
-                    return new Response<BaseResponse>(false,null);
+                    return new Response<BaseResponse>(false, null);
                 }
 
-                return new Response<BaseResponse>(true,null);
+                return new Response<BaseResponse>(true, null);
             }
             catch (Exception ex)
             {
@@ -378,10 +383,10 @@ namespace Course.BLL.Services
                 var courses = await _courseReviewRepository.BuildQuery()
                                                            .FilterByUserId(userId)
                                                            .GetAvgRate();
-                if(courses != 0)
+                if (courses != 0)
                 {
                     return new Response<float>(true, 0);
-                } 
+                }
                 return new Response<float>(true, courses);
             }
             catch (Exception ex)
@@ -402,12 +407,12 @@ namespace Course.BLL.Services
                 var sumRating = await _courseReviewRepository.BuildQuery()
                                                              .FilterByUserId(userId)
                                                              .CountAsync();
-                
-                if(sumRating == 0)
+
+                if (sumRating == 0)
                 {
                     return new Response<List<float>>(true, new() { 0, 0, 0, 0, 0 });
                 }
-                
+
                 List<float> rates = new();
 
                 for (var i = 1; i <= 5; i++)
