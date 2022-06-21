@@ -85,7 +85,7 @@ namespace Course.BLL.Services
                 var user = _mapper.Map<AppUser>(registerRequest);
                 user.Description = registerRequest.Description;
                 GetAvartarUser(user);
-                user.CreatedAt = DateTime.Now;
+                user.CreatedAt = DateTime.Now;//await AddCodeNumber(user.Email, codeNumber);
 
                 var result = await _userManager.CreateAsync(user, registerRequest.Password);
 
@@ -110,7 +110,11 @@ namespace Course.BLL.Services
                 userResponse.Role = string.Join(",", roles);
 
                 string codeNumber = CreateCodeNumber().Result.ToString();
-                await AddCodeNumber(user.Email, codeNumber);
+                bool isAddCodeNumber = await AddCodeNumber(user.Email, codeNumber);
+                if (!isAddCodeNumber)
+                {
+                    return new BaseResponse(false, "Something went wrong!", null);
+                }
                 await SendEmailConfirm(user.Email, "Register", codeNumber);
                 return new BaseResponse(true);
 
@@ -129,12 +133,17 @@ namespace Course.BLL.Services
         public async Task<BaseResponse> Confirm(string email, string codeNumber)
         {
             var user = await _userManager.FindByEmailAsync(email);
-            if (user.CodeNumber != codeNumber || DateTime.Now >= user.UpdatedAt.Value.AddMinutes(3))
+            DateTime endTime = (user.UpdatedAt != null) ? user.UpdatedAt.Value.AddMinutes(3) : user.CreatedAt.AddMinutes(3);
+            if (user.CodeNumber != codeNumber || DateTime.Now >= endTime)
             {
                 return new Response<BaseResponse>(false, "Something went wrong!", null);
             }
             user.EmailConfirmed = true;
             await _userManager.UpdateAsync(user);
+            //
+            codeNumber = CreateCodeNumber().Result.ToString();
+            await AddCodeNumber(user.Email, codeNumber);
+            
             return new BaseResponse(true);
         }
 
@@ -351,7 +360,7 @@ namespace Course.BLL.Services
             return new Response<BaseResponse>(true);
         }
         //
-        private async Task AddCodeNumber(string email, string codeNumber)
+        private async Task<bool> AddCodeNumber(string email, string codeNumber)
         {
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
@@ -360,7 +369,8 @@ namespace Course.BLL.Services
             }
             user.CodeNumber = codeNumber;
             user.UpdatedAt = DateTime.Now;
-            await _userManager.UpdateAsync(user);
+            var result = await _userManager.UpdateAsync(user);
+            return result.Succeeded;
         }
         //
         private async Task<string> CreateCodeNumber()
@@ -373,7 +383,11 @@ namespace Course.BLL.Services
         public async Task<BaseResponse> ResetCodeNumber(string email, string working)
         {
             string codeNumber = CreateCodeNumber().Result.ToString();
-            AddCodeNumber(email, codeNumber);
+            bool isAddCodeNumber = await AddCodeNumber(email, codeNumber);
+            if (!isAddCodeNumber)
+            {
+                return new Response<BaseResponse>(false, "Something went wrong!", null);
+            }
             SendEmailConfirm(email, working, codeNumber);
             return new BaseResponse(true);
         }
@@ -392,7 +406,11 @@ namespace Course.BLL.Services
                     return new Response<BaseResponse>(false, "No user associated with email", null);
                 }
                 string codeNumber = CreateCodeNumber().Result.ToString();
-                await AddCodeNumber(email, codeNumber);
+                bool isAddCodeNumber = await AddCodeNumber(user.Email, codeNumber);
+                if (!isAddCodeNumber)
+                {
+                    return new Response<BaseResponse>(false, "Something went wrong!",null);
+                }
                 await SendEmailConfirm(user.Email, "Forget PassWord", codeNumber);
                 return new Response<BaseResponse>(true, null, null);
             }
@@ -421,6 +439,8 @@ namespace Course.BLL.Services
                 }
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var Result = await _userManager.ResetPasswordAsync(user, token, resetPasswordRequest.newPassword);
+                string codeNumber = CreateCodeNumber().Result.ToString();
+                await AddCodeNumber(user.Email, codeNumber);
                 if (!Result.Succeeded)
                 {
                     return new Response<BaseResponse>(false, "Something went wrong!", null);
