@@ -26,7 +26,6 @@ namespace Course.BLL.Requests
     public class QuizSettingForUpdateRequest
     {
         public Guid Id { get; set; }
-        public string FileUrl { get; set; }
         public bool IsGradable { get; set; } = false;
         public bool IsShowTime { get; set; } = false;
         public long TimeLimit { get; set; }

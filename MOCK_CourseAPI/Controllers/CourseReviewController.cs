@@ -11,13 +11,16 @@ using System.Collections.Generic;
 using System.Text.Json;
 using Course.BLL.Share.RequestFeatures;
 using Entities.ParameterRequest;
+using CourseAPI.Presentation.Controllers;
+using Entities.Responses;
+using Entities.Extension;
 
 namespace CourseAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class CourseReviewController : ControllerBase
+    public class CourseReviewController : ApiControllerBase
     {
         private readonly ICourseReviewService _courseReviewService;
         public CourseReviewController(ICourseReviewService courseReviewService)
@@ -33,14 +36,17 @@ namespace CourseAPI.Controllers
         /// <returns></returns>
         [HttpGet("Get-all")]
         [AllowAnonymous]
-        public async Task<ActionResult<Responses<CourseReviewDTO>>> GetAllCourses([FromQuery] Guid courseId, [FromQuery] CourseReviewParameters courseReviewParameters)
+        public async Task<ActionResult<ApiOkResponses<CourseReviewDTO>>> GetAllCourses([FromQuery] Guid courseId, [FromQuery] CourseReviewParameters courseReviewParameters)
         {
             var result = await _courseReviewService.GetAll(courseId, courseReviewParameters);
+            if (!result.IsSuccess)
+                return ProcessError(result);
+            var coursePagedList = result.GetResult<PagedList<CourseReviewDTO>>();
 
             Response.Headers.Add("X-Pagination",
-                                 JsonSerializer.Serialize(result.MetaData));
+                              JsonSerializer.Serialize(coursePagedList.MetaData));
 
-            return Ok(new Responses<CourseReviewDTO>(true, result));
+            return Ok(result);
         }
 
 
@@ -50,11 +56,18 @@ namespace CourseAPI.Controllers
         /// <param name="courseReviewRequest"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Responses<CourseReviewDTO>>> Add(CourseReviewRequest courseReviewRequest)
+        //public async Task<ActionResult<Responses<CourseReviewDTO>>> Add(CourseReviewRequest courseReviewRequest)
+        //{
+        //    var result = await _courseReviewService.Add(courseReviewRequest);
+        //    if (result.IsSuccess == false)
+        //        return BadRequest(result);
+        //    return Ok(result);
+        //}
+        public async Task<ActionResult<ApiOkResponse<CourseReviewDTO>>> Add(CourseReviewRequest courseReviewRequest)
         {
             var result = await _courseReviewService.Add(courseReviewRequest);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
+            if (!result.IsSuccess)
+                return ProcessError(result);
             return Ok(result);
         }
 
@@ -65,11 +78,12 @@ namespace CourseAPI.Controllers
         /// <param name="courseReviewUpdateRequest"></param>
         /// <returns></returns>
         [HttpPut()]
-        public async Task<ActionResult<BaseResponse>> Update(Guid id, CourseReviewUpdateRequest courseReviewUpdateRequest)
+        public async Task<ActionResult<ApiOkResponse<CourseReviewDTO>>> Update(Guid id, CourseReviewUpdateRequest courseReviewUpdateRequest)
         {
             var result = await _courseReviewService.Update(id, courseReviewUpdateRequest);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
+            if (!result.IsSuccess)
+                return ProcessError(result);
+
             return Ok(result);
         }
 
@@ -82,8 +96,9 @@ namespace CourseAPI.Controllers
         public async Task<ActionResult<BaseResponse>> Delete(Guid id)
         {
             var result = await _courseReviewService.Delete(id);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
+            if (!result.IsSuccess)
+                return ProcessError(result);
+
             return Ok(result);
         }
         /// <summary>
