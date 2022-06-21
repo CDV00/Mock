@@ -213,10 +213,10 @@ namespace CourseAPI.Controllers
         }
         //
         [HttpGet("Get-all-course-reviews-of-instructor")]
-        public async Task<ActionResult<Responses<CourseReviewDTO>>> GetAllCourseReviewsOfIntructor([FromQuery] RequestParameters requestParameters)
+        public async Task<ActionResult<Responses<CourseReviewDTO>>> GetAllCourseReviewsOfIntructor([FromQuery] CourseReviewParameters courseReviewParameters)
         {
             var userId = User.GetUserId();
-            var result = await _courseReviewService.GetAllCourseReviewOfIntructor(requestParameters, userId);
+            var result = await _courseReviewService.GetAllCourseReviewOfIntructor(courseReviewParameters, userId);
             Response.Headers.Add("X-Pagination",
                                 JsonSerializer.Serialize(result.MetaData));
 

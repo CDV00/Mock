@@ -303,20 +303,23 @@ namespace Course.BLL.Services
             }
         }
         //
-        public async Task<PagedList<CourseReviewDTO>> GetAllCourseReviewOfIntructor(RequestParameters requestParameters, Guid userId)
+        public async Task<PagedList<CourseReviewDTO>> GetAllCourseReviewOfIntructor(CourseReviewParameters courseReviewParameters, Guid userId)
         {
             var courseReview = await _courseReviewRepository.BuildQuery()
                                                             .FilterCourseByUSer(userId)
                                                             .IncludeEnrollment()
                                                             .IncludeUser()
-                                                            .Skip((requestParameters.PageNumber - 1) * requestParameters.PageSize)
-                                                            .Take(requestParameters.PageSize)
+                                                            .FilterByKeyword(courseReviewParameters.Keyword)
+                                                            .ApplySort(courseReviewParameters.Orderby)
+                                                            .Skip((courseReviewParameters.PageNumber - 1) * courseReviewParameters.PageSize)
+                                                            .Take(courseReviewParameters.PageSize)
                                                             .ToListAsync(cr => _mapper.Map<CourseReviewDTO>(cr));
 
             var count = await _courseReviewRepository.BuildQuery()
                                                      .FilterCourseByUSer(userId)
+                                                     .FilterByKeyword(courseReviewParameters.Keyword)
                                                      .CountAsync();
-            return new PagedList<CourseReviewDTO>(courseReview, count, requestParameters.PageNumber, requestParameters.PageSize);
+            return new PagedList<CourseReviewDTO>(courseReview, count, courseReviewParameters.PageNumber, courseReviewParameters.PageSize);
         }
         public async Task<PagedList<CourseReviewDTO>> GetAllCourseReviewOfUser(Guid userId, CourseReviewParameters courseReviewParameters)
         {
@@ -348,12 +351,9 @@ namespace Course.BLL.Services
                     return new Response<float>(true, 0);
 
                 var courses = await _courseReviewRepository.BuildQuery()
-                                                           .FilterByUserId(userId)
+                                                           .FilterCourseByUSer(userId)
                                                            .GetAvgRate();
-                if (courses != 0)
-                {
-                    return new Response<float>(true, 0);
-                }
+
                 return new Response<float>(true, courses);
             }
             catch (Exception ex)
@@ -372,7 +372,7 @@ namespace Course.BLL.Services
                     return new Response<List<float>>(true, new() { 0, 0, 0, 0, 0 });
 
                 var sumRating = await _courseReviewRepository.BuildQuery()
-                                                             .FilterByUserId(userId)
+                                                             .FilterCourseByUSer(userId)
                                                              .CountAsync();
 
                 if (sumRating == 0)
@@ -385,7 +385,8 @@ namespace Course.BLL.Services
                 for (var i = 1; i <= 5; i++)
                 {
                     rates.Add(await _courseReviewRepository.BuildQuery()
-                                                           .FilterByUserId(userId)
+                                                            //.FilterByUserId(userId)
+                                                            .FilterCourseByUSer(userId)
                                                            .FilterByRating(i)
                                                            .GetAvgRatePercent(sumRating));
                 }
