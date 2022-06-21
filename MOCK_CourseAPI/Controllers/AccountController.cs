@@ -123,7 +123,7 @@ namespace CourseAPI.Controllers
         /// <param name="email"></param>
         /// <param name="working"> Register, forget password</param>
         /// <returns></returns>
-        [HttpPost("Reset-Code-Number")]
+        [HttpGet("Reset-Code-Number")]
         [AllowAnonymous]
         public async Task<ActionResult> ResetCodeNumber(string email, string working)
         {
