@@ -10,8 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog;
-using Elmah.Io.AspNetCore;
-using System;
+using NLog.Web;
 
 namespace CourseAPI
 {
@@ -19,8 +18,9 @@ namespace CourseAPI
     {
         public Startup(IConfiguration configuration)
         {
-            string configFileLog = string.Concat(Directory.GetCurrentDirectory(), "/nlog.config");
-            LogManager.LoadConfiguration(configFileLog);
+            var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+            //string configFileLog = string.Concat(Directory.GetCurrentDirectory(), "/nlog.config");
+            //LogManager.LoadConfiguration(configFileLog);
 
             Configuration = configuration;
         }

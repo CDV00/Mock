@@ -14211,3 +14211,540 @@
 2022-06-21 16:26:35.3063 Trace  Scanning Property LineEnding 'Default' NLog.Targets
 2022-06-21 16:26:35.3063 Trace FileTarget(Name=logfile) has 2 layouts
 2022-06-21 16:26:35.3233 Trace FileTarget(Name=logfile): Using appenderFactory: NLog.Internal.FileAppenders.SingleProcessFileAppender+Factory
+2022-06-21 17:06:10.8342 Info Message Template Auto Format enabled
+2022-06-21 17:06:10.9174 Debug ScanAssembly('NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c')
+2022-06-21 17:06:11.0498 Debug Setting 'NLog.Targets.FileTarget.name' to 'logfile'
+2022-06-21 17:06:11.0750 Debug Setting 'NLog.Targets.FileTarget.fileName' to 'E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\internal_logs\logs\${shortdate}_logfile.txt'
+2022-06-21 17:06:11.0750 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2022-06-21 17:06:11.0943 Trace Scanning ShortDateLayoutRenderer 'Layout Renderer: ${shortdate}'
+2022-06-21 17:06:11.0943 Debug Setting 'NLog.Targets.FileTarget.layout' to '${longdate} ${level:uppercase=true} ${message}'
+2022-06-21 17:06:11.0943 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2022-06-21 17:06:11.0943 Trace Scanning LongDateLayoutRenderer 'Layout Renderer: ${longdate}'
+2022-06-21 17:06:11.1071 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2022-06-21 17:06:11.1071 Trace Scanning LevelLayoutRenderer 'Layout Renderer: ${level}'
+2022-06-21 17:06:11.1071 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2022-06-21 17:06:11.1071 Trace Scanning MessageLayoutRenderer 'Layout Renderer: ${message}'
+2022-06-21 17:06:11.1071 Info Adding target FileTarget(Name=logfile)
+2022-06-21 17:06:11.1071 Debug Registered target logfile: NLog.Targets.FileTarget
+2022-06-21 17:06:11.1071 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Failed to create Target of type: Database
+ ---> System.ArgumentException: Target symbol-name is unknown: 'Database'. Extension NLog.Database not included?
+   at NLog.Config.Factory`2.CreateInstance(String itemName)
+   at NLog.Config.LoggingConfigurationParser.FactoryCreateInstance[T](String classType, INamedItemFactory`2 factory)
+   --- End of inner exception stack trace ---
+2022-06-21 17:06:11.2219 Trace ParseRulesElement
+2022-06-21 17:06:11.2344 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'db' not found for logging rule: *.
+2022-06-21 17:06:11.2585 Debug Watching file-filter 'nlog.config' in directory: E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI
+2022-06-21 17:06:11.2637 Debug --- NLog configuration dump ---
+2022-06-21 17:06:11.2637 Debug Targets:
+2022-06-21 17:06:11.2637 Debug FileTarget(Name=logfile)
+2022-06-21 17:06:11.2637 Debug Rules:
+2022-06-21 17:06:11.2786 Debug logNamePattern: (:All) levels: [ Debug Info Warn Error Fatal ] writeTo: [ logfile ]
+2022-06-21 17:06:11.2786 Debug logNamePattern: (:All) levels: [ Error Fatal ] writeTo: [ ]
+2022-06-21 17:06:11.2786 Debug --- End of NLog configuration dump ---
+2022-06-21 17:06:11.2786 Trace FindReachableObject<System.Object>:
+2022-06-21 17:06:11.2939 Trace Scanning LoggingRule 'logNamePattern: (:All) levels: [ Debug Info Warn Error Fatal ] writeTo: [ logfile ]'
+2022-06-21 17:06:11.2939 Trace  Scanning Property Targets 'System.Collections.Generic.List`1[NLog.Targets.Target]' System.Collections.Generic
+2022-06-21 17:06:11.2939 Trace  Scanning FileTarget 'FileTarget(Name=logfile)'
+2022-06-21 17:06:11.2939 Trace   Scanning Property FileName 'E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\internal_logs\logs\${shortdate}_logfile.txt' NLog.Layouts
+2022-06-21 17:06:11.2939 Trace   Scanning SimpleLayout 'E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\internal_logs\logs\${shortdate}_logfile.txt'
+2022-06-21 17:06:11.2939 Trace    Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic
+2022-06-21 17:06:11.3078 Trace    Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2022-06-21 17:06:11.3078 Trace    Scanning ShortDateLayoutRenderer 'Layout Renderer: ${shortdate}'
+2022-06-21 17:06:11.3078 Trace    Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2022-06-21 17:06:11.3078 Trace   Scanning Property Layout '${longdate} ${level:uppercase=true} ${message}' NLog.Layouts
+2022-06-21 17:06:11.3078 Trace   Scanning SimpleLayout '${longdate} ${level:uppercase=true} ${message}'
+2022-06-21 17:06:11.3078 Trace    Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic
+2022-06-21 17:06:11.3078 Trace    Scanning LongDateLayoutRenderer 'Layout Renderer: ${longdate}'
+2022-06-21 17:06:11.3078 Trace    Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2022-06-21 17:06:11.3243 Trace    Scanning LevelLayoutRenderer 'Layout Renderer: ${level}'
+2022-06-21 17:06:11.3243 Trace    Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2022-06-21 17:06:11.3243 Trace    Scanning MessageLayoutRenderer 'Layout Renderer: ${message}'
+2022-06-21 17:06:11.3243 Trace   Scanning Property LineEnding 'Default' NLog.Targets
+2022-06-21 17:06:11.3243 Trace  Scanning Property ChildRules 'System.Collections.Generic.List`1[NLog.Config.LoggingRule]' System.Collections.Generic
+2022-06-21 17:06:11.3243 Trace  Scanning Property Filters 'System.Collections.Generic.List`1[NLog.Filters.Filter]' System.Collections.Generic
+2022-06-21 17:06:11.3243 Trace Scanning LoggingRule 'logNamePattern: (:All) levels: [ Error Fatal ] writeTo: [ ]'
+2022-06-21 17:06:11.3243 Trace  Scanning Property Targets 'System.Collections.Generic.List`1[NLog.Targets.Target]' System.Collections.Generic
+2022-06-21 17:06:11.3243 Trace  Scanning Property ChildRules 'System.Collections.Generic.List`1[NLog.Config.LoggingRule]' System.Collections.Generic
+2022-06-21 17:06:11.3243 Trace  Scanning Property Filters 'System.Collections.Generic.List`1[NLog.Filters.Filter]' System.Collections.Generic
+2022-06-21 17:06:11.3435 Info Validating config: TargetNames=logfile, ConfigItems=13, FilePath=E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\nlog.config
+2022-06-21 17:06:11.3435 Debug Unused target checking is started... Rule Count: 2, Target Count: 1
+2022-06-21 17:06:11.3572 Debug Unused target checking is completed. Total Rule Count: 2, Total Target Count: 1, Unused Target Count: 0
+2022-06-21 17:06:11.3572 Trace Initializing Layout Renderer: ${message}
+2022-06-21 17:06:11.3572 Trace Initializing Layout Renderer: ${literal}
+2022-06-21 17:06:11.3572 Trace Initializing Layout Renderer: ${level}
+2022-06-21 17:06:11.3713 Trace Initializing Layout Renderer: ${literal}
+2022-06-21 17:06:11.3713 Trace Initializing Layout Renderer: ${longdate}
+2022-06-21 17:06:11.3713 Trace Initializing ${longdate} ${level:uppercase=true} ${message}
+2022-06-21 17:06:11.3713 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2022-06-21 17:06:11.3866 Trace Scanning SimpleLayout '${longdate} ${level:uppercase=true} ${message}'
+2022-06-21 17:06:11.3866 Trace  Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic
+2022-06-21 17:06:11.3866 Trace  Scanning LongDateLayoutRenderer 'Layout Renderer: ${longdate}'
+2022-06-21 17:06:11.3866 Trace  Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2022-06-21 17:06:11.3866 Trace  Scanning LevelLayoutRenderer 'Layout Renderer: ${level}'
+2022-06-21 17:06:11.3866 Trace  Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2022-06-21 17:06:11.3866 Trace  Scanning MessageLayoutRenderer 'Layout Renderer: ${message}'
+2022-06-21 17:06:11.4057 Trace Initializing Layout Renderer: ${literal}
+2022-06-21 17:06:11.4057 Trace Initializing Layout Renderer: ${shortdate}
+2022-06-21 17:06:11.4057 Trace Initializing Layout Renderer: ${literal}
+2022-06-21 17:06:11.4057 Trace Initializing E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\internal_logs\logs\${shortdate}_logfile.txt
+2022-06-21 17:06:11.4057 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2022-06-21 17:06:11.4057 Trace Scanning SimpleLayout 'E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\internal_logs\logs\${shortdate}_logfile.txt'
+2022-06-21 17:06:11.4057 Trace  Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic
+2022-06-21 17:06:11.4057 Trace  Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2022-06-21 17:06:11.4057 Trace  Scanning ShortDateLayoutRenderer 'Layout Renderer: ${shortdate}'
+2022-06-21 17:06:11.4173 Trace  Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2022-06-21 17:06:11.4173 Trace Initializing FileTarget(Name=logfile)
+2022-06-21 17:06:11.4173 Trace FindReachableObject<NLog.Layouts.Layout>:
+2022-06-21 17:06:11.4173 Trace Scanning FileTarget 'FileTarget(Name=logfile)'
+2022-06-21 17:06:11.4173 Trace  Scanning Property FileName 'E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\internal_logs\logs\${shortdate}_logfile.txt' NLog.Layouts
+2022-06-21 17:06:11.4173 Trace  Scanning SimpleLayout 'E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\internal_logs\logs\${shortdate}_logfile.txt'
+2022-06-21 17:06:11.4173 Trace  Scanning Property Layout '${longdate} ${level:uppercase=true} ${message}' NLog.Layouts
+2022-06-21 17:06:11.4173 Trace  Scanning SimpleLayout '${longdate} ${level:uppercase=true} ${message}'
+2022-06-21 17:06:11.4173 Trace  Scanning Property LineEnding 'Default' NLog.Targets
+2022-06-21 17:06:11.4173 Trace FileTarget(Name=logfile) has 2 layouts
+2022-06-21 17:06:11.4349 Trace FileTarget(Name=logfile): Using appenderFactory: NLog.Internal.FileAppenders.SingleProcessFileAppender+Factory
+2022-06-21 17:06:12.6288 Debug ScanAssembly('NLog.Web.AspNetCore, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c')
+2022-06-21 17:06:12.6288 Trace Assembly 'NLog.Web.AspNetCore, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c' will be hidden in callsite stacktrace
+2022-06-21 17:06:12.7432 Debug Hide assemblies for callsite
+2022-06-21 17:06:12.7450 Debug ScanAssembly('NLog.Extensions.Logging, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c')
+2022-06-21 17:06:12.7450 Trace Assembly 'NLog.Extensions.Logging, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c' will be hidden in callsite stacktrace
+2022-06-21 17:06:12.7450 Trace Assembly 'Microsoft.Extensions.Logging.Abstractions, Version=5.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60' will be hidden in callsite stacktrace
+2022-06-21 17:06:12.7450 Trace Assembly 'Microsoft.Extensions.Logging, Version=5.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60' will be hidden in callsite stacktrace
+2022-06-21 17:06:12.7450 Trace FindReachableObject<System.Object>:
+2022-06-21 17:06:12.7450 Trace Scanning LoggingRule 'logNamePattern: (:All) levels: [ Debug Info Warn Error Fatal ] writeTo: [ logfile ]'
+2022-06-21 17:06:12.7450 Trace  Scanning Property Targets 'System.Collections.Generic.List`1[NLog.Targets.Target]' System.Collections.Generic
+2022-06-21 17:06:12.7450 Trace  Scanning FileTarget 'FileTarget(Name=logfile)'
+2022-06-21 17:06:12.7619 Trace   Scanning Property FileName 'E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\internal_logs\logs\${shortdate}_logfile.txt' NLog.Layouts
+2022-06-21 17:06:12.7619 Trace   Scanning SimpleLayout 'E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\internal_logs\logs\${shortdate}_logfile.txt'
+2022-06-21 17:06:12.7619 Trace    Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic
+2022-06-21 17:06:12.7619 Trace    Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2022-06-21 17:06:12.7619 Trace    Scanning ShortDateLayoutRenderer 'Layout Renderer: ${shortdate}'
+2022-06-21 17:06:12.7619 Trace    Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2022-06-21 17:06:12.7619 Trace   Scanning Property Layout '${longdate} ${level:uppercase=true} ${message}' NLog.Layouts
+2022-06-21 17:06:12.7619 Trace   Scanning SimpleLayout '${longdate} ${level:uppercase=true} ${message}'
+2022-06-21 17:06:12.7619 Trace    Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic
+2022-06-21 17:06:12.7619 Trace    Scanning LongDateLayoutRenderer 'Layout Renderer: ${longdate}'
+2022-06-21 17:06:12.7619 Trace    Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2022-06-21 17:06:12.7619 Trace    Scanning LevelLayoutRenderer 'Layout Renderer: ${level}'
+2022-06-21 17:06:12.7757 Trace    Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2022-06-21 17:06:12.7757 Trace    Scanning MessageLayoutRenderer 'Layout Renderer: ${message}'
+2022-06-21 17:06:12.7757 Trace   Scanning Property LineEnding 'Default' NLog.Targets
+2022-06-21 17:06:12.7757 Trace  Scanning Property ChildRules 'System.Collections.Generic.List`1[NLog.Config.LoggingRule]' System.Collections.Generic
+2022-06-21 17:06:12.7757 Trace  Scanning Property Filters 'System.Collections.Generic.List`1[NLog.Filters.Filter]' System.Collections.Generic
+2022-06-21 17:06:12.7757 Trace Scanning LoggingRule 'logNamePattern: (:All) levels: [ Error Fatal ] writeTo: [ ]'
+2022-06-21 17:06:12.7757 Trace  Scanning Property Targets 'System.Collections.Generic.List`1[NLog.Targets.Target]' System.Collections.Generic
+2022-06-21 17:06:12.7757 Trace  Scanning Property ChildRules 'System.Collections.Generic.List`1[NLog.Config.LoggingRule]' System.Collections.Generic
+2022-06-21 17:06:12.7757 Trace  Scanning Property Filters 'System.Collections.Generic.List`1[NLog.Filters.Filter]' System.Collections.Generic
+2022-06-21 17:06:12.7757 Info Validating config: TargetNames=logfile, ConfigItems=13, FilePath=E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\nlog.config
+2022-06-21 17:06:12.7757 Trace Initializing Layout Renderer: ${message}
+2022-06-21 17:06:12.7757 Trace Initializing Layout Renderer: ${literal}
+2022-06-21 17:06:12.7920 Trace Initializing Layout Renderer: ${level}
+2022-06-21 17:06:12.7920 Trace Initializing Layout Renderer: ${literal}
+2022-06-21 17:06:12.7920 Trace Initializing Layout Renderer: ${longdate}
+2022-06-21 17:06:12.7920 Trace Initializing ${longdate} ${level:uppercase=true} ${message}
+2022-06-21 17:06:12.7920 Trace Initializing Layout Renderer: ${literal}
+2022-06-21 17:06:12.7920 Trace Initializing Layout Renderer: ${shortdate}
+2022-06-21 17:06:12.7920 Trace Initializing Layout Renderer: ${literal}
+2022-06-21 17:06:12.7920 Trace Initializing E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\internal_logs\logs\${shortdate}_logfile.txt
+2022-06-21 17:06:12.7920 Trace Initializing FileTarget(Name=logfile)
+2022-06-21 17:06:12.7920 Trace FindReachableObject<NLog.Layouts.Layout>:
+2022-06-21 17:06:12.7920 Trace Scanning FileTarget 'FileTarget(Name=logfile)'
+2022-06-21 17:06:12.7920 Trace  Scanning Property FileName 'E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\internal_logs\logs\${shortdate}_logfile.txt' NLog.Layouts
+2022-06-21 17:06:12.8084 Trace  Scanning SimpleLayout 'E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\internal_logs\logs\${shortdate}_logfile.txt'
+2022-06-21 17:06:12.8084 Trace  Scanning Property Layout '${longdate} ${level:uppercase=true} ${message}' NLog.Layouts
+2022-06-21 17:06:12.8084 Trace  Scanning SimpleLayout '${longdate} ${level:uppercase=true} ${message}'
+2022-06-21 17:06:12.8084 Trace  Scanning Property LineEnding 'Default' NLog.Targets
+2022-06-21 17:06:12.8084 Trace FileTarget(Name=logfile) has 2 layouts
+2022-06-21 17:06:12.8084 Trace FindReachableObject<System.Object>:
+2022-06-21 17:06:12.8084 Trace Scanning LoggingRule 'logNamePattern: (:All) levels: [ Debug Info Warn Error Fatal ] writeTo: [ logfile ]'
+2022-06-21 17:06:12.8084 Trace  Scanning Property Targets 'System.Collections.Generic.List`1[NLog.Targets.Target]' System.Collections.Generic
+2022-06-21 17:06:12.8084 Trace  Scanning FileTarget 'FileTarget(Name=logfile)'
+2022-06-21 17:06:12.8084 Trace   Scanning Property FileName 'E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\internal_logs\logs\${shortdate}_logfile.txt' NLog.Layouts
+2022-06-21 17:06:12.8084 Trace   Scanning SimpleLayout 'E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\internal_logs\logs\${shortdate}_logfile.txt'
+2022-06-21 17:06:12.8084 Trace    Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic
+2022-06-21 17:06:12.8237 Trace    Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2022-06-21 17:06:12.8237 Trace    Scanning ShortDateLayoutRenderer 'Layout Renderer: ${shortdate}'
+2022-06-21 17:06:12.8237 Trace    Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2022-06-21 17:06:12.8237 Trace   Scanning Property Layout '${longdate} ${level:uppercase=true} ${message}' NLog.Layouts
+2022-06-21 17:06:12.8237 Trace   Scanning SimpleLayout '${longdate} ${level:uppercase=true} ${message}'
+2022-06-21 17:06:12.8237 Trace    Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic
+2022-06-21 17:06:12.8237 Trace    Scanning LongDateLayoutRenderer 'Layout Renderer: ${longdate}'
+2022-06-21 17:06:12.8237 Trace    Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2022-06-21 17:06:12.8237 Trace    Scanning LevelLayoutRenderer 'Layout Renderer: ${level}'
+2022-06-21 17:06:12.8237 Trace    Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2022-06-21 17:06:12.8237 Trace    Scanning MessageLayoutRenderer 'Layout Renderer: ${message}'
+2022-06-21 17:06:12.8237 Trace   Scanning Property LineEnding 'Default' NLog.Targets
+2022-06-21 17:06:12.8392 Trace  Scanning Property ChildRules 'System.Collections.Generic.List`1[NLog.Config.LoggingRule]' System.Collections.Generic
+2022-06-21 17:06:12.8392 Trace  Scanning Property Filters 'System.Collections.Generic.List`1[NLog.Filters.Filter]' System.Collections.Generic
+2022-06-21 17:06:12.8392 Trace Scanning LoggingRule 'logNamePattern: (:All) levels: [ Error Fatal ] writeTo: [ ]'
+2022-06-21 17:06:12.8392 Trace  Scanning Property Targets 'System.Collections.Generic.List`1[NLog.Targets.Target]' System.Collections.Generic
+2022-06-21 17:06:12.8392 Trace  Scanning Property ChildRules 'System.Collections.Generic.List`1[NLog.Config.LoggingRule]' System.Collections.Generic
+2022-06-21 17:06:12.8392 Trace  Scanning Property Filters 'System.Collections.Generic.List`1[NLog.Filters.Filter]' System.Collections.Generic
+2022-06-21 17:06:12.8392 Info Validating config: TargetNames=logfile, ConfigItems=13, FilePath=E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\nlog.config
+2022-06-21 17:06:12.8392 Trace Initializing Layout Renderer: ${message}
+2022-06-21 17:06:12.8392 Trace Initializing Layout Renderer: ${literal}
+2022-06-21 17:06:12.8392 Trace Initializing Layout Renderer: ${level}
+2022-06-21 17:06:12.8392 Trace Initializing Layout Renderer: ${literal}
+2022-06-21 17:06:12.8392 Trace Initializing Layout Renderer: ${longdate}
+2022-06-21 17:06:12.8392 Trace Initializing ${longdate} ${level:uppercase=true} ${message}
+2022-06-21 17:06:12.8553 Trace Initializing Layout Renderer: ${literal}
+2022-06-21 17:06:12.8553 Trace Initializing Layout Renderer: ${shortdate}
+2022-06-21 17:06:12.8553 Trace Initializing Layout Renderer: ${literal}
+2022-06-21 17:06:12.8553 Trace Initializing E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\internal_logs\logs\${shortdate}_logfile.txt
+2022-06-21 17:06:12.8553 Trace Initializing FileTarget(Name=logfile)
+2022-06-21 17:06:12.8553 Trace FindReachableObject<NLog.Layouts.Layout>:
+2022-06-21 17:06:12.8553 Trace Scanning FileTarget 'FileTarget(Name=logfile)'
+2022-06-21 17:06:12.8553 Trace  Scanning Property FileName 'E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\internal_logs\logs\${shortdate}_logfile.txt' NLog.Layouts
+2022-06-21 17:06:12.8553 Trace  Scanning SimpleLayout 'E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\internal_logs\logs\${shortdate}_logfile.txt'
+2022-06-21 17:06:12.8553 Trace  Scanning Property Layout '${longdate} ${level:uppercase=true} ${message}' NLog.Layouts
+2022-06-21 17:06:12.8553 Trace  Scanning SimpleLayout '${longdate} ${level:uppercase=true} ${message}'
+2022-06-21 17:06:12.8702 Trace  Scanning Property LineEnding 'Default' NLog.Targets
+2022-06-21 17:06:12.8702 Trace FileTarget(Name=logfile) has 2 layouts
+2022-06-21 17:06:12.9192 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.Extensions.Hosting.Internal.ApplicationLifetime
+2022-06-21 17:06:12.9192 Debug Logger Microsoft.Extensions.Hosting.Internal.ApplicationLifetime [Debug] => logfile
+2022-06-21 17:06:12.9192 Debug Logger Microsoft.Extensions.Hosting.Internal.ApplicationLifetime [Info] => logfile
+2022-06-21 17:06:12.9192 Debug Logger Microsoft.Extensions.Hosting.Internal.ApplicationLifetime [Warn] => logfile
+2022-06-21 17:06:12.9192 Debug Logger Microsoft.Extensions.Hosting.Internal.ApplicationLifetime [Error] => logfile
+2022-06-21 17:06:12.9192 Debug Logger Microsoft.Extensions.Hosting.Internal.ApplicationLifetime [Fatal] => logfile
+2022-06-21 17:06:12.9369 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.Extensions.Hosting.Internal.Host
+2022-06-21 17:06:12.9369 Debug Logger Microsoft.Extensions.Hosting.Internal.Host [Debug] => logfile
+2022-06-21 17:06:12.9369 Debug Logger Microsoft.Extensions.Hosting.Internal.Host [Info] => logfile
+2022-06-21 17:06:12.9369 Debug Logger Microsoft.Extensions.Hosting.Internal.Host [Warn] => logfile
+2022-06-21 17:06:12.9369 Debug Logger Microsoft.Extensions.Hosting.Internal.Host [Error] => logfile
+2022-06-21 17:06:12.9369 Debug Logger Microsoft.Extensions.Hosting.Internal.Host [Fatal] => logfile
+2022-06-21 17:06:12.9369 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.Hosting.Lifetime
+2022-06-21 17:06:12.9369 Debug Logger Microsoft.Hosting.Lifetime [Debug] => logfile
+2022-06-21 17:06:12.9369 Debug Logger Microsoft.Hosting.Lifetime [Info] => logfile
+2022-06-21 17:06:12.9486 Debug Logger Microsoft.Hosting.Lifetime [Warn] => logfile
+2022-06-21 17:06:12.9486 Debug Logger Microsoft.Hosting.Lifetime [Error] => logfile
+2022-06-21 17:06:12.9486 Debug Logger Microsoft.Hosting.Lifetime [Fatal] => logfile
+2022-06-21 17:06:13.1899 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.EntityFrameworkCore.Infrastructure
+2022-06-21 17:06:13.1899 Debug Logger Microsoft.EntityFrameworkCore.Infrastructure [Debug] => logfile
+2022-06-21 17:06:13.1899 Debug Logger Microsoft.EntityFrameworkCore.Infrastructure [Info] => logfile
+2022-06-21 17:06:13.1899 Debug Logger Microsoft.EntityFrameworkCore.Infrastructure [Warn] => logfile
+2022-06-21 17:06:13.1899 Debug Logger Microsoft.EntityFrameworkCore.Infrastructure [Error] => logfile
+2022-06-21 17:06:13.1899 Debug Logger Microsoft.EntityFrameworkCore.Infrastructure [Fatal] => logfile
+2022-06-21 17:06:13.2419 Debug FileTarget(Name=logfile): Preparing for new file 'E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\internal_logs\logs\2022-06-21_logfile.txt'
+2022-06-21 17:06:13.2522 Debug FileTarget(Name=logfile): Creating file appender: E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\internal_logs\logs\2022-06-21_logfile.txt
+2022-06-21 17:06:13.2522 Trace FileTarget(Name=logfile): Opening E:\workspace\mocknew\mock3\mock\MOCK_CourseAPI\internal_logs\logs\2022-06-21_logfile.txt with allowFileSharedWriting=False
+2022-06-21 17:06:13.4298 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.Identity.UserManager
+2022-06-21 17:06:13.4298 Debug Logger Microsoft.AspNetCore.Identity.UserManager [Debug] => logfile
+2022-06-21 17:06:13.4505 Debug Logger Microsoft.AspNetCore.Identity.UserManager [Info] => logfile
+2022-06-21 17:06:13.4505 Debug Logger Microsoft.AspNetCore.Identity.UserManager [Warn] => logfile
+2022-06-21 17:06:13.4505 Debug Logger Microsoft.AspNetCore.Identity.UserManager [Error] => logfile
+2022-06-21 17:06:13.4505 Debug Logger Microsoft.AspNetCore.Identity.UserManager [Fatal] => logfile
+2022-06-21 17:06:13.4505 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.DataProtection.TypeForwardingActivator
+2022-06-21 17:06:13.4505 Debug Logger Microsoft.AspNetCore.DataProtection.TypeForwardingActivator [Debug] => logfile
+2022-06-21 17:06:13.4505 Debug Logger Microsoft.AspNetCore.DataProtection.TypeForwardingActivator [Info] => logfile
+2022-06-21 17:06:13.4505 Debug Logger Microsoft.AspNetCore.DataProtection.TypeForwardingActivator [Warn] => logfile
+2022-06-21 17:06:13.4646 Debug Logger Microsoft.AspNetCore.DataProtection.TypeForwardingActivator [Error] => logfile
+2022-06-21 17:06:13.4646 Debug Logger Microsoft.AspNetCore.DataProtection.TypeForwardingActivator [Fatal] => logfile
+2022-06-21 17:06:13.4889 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager
+2022-06-21 17:06:13.4889 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager [Debug] => logfile
+2022-06-21 17:06:13.4889 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager [Info] => logfile
+2022-06-21 17:06:13.4889 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager [Warn] => logfile
+2022-06-21 17:06:13.4889 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager [Error] => logfile
+2022-06-21 17:06:13.4889 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager [Fatal] => logfile
+2022-06-21 17:06:13.4985 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.CngGcmAuthenticatedEncryptorFactory
+2022-06-21 17:06:13.4985 Debug Logger Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.CngGcmAuthenticatedEncryptorFactory [Debug] => logfile
+2022-06-21 17:06:13.4985 Debug Logger Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.CngGcmAuthenticatedEncryptorFactory [Info] => logfile
+2022-06-21 17:06:13.4985 Debug Logger Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.CngGcmAuthenticatedEncryptorFactory [Warn] => logfile
+2022-06-21 17:06:13.4985 Debug Logger Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.CngGcmAuthenticatedEncryptorFactory [Error] => logfile
+2022-06-21 17:06:13.4985 Debug Logger Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.CngGcmAuthenticatedEncryptorFactory [Fatal] => logfile
+2022-06-21 17:06:13.4985 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.CngCbcAuthenticatedEncryptorFactory
+2022-06-21 17:06:13.4985 Debug Logger Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.CngCbcAuthenticatedEncryptorFactory [Debug] => logfile
+2022-06-21 17:06:13.4985 Debug Logger Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.CngCbcAuthenticatedEncryptorFactory [Info] => logfile
+2022-06-21 17:06:13.4985 Debug Logger Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.CngCbcAuthenticatedEncryptorFactory [Warn] => logfile
+2022-06-21 17:06:13.5112 Debug Logger Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.CngCbcAuthenticatedEncryptorFactory [Error] => logfile
+2022-06-21 17:06:13.5112 Debug Logger Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.CngCbcAuthenticatedEncryptorFactory [Fatal] => logfile
+2022-06-21 17:06:13.5112 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ManagedAuthenticatedEncryptorFactory
+2022-06-21 17:06:13.5112 Debug Logger Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ManagedAuthenticatedEncryptorFactory [Debug] => logfile
+2022-06-21 17:06:13.5112 Debug Logger Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ManagedAuthenticatedEncryptorFactory [Info] => logfile
+2022-06-21 17:06:13.5112 Debug Logger Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ManagedAuthenticatedEncryptorFactory [Warn] => logfile
+2022-06-21 17:06:13.5112 Debug Logger Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ManagedAuthenticatedEncryptorFactory [Error] => logfile
+2022-06-21 17:06:13.5112 Debug Logger Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ManagedAuthenticatedEncryptorFactory [Fatal] => logfile
+2022-06-21 17:06:13.5717 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlEncryptor
+2022-06-21 17:06:13.5734 Debug Logger Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlEncryptor [Debug] => logfile
+2022-06-21 17:06:13.5734 Debug Logger Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlEncryptor [Info] => logfile
+2022-06-21 17:06:13.5734 Debug Logger Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlEncryptor [Warn] => logfile
+2022-06-21 17:06:13.5734 Debug Logger Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlEncryptor [Error] => logfile
+2022-06-21 17:06:13.5734 Debug Logger Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlEncryptor [Fatal] => logfile
+2022-06-21 17:06:13.5734 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.DataProtection.Repositories.FileSystemXmlRepository
+2022-06-21 17:06:13.5734 Debug Logger Microsoft.AspNetCore.DataProtection.Repositories.FileSystemXmlRepository [Debug] => logfile
+2022-06-21 17:06:13.5734 Debug Logger Microsoft.AspNetCore.DataProtection.Repositories.FileSystemXmlRepository [Info] => logfile
+2022-06-21 17:06:13.5734 Debug Logger Microsoft.AspNetCore.DataProtection.Repositories.FileSystemXmlRepository [Warn] => logfile
+2022-06-21 17:06:13.5734 Debug Logger Microsoft.AspNetCore.DataProtection.Repositories.FileSystemXmlRepository [Error] => logfile
+2022-06-21 17:06:13.5734 Debug Logger Microsoft.AspNetCore.DataProtection.Repositories.FileSystemXmlRepository [Fatal] => logfile
+2022-06-21 17:06:13.6370 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.DataProtection.KeyManagement.DefaultKeyResolver
+2022-06-21 17:06:13.6370 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.DefaultKeyResolver [Debug] => logfile
+2022-06-21 17:06:13.6370 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.DefaultKeyResolver [Info] => logfile
+2022-06-21 17:06:13.6370 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.DefaultKeyResolver [Warn] => logfile
+2022-06-21 17:06:13.6370 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.DefaultKeyResolver [Error] => logfile
+2022-06-21 17:06:13.6370 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.DefaultKeyResolver [Fatal] => logfile
+2022-06-21 17:06:13.6509 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingProvider
+2022-06-21 17:06:13.6509 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingProvider [Debug] => logfile
+2022-06-21 17:06:13.6509 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingProvider [Info] => logfile
+2022-06-21 17:06:13.6509 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingProvider [Warn] => logfile
+2022-06-21 17:06:13.6509 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingProvider [Error] => logfile
+2022-06-21 17:06:13.6509 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingProvider [Fatal] => logfile
+2022-06-21 17:06:13.6509 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingBasedDataProtector
+2022-06-21 17:06:13.6509 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingBasedDataProtector [Debug] => logfile
+2022-06-21 17:06:13.6509 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingBasedDataProtector [Info] => logfile
+2022-06-21 17:06:13.6509 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingBasedDataProtector [Warn] => logfile
+2022-06-21 17:06:13.6509 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingBasedDataProtector [Error] => logfile
+2022-06-21 17:06:13.6509 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingBasedDataProtector [Fatal] => logfile
+2022-06-21 17:06:13.6667 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.Identity.DataProtectorTokenProvider
+2022-06-21 17:06:13.6667 Debug Logger Microsoft.AspNetCore.Identity.DataProtectorTokenProvider [Debug] => logfile
+2022-06-21 17:06:13.6667 Debug Logger Microsoft.AspNetCore.Identity.DataProtectorTokenProvider [Info] => logfile
+2022-06-21 17:06:13.6667 Debug Logger Microsoft.AspNetCore.Identity.DataProtectorTokenProvider [Warn] => logfile
+2022-06-21 17:06:13.6667 Debug Logger Microsoft.AspNetCore.Identity.DataProtectorTokenProvider [Error] => logfile
+2022-06-21 17:06:13.6667 Debug Logger Microsoft.AspNetCore.Identity.DataProtectorTokenProvider [Fatal] => logfile
+2022-06-21 17:06:13.6667 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.Identity.RoleManager
+2022-06-21 17:06:13.6667 Debug Logger Microsoft.AspNetCore.Identity.RoleManager [Debug] => logfile
+2022-06-21 17:06:13.6667 Debug Logger Microsoft.AspNetCore.Identity.RoleManager [Info] => logfile
+2022-06-21 17:06:13.6667 Debug Logger Microsoft.AspNetCore.Identity.RoleManager [Warn] => logfile
+2022-06-21 17:06:13.6667 Debug Logger Microsoft.AspNetCore.Identity.RoleManager [Error] => logfile
+2022-06-21 17:06:13.6667 Debug Logger Microsoft.AspNetCore.Identity.RoleManager [Fatal] => logfile
+2022-06-21 17:06:13.7268 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.EntityFrameworkCore.ChangeTracking
+2022-06-21 17:06:13.7268 Debug Logger Microsoft.EntityFrameworkCore.ChangeTracking [Debug] => logfile
+2022-06-21 17:06:13.7298 Debug Logger Microsoft.EntityFrameworkCore.ChangeTracking [Info] => logfile
+2022-06-21 17:06:13.7298 Debug Logger Microsoft.EntityFrameworkCore.ChangeTracking [Warn] => logfile
+2022-06-21 17:06:13.7298 Debug Logger Microsoft.EntityFrameworkCore.ChangeTracking [Error] => logfile
+2022-06-21 17:06:13.7298 Debug Logger Microsoft.EntityFrameworkCore.ChangeTracking [Fatal] => logfile
+2022-06-21 17:06:13.7826 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.EntityFrameworkCore.Model
+2022-06-21 17:06:13.7826 Debug Logger Microsoft.EntityFrameworkCore.Model [Debug] => logfile
+2022-06-21 17:06:13.7826 Debug Logger Microsoft.EntityFrameworkCore.Model [Info] => logfile
+2022-06-21 17:06:13.7826 Debug Logger Microsoft.EntityFrameworkCore.Model [Warn] => logfile
+2022-06-21 17:06:13.7826 Debug Logger Microsoft.EntityFrameworkCore.Model [Error] => logfile
+2022-06-21 17:06:13.7826 Debug Logger Microsoft.EntityFrameworkCore.Model [Fatal] => logfile
+2022-06-21 17:06:13.7921 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.EntityFrameworkCore.Model.Validation
+2022-06-21 17:06:13.7921 Debug Logger Microsoft.EntityFrameworkCore.Model.Validation [Debug] => logfile
+2022-06-21 17:06:13.7921 Debug Logger Microsoft.EntityFrameworkCore.Model.Validation [Info] => logfile
+2022-06-21 17:06:13.7921 Debug Logger Microsoft.EntityFrameworkCore.Model.Validation [Warn] => logfile
+2022-06-21 17:06:13.7921 Debug Logger Microsoft.EntityFrameworkCore.Model.Validation [Error] => logfile
+2022-06-21 17:06:13.7921 Debug Logger Microsoft.EntityFrameworkCore.Model.Validation [Fatal] => logfile
+2022-06-21 17:06:15.3576 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.EntityFrameworkCore.Database.Command
+2022-06-21 17:06:15.3576 Debug Logger Microsoft.EntityFrameworkCore.Database.Command [Debug] => logfile
+2022-06-21 17:06:15.3576 Debug Logger Microsoft.EntityFrameworkCore.Database.Command [Info] => logfile
+2022-06-21 17:06:15.3576 Debug Logger Microsoft.EntityFrameworkCore.Database.Command [Warn] => logfile
+2022-06-21 17:06:15.3576 Debug Logger Microsoft.EntityFrameworkCore.Database.Command [Error] => logfile
+2022-06-21 17:06:15.3576 Debug Logger Microsoft.EntityFrameworkCore.Database.Command [Fatal] => logfile
+2022-06-21 17:06:15.3576 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.EntityFrameworkCore.Query
+2022-06-21 17:06:15.3576 Debug Logger Microsoft.EntityFrameworkCore.Query [Debug] => logfile
+2022-06-21 17:06:15.3576 Debug Logger Microsoft.EntityFrameworkCore.Query [Info] => logfile
+2022-06-21 17:06:15.3700 Debug Logger Microsoft.EntityFrameworkCore.Query [Warn] => logfile
+2022-06-21 17:06:15.3700 Debug Logger Microsoft.EntityFrameworkCore.Query [Error] => logfile
+2022-06-21 17:06:15.3700 Debug Logger Microsoft.EntityFrameworkCore.Query [Fatal] => logfile
+2022-06-21 17:06:15.3700 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.EntityFrameworkCore.Database.Transaction
+2022-06-21 17:06:15.3700 Debug Logger Microsoft.EntityFrameworkCore.Database.Transaction [Debug] => logfile
+2022-06-21 17:06:15.3700 Debug Logger Microsoft.EntityFrameworkCore.Database.Transaction [Info] => logfile
+2022-06-21 17:06:15.3700 Debug Logger Microsoft.EntityFrameworkCore.Database.Transaction [Warn] => logfile
+2022-06-21 17:06:15.3700 Debug Logger Microsoft.EntityFrameworkCore.Database.Transaction [Error] => logfile
+2022-06-21 17:06:15.3700 Debug Logger Microsoft.EntityFrameworkCore.Database.Transaction [Fatal] => logfile
+2022-06-21 17:06:15.3700 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.EntityFrameworkCore.Database.Connection
+2022-06-21 17:06:15.3700 Debug Logger Microsoft.EntityFrameworkCore.Database.Connection [Debug] => logfile
+2022-06-21 17:06:15.3700 Debug Logger Microsoft.EntityFrameworkCore.Database.Connection [Info] => logfile
+2022-06-21 17:06:15.3700 Debug Logger Microsoft.EntityFrameworkCore.Database.Connection [Warn] => logfile
+2022-06-21 17:06:15.3859 Debug Logger Microsoft.EntityFrameworkCore.Database.Connection [Error] => logfile
+2022-06-21 17:06:15.3859 Debug Logger Microsoft.EntityFrameworkCore.Database.Connection [Fatal] => logfile
+2022-06-21 17:06:15.4117 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.EntityFrameworkCore.Update
+2022-06-21 17:06:15.4117 Debug Logger Microsoft.EntityFrameworkCore.Update [Debug] => logfile
+2022-06-21 17:06:15.4117 Debug Logger Microsoft.EntityFrameworkCore.Update [Info] => logfile
+2022-06-21 17:06:15.4117 Debug Logger Microsoft.EntityFrameworkCore.Update [Warn] => logfile
+2022-06-21 17:06:15.4171 Debug Logger Microsoft.EntityFrameworkCore.Update [Error] => logfile
+2022-06-21 17:06:15.4171 Debug Logger Microsoft.EntityFrameworkCore.Update [Fatal] => logfile
+2022-06-21 17:06:15.4353 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.EntityFrameworkCore.Migrations
+2022-06-21 17:06:15.4353 Debug Logger Microsoft.EntityFrameworkCore.Migrations [Debug] => logfile
+2022-06-21 17:06:15.4353 Debug Logger Microsoft.EntityFrameworkCore.Migrations [Info] => logfile
+2022-06-21 17:06:15.4353 Debug Logger Microsoft.EntityFrameworkCore.Migrations [Warn] => logfile
+2022-06-21 17:06:15.4353 Debug Logger Microsoft.EntityFrameworkCore.Migrations [Error] => logfile
+2022-06-21 17:06:15.4353 Debug Logger Microsoft.EntityFrameworkCore.Migrations [Fatal] => logfile
+2022-06-21 17:06:21.9173 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.DataProtection.Internal.DataProtectionHostedService
+2022-06-21 17:06:21.9173 Debug Logger Microsoft.AspNetCore.DataProtection.Internal.DataProtectionHostedService [Debug] => logfile
+2022-06-21 17:06:21.9173 Debug Logger Microsoft.AspNetCore.DataProtection.Internal.DataProtectionHostedService [Info] => logfile
+2022-06-21 17:06:21.9173 Debug Logger Microsoft.AspNetCore.DataProtection.Internal.DataProtectionHostedService [Warn] => logfile
+2022-06-21 17:06:21.9173 Debug Logger Microsoft.AspNetCore.DataProtection.Internal.DataProtectionHostedService [Error] => logfile
+2022-06-21 17:06:21.9173 Debug Logger Microsoft.AspNetCore.DataProtection.Internal.DataProtectionHostedService [Fatal] => logfile
+2022-06-21 17:06:21.9173 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets
+2022-06-21 17:06:21.9173 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets [Debug] => logfile
+2022-06-21 17:06:21.9173 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets [Info] => logfile
+2022-06-21 17:06:21.9329 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets [Warn] => logfile
+2022-06-21 17:06:21.9329 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets [Error] => logfile
+2022-06-21 17:06:21.9329 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets [Fatal] => logfile
+2022-06-21 17:06:21.9329 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServer
+2022-06-21 17:06:21.9329 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServer [Debug] => logfile
+2022-06-21 17:06:21.9329 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServer [Info] => logfile
+2022-06-21 17:06:22.0576 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor
+2022-06-21 17:06:22.0576 Debug Logger Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor [Debug] => logfile
+2022-06-21 17:06:22.0576 Debug Logger Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor [Info] => logfile
+2022-06-21 17:06:22.0576 Debug Logger Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor [Warn] => logfile
+2022-06-21 17:06:22.0576 Debug Logger Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor [Error] => logfile
+2022-06-21 17:06:22.0576 Debug Logger Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor [Fatal] => logfile
+2022-06-21 17:06:22.2534 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.Mvc.MvcOptions
+2022-06-21 17:06:22.2534 Debug Logger Microsoft.AspNetCore.Mvc.MvcOptions [Debug] => logfile
+2022-06-21 17:06:22.2534 Debug Logger Microsoft.AspNetCore.Mvc.MvcOptions [Info] => logfile
+2022-06-21 17:06:22.2534 Debug Logger Microsoft.AspNetCore.Mvc.MvcOptions [Warn] => logfile
+2022-06-21 17:06:22.2534 Debug Logger Microsoft.AspNetCore.Mvc.MvcOptions [Error] => logfile
+2022-06-21 17:06:22.2534 Debug Logger Microsoft.AspNetCore.Mvc.MvcOptions [Fatal] => logfile
+2022-06-21 17:06:22.2680 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonInputFormatter
+2022-06-21 17:06:22.2680 Debug Logger Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonInputFormatter [Debug] => logfile
+2022-06-21 17:06:22.2680 Debug Logger Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonInputFormatter [Info] => logfile
+2022-06-21 17:06:22.2680 Debug Logger Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonInputFormatter [Warn] => logfile
+2022-06-21 17:06:22.2680 Debug Logger Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonInputFormatter [Error] => logfile
+2022-06-21 17:06:22.2680 Debug Logger Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonInputFormatter [Fatal] => logfile
+2022-06-21 17:06:22.3335 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonPatchInputFormatter
+2022-06-21 17:06:22.3335 Debug Logger Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonPatchInputFormatter [Debug] => logfile
+2022-06-21 17:06:22.3335 Debug Logger Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonPatchInputFormatter [Info] => logfile
+2022-06-21 17:06:22.3335 Debug Logger Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonPatchInputFormatter [Warn] => logfile
+2022-06-21 17:06:22.3395 Debug Logger Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonPatchInputFormatter [Error] => logfile
+2022-06-21 17:06:22.3395 Debug Logger Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonPatchInputFormatter [Fatal] => logfile
+2022-06-21 17:06:22.3395 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonInputFormatter
+2022-06-21 17:06:22.3395 Debug Logger Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonInputFormatter [Debug] => logfile
+2022-06-21 17:06:22.3395 Debug Logger Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonInputFormatter [Info] => logfile
+2022-06-21 17:06:22.3395 Debug Logger Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonInputFormatter [Warn] => logfile
+2022-06-21 17:06:22.3395 Debug Logger Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonInputFormatter [Error] => logfile
+2022-06-21 17:06:22.3395 Debug Logger Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonInputFormatter [Fatal] => logfile
+2022-06-21 17:06:22.5023 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.Routing.EndpointMiddleware
+2022-06-21 17:06:22.5023 Debug Logger Microsoft.AspNetCore.Routing.EndpointMiddleware [Debug] => logfile
+2022-06-21 17:06:22.5023 Debug Logger Microsoft.AspNetCore.Routing.EndpointMiddleware [Info] => logfile
+2022-06-21 17:06:22.5023 Debug Logger Microsoft.AspNetCore.Routing.EndpointMiddleware [Warn] => logfile
+2022-06-21 17:06:22.5023 Debug Logger Microsoft.AspNetCore.Routing.EndpointMiddleware [Error] => logfile
+2022-06-21 17:06:22.5023 Debug Logger Microsoft.AspNetCore.Routing.EndpointMiddleware [Fatal] => logfile
+2022-06-21 17:06:22.5134 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware
+2022-06-21 17:06:22.5283 Debug Logger Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware [Debug] => logfile
+2022-06-21 17:06:22.5283 Debug Logger Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware [Info] => logfile
+2022-06-21 17:06:22.5283 Debug Logger Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware [Warn] => logfile
+2022-06-21 17:06:22.5283 Debug Logger Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware [Error] => logfile
+2022-06-21 17:06:22.5283 Debug Logger Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware [Fatal] => logfile
+2022-06-21 17:06:22.5283 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.HttpOverrides.ForwardedHeadersMiddleware
+2022-06-21 17:06:22.5283 Debug Logger Microsoft.AspNetCore.HttpOverrides.ForwardedHeadersMiddleware [Debug] => logfile
+2022-06-21 17:06:22.5283 Debug Logger Microsoft.AspNetCore.HttpOverrides.ForwardedHeadersMiddleware [Info] => logfile
+2022-06-21 17:06:22.5283 Debug Logger Microsoft.AspNetCore.HttpOverrides.ForwardedHeadersMiddleware [Warn] => logfile
+2022-06-21 17:06:22.5423 Debug Logger Microsoft.AspNetCore.HttpOverrides.ForwardedHeadersMiddleware [Error] => logfile
+2022-06-21 17:06:22.5423 Debug Logger Microsoft.AspNetCore.HttpOverrides.ForwardedHeadersMiddleware [Fatal] => logfile
+2022-06-21 17:06:22.5423 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.Cors.Infrastructure.CorsService
+2022-06-21 17:06:22.5423 Debug Logger Microsoft.AspNetCore.Cors.Infrastructure.CorsService [Debug] => logfile
+2022-06-21 17:06:22.5423 Debug Logger Microsoft.AspNetCore.Cors.Infrastructure.CorsService [Info] => logfile
+2022-06-21 17:06:22.5423 Debug Logger Microsoft.AspNetCore.Cors.Infrastructure.CorsService [Warn] => logfile
+2022-06-21 17:06:22.5423 Debug Logger Microsoft.AspNetCore.Cors.Infrastructure.CorsService [Error] => logfile
+2022-06-21 17:06:22.5581 Debug Logger Microsoft.AspNetCore.Cors.Infrastructure.CorsService [Fatal] => logfile
+2022-06-21 17:06:22.5581 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.Cors.Infrastructure.CorsMiddleware
+2022-06-21 17:06:22.5581 Debug Logger Microsoft.AspNetCore.Cors.Infrastructure.CorsMiddleware [Debug] => logfile
+2022-06-21 17:06:22.5581 Debug Logger Microsoft.AspNetCore.Cors.Infrastructure.CorsMiddleware [Info] => logfile
+2022-06-21 17:06:22.5581 Debug Logger Microsoft.AspNetCore.Cors.Infrastructure.CorsMiddleware [Warn] => logfile
+2022-06-21 17:06:22.5581 Debug Logger Microsoft.AspNetCore.Cors.Infrastructure.CorsMiddleware [Error] => logfile
+2022-06-21 17:06:22.5581 Debug Logger Microsoft.AspNetCore.Cors.Infrastructure.CorsMiddleware [Fatal] => logfile
+2022-06-21 17:06:22.5581 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware
+2022-06-21 17:06:22.5581 Debug Logger Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware [Debug] => logfile
+2022-06-21 17:06:22.5737 Debug Logger Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware [Info] => logfile
+2022-06-21 17:06:22.5737 Debug Logger Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware [Warn] => logfile
+2022-06-21 17:06:22.5737 Debug Logger Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware [Error] => logfile
+2022-06-21 17:06:22.5737 Debug Logger Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware [Fatal] => logfile
+2022-06-21 17:06:22.6056 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+2022-06-21 17:06:22.6056 Debug Logger Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware [Debug] => logfile
+2022-06-21 17:06:22.6056 Debug Logger Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware [Info] => logfile
+2022-06-21 17:06:22.6056 Debug Logger Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware [Warn] => logfile
+2022-06-21 17:06:22.6056 Debug Logger Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware [Error] => logfile
+2022-06-21 17:06:22.6056 Debug Logger Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware [Fatal] => logfile
+2022-06-21 17:06:22.6461 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware
+2022-06-21 17:06:22.6461 Debug Logger Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware [Debug] => logfile
+2022-06-21 17:06:22.6461 Debug Logger Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware [Info] => logfile
+2022-06-21 17:06:22.6519 Debug Logger Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware [Warn] => logfile
+2022-06-21 17:06:22.6519 Debug Logger Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware [Error] => logfile
+2022-06-21 17:06:22.6519 Debug Logger Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware [Fatal] => logfile
+2022-06-21 17:06:22.6519 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.HostFiltering.HostFilteringMiddleware
+2022-06-21 17:06:22.6519 Debug Logger Microsoft.AspNetCore.HostFiltering.HostFilteringMiddleware [Debug] => logfile
+2022-06-21 17:06:22.6519 Debug Logger Microsoft.AspNetCore.HostFiltering.HostFilteringMiddleware [Info] => logfile
+2022-06-21 17:06:22.6519 Debug Logger Microsoft.AspNetCore.HostFiltering.HostFilteringMiddleware [Warn] => logfile
+2022-06-21 17:06:22.6519 Debug Logger Microsoft.AspNetCore.HostFiltering.HostFilteringMiddleware [Error] => logfile
+2022-06-21 17:06:22.6519 Debug Logger Microsoft.AspNetCore.HostFiltering.HostFilteringMiddleware [Fatal] => logfile
+2022-06-21 17:06:22.6675 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware
+2022-06-21 17:06:22.6675 Debug Logger Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware [Debug] => logfile
+2022-06-21 17:06:22.6675 Debug Logger Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware [Info] => logfile
+2022-06-21 17:06:22.6675 Debug Logger Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware [Warn] => logfile
+2022-06-21 17:06:22.6675 Debug Logger Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware [Error] => logfile
+2022-06-21 17:06:22.6675 Debug Logger Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware [Fatal] => logfile
+2022-06-21 17:06:50.6000 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler
+2022-06-21 17:06:50.6000 Debug Logger Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler [Debug] => logfile
+2022-06-21 17:06:50.6000 Debug Logger Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler [Info] => logfile
+2022-06-21 17:06:50.6000 Debug Logger Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler [Warn] => logfile
+2022-06-21 17:06:50.6051 Debug Logger Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler [Error] => logfile
+2022-06-21 17:06:50.6051 Debug Logger Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler [Fatal] => logfile
+2022-06-21 17:06:50.9790 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.Routing.Matching.DfaMatcher
+2022-06-21 17:06:50.9808 Debug Logger Microsoft.AspNetCore.Routing.Matching.DfaMatcher [Debug] => logfile
+2022-06-21 17:06:50.9808 Debug Logger Microsoft.AspNetCore.Routing.Matching.DfaMatcher [Info] => logfile
+2022-06-21 17:06:50.9808 Debug Logger Microsoft.AspNetCore.Routing.Matching.DfaMatcher [Warn] => logfile
+2022-06-21 17:06:50.9808 Debug Logger Microsoft.AspNetCore.Routing.Matching.DfaMatcher [Error] => logfile
+2022-06-21 17:06:50.9808 Debug Logger Microsoft.AspNetCore.Routing.Matching.DfaMatcher [Fatal] => logfile
+2022-06-21 17:06:50.9984 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.Authorization.DefaultAuthorizationService
+2022-06-21 17:06:50.9984 Debug Logger Microsoft.AspNetCore.Authorization.DefaultAuthorizationService [Debug] => logfile
+2022-06-21 17:06:50.9984 Debug Logger Microsoft.AspNetCore.Authorization.DefaultAuthorizationService [Info] => logfile
+2022-06-21 17:06:50.9984 Debug Logger Microsoft.AspNetCore.Authorization.DefaultAuthorizationService [Warn] => logfile
+2022-06-21 17:06:50.9984 Debug Logger Microsoft.AspNetCore.Authorization.DefaultAuthorizationService [Error] => logfile
+2022-06-21 17:06:50.9984 Debug Logger Microsoft.AspNetCore.Authorization.DefaultAuthorizationService [Fatal] => logfile
+2022-06-21 17:06:51.0152 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.Mvc.ModelBinding.ModelBinderFactory
+2022-06-21 17:06:51.0152 Debug Logger Microsoft.AspNetCore.Mvc.ModelBinding.ModelBinderFactory [Debug] => logfile
+2022-06-21 17:06:51.0152 Debug Logger Microsoft.AspNetCore.Mvc.ModelBinding.ModelBinderFactory [Info] => logfile
+2022-06-21 17:06:51.0152 Debug Logger Microsoft.AspNetCore.Mvc.ModelBinding.ModelBinderFactory [Warn] => logfile
+2022-06-21 17:06:51.0152 Debug Logger Microsoft.AspNetCore.Mvc.ModelBinding.ModelBinderFactory [Error] => logfile
+2022-06-21 17:06:51.0152 Debug Logger Microsoft.AspNetCore.Mvc.ModelBinding.ModelBinderFactory [Fatal] => logfile
+2022-06-21 17:06:51.0320 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder
+2022-06-21 17:06:51.0320 Debug Logger Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder [Debug] => logfile
+2022-06-21 17:06:51.0320 Debug Logger Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder [Info] => logfile
+2022-06-21 17:06:51.0320 Debug Logger Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder [Warn] => logfile
+2022-06-21 17:06:51.0320 Debug Logger Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder [Error] => logfile
+2022-06-21 17:06:51.0320 Debug Logger Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder [Fatal] => logfile
+2022-06-21 17:06:51.0451 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker
+2022-06-21 17:06:51.0451 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker [Debug] => logfile
+2022-06-21 17:06:51.0451 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker [Info] => logfile
+2022-06-21 17:06:51.0451 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker [Warn] => logfile
+2022-06-21 17:06:51.0451 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker [Error] => logfile
+2022-06-21 17:06:51.0451 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker [Fatal] => logfile
+2022-06-21 17:06:51.0451 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter
+2022-06-21 17:06:51.0451 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter [Debug] => logfile
+2022-06-21 17:06:51.0584 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter [Info] => logfile
+2022-06-21 17:06:51.0584 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter [Warn] => logfile
+2022-06-21 17:06:51.0584 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter [Error] => logfile
+2022-06-21 17:06:51.0584 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter [Fatal] => logfile
+2022-06-21 17:06:51.0584 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter
+2022-06-21 17:06:51.0584 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter [Debug] => logfile
+2022-06-21 17:06:51.0584 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter [Info] => logfile
+2022-06-21 17:06:51.0584 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter [Warn] => logfile
+2022-06-21 17:06:51.0584 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter [Error] => logfile
+2022-06-21 17:06:51.0584 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter [Fatal] => logfile
+2022-06-21 17:06:51.0970 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BodyModelBinder
+2022-06-21 17:06:51.0970 Debug Logger Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BodyModelBinder [Debug] => logfile
+2022-06-21 17:06:51.0970 Debug Logger Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BodyModelBinder [Info] => logfile
+2022-06-21 17:06:51.0970 Debug Logger Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BodyModelBinder [Warn] => logfile
+2022-06-21 17:06:51.0970 Debug Logger Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BodyModelBinder [Error] => logfile
+2022-06-21 17:06:51.0970 Debug Logger Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BodyModelBinder [Fatal] => logfile
+2022-06-21 17:06:51.5667 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.Identity.SignInManager
+2022-06-21 17:06:51.5667 Debug Logger Microsoft.AspNetCore.Identity.SignInManager [Debug] => logfile
+2022-06-21 17:06:51.5667 Debug Logger Microsoft.AspNetCore.Identity.SignInManager [Info] => logfile
+2022-06-21 17:06:51.5667 Debug Logger Microsoft.AspNetCore.Identity.SignInManager [Warn] => logfile
+2022-06-21 17:06:51.5771 Debug Logger Microsoft.AspNetCore.Identity.SignInManager [Error] => logfile
+2022-06-21 17:06:51.5933 Debug Logger Microsoft.AspNetCore.Identity.SignInManager [Fatal] => logfile
+2022-06-21 17:06:51.5933 Debug Targets configured when LogLevel >= Debug for Logger: Course.BLL.Services.AuthenticationService
+2022-06-21 17:06:51.5933 Debug Logger Course.BLL.Services.AuthenticationService [Debug] => logfile
+2022-06-21 17:06:51.5933 Debug Logger Course.BLL.Services.AuthenticationService [Info] => logfile
+2022-06-21 17:06:51.5933 Debug Logger Course.BLL.Services.AuthenticationService [Warn] => logfile
+2022-06-21 17:06:51.5933 Debug Logger Course.BLL.Services.AuthenticationService [Error] => logfile
+2022-06-21 17:06:51.5933 Debug Logger Course.BLL.Services.AuthenticationService [Fatal] => logfile
+2022-06-21 17:06:51.8777 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector
+2022-06-21 17:06:51.8858 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector [Debug] => logfile
+2022-06-21 17:06:51.8858 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector [Info] => logfile
+2022-06-21 17:06:51.8858 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector [Warn] => logfile
+2022-06-21 17:06:51.8858 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector [Error] => logfile
+2022-06-21 17:06:51.8858 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector [Fatal] => logfile
+2022-06-21 17:06:51.8858 Debug Targets configured when LogLevel >= Debug for Logger: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor
+2022-06-21 17:06:51.8858 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor [Debug] => logfile
+2022-06-21 17:06:51.8858 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor [Info] => logfile
+2022-06-21 17:06:51.8858 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor [Warn] => logfile
+2022-06-21 17:06:51.8858 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor [Error] => logfile
+2022-06-21 17:06:51.8858 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor [Fatal] => logfile
+2022-06-21 17:07:01.4267 Debug Targets configured when LogLevel >= Debug for Logger: LoggerService.LoggerManager
+2022-06-21 17:07:01.4267 Debug Logger LoggerService.LoggerManager [Debug] => logfile
+2022-06-21 17:07:01.4267 Debug Logger LoggerService.LoggerManager [Info] => logfile
+2022-06-21 17:07:01.4267 Debug Logger LoggerService.LoggerManager [Warn] => logfile
+2022-06-21 17:07:01.4267 Debug Logger LoggerService.LoggerManager [Error] => logfile
+2022-06-21 17:07:01.4336 Debug Logger LoggerService.LoggerManager [Fatal] => logfile
