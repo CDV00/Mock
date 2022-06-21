@@ -107,7 +107,10 @@ namespace Course.DAL.Queries
                 return this;
 
             var KEYWORD = Keyword.ToUpper();
-            Query = Query.Where(c => c.Content.ToUpper().Contains(KEYWORD));
+            Query = Query.Where(c => c.Content.ToUpper().Contains(KEYWORD) ||
+                                        c.Enrollment.User.Fullname.ToUpper().Contains(KEYWORD) ||
+                                        c.Enrollment.Courses.Title.ToUpper().Contains(KEYWORD)
+                                        );
             return this;
         }
         public ICourseReviewQuery FilterCourseByUSer(Guid userId)
