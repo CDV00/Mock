@@ -26,6 +26,8 @@ namespace Course.BLL.Services
         private readonly IEnrollmentService _enrollmentService;
         private readonly ISavedCoursesService _savedCoursesService;
         private readonly ISectionService _sectionService;
+        private readonly IOrderService _orderService;
+        private readonly IOrderItemService _orderItemService;
 
         private readonly ILectureService _lectureService;
         private readonly IUnitOfWork _unitOfWork;
@@ -42,8 +44,8 @@ namespace Course.BLL.Services
                              IEnrollmentService enrollmentService,
                              ISavedCoursesService savedCoursesService,
                              ISectionService sectionService,
-                             ILectureService lectureService,
-                             ICategoryRepository categoryRepository)
+                             ILectureService lectureService, IOrderService orderService,
+                             ICategoryRepository categoryRepository, IOrderItemService orderItemService)
         {
             _cousesRepository = cousesRepository;
             _mapper = mapper;
@@ -57,7 +59,9 @@ namespace Course.BLL.Services
             _savedCoursesService = savedCoursesService;
             _sectionService = sectionService;
             _lectureService = lectureService;
+            _orderService = orderService;
             _categoryRepository = categoryRepository;
+            _orderItemService = orderItemService;
         }
 
         public async Task<ApiBaseResponse> GetAllCourses(CourseParameters parameter, Guid? userId)
@@ -79,6 +83,8 @@ namespace Course.BLL.Services
                 courses[i].PercentCompletion = await _lectureService.PercentCourseCompletion(userId.GetValueOrDefault(), courses[i].Id);
 
                 courses[i].IsEnroll = (await _enrollmentService.IsEnrollment(userId.GetValueOrDefault(), courses[i].Id)).data == null ? false : true;
+                courses[i].isPurchased = (await _orderItemService.IsPurchased(userId.GetValueOrDefault(), courses[i].Id)).data == null ? false : true;
+
             }
         }
 

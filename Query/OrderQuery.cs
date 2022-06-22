@@ -40,7 +40,7 @@ namespace Course.DAL.Queries
         public IOrderQuery FilterByCourseId(Guid CourseId)
         {
 
-            //Query = Query.Where(type => type.CourseId == CourseId);
+            Query = Query.Where(type => type.OrderItem.Any(o=>o.Course.Id == CourseId));
             return this;
         }
 

@@ -248,7 +248,30 @@ namespace Course.BLL.Services
             catch (Exception ex)
             {
                 return new BaseResponse(false, ex.Message, null);
+
             }
         }
-    }
+
+            public async Task<Response<OrderItemDTO>> IsPurchased(Guid userId, Guid courseId)
+            {
+                try
+                {
+                    var purchase = await _orderRepository.BuildQuery()
+                                                           .FilterByUserId(userId)
+                                                           .FilterByCourseId(courseId)
+                                                           .AsSelectorAsync(e => _mapper.Map<OrderItemDTO>(e));
+
+                if (purchase == null)
+                {
+                    return new Response<OrderItemDTO>(true, null);
+                }
+
+                return new Response<OrderItemDTO>(true, purchase);
+            }
+                catch (Exception ex)
+                {
+                    return new Response<OrderItemDTO>(false, ex.Message, null);
+                }
+            }
+        }
 }

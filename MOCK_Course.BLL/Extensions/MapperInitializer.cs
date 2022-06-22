@@ -66,6 +66,7 @@ namespace Course.BLL.Extensions
             CreateMap<Order, OrderUpdateRequest>().ReverseMap();
 
 
+
             // map enrollment
             CreateMap<EnrollmentRequest, EnrollmentDTO>().ReverseMap();
             CreateMap<Enrollment, EnrollmentDTO>().ReverseMap();
