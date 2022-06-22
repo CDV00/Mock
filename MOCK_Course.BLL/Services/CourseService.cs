@@ -492,56 +492,56 @@ namespace Course.BLL.Services
                         quiz.Id = Guid.Empty;
                     }
 
-                    AddNewQuestionAsync(quiz);
+                    //AddNewQuestionAsync(quiz);
                 }
             }
         }
 
-        private static void AddNewQuestionAsync(QuizForUpdateRequest quiz)
-        {
-            #region Update Question
-            var questions = quiz.Questions;
-            if (questions != null)
-            {
-                for (var k = 0; k < questions.Count; k++)
-                {
-                    var question = questions[k];
-                    if (question.IsDeleted && question.IsNew)
-                    {
-                        questions.Remove(question);
-                        continue;
-                    }
-                    if (question.IsNew || quiz.IsNew)
-                    {
-                        question.Id = Guid.Empty;
-                    }
+        //private static void AddNewQuestionAsync(QuizForUpdateRequest quiz)
+        //{
+        //    #region Update Question
+        //    var questions = quiz.Questions;
+        //    if (questions != null)
+        //    {
+        //        for (var k = 0; k < questions.Count; k++)
+        //        {
+        //            var question = questions[k];
+        //            if (question.IsDeleted && question.IsNew)
+        //            {
+        //                questions.Remove(question);
+        //                continue;
+        //            }
+        //            if (question.IsNew || quiz.IsNew)
+        //            {
+        //                question.Id = Guid.Empty;
+        //            }
 
-                    NewQuizOption(question);
-                    #endregion
-                }
-            }
-        }
+        //            NewQuizOption(question);
+        //            #endregion
+        //        }
+        //    }
+        //}
 
-        private static void NewQuizOption(QuestionForUpdateRequest question)
-        {
-            var quizoptions = question.Options;
-            if (quizoptions != null)
-            {
-                for (var l = 0; l < quizoptions.Count; l++)
-                {
-                    var quizoption = quizoptions[l];
-                    if (quizoption.IsDeleted && quizoption.IsNew)
-                    {
-                        quizoptions.Remove(quizoption);
-                        continue;
-                    }
-                    if (quizoption.IsNew || question.IsNew)
-                    {
-                        quizoption.Id = Guid.Empty;
-                    }
-                }
-            }
-        }
+        //private static void NewQuizOption(QuestionForUpdateRequest question)
+        //{
+        //    var quizoptions = question.Options;
+        //    if (quizoptions != null)
+        //    {
+        //        for (var l = 0; l < quizoptions.Count; l++)
+        //        {
+        //            var quizoption = quizoptions[l];
+        //            if (quizoption.IsDeleted && quizoption.IsNew)
+        //            {
+        //                quizoptions.Remove(quizoption);
+        //                continue;
+        //            }
+        //            if (quizoption.IsNew || question.IsNew)
+        //            {
+        //                quizoption.Id = Guid.Empty;
+        //            }
+        //        }
+        //    }
+        //}
 
         private static void NewAssignment(SectionUpdateRequest section)
         {

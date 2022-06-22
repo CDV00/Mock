@@ -128,7 +128,7 @@ namespace Course.BLL.Extensions
             CreateMap<Question, QuestionDTO>().ReverseMap();
             CreateMap<Question, QuestionRequest>().ReverseMap();
             CreateMap<Question, QuestionForCreateRequest>().ReverseMap();
-            CreateMap<QuestionForUpdateRequest, Question>().ReverseMap();
+            CreateMap<Question, QuestionForUpdateRequest>().ReverseMap();
 
             //map quiz
             CreateMap<Quiz, QuizDTO>().ReverseMap();
