@@ -141,7 +141,7 @@ namespace Course.BLL.Services
         {
             var user = await _userManager.FindByEmailAsync(Email);
 
-            if (user == null || !user.EmailConfirmed)
+            if (user == null || !user.EmailConfirmed || user.Fullname == null)
             {
                 return new BaseResponse(false);
             }
