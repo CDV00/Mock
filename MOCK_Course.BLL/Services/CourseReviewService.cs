@@ -236,13 +236,20 @@ namespace Course.BLL.Services
         {
             try
             {
+
                 if (courseId is null && userId == Guid.Empty)
                     return new Response<float>(false, "must pass userId or CourseId", "400");
 
+                var IsExistEnrolls = await _enrollmentRepository.BuildQuery()
+                                                                .FilterByCourseId(courseId)
+                                                                .FilterByUserId(userId)
+                                                                .AnyAsync();
+                if (!IsExistEnrolls)
+                    return new Response<float>(true, 0);
 
                 var courses = await _courseReviewRepository.BuildQuery()
                                                            .FilterByCourseId(courseId)
-                                                           .FilterByUserId(userId)
+                                                           //.FilterByUserId(userId)
                                                            .GetAvgRate();
 
                 return new Response<float>(true, courses);
@@ -256,13 +263,20 @@ namespace Course.BLL.Services
         {
             try
             {
+
                 if (courseId is null && userId == Guid.Empty)
                     return new Response<List<float>>(false, "must pass userId or CourseId", "400");
 
+                var IsExistEnrolls = await _enrollmentRepository.BuildQuery()
+                                                               .FilterByCourseId(courseId)
+                                                               .FilterByUserId(userId)
+                                                               .AnyAsync();
+                if (!IsExistEnrolls)
+                    return new Response<List<float>>(true, new() { 0, 0, 0, 0, 0 });
 
                 var sumRating = await _courseReviewRepository.BuildQuery()
                                                              .FilterByCourseId(courseId)
-                                                             .FilterByUserId(userId)
+                                                             //.FilterByUserId(userId)
                                                              .CountAsync();
 
                 if (sumRating == 0)
@@ -276,7 +290,7 @@ namespace Course.BLL.Services
                 {
                     rates.Add(await _courseReviewRepository.BuildQuery()
                                                            .FilterByCourseId(courseId)
-                                                           .FilterByUserId(userId)
+                                                           //.FilterByUserId(userId)
                                                            .FilterByRating(i)
                                                            .GetAvgRatePercent(sumRating));
                 }
