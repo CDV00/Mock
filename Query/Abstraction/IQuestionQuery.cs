@@ -5,6 +5,6 @@ namespace Course.DAL.Queries.Abstraction
 {
     public interface IQuestionQuery : IQuery<Question>
     {
-        public IQuestionQuery FilterByQuizId(Guid quizId);
+        public IQuestionQuery FilterByCourseId(Guid quizId);
     }
 }

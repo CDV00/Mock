@@ -177,7 +177,7 @@ namespace Course.BLL.Services
         {
             var courses = await _cousesRepository.GetAllMyPurchase(userId, parameter);
             await AddLast(courses, userId);
-            
+
             return new ApiOkResponse<PagedList<CourseDTO>>(courses);
         }
 
@@ -324,6 +324,11 @@ namespace Course.BLL.Services
                 return new NotMathIdResponse(nameof(Level), string.Join(',', courseRequest.AudioLanguageIds));
 
             AddNewSection(courseRequest);
+            var questions = await _questionRepository.BuildQuery()
+                                                     .FilterByCourseId(id)
+                                                     .ToListAsync(q => q);
+            questions.Clear();
+            _questionRepository.UpdateRange(questions);
             _mapper.Map(courseRequest, course);
 
             course.UpdatedAt = DateTime.Now;

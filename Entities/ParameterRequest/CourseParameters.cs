@@ -13,7 +13,7 @@ namespace Entities.ParameterRequest
         public List<Guid?> AudioLanguageIds { get; set; }
         public List<Guid?> CloseCaptionIds { get; set; }
         public List<Guid?> LevelIds { get; set; }
-        public Status status { get; set; }
+        public Status? status { get; set; } = null;
         public int? Rate { get; set; }
         public string Orderby { get; set; }
         public bool IsDiscount { get; set; } = false;

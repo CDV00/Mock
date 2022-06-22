@@ -22,9 +22,9 @@ namespace Course.DAL.Queries
         public QuestionQuery(IQueryable<Question> questionQuery, AppDbContext dbContext) : base(questionQuery)
         { _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext)); }
 
-        public IQuestionQuery FilterByQuizId(Guid quizId)
+        public IQuestionQuery FilterByCourseId(Guid courseId)
         {
-            Query = Query.Where(q => q.Quiz.Id == quizId);
+            Query = Query.Where(q => q.Quiz.Section.CourseId == courseId);
             return this;
         }
     }

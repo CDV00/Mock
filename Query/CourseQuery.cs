@@ -24,7 +24,7 @@ namespace Course.DAL.Queries
 
         public ICourseQuery FilterByOrderd(Guid userId)
         {
-            Query.Where(type => type.Orders.Any(o => o.OrderItem.Any(or=>o.User.Id == userId)));
+            Query.Where(type => type.Orders.Any(o => o.OrderItem.Any(or => o.User.Id == userId)));
             return this;
         }
 
@@ -277,8 +277,11 @@ namespace Course.DAL.Queries
             Query = Query.Where(type => type.Id == Id);
             return Query.FirstOrDefaultAsync();
         }
-        public ICourseQuery FilterStatus(Status status)
+        public ICourseQuery FilterStatus(Status? status)
         {
+            if (status == null)
+                return this;
+
             Query = Query.Where(type => type.status == status);
             return this;
         }

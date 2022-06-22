@@ -28,7 +28,7 @@ namespace Repository.Repositories
 
         public virtual async Task CreateRangeAsync(List<T> _object) => await DbSet.AddRangeAsync(_object);
 
-      
+
         public virtual void Remove(dynamic _object, bool? permanent)
         {
             if (permanent == null || permanent == false)
@@ -65,6 +65,13 @@ namespace Repository.Repositories
         {
             DbSet.Attach(_object);
             _context.Entry(_object).State = EntityState.Modified;
+            return true;
+        }
+
+        public virtual bool UpdateRange(List<T> _objects)
+        {
+            DbSet.AttachRange(_objects);
+            _context.Entry(_objects).State = EntityState.Modified;
             return true;
         }
 
