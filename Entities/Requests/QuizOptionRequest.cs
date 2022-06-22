@@ -16,8 +16,8 @@ namespace Course.BLL.Requests
         public Guid Id { get; set; }
         public string Title { get; set; }
         public bool IsCorrectAnswer { get; set; } = false;
-        public bool IsDeleted { get; set; } = false;
-        public bool IsNew { get; set; } = true;
+        //public bool IsDeleted { get; set; } = false;
+        //public bool IsNew { get; set; } = true;
     }
 
 }

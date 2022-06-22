@@ -36,9 +36,7 @@ namespace Course.BLL.Requests
         public TypeQuestion Type { get; set; }
         public IList<QuizOptionForUpdateRequest> Options { get; set; }
         public string TextAnswer { get; set; }
-        public bool IsDeleted { get; set; } = false;
-        public bool IsNew { get; set; } = true;
-
+        //public bool IsDeleted { get; set; } = false;
+        //public bool IsNew { get; set; } = true;
     }
-
 }

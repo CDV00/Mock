@@ -17,7 +17,7 @@ namespace Course.DAL.DTOs
         public Guid QuizId { get; set; }
         public List<QuizOptionDTO> Options { get; set; }
         public string TextAnswer { get; set; }
-        public bool IsDeleted { get; set; }
-        public bool IsNew { get; set; } = false;
+        //public bool IsDeleted { get; set; }
+        //public bool IsNew { get; set; } = false;
     }
 }
