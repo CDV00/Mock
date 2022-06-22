@@ -122,13 +122,13 @@ namespace Course.BLL.Extensions
             //map quiz option
             CreateMap<QuizOption, QuizOptionDTO>().ReverseMap();
             CreateMap<QuizOption, QuizOptionCreateForRequest>().ReverseMap();
-            CreateMap<QuizOption, QuizOptionForUpdateRequest>().ReverseMap();
+            CreateMap<QuizOptionForUpdateRequest, QuizOption>().ReverseMap();
 
             //map question
             CreateMap<Question, QuestionDTO>().ReverseMap();
             CreateMap<Question, QuestionRequest>().ReverseMap();
             CreateMap<Question, QuestionForCreateRequest>().ReverseMap();
-            CreateMap<Question, QuestionForUpdateRequest>().ReverseMap();
+            CreateMap<QuestionForUpdateRequest, Question>().ReverseMap();
 
             //map quiz
             CreateMap<Quiz, QuizDTO>().ReverseMap();

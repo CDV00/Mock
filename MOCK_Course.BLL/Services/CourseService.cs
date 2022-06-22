@@ -327,8 +327,7 @@ namespace Course.BLL.Services
             var questions = await _questionRepository.BuildQuery()
                                                      .FilterByCourseId(id)
                                                      .ToListAsync(q => q);
-            questions.Clear();
-            _questionRepository.UpdateRange(questions);
+
             _mapper.Map(courseRequest, course);
 
             course.UpdatedAt = DateTime.Now;

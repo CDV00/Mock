@@ -38,7 +38,5 @@ namespace Course.BLL.Requests
         public string TextAnswer { get; set; }
         public bool IsDeleted { get; set; } = false;
         public bool IsNew { get; set; } = true;
-
     }
-
 }
