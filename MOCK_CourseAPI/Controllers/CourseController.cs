@@ -235,6 +235,33 @@ namespace CourseAPI.Controllers
             return Ok(new Responses<CourseDTO>(true, coursePagedList));
         }
 
+        /// <summary>
+        /// Get All My learning
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        [HttpGet("Get-all-my-learning")]
+        public async Task<ActionResult<ApiOkResponse<CourseDTO>>> GetAllMyLearning([FromQuery] CourseParameters parameters)
+        {
+            var userId = User.GetUserId();
+
+            var result = await _coursesService.GetAllMyLearning(parameters, userId);
+            if (!result.IsSuccess)
+                return ProcessError(result);
+
+            var coursePagedList = result.GetResult<PagedList<CourseDTO>>();
+
+            Response.Headers.Add("X-Pagination",
+                                 JsonSerializer.Serialize(coursePagedList.MetaData));
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Update Status Course
+        /// </summary>
+        /// <param name="courseStatusUpdateRequest"></param>
+        /// <returns></returns>
         [HttpPut("update-status")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Response<CourseDTO>>> UpdateStatus(CourseStatusUpdateRequest courseStatusUpdateRequest)

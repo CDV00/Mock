@@ -35,5 +35,6 @@ namespace Course.DAL.Queries
         ICourseQuery IncludeOrder();
         ICourseQuery FilterByIds(List<Guid> Ids);
         ICourseQuery FilterStatus(Status status);
+        ICourseQuery FilterByEnroll(Guid userId);
     }
 }
