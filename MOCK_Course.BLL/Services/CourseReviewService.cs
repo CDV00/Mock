@@ -52,27 +52,43 @@ namespace Course.BLL.Services
 
         public async Task<ApiBaseResponse> Add(CourseReviewRequest courseReviewRequest)
         {
+            var enrollment = await _enrollmentRepository.GetByIdAsync(courseReviewRequest.EnrollmentId);
+            if (enrollment is null)
+                return new EnrollmentNotFoundResponse(courseReviewRequest.EnrollmentId);
+
             var courseReview = _mapper.Map<CourseReview>(courseReviewRequest);
             courseReview.CreatedAt = DateTime.Now;
             await _courseReviewRepository.CreateAsync(courseReview);
 
-            var enrollment = await _enrollmentRepository.GetByIdAsync(courseReviewRequest.EnrollmentId);
-            var course = await _cousesRepository.GetByIdAsync(enrollment.CourseId);
-            course.SumRates += courseReview.Rating;
-            course.TotalReviews++;
-            course.AvgRate = course.SumRates / course.TotalReviews;
+            await IncreateRate(enrollment, courseReview);
 
             await _unitOfWork.SaveChangesAsync();
             var courseReviewDTO = _mapper.Map<CourseReviewDTO>(courseReview);
             return new ApiOkResponse<CourseReviewDTO>(courseReviewDTO);
         }
+
+        private async Task IncreateRate(Enrollment enrollment, CourseReview courseReview)
+        {
+            var course = await _cousesRepository.GetByIdAsync(enrollment.CourseId);
+            course.SumRates += courseReview.Rating;
+            course.TotalReviews++;
+            if (!ValidAvgRate(course))
+            {
+                course.AvgRate = 0;
+                return;
+            }
+            course.AvgRate = course.SumRates / course.TotalReviews;
+        }
+
         /// <summary>
         /// update course review
         /// </summary>
         /// <param name="courseReviewUpdateRequest"></param>
         /// <returns></returns>
-        public async Task<ApiBaseResponse> Update(Guid id, CourseReviewUpdateRequest courseReviewUpdateRequest)
+        public async Task<ApiBaseResponse> Update(Guid id, CourseReviewUpdateRequest courseReviewUpdateRequest, Guid userId)
         {
+
+
             var courseReview = await _courseReviewRepository.BuildQuery()
                                                             .GetById(id)
                                                             .IncludeEnrollment()
@@ -81,24 +97,39 @@ namespace Course.BLL.Services
             if (courseReview == null)
                 return new CourseReviewNotFound(id);
 
+            var enrollment = await _enrollmentRepository.GetByIdAsync(courseReview.EnrollmentId);
+            if (enrollment.UserId != userId)
+                return new NotOwnOfCourseReviewResponse(courseReview.Id);
+
             courseReview.UpdatedAt = DateTime.Now;
 
-            var course = await _cousesRepository.GetByIdAsync(courseReview.Enrollment.CourseId);
-            course.SumRates -= courseReview.Rating;
-            course.SumRates += courseReviewUpdateRequest.Rating;
-            course.AvgRate = course.SumRates / course.TotalReviews;
+            await UpdateRate(courseReviewUpdateRequest, courseReview);
 
             _mapper.Map(courseReviewUpdateRequest, courseReview);
             await _unitOfWork.SaveChangesAsync();
             var courseReviewDTO = _mapper.Map<CourseReviewDTO>(courseReview);
             return new ApiOkResponse<CourseReviewDTO>(courseReviewDTO);
         }
+
+        private async Task UpdateRate(CourseReviewUpdateRequest courseReviewUpdateRequest, CourseReview courseReview)
+        {
+            var course = await _cousesRepository.GetByIdAsync(courseReview.Enrollment.CourseId);
+            course.SumRates -= courseReview.Rating;
+            course.SumRates += courseReviewUpdateRequest.Rating;
+            if (!ValidAvgRate(course))
+            {
+                course.AvgRate = 0;
+                return;
+            }
+            course.AvgRate = course.SumRates / course.TotalReviews;
+        }
+
         /// <summary>
         /// delete course review
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<ApiBaseResponse> Delete(Guid id)
+        public async Task<ApiBaseResponse> Delete(Guid id, Guid userId)
         {
             var courseReview = await _courseReviewRepository.BuildQuery()
                                                             .GetById(id)
@@ -106,6 +137,10 @@ namespace Course.BLL.Services
                                                             .AsSelectorAsync(c => c);
             if (courseReview == null)
                 return new CourseReviewNotFound(id);
+
+            var enrollment = await _enrollmentRepository.GetByIdAsync(courseReview.EnrollmentId);
+            if (enrollment.UserId != userId)
+                return new NotOwnOfCourseReviewResponse(courseReview.Id);
 
             await RemoveRateCourse(courseReview);
 
@@ -120,7 +155,7 @@ namespace Course.BLL.Services
             course.SumRates -= courseReview.Rating;
             course.TotalReviews--;
 
-            if (course.TotalReviews <= 0)
+            if (!ValidAvgRate(course))
             {
                 course.AvgRate = 0;
                 return;
@@ -128,30 +163,35 @@ namespace Course.BLL.Services
             course.AvgRate = (course.SumRates / course.TotalReviews);
         }
 
+        private static bool ValidAvgRate(Courses course)
+        {
+            if (course.TotalReviews <= 0 || course.SumRates <= 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
         // <summary>
         // Get total review of course
         // </summary>
         // <param name = "userId" ></ param >
         // < returns ></ returns >
-        public async Task<Response<int>> GetTotalReviewOfUser(Guid userId)
+        public async Task<ApiBaseResponse> GetTotalReviewOfUser(Guid userId)
         {
-            try
-            {
-                var IsExistEnrolls = await _enrollmentRepository.BuildQuery()
-                                                                .FilterByUserId(userId)
-                                                                .AnyAsync();
-                if (!IsExistEnrolls)
-                    return new Response<int>(true, 0);
+            if (userId == Guid.Empty)
+                return new UserIdNullResponse();
 
-                var courses = await _courseReviewRepository.BuildQuery()
-                                                           .FilterByUserId(userId)
-                                                           .CountAsync();
-                return new Response<int>(true, courses);
-            }
-            catch (Exception ex)
-            {
-                return new Response<int>(false, ex.Message, null);
-            }
+            var IsExistEnrolls = await _enrollmentRepository.BuildQuery()
+                                                            .FilterByUserId(userId)
+                                                            .AnyAsync();
+            if (!IsExistEnrolls)
+                return new EnrollmentNotForUserFoundResponse(userId);
+
+            var count = await _courseReviewRepository.BuildQuery()
+                                                     .FilterByUserId(userId)
+                                                     .CountAsync();
+            return new ApiOkResponse<int>(count);
         }
 
         public async Task<Response<int>> GetTotalReviewOfInstructor(Guid userId)
@@ -167,6 +207,7 @@ namespace Course.BLL.Services
                 var courses = await _courseReviewRepository.BuildQuery()
                                                            .FilterByUserIdOfCourse(userId)
                                                            .CountAsync();
+
                 return new Response<int>(true, courses);
             }
             catch (Exception ex)
@@ -203,12 +244,6 @@ namespace Course.BLL.Services
             {
                 if (courseId is null && userId == Guid.Empty)
                     return new Response<float>(false, "must pass userId or CourseId", "400");
-                //var IsExistEnrolls = await _enrollmentRepository.BuildQuery()
-                //                                                .FilterByCourseId(courseId)
-                //                                                .FilterByUserId(userId)
-                //                                                .AnyAsync();
-                //if (!IsExistEnrolls)
-                //    return new Response<float>(true, 0);
 
 
                 var courses = await _courseReviewRepository.BuildQuery()
@@ -230,12 +265,6 @@ namespace Course.BLL.Services
                 if (courseId is null && userId == Guid.Empty)
                     return new Response<List<float>>(false, "must pass userId or CourseId", "400");
 
-                //var IsExistEnrolls = await _enrollmentRepository.BuildQuery()
-                //                                                .FilterByCourseId(courseId)
-                //                                                .FilterByUserId(userId)
-                //                                                .AnyAsync();
-                //if (!IsExistEnrolls)
-                //    return new Response<List<float>>(true, new() { 0, 0, 0, 0, 0 });
 
                 var sumRating = await _courseReviewRepository.BuildQuery()
                                                              .FilterByCourseId(courseId)

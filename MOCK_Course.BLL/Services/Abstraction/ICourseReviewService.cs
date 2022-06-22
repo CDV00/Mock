@@ -12,13 +12,7 @@ namespace Course.BLL.Services.Abstraction
 {
     public interface ICourseReviewService
     {
-        //Task<Responses<CourseReviewDTO>> GetAll(Guid courseId);
-        //Task<PagedList<CourseReviewDTO>> GetAll(Guid courseId, CourseReviewParameters courseReviewParameters);
-        //Task<Responses<CourseReviewDTO>> Getall(Guid courseId);
-        //Task<Response<CourseReviewDTO>> Add(CourseReviewRequest courseReviewRequest);
-        //Task<Response<CourseReviewDTO>> Update(Guid id, CourseReviewUpdateRequest courseReviewUpdateRequest);
-        //Task<BaseResponse> Delete(Guid id);
-        Task<Response<int>> GetTotalReviewOfUser(Guid userId);
+        Task<ApiBaseResponse> GetTotalReviewOfUser(Guid userId);
         Task<Response<float>> GetAVGRatinng(Guid? courseId, Guid? userId);
         Task<Response<List<float>>> GetDetaiRate(Guid? courseId, Guid? userId);
         Task<Response<BaseResponse>> IsCourseReview(Guid userId, Guid courseId);
@@ -31,7 +25,7 @@ namespace Course.BLL.Services.Abstraction
         Task<Response<List<float>>> GetDetaiRateOfIntructor(Guid userId);
         Task<ApiBaseResponse> GetAll(Guid courseId, CourseReviewParameters parameter);
         Task<ApiBaseResponse> Add(CourseReviewRequest courseReviewRequest);
-        Task<ApiBaseResponse> Update(Guid id, CourseReviewUpdateRequest courseReviewUpdateRequest);
-        Task<ApiBaseResponse> Delete(Guid id);
+        Task<ApiBaseResponse> Update(Guid id, CourseReviewUpdateRequest courseReviewUpdateRequest, Guid userId);
+        Task<ApiBaseResponse> Delete(Guid id, Guid userId);
     }
 }

@@ -30,9 +30,7 @@ namespace CourseAPI.Controllers
 
         /// <summary>
         /// Get all review of course. with paging and search
-        /// https://gambolthemes.net/html-items/cursus_main_demo/course_detail_view.html
         /// </summary>
-        /// <param name="CourseId">Course Id</param>
         /// <returns></returns>
         [HttpGet("Get-all")]
         [AllowAnonymous]
@@ -50,24 +48,12 @@ namespace CourseAPI.Controllers
         }
 
 
-        /// <summary>
-        /// Create new review
-        /// </summary>
-        /// <param name="courseReviewRequest"></param>
-        /// <returns></returns>
-        [HttpPost]
-        //public async Task<ActionResult<Responses<CourseReviewDTO>>> Add(CourseReviewRequest courseReviewRequest)
-        //{
-        //    var result = await _courseReviewService.Add(courseReviewRequest);
-        //    if (result.IsSuccess == false)
-        //        return BadRequest(result);
-        //    return Ok(result);
-        //}
         public async Task<ActionResult<ApiOkResponse<CourseReviewDTO>>> Add(CourseReviewRequest courseReviewRequest)
         {
             var result = await _courseReviewService.Add(courseReviewRequest);
             if (!result.IsSuccess)
                 return ProcessError(result);
+
             return Ok(result);
         }
 
@@ -80,7 +66,8 @@ namespace CourseAPI.Controllers
         [HttpPut()]
         public async Task<ActionResult<ApiOkResponse<CourseReviewDTO>>> Update(Guid id, CourseReviewUpdateRequest courseReviewUpdateRequest)
         {
-            var result = await _courseReviewService.Update(id, courseReviewUpdateRequest);
+            var userId = User.GetUserId();
+            var result = await _courseReviewService.Update(id, courseReviewUpdateRequest, userId);
             if (!result.IsSuccess)
                 return ProcessError(result);
 
@@ -95,28 +82,30 @@ namespace CourseAPI.Controllers
         [HttpDelete()]
         public async Task<ActionResult<ApiBaseResponse>> Delete(Guid id)
         {
-            var result = await _courseReviewService.Delete(id);
+            var userId = User.GetUserId();
+            var result = await _courseReviewService.Delete(id, userId);
             if (!result.IsSuccess)
                 return ProcessError(result);
 
             return Ok(result);
         }
         /// <summary>
+        /// </summary>
+        /// <remarks>
         /// Here:http://res.cloudinary.com/dnusjl4qg/image/upload/v1655028774/utxnqqfxqh6fc4galiu8.jpg
         /// if userId from query == null, It will get userId from token.
-        /// </summary>
+        /// </remarks>
         [HttpGet("Get-total-Review-of-User")]
         [AllowAnonymous]
-        public async Task<ActionResult<Response<int>>> GetTotalReviewOfUser(Guid? userId)
+        public async Task<ActionResult<ApiOkResponse<int>>> GetTotalReviewOfUser(Guid? userId)
         {
             if (userId == null)
                 userId = User.GetUserId();
-            if (userId == null)
-                return new Response<int>(false, "userId is null! need pass userId from Query or authentication", null);
 
             var result = await _courseReviewService.GetTotalReviewOfUser(userId.GetValueOrDefault());
-            if (result.IsSuccess == false)
-                return BadRequest(result);
+
+            if (!result.IsSuccess)
+                return ProcessError(result);
             return Ok(result);
         }
 
