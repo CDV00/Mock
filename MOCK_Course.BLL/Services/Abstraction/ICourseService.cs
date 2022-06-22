@@ -23,5 +23,6 @@ namespace Course.BLL.Services.Abstraction
         Task<BaseResponse> UpdateStatus(CourseStatusUpdateRequest courseStatusUpdateRequest);
         //Task<Responses<CourseDTO>> UpcomingCourse(Guid userId);
         Task<ApiBaseResponse> GetDetail(Guid id, Guid? userId);
+        Task<ApiBaseResponse> GetAllMyLearning(CourseParameters parameter, Guid userId);
     }
 }

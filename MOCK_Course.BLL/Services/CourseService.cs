@@ -118,7 +118,13 @@ namespace Course.BLL.Services
 
             return new ApiOkResponse<PagedList<CourseDTO>>(courses);
         }
+        public async Task<ApiBaseResponse> GetAllMyLearning(CourseParameters parameter, Guid userId)
+        {
+            var courses = await _cousesRepository.GetAllMyLearning(userId, parameter);
+            await AddLast(courses, userId);
 
+            return new ApiOkResponse<PagedList<CourseDTO>>(courses);
+        }
         // Upcoming courses: Review
         //public async Task<Responses<CourseDTO>> UpcomingCourse(Guid userId)
         //{
@@ -170,7 +176,8 @@ namespace Course.BLL.Services
         public async Task<ApiBaseResponse> GetAllMyPurchase(CourseParameters parameter, Guid userId)
         {
             var courses = await _cousesRepository.GetAllMyPurchase(userId, parameter);
-
+            await AddLast(courses, userId);
+            
             return new ApiOkResponse<PagedList<CourseDTO>>(courses);
         }
 

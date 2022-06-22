@@ -24,7 +24,7 @@ namespace Course.DAL.Queries
 
         public ICourseQuery FilterByOrderd(Guid userId)
         {
-            Query.Where(type => type.Orders.Any(o => o.UserId == userId));
+            Query.Where(type => type.Orders.Any(o => o.OrderItem.Any(or=>o.User.Id == userId)));
             return this;
         }
 
@@ -67,6 +67,11 @@ namespace Course.DAL.Queries
         public ICourseQuery FilterById(Guid Id)
         {
             Query = Query.Where(type => type.Id == Id);
+            return this;
+        }
+        public ICourseQuery FilterByEnroll(Guid userId)
+        {
+            Query = Query.Where(c => c.Enrollments.Any(e => e.UserId == userId));
             return this;
         }
 
