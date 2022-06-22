@@ -22,12 +22,6 @@ namespace Course.BLL.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        /// <summary>
-        /// contructer CourseReviewService 
-        /// </summary>
-        /// <param name="courseReviewRepository"></param>
-        /// <param name="unitOfWork"></param>
-        /// <param name="mapper"></param>
         public CourseReviewService(ICourseReviewRepository courseReviewRepository, ICourseRepository cousesRepository, IEnrollmentRepository enrollmentRepository, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _courseReviewRepository = courseReviewRepository;

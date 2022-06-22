@@ -28,7 +28,7 @@ namespace Course.BLL.Services
         private readonly ISectionService _sectionService;
         private readonly IOrderService _orderService;
         private readonly IOrderItemService _orderItemService;
-
+        private readonly IQuestionRepository _questionRepository;
         private readonly ILectureService _lectureService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -45,7 +45,8 @@ namespace Course.BLL.Services
                              ISavedCoursesService savedCoursesService,
                              ISectionService sectionService,
                              ILectureService lectureService, IOrderService orderService,
-                             ICategoryRepository categoryRepository, IOrderItemService orderItemService)
+                             ICategoryRepository categoryRepository, IOrderItemService orderItemService,
+                              IQuestionRepository questionRepository)
         {
             _cousesRepository = cousesRepository;
             _mapper = mapper;
@@ -62,6 +63,7 @@ namespace Course.BLL.Services
             _orderService = orderService;
             _categoryRepository = categoryRepository;
             _orderItemService = orderItemService;
+            _questionRepository = questionRepository;
         }
 
         public async Task<ApiBaseResponse> GetAllCourses(CourseParameters parameter, Guid? userId)
@@ -479,27 +481,32 @@ namespace Course.BLL.Services
                         quiz.Id = Guid.Empty;
                     }
 
-                    #region Update Question
-                    var questions = quiz.Questions;
-                    if (questions != null)
-                    {
-                        for (var k = 0; k < questions.Count; k++)
-                        {
-                            var question = questions[k];
-                            if (question.IsDeleted && question.IsNew)
-                            {
-                                questions.Remove(question);
-                                continue;
-                            }
-                            if (question.IsNew || quiz.IsNew)
-                            {
-                                question.Id = Guid.Empty;
-                            }
+                    AddNewQuestionAsync(quiz);
+                }
+            }
+        }
 
-                            NewQuizOption(question);
-                            #endregion
-                        }
+        private static void AddNewQuestionAsync(QuizForUpdateRequest quiz)
+        {
+            #region Update Question
+            var questions = quiz.Questions;
+            if (questions != null)
+            {
+                for (var k = 0; k < questions.Count; k++)
+                {
+                    var question = questions[k];
+                    if (question.IsDeleted && question.IsNew)
+                    {
+                        questions.Remove(question);
+                        continue;
                     }
+                    if (question.IsNew || quiz.IsNew)
+                    {
+                        question.Id = Guid.Empty;
+                    }
+
+                    NewQuizOption(question);
+                    #endregion
                 }
             }
         }

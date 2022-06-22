@@ -47,7 +47,7 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
 
-
+        [HttpPost]
         public async Task<ActionResult<ApiOkResponse<CourseReviewDTO>>> Add(CourseReviewRequest courseReviewRequest)
         {
             var result = await _courseReviewService.Add(courseReviewRequest);
