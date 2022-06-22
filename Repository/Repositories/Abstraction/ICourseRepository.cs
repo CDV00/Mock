@@ -19,5 +19,6 @@ namespace Course.DAL.Repositories.Abstraction
         Task<PagedList<CourseDTO>> GetAllMyPurchase(Guid userId, CourseParameters parameters);
         Task<CourseDTO> GetDetailCourseAsync(Guid id);
         Task<bool> IsExist(Guid id);
+        Task<PagedList<CourseDTO>> GetAllMyLearning(Guid userId, CourseParameters parameters);
     }
 }

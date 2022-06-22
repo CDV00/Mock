@@ -43,7 +43,7 @@ namespace Course.BLL.Services
 
                 if (purchase == null)
                 {
-                    return new Response<OrderItemDTO>(true, null);
+                    return new Response<OrderItemDTO>(false, purchase);
                 }
 
                 return new Response<OrderItemDTO>(true, purchase);
