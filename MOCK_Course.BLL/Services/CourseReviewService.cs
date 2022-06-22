@@ -107,19 +107,25 @@ namespace Course.BLL.Services
             if (courseReview == null)
                 return new CourseReviewNotFound(id);
 
-            await RemoeRateCourse(courseReview);
+            await RemoveRateCourse(courseReview);
 
-            _courseReviewRepository.Remove(courseReview, true);
+            _courseReviewRepository.Remove(courseReview, false);
             await _unitOfWork.SaveChangesAsync();
             return new ApiBaseResponse(true);
         }
 
-        private async Task RemoeRateCourse(CourseReview courseReview)
+        private async Task RemoveRateCourse(CourseReview courseReview)
         {
             var course = await _cousesRepository.GetByIdAsync(courseReview.Enrollment.CourseId);
             course.SumRates -= courseReview.Rating;
             course.TotalReviews--;
-            course.AvgRate = course.SumRates / course.TotalReviews;
+
+            if (course.TotalReviews <= 0)
+            {
+                course.AvgRate = 0;
+                return;
+            }
+            course.AvgRate = (course.SumRates / course.TotalReviews);
         }
 
         // <summary>
