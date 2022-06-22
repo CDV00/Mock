@@ -7,13 +7,15 @@ using System;
 using System.Threading.Tasks;
 using CourseAPI.Extensions.ControllerBase;
 using Course.BLL.Services.Abstraction;
+using Entities.Responses;
+using CourseAPI.Presentation.Controllers;
 
 namespace CourseAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class EnrollmentController : ControllerBase
+    public class EnrollmentController : ApiControllerBase
     {
         private readonly IEnrollmentService _enrollmentService;
         public EnrollmentController(IEnrollmentService enrollmentService)
@@ -27,12 +29,13 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Response<EnrollmentDTO>>> Create(Guid courseId)
+        public async Task<ActionResult<ApiOkResponse<EnrollmentDTO>>> Create(Guid courseId)
         {
             var userId = User.GetUserId();
             var result = await _enrollmentService.Add(userId, courseId);
             if (result.IsSuccess == false)
-                return BadRequest(result);
+                return ProcessError(result);
+
             return Ok(result);
         }
 

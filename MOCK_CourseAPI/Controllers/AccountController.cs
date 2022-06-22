@@ -23,9 +23,12 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// Register a account, if categoryId (category of course) == null then user role is student, 
-        /// otherwise user role is Instructor
+        /// Register new account
         /// </summary>
+        /// <remarks>
+        ///if categoryId(category of course) == null then user role is student, 
+        /// otherwise user role is Instructor
+        /// </remarks>
         /// <param name="registerRequest"></param>
         /// <returns>token and User Information</returns>
         [HttpPost("register")]
@@ -45,9 +48,13 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// Login with email and password
-        /// https://gambolthemes.net/html-items/cursus_main_demo/sign_in.html
+        /// Login 
         /// </summary>
+        /// <remarks>
+        /// ## Account Admin:
+        /// email: admin123@gmail.com         
+        ///  password: 1aA*1aA*
+        /// </remarks>
         /// <param name="loginRequest"></param>
         /// <returns>Token and user Information</returns>
         [HttpPost("login")]

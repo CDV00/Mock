@@ -64,7 +64,7 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// Upload File, lesser 5mn
+        /// Upload File, file lesser 5mb
         /// </summary>
         /// <remarks>
         /// Use api DownloadFile to download file you already upload

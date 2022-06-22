@@ -93,7 +93,7 @@ namespace CourseAPI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete()]
-        public async Task<ActionResult<BaseResponse>> Delete(Guid id)
+        public async Task<ActionResult<ApiBaseResponse>> Delete(Guid id)
         {
             var result = await _courseReviewService.Delete(id);
             if (!result.IsSuccess)

@@ -8,6 +8,7 @@ using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
 using Repository.Repositories;
 using Course.BLL.Share.RequestFeatures;
+using Entities.Responses;
 
 namespace Course.BLL.Services
 {
@@ -29,37 +30,35 @@ namespace Course.BLL.Services
             _cousesRepository = cousesRepository;
         }
 
-        public async Task<Response<EnrollmentDTO>> Add(Guid userId, Guid CourseId)
+        public async Task<ApiBaseResponse> Add(Guid userId, Guid CourseId)
         {
-            try
+            if (!await _cousesRepository.BuildQuery()
+                                        .FilterById(CourseId)
+                                        .AnyAsync())
+                return new CourseNotFoundResponse(CourseId);
+
+            if (await _enrollmentRepository.BuildQuery()
+                                           .FilterByCourseId(CourseId)
+                                           .FilterByUserId(userId)
+                                           .AnyAsync())
+                return new DuplicateEnrollmentResponse(CourseId);
+
+            var enrollment = new Enrollment()
             {
-                if (CheckPriceGreaterZero(CourseId).Result)
-                {
-                    return new Response<EnrollmentDTO>(false, "Can't add course with price lower 0", null);
-                }
+                UserId = userId,
+                CourseId = CourseId
+            };
 
-                var enrollment = new Enrollment()
-                {
-                    UserId = userId,
-                    CourseId = CourseId
-                };
+            await _enrollmentRepository.CreateAsync(enrollment);
 
-                await _enrollmentRepository.CreateAsync(enrollment);
+            var course = await _cousesRepository.GetByIdAsync(CourseId);
+            course.TotalEnrolls++;
 
-                var course = await _cousesRepository.GetByIdAsync(CourseId);
-                course.TotalEnrolls++;
+            await _unitOfWork.SaveChangesAsync();
 
-                await _unitOfWork.SaveChangesAsync();
-
-                return new Response<EnrollmentDTO>(
-                    true, _mapper.Map<EnrollmentDTO>(enrollment));
-            }
-            catch (Exception ex)
-            {
-                return new Response<EnrollmentDTO>(false, ex.Message, null);
-            }
+            return new ApiOkResponse<EnrollmentDTO>(_mapper.Map<EnrollmentDTO>(enrollment));
         }
-        //
+
         private async Task<bool> CheckPriceGreaterZero(Guid courseId)
         {
             decimal price = await _cousesRepository.BuildQuery()

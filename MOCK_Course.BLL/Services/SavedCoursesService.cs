@@ -34,7 +34,7 @@ namespace Course.BLL.Services
                 return new CourseNotFoundResponse(courseId);
 
             if (await _savedCoursesRepository.CheckExistSaveCourse(courseId, userId))
-                return new DuplicateSaveCourseResponse(courseId, userId);
+                return new DuplicateSaveCourseResponse(courseId);
 
             var savecourse = new SavedCourses()
             {
