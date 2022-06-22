@@ -84,60 +84,44 @@ namespace Course.BLL.Services
         /// <returns></returns>
         public async Task<BaseResponse> Register(RegisterRequest registerRequest)
         {
-            try
+
+            var user = await _userManager.FindByEmailAsync(registerRequest.Email);
+            //check Email Confirmed
+            if (!user.EmailConfirmed)
             {
-                var user = await _userManager.FindByEmailAsync(registerRequest.Email);
-                //check Email Confirmed
-                if (!user.EmailConfirmed)
-                {
-                    return new Response<LoginDTO>(false, "Authentication failed. You have not confirmed email.", "403");
-                }
-
-                _mapper.Map(registerRequest, user);
-                user.Description = registerRequest.Description;
-                GetAvartarUser(user);
-                user.UpdatedAt = DateTime.Now;
-
-                //var user = _mapper.Map<AppUser>(registerRequest);
-                //user.Description = registerRequest.Description;
-                //GetAvartarUser(user);
-                //user.CreatedAt = DateTime.Now;//await AddCodeNumber(user.Email, codeNumber);
-                //var result = await _userManager.CreateAsync(user, registerRequest.Password);
-
-
-                if (!result.Succeeded)
-                {
-                    return new BaseResponse(false, result.Errors.ToList()[0].Description, result.Errors.ToList()[0].Code);
-                }
-
-                if (registerRequest.CategoryId == null)
-                {
-                    await AddStudentRole(user);
-                }
-
-                if (registerRequest.CategoryId != null)
-                {
-                    await AddInstructorRole(user);
-                }
-
-                var userResponse = _mapper.Map<UserDTO>(user);
-
-                var roles = await _userManager.GetRolesAsync(user);
-                userResponse.Role = string.Join(",", roles);
-                return new BaseResponse(true);
-
-            }
-            catch (Exception ex)
-            {
-                return new BaseResponse(false, ex.Message, null);
+                return new Response<LoginDTO>(false, "Authentication failed. You have not confirmed email.", "403");
             }
 
-            string codeNumber = CreateCodeNumber().Result.ToString();
-            await AddCodeNumber(user.Email, codeNumber);
-            await SendEmailConfirm(user.Email, "Register", codeNumber);
+            _mapper.Map(registerRequest, user);
+            user.Description = registerRequest.Description;
+            GetAvartarUser(user);
+            user.UpdatedAt = DateTime.Now;
+
+            await _userManager.AddPasswordAsync(user, registerRequest.Password);
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                return new BaseResponse(false, result.Errors.ToList()[0].Description, result.Errors.ToList()[0].Code);
+            }
+
+            if (registerRequest.CategoryId == null)
+            {
+                await AddStudentRole(user);
+            }
+
+            if (registerRequest.CategoryId != null)
+            {
+                await AddInstructorRole(user);
+            }
+
+            var userResponse = _mapper.Map<UserDTO>(user);
+
+            var roles = await _userManager.GetRolesAsync(user);
+            userResponse.Role = string.Join(",", roles);
+
             return new BaseResponse(true);
         }
-
         /// <summary>
         /// condirm 
         /// </summary>
@@ -408,7 +392,7 @@ namespace Course.BLL.Services
         //
         public async Task<BaseResponse> ResetCodeNumber(string email, string working)
         {
-            string  codeNumber = await AddCodeNumber(email);
+            string codeNumber = await AddCodeNumber(email);
             if (codeNumber == string.Empty)
             {
                 return new Response<BaseResponse>(false, "Add Code Number went wrong!", null);

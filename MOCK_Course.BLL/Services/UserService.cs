@@ -38,7 +38,6 @@ namespace Course.BLL.Services
             _courseService = courseService;
         }
 
-
         // Get All User(role):Full Name, Birthday,... IsActive
         public async Task<Responses<UserDTO>> GetAllUserByRole(string role)
         {
@@ -164,6 +163,7 @@ namespace Course.BLL.Services
                                              .FilterByRole(RoleName)
                                              .FilterByName(userParameter.Keyword)
                                              .CountAsync();
+
             //Get Total Subscribers & Total Courses
             for (var i = 0; i < users.Count; i++)
             {

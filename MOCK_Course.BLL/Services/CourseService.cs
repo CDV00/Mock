@@ -83,7 +83,7 @@ namespace Course.BLL.Services
                 courses[i].PercentCompletion = await _lectureService.PercentCourseCompletion(userId.GetValueOrDefault(), courses[i].Id);
 
                 courses[i].IsEnroll = (await _enrollmentService.IsEnrollment(userId.GetValueOrDefault(), courses[i].Id)).data == null ? false : true;
-                courses[i].isPurchased = (await _orderItemService.IsPurchased(userId.GetValueOrDefault(), courses[i].Id)).data == null ? false : true;
+                courses[i].IsPurchased = (await _orderItemService.IsPurchased(userId.GetValueOrDefault(), courses[i].Id)).data == null ? false : true;
 
             }
         }
