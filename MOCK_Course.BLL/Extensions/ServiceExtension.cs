@@ -26,6 +26,7 @@ namespace Course.BLL.Extensions
 
             services.AddScoped<ILectureRepository, LectureRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderItemRepository, OrderItemRepository>();
             services.AddScoped<ICourseReviewRepository, CourseReviewRepository>();
             services.AddScoped<IDiscountRepository, DiscountRepository>();
             services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
@@ -36,6 +37,7 @@ namespace Course.BLL.Extensions
             services.AddScoped<IQuizRepository, QuizRepository>();
             services.AddScoped<IQuizOptionRepository, QuizOptionRepository>();
             services.AddScoped<IQuizSettingRepository, QuizSettingRepository>();
+
         }
         /// <summary>
         /// Configure Services
@@ -55,6 +57,7 @@ namespace Course.BLL.Extensions
             services.AddScoped<ILectureService, LectureService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IOrderItemService, OrderItemService>();
             services.AddScoped<ICourseReviewService, CourseReviewService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IDiscountService, DiscountService>();

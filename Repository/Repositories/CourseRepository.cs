@@ -147,14 +147,15 @@ namespace Repository.Repositories
         }
         public async Task<PagedList<CourseDTO>> GetAllMyPurchase(Guid userId, CourseParameters parameters)
         {
-            Status status = Status.Review;
+            Status status = Status.Aprrove;
             var courses = await BuildQuery().IncludeCategory()
                                             .IncludeUser()
+                                            .IncludeOrder()
+                                            //.FilterByUserId(userId)
                                             .IncludeDiscount()
                                             .FilterByOrderd(userId)
                                             .FilterStatus(status)
                                             .FilterByKeyword(parameters.Keyword)
-                                            .FilterByUserId(parameters.userId)
                                             .FilterByCategoryId(parameters.CategoryId)
                                             .FilterByAudioLanguageIds(parameters.AudioLanguageIds)
                                             .FilterByCloseCaptionIds(parameters.CloseCaptionIds)
@@ -166,8 +167,9 @@ namespace Repository.Repositories
                                             .Take(parameters.PageSize)
                                             .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 
-            var count = await BuildQuery().FilterByKeyword(parameters.Keyword)
-                                          .FilterByUserId(parameters.userId)
+            var count = await BuildQuery().FilterByOrderd(userId)
+                                          //.FilterStatus(status)
+                                          .FilterByKeyword(parameters.Keyword)
                                           .FilterByCategoryId(parameters.CategoryId)
                                           .FilterByAudioLanguageIds(parameters.AudioLanguageIds)
                                           .FilterByCloseCaptionIds(parameters.CloseCaptionIds)

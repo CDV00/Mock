@@ -234,6 +234,7 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<ILectureService, LectureService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IOrderItemService, OrderItemService>();
             services.AddScoped<ICourseReviewService, CourseReviewService>();
 
             services.AddScoped<ILectureService, LectureService>();

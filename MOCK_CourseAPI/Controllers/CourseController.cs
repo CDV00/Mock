@@ -170,7 +170,7 @@ namespace CourseAPI.Controllers
             Response.Headers.Add("X-Pagination",
                                  JsonSerializer.Serialize(coursePagedList.MetaData));
 
-            return Ok(new Responses<CourseDTO>(true, coursePagedList));
+            return Ok(result);
         }
 
         /// <summary>
@@ -199,7 +199,7 @@ namespace CourseAPI.Controllers
             Response.Headers.Add("X-Pagination",
                                  JsonSerializer.Serialize(coursePagedList.MetaData));
 
-            return Ok(new Responses<CourseDTO>(true, coursePagedList));
+            return Ok(result);
         }
 
         [HttpGet("Get-all-up-coming-Course")]
