@@ -17,8 +17,7 @@ namespace Course.DAL.Configuration
             .HasForeignKey(c => c.CourseId)
             .OnDelete(DeleteBehavior.NoAction);
 
-            builder.HasQueryFilter(u => !u.IsDeleted && u.EndDate > DateTime.Now);
-            ////builder.HasQueryFilter();
+            builder.HasQueryFilter(u => !u.IsDeleted || u.EndDate > DateTime.Now);
         }
     }
 }

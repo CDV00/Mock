@@ -22,6 +22,7 @@ namespace Course.DAL.Data
         public DbSet<ShoppingCart> Carts { get; set; }
         public DbSet<Section> Sections { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<Deposit> Deposits { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Discount> Discounts { get; set; }
         public DbSet<Lecture> Lectures { get; set; }
@@ -74,6 +75,7 @@ namespace Course.DAL.Data
             modelBuilder.ApplyConfiguration(new QuizOptionConfiguration());
             modelBuilder.ApplyConfiguration(new QuestionConfiguration());
             modelBuilder.ApplyConfiguration(new QuizConfiguration());
+            modelBuilder.ApplyConfiguration(new DipositeConfiguration());
 
             modelBuilder.ConfigTablesOfIdentity();
             //modelBuilder.SeedData();

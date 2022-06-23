@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entities.Models;
+using System;
 using System.Collections.Generic;
 
 namespace Course.DAL.Models
@@ -31,6 +32,7 @@ namespace Course.DAL.Models
         public ICollection<Subscription> Subscriptions { get; set; }
         public ICollection<LectureCompletion> LectureCompletions { get; set; }
         public ICollection<Order> Orders { get; set; }
+        public ICollection<Deposit> Deposits { get; set; }
         public ICollection<ShoppingCart> Carts { get; set; }
         public ICollection<SavedCourses> SavedCourses { get; set; }
     }

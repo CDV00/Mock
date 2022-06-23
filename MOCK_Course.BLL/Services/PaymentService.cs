@@ -2,7 +2,10 @@
 using Course.BLL.Requests;
 using Course.DAL.DTOs;
 using Course.DAL.Models;
+using Course.DAL.Repositories.Abstraction;
+using Entities.Models;
 using Microsoft.AspNetCore.Identity;
+using Repository.Repositories;
 using Stripe;
 using System;
 using System.Threading.Tasks;
@@ -12,21 +15,35 @@ namespace MOCK_Course.BLL.Services.Implementations
     public class PaymentService : IPaymentService
     {
         private readonly UserManager<AppUser> _userManager;
-        public PaymentService(UserManager<AppUser> userManager)
+        private readonly IDipositRepository _dipositRepository;
+        private readonly IUnitOfWork _unitOfWork;
+        public PaymentService(UserManager<AppUser> userManager,
+                              IDipositRepository dipositRepository,
+                              IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
+            _dipositRepository = dipositRepository;
         }
+
         public async Task<Response<PaymentDTO>> Deposit(string userId, Payment payment)
         {
             var result = await PayAsync(payment);
             if (!result.IsSuccess)
             {
-                return new Response<PaymentDTO>(false);
+                return new Response<PaymentDTO>(false, result.Message, result.StatusCode);
             }
 
             var user = await _userManager.FindByIdAsync(userId);
             user.Balance += payment.value.GetValueOrDefault();
             await _userManager.UpdateAsync(user);
+
+            var diposite = new Deposit
+            {
+                UserId = Guid.Parse(userId),
+                Amount = payment.value.GetValueOrDefault()
+            };
+            await _dipositRepository.CreateAsync(diposite);
+            await _unitOfWork.SaveChangesAsync();
 
             var paymentDTO = new PaymentDTO { AddedValue = payment.value.GetValueOrDefault() };
             return new Response<PaymentDTO>(true, paymentDTO);
