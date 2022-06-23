@@ -501,16 +501,17 @@ namespace Course.BLL.Services
         /// <exception cref="NotImplementedException"></exception>
         private async Task<LoginDTO> FacebookLogin(ExternalLoginResquest externalLoginResquest)
         {
+            
 
+            // 1.generate an app access token
             string AppId = _configurations["Authentication:Facebook:AppId"];
             string AppSecret = _configurations["Authentication:Facebook:AppSecret"];
             var url = new Uri($"https://graph.facebook.com/oauth/access_token?client_id={AppId}&client_secret={AppSecret}&grant_type=client_credentials");
 
-
-            // 1.generate an app access token
             var httpClient = new HttpClient();
             var appAccessTokenResponse = await httpClient.GetStringAsync(url);
             var appAccessToken = JsonConvert.DeserializeObject<FacebookAppAccessToken>(appAccessTokenResponse);
+
             // 2. validate the user access token
             var userAccessTokenValidationResponse = await httpClient.GetStringAsync($"https://graph.facebook.com/debug_token?input_token={externalLoginResquest.Token}&access_token={appAccessToken.AccessToken}");
             var userAccessTokenValidation = JsonConvert.DeserializeObject<FacebookUserAccessTokenValidation>(userAccessTokenValidationResponse);
@@ -523,11 +524,10 @@ namespace Course.BLL.Services
             // 3. we've got a valid token so we can request user data from fb
             var userInfoResponse = await httpClient.GetStringAsync($"https://graph.facebook.com/v2.8/me?fields=id,email,first_name,last_name,name,gender,locale,birthday,picture&access_token={externalLoginResquest.Token}");
             var userInfo = JsonConvert.DeserializeObject<FacebookUserData>(userInfoResponse);
-
             // 4. ready to create the local user account (if necessary) and jwt
-            var user = await _userManager.FindByEmailAsync(userInfo.Email);
+            _user = await _userManager.FindByEmailAsync(userInfo.Email);
 
-            if (user == null)
+            if (_user == null || _user.Fullname == null)
             {
                 var appUser = new AppUser
                 {
@@ -537,7 +537,8 @@ namespace Course.BLL.Services
                     FacebookLink = userInfo.Id,
                     Email = userInfo.Email,
                     UserName = userInfo.Email,
-                    AvatarUrl = userInfo.Picture.Data.Url
+                    AvatarUrl = userInfo.Picture.Data.Url,
+                    EmailConfirmed = true
                 };
 
                 var result = await _userManager.CreateAsync(appUser);
@@ -545,26 +546,23 @@ namespace Course.BLL.Services
                 if (!result.Succeeded)
                     throw new Exception();
                 await _userManager.AddToRoleAsync(appUser, UserRolesConstant.Student);
+                _user = await _userManager.FindByNameAsync(userInfo.Email);
             }
-
-            // generate the jwt for the local user...
-            user = await _userManager.FindByNameAsync(userInfo.Email);
-            user.Fullname = userInfo.Name;
-            var userRole = await _userManager.GetRolesAsync(user);
+            if (!_user.IsActive)
+                throw new("Authentication failed. Account has been blocked.");
+            // create token
             var token = await CreateToken(populateExp: true);
-            user.UpdatedAt = DateTime.Now;
-            await _userManager.UpdateAsync(user);
-            UserDTO userWithRole = _mapper.Map<UserDTO>(user);
-            userWithRole.Role = userRole.FirstOrDefault();
 
-            return new LoginDTO(
-               token,
-               new UserDTO()
-               {
-                   FullName = user.Fullname,
-                   Email = user.Email,
-                   Role = UserRolesConstant.Student
-               });
+            if (token == null)
+                throw new ("Authentication Error. User don't have any role, please create new account!");
+
+
+            return new LoginDTO( token, new UserDTO()
+            {
+                FullName = _user.Fullname,
+                Email = _user.Email,
+                Role = UserRolesConstant.Student
+            });
         }
 
         /// <summary>
@@ -580,13 +578,12 @@ namespace Course.BLL.Services
             {
                 throw new Exception("Payload is null");
             }
-            var user = await _userManager.FindByEmailAsync(payload.Email);
+            var _user = await _userManager.FindByEmailAsync(payload.Email);
 
-            if (user is null)
+            if (_user is null)
             {
                 var appUser = new AppUser()
                 {
-                    Id = new Guid(),
                     UserName = payload.Email,
                     Email = payload.Email,
                     Fullname = payload.Name,
@@ -597,19 +594,24 @@ namespace Course.BLL.Services
                 if (!result.Succeeded)
                     throw new Exception();
                 await _userManager.AddToRoleAsync(appUser, UserRolesConstant.Student);
+                //find user
+                _user = await _userManager.FindByEmailAsync(payload.Email);
             }
-            user = await _userManager.FindByEmailAsync(payload.Email);
-            var userRoles = await _userManager.GetRolesAsync(user);
+            if (!_user.IsActive)
+                throw new("Authentication failed. Account has been blocked.");
+            //var userRoles = await _userManager.GetRolesAsync(user);
             // create token
             var token = await CreateToken(populateExp: true);
-            return new LoginDTO(
-                token,
-                new UserDTO()
-                {
-                    FullName = user.Fullname,
-                    Email = user.Email,
-                    Role = UserRolesConstant.Student
-                });
+
+            if (token == null)
+                throw new("Authentication Error. User don't have any role, please create new account!");
+
+            return new LoginDTO(token, new UserDTO()
+            {
+                FullName = _user.Fullname,
+                Email = _user.Email,
+                Role = UserRolesConstant.Student
+            });
 
         }
         /// <summary>

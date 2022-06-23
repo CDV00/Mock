@@ -1,8 +1,10 @@
-using System.IO;
+﻿using System.IO;
 using Contracts;
 using Course.BLL.Extensions;
 using CourseAPI.Extensions.Middleware;
 using CourseAPI.Extensions.ServiceExtensions;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -47,6 +49,31 @@ namespace CourseAPI
             services.AddControllers(config =>
             {
             });
+            //login Ex
+            services.AddAuthentication()
+                .AddFacebook(facebookOptions =>
+                {
+                    facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+                    facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+                })
+                .AddGoogle(googleOptions =>
+                {
+                    // Đọc thông tin Authentication:Google từ appsettings.json
+                    IConfigurationSection googleAuthNSection = Configuration.GetSection("Authentication:Google");
+                    // Thiết lập ClientID và ClientSecret để truy cập API google
+                    googleOptions.ClientId = googleAuthNSection["ClientId"];
+                    googleOptions.ClientSecret = googleAuthNSection["ClientSecret"];
+
+                });
+            services.AddAuthentication(
+                options =>
+                {
+                    options.DefaultChallengeScheme = FacebookDefaults.AuthenticationScheme;
+                    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
+                });
+
+            
         }
 
 
@@ -90,6 +117,8 @@ namespace CourseAPI
             {
                 endpoints.MapControllers();
             });
+
+            
         }
     }
 }
