@@ -22,7 +22,9 @@ namespace Course.BLL.Services
         private readonly ICloseCaptionRepository _closeCaptionRepository;
         private readonly ILevelRepository _levelRepository;
         private readonly ISectionRepositoty _sectionRepositoty;
+        private readonly ICourseReviewRepository _courseReviewRepository;
         private readonly ICourseReviewService _courseReviewService;
+        private readonly ICourseRepository _courseRepository;
         private readonly IEnrollmentService _enrollmentService;
         private readonly ISavedCoursesService _savedCoursesService;
         private readonly ISectionService _sectionService;
@@ -44,9 +46,12 @@ namespace Course.BLL.Services
                              IEnrollmentService enrollmentService,
                              ISavedCoursesService savedCoursesService,
                              ISectionService sectionService,
-                             ILectureService lectureService, IOrderService orderService,
-                             ICategoryRepository categoryRepository, IOrderItemService orderItemService,
-                              IQuestionRepository questionRepository)
+                             ILectureService lectureService,
+                             IOrderService orderService,
+                             ICategoryRepository categoryRepository,
+                             IOrderItemService orderItemService,
+                             IQuestionRepository questionRepository,
+                             ICourseReviewRepository courseReviewRepository)
         {
             _cousesRepository = cousesRepository;
             _mapper = mapper;
@@ -64,6 +69,7 @@ namespace Course.BLL.Services
             _categoryRepository = categoryRepository;
             _orderItemService = orderItemService;
             _questionRepository = questionRepository;
+            _courseReviewRepository = courseReviewRepository;
         }
 
         public async Task<ApiBaseResponse> GetAllCourses(CourseParameters parameter, Guid? userId)
@@ -85,32 +91,13 @@ namespace Course.BLL.Services
                 courses[i].PercentCompletion = await _lectureService.PercentCourseCompletion(userId.GetValueOrDefault(), courses[i].Id);
 
                 courses[i].IsEnroll = (await _enrollmentService.IsEnrollment(userId.GetValueOrDefault(), courses[i].Id)).data == null ? false : true;
+
                 courses[i].IsPurchased = (await _orderItemService.IsPurchased(userId.GetValueOrDefault(), courses[i].Id)).data == null ? false : true;
 
+                courses[i].MyRating = (await _courseReviewRepository.GetMyRating(userId.GetValueOrDefault(), courses[i].Id));
             }
         }
 
-        //public async Task<Responses<CourseDTO>> GetAllMyCoures(Guid userId)
-        //{
-        //    try
-        //    {
-        //        var courses = await _cousesRepository.BuildQuery()
-        //                                             .FilterByUserId(userId)
-        //                                             .FilterByApprove()
-        //                                             .IncludeCategory()
-        //                                             .IncludeSection()
-        //                                             .IncludeOrder()
-        //                                             .IncludeUser()
-        //                                             .IncludeDiscount()
-        //                                             .ToListAsync(c => _mapper.Map<CourseDTO>(c));
-
-        //        return new Responses<CourseDTO>(true, courses);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new Responses<CourseDTO>(false, ex.Message, null);
-        //    }
-        //}
         public async Task<ApiBaseResponse> GetAllMyCoures(CourseParameters parameter, Guid? userId)
         {
             var courses = await _cousesRepository.GetAllMyCoures(userId, parameter);
@@ -125,53 +112,12 @@ namespace Course.BLL.Services
 
             return new ApiOkResponse<PagedList<CourseDTO>>(courses);
         }
-        // Upcoming courses: Review
-        //public async Task<Responses<CourseDTO>> UpcomingCourse(Guid userId)
-        //{
-        //    try
-        //    {
-        //        Status status = Status.Review;
-        //        var courses = await _cousesRepository.BuildQuery()
-        //                                             .FilterByUserId(userId)
-        //                                             .FilterStatus(status)
-        //                                             .IncludeCategory()
-        //                                             .IncludeUser()
-        //                                             .IncludeDiscount()
-        //                                             .FilterByOrderd(userId)
-        //                                             .ToListAsync(c => _mapper.Map<CourseDTO>(c));
-
-        //        return new Responses<CourseDTO>(true, courses);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new Responses<CourseDTO>(false, ex.Message, null);
-        //    }
-        //}
         public async Task<ApiBaseResponse> UpcomingCourse(CourseParameters parameter, Guid? userId)
         {
             var courses = await _cousesRepository.UpcomingCourse(userId, parameter);
 
             return new ApiOkResponse<PagedList<CourseDTO>>(courses);
         }
-
-        //public async Task<Responses<CourseDTO>> GetAllMyPurchase(Guid userId)
-        //{
-        //    try
-        //    {
-        //        var courses = await _cousesRepository.BuildQuery()
-        //                                             .IncludeCategory()
-        //                                             .IncludeUser()
-        //                                             .IncludeDiscount()
-        //                                             .FilterByOrderd(userId)
-        //                                             .ToListAsync(c => _mapper.Map<CourseDTO>(c));
-
-        //        return new Responses<CourseDTO>(true, courses);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new Responses<CourseDTO>(false, ex.Message, null);
-        //    }
-        //}
 
         public async Task<ApiBaseResponse> GetAllMyPurchase(CourseParameters parameter, Guid userId)
         {
@@ -195,7 +141,7 @@ namespace Course.BLL.Services
         public async Task<ApiBaseResponse> Add(Guid userId, CourseForCreateRequest courseRequest)
         {
             if (!await _categoryRepository.Existing(courseRequest.CategoryId))
-                return new CategoryNotFoundResponse(courseRequest.CategoryId);
+                return new CategoryNotFoundResponse(courseRequest.CategoryId.GetValueOrDefault());
 
             if (!await _audioLanguageRepository.CheckExists(courseRequest.AudioLanguageIds))
                 return new NotMathIdResponse(nameof(AudioLanguage), string.Join(',', courseRequest.AudioLanguageIds));
@@ -324,9 +270,6 @@ namespace Course.BLL.Services
                 return new NotMathIdResponse(nameof(Level), string.Join(',', courseRequest.AudioLanguageIds));
 
             AddNewSection(courseRequest);
-            var questions = await _questionRepository.BuildQuery()
-                                                     .FilterByCourseId(id)
-                                                     .ToListAsync(q => q);
 
             _mapper.Map(courseRequest, course);
 

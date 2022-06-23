@@ -30,7 +30,7 @@ namespace Course.DAL.Queries
         {
             if (CourseId == null)
                 return this;
-            Query = Query.Where(type => type.Courses.Id == CourseId);
+            Query = Query.Where(type => type.CourseId == CourseId);
             return this;
         }
 
@@ -39,7 +39,7 @@ namespace Course.DAL.Queries
             if (UserId == Guid.Empty)
                 return this;
 
-            Query = Query.Where(type => type.User.Id == UserId);
+            Query = Query.Where(type => type.UserId == UserId);
             return this;
         }
 

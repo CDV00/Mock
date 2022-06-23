@@ -11,6 +11,8 @@ namespace Course.BLL.Requests
         public IList<LectureForCreateRequest> Lectures { get; set; }
         public IList<AssignmentForCreateRequest> Assignments { get; set; }
         public IList<QuizForCreateRequest> Quizzes { get; set; }
+
+        public bool IsDeleted { get; set; } = false;
     }
     public class SectionUpdateRequest
     {

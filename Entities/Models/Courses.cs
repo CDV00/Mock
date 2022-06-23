@@ -35,7 +35,7 @@ namespace Course.DAL.Models
         public int TotalTime { get; set; } = 0;
 
         public Status status { get; set; } = Status.Review;
-        public Guid CategoryId { get; set; }
+        public Guid? CategoryId { get; set; }
         public Category Category { get; set; }
         public Guid UserId { get; set; }
         public AppUser User { get; set; }

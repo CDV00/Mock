@@ -230,7 +230,7 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// Get AVG Rating Of Intructor
+        /// Get AVG Rating Of Instructor
         /// </summary>
         /// <returns></returns>
         [HttpGet("Get-Avg-Rating-Of-Intructor")]
@@ -245,7 +245,7 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// Get Detail Percent Rating Of Intructor
+        /// Get Detail Percent Rating Of Instructor
         /// </summary>
         /// <returns></returns>
         [HttpGet("Get-Detail-Rating-Of-intructor")]

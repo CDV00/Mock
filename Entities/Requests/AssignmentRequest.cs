@@ -22,6 +22,8 @@ namespace Course.BLL.Requests
         public IList<AttachmentForCreateRequest> Attachments { get; set; }
         //public Guid SectionId { get; set; }
         public int Index { get; set; }
+
+        public bool IsDeleted { get; set; } = false;
     }
     public class AssignmentForUpdateRequest
     {

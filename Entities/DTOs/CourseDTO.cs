@@ -32,6 +32,7 @@ namespace Course.BLL.Responses
         public bool IsSave { get; set; }
         public bool IsEnroll { get; set; }
         public bool IsPurchased { get; set; }
+        public float MyRating { get; set; }
 
         public decimal Price { get; set; }
         public float AvgRate { get; set; } = 0;

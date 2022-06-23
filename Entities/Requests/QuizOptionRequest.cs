@@ -10,6 +10,8 @@ namespace Course.BLL.Requests
     {
         public string Title { get; set; }
         public bool IsCorrectAnswer { get; set; } = false;
+
+        public bool IsDeleted { get; set; } = false;
     }
     public class QuizOptionForUpdateRequest
     {

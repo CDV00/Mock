@@ -30,6 +30,8 @@ namespace Course.BLL.Requests
         [Required]
         public byte PassingScore { get; set; } = 100;
         public uint QuestionsLimit { get; set; } = 10;
+
+        public bool IsDeleted { get; set; } = false;
     }
     public class QuizForUpdateRequest
     {

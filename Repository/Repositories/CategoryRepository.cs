@@ -21,9 +21,11 @@ namespace Repository.Repositories
             return new CategoryQuery(_context.Categories.AsQueryable(), _context);
         }
 
-        public async Task<bool> Existing(Guid id)
+        public async Task<bool> Existing(Guid? id)
         {
-            return await BuildQuery().FilterById(id).AnyAsync();
+            if (id == null)
+                return true;
+            return await BuildQuery().FilterById(id.GetValueOrDefault()).AnyAsync();
         }
     }
 }

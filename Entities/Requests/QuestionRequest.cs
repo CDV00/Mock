@@ -26,6 +26,7 @@ namespace Course.BLL.Requests
         public IList<QuizOptionCreateForRequest> Options { get; set; }
         public string TextAnswer { get; set; }
 
+        public bool IsDeleted { get; set; } = false;
     }
     public class QuestionForUpdateRequest
     {

@@ -41,7 +41,7 @@ namespace Course.DAL.Queries
             if (userId == null)
                 return this;
 
-            Query = Query.Where(type => type.Enrollment.Courses.UserId == userId);
+            Query = Query.Where(type => type.Enrollment.UserId == userId);
             return this;
         }
 
@@ -66,7 +66,6 @@ namespace Course.DAL.Queries
 
         public ICourseReviewQuery FilterByUserId(Guid UserId)
         {
-            Query.Include(cr => cr.Enrollment.Courses).Load();
             Query = Query.Where(type => type.Enrollment.UserId == UserId);
             return this;
         }

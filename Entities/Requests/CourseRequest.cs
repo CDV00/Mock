@@ -24,13 +24,13 @@ namespace Course.BLL.Requests
         /// </summary>
         public string PreviewVideoUrl { get; set; }
 
-        public bool RequireLogin { get; set; }
-        public bool RequireEnroll { get; set; }
+        public bool RequireLogin { get; set; } = false;
+        public bool RequireEnroll { get; set; } = false;
 
-        public bool IsFree { get; set; }
+        public bool IsFree { get; set; } = false;
 
-        public decimal Price { get; set; }
-        public Guid CategoryId { get; set; }
+        public decimal Price { get; set; } = 0;
+        public Guid? CategoryId { get; set; }
         public List<Guid> AudioLanguageIds { get; set; }
         public List<Guid> CloseCaptionIds { get; set; }
         public List<Guid> LevelIds { get; set; }

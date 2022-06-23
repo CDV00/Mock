@@ -120,7 +120,7 @@ namespace Course.BLL.Services
                     var coursePrice = course.Price * (100 - discountPercent) / 100;
                     totalPrice += coursePrice;
 
-                    await CreateEnroll(userId, course);
+                    //await CreateEnroll(userId, course);
                     await UpdateBalanceOfInstrucctor(course, coursePrice);
                     await RemoveCart(userId, course);
                 }
@@ -139,7 +139,7 @@ namespace Course.BLL.Services
                             var resultPayment = await _paymentService.PayAsync(orderRequest.Payment);
                             if (!resultPayment.IsSuccess)
                             {
-                                return new Response<OrderDTO>(false, resultPayment.StatusCode, resultPayment.Message);
+                                return new Response<OrderDTO>(false, resultPayment.Message, resultPayment.StatusCode);
                             }
 
                             break;
@@ -252,14 +252,14 @@ namespace Course.BLL.Services
             }
         }
 
-            public async Task<Response<OrderItemDTO>> IsPurchased(Guid userId, Guid courseId)
+        public async Task<Response<OrderItemDTO>> IsPurchased(Guid userId, Guid courseId)
+        {
+            try
             {
-                try
-                {
-                    var purchase = await _orderRepository.BuildQuery()
-                                                           .FilterByUserId(userId)
-                                                           .FilterByCourseId(courseId)
-                                                           .AsSelectorAsync(e => _mapper.Map<OrderItemDTO>(e));
+                var purchase = await _orderRepository.BuildQuery()
+                                                       .FilterByUserId(userId)
+                                                       .FilterByCourseId(courseId)
+                                                       .AsSelectorAsync(e => _mapper.Map<OrderItemDTO>(e));
 
                 if (purchase == null)
                 {
@@ -268,10 +268,10 @@ namespace Course.BLL.Services
 
                 return new Response<OrderItemDTO>(true, purchase);
             }
-                catch (Exception ex)
-                {
-                    return new Response<OrderItemDTO>(false, ex.Message, null);
-                }
+            catch (Exception ex)
+            {
+                return new Response<OrderItemDTO>(false, ex.Message, null);
             }
         }
+    }
 }

@@ -24,7 +24,7 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
-        /// when user press enrellment one course
+        /// when user press enrollment one course
         /// https://gambolthemes.net/html-items/cursus_main_demo/course_detail_view.html
         /// </summary>
         /// <returns></returns>

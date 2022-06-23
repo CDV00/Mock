@@ -8,6 +8,6 @@ namespace Course.DAL.Repositories.Abstraction
     public interface ICategoryRepository : IRepository<Category>
     {
         ICategoryQuery BuildQuery();
-        Task<bool> Existing(Guid id);
+        Task<bool> Existing(Guid? id);
     }
 }

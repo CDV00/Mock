@@ -6,8 +6,6 @@ using Course.BLL.DTO;
 using Course.BLL.Responses;
 using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
-using Repository.Repositories;
-using Course.BLL.Share.RequestFeatures;
 using Entities.Responses;
 
 namespace Course.BLL.Services
@@ -15,27 +13,40 @@ namespace Course.BLL.Services
     public class EnrollmentService : IEnrollmentService
     {
         private readonly IEnrollmentRepository _enrollmentRepository;
+        private readonly IOrderRepository _orderRepository;
         private readonly ICourseRepository _cousesRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public EnrollmentService(IEnrollmentRepository enrollmentRepository,
-            IMapper mapper,
-            IUnitOfWork unitOfWork,
-            ICourseRepository cousesRepository)
+                                 IMapper mapper,
+                                 IUnitOfWork unitOfWork,
+                                 ICourseRepository cousesRepository,
+                                 IOrderRepository orderRepository)
         {
             _enrollmentRepository = enrollmentRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _cousesRepository = cousesRepository;
+            _orderRepository = orderRepository;
         }
 
         public async Task<ApiBaseResponse> Add(Guid userId, Guid CourseId)
         {
-            if (!await _cousesRepository.BuildQuery()
-                                        .FilterById(CourseId)
-                                        .AnyAsync())
+            var course = await _cousesRepository.GetByIdAsync(CourseId);
+            var IsOrder = await _orderRepository.BuildQuery()
+                                                .FilterByUserId(userId)
+                                                .FilterByCourseId(CourseId)
+                                                .AnyAsync();
+
+            if (course is null)
                 return new CourseNotFoundResponse(CourseId);
+
+            if (!course.IsFree.HasValue)
+                return new InvalidEnrollCoursePrice(CourseId);
+
+            if (!IsOrder)
+                return new NotOrderCourseResponse(CourseId);
 
             if (await _enrollmentRepository.BuildQuery()
                                            .FilterByCourseId(CourseId)
@@ -51,7 +62,6 @@ namespace Course.BLL.Services
 
             await _enrollmentRepository.CreateAsync(enrollment);
 
-            var course = await _cousesRepository.GetByIdAsync(CourseId);
             course.TotalEnrolls++;
 
             await _unitOfWork.SaveChangesAsync();

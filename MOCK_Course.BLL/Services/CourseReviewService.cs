@@ -249,14 +249,14 @@ namespace Course.BLL.Services
 
                 var courses = await _courseReviewRepository.BuildQuery()
                                                            .FilterByCourseId(courseId)
-                                                           //.FilterByUserId(userId)
+                                                           .FilterByUserId(userId)
                                                            .GetAvgRate();
 
                 return new Response<float>(true, courses);
             }
             catch (Exception ex)
             {
-                return new Response<float>(false, ex.Message, null);
+                return new Response<float>(false, ex.Message, "404");
             }
         }
         public async Task<Response<List<float>>> GetDetaiRate(Guid? courseId, Guid? userId)
@@ -276,7 +276,7 @@ namespace Course.BLL.Services
 
                 var sumRating = await _courseReviewRepository.BuildQuery()
                                                              .FilterByCourseId(courseId)
-                                                             //.FilterByUserId(userId)
+                                                             .FilterByUserId(userId)
                                                              .CountAsync();
 
                 if (sumRating == 0)
@@ -290,7 +290,7 @@ namespace Course.BLL.Services
                 {
                     rates.Add(await _courseReviewRepository.BuildQuery()
                                                            .FilterByCourseId(courseId)
-                                                           //.FilterByUserId(userId)
+                                                           .FilterByUserId(userId)
                                                            .FilterByRating(i)
                                                            .GetAvgRatePercent(sumRating));
                 }
@@ -358,6 +358,7 @@ namespace Course.BLL.Services
                                                             .FilterCourseByUSer(userId)
                                                             .IncludeEnrollment()
                                                             .IncludeUser()
+                                                            .IncludeCourse()
                                                             .FilterByKeyword(courseReviewParameters.Keyword)
                                                             .ApplySort(courseReviewParameters.Orderby)
                                                             .Skip((courseReviewParameters.PageNumber - 1) * courseReviewParameters.PageSize)
@@ -376,6 +377,7 @@ namespace Course.BLL.Services
                                                             .FilterByUserId(userId)
                                                             .FilterByKeyword(courseReviewParameters.Keyword)
                                                             .IncludeUser()
+                                                            .IncludeCourse()
                                                             .ApplySort(courseReviewParameters.Orderby)
                                                             .Skip((courseReviewParameters.PageNumber - 1) * courseReviewParameters.PageSize)
                                                             .Take(courseReviewParameters.PageSize)

@@ -12,5 +12,6 @@ namespace Course.DAL.Repositories.Abstraction
     {
         ICourseReviewQuery BuildQuery();
         Task<PagedList<CourseReviewDTO>> GetAllCourseReview(Guid courseId, CourseReviewParameters parameter);
+        Task<float> GetMyRating(Guid userId, Guid courseId);
     }
 }

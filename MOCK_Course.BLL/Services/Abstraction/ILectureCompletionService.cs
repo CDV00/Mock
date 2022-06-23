@@ -10,9 +10,6 @@ namespace Course.BLL.Services.Abstraction
         Task<BaseResponse> Add(System.Guid userId, LectureCompletionRequest lessonCompletionRequest);
         Task<BaseResponse> IsCompletion(Guid userId, Guid lectureId);
         Task<int> TotalLectureCompletionBycourse(Guid userId, Guid courseId);
-
-        //Task<BaseResponse> Remove(Guid userId);
-        //Task<Response<LessonCompletionResponse>> Update(LessonCompletionUpdateRequest lessonCompletionUpdateRequest);
         Task<int> TotalLectureCompletionBySection(Guid userId, Guid sectionId);
     }
 }

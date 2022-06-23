@@ -26,10 +26,18 @@ namespace Repository.Repositories
         {
             return new CourseReviewQuery(_context.CourseReviews.AsQueryable(), _context);
         }
-        //public async Task<int> GetTotal(Guid userId)
-        //{
-        //    return await GetAll().Where(s => s.Enrollment.UserId == userId).GroupBy(s => s.Enrollment.UserId).CountAsync();
-        //}
+
+        public async Task<float> GetMyRating(Guid userId, Guid courseId)
+        {
+            var review = await BuildQuery().FilterByCourseId(courseId)
+                                           .FilterByUserId(userId)
+                                           .AsSelectorAsync(s => s);
+
+            if (review == null)
+                return 0;
+
+            return review.Rating;
+        }
         public async Task<PagedList<CourseReviewDTO>> GetAllCourseReview(Guid courseId, CourseReviewParameters parameter)
         {
             var courseReview = await BuildQuery()
