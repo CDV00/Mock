@@ -28,7 +28,7 @@ namespace Course.DAL.Queries
         /// <returns></returns>
         public ICourseReviewQuery FilterByCourseId(Guid? CourseId)
         {
-            if (CourseId == null)
+            if (CourseId == null || CourseId == Guid.Empty)
                 return this;
 
             Query = Query.Where(type => type.Enrollment.CourseId == CourseId);
@@ -38,7 +38,7 @@ namespace Course.DAL.Queries
 
         public ICourseReviewQuery FilterByUserId(Guid? userId)
         {
-            if (userId == null)
+            if (userId == null || userId == Guid.Empty)
                 return this;
 
             Query = Query.Where(type => type.Enrollment.UserId == userId);
