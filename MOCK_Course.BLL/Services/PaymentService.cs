@@ -23,6 +23,7 @@ namespace MOCK_Course.BLL.Services.Implementations
         {
             _userManager = userManager;
             _dipositRepository = dipositRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Response<PaymentDTO>> Deposit(string userId, Payment payment)
