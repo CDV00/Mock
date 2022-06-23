@@ -165,7 +165,6 @@ namespace Repository.Repositories
                                             .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 
             var count = await BuildQuery().FilterByOrderd(userId)
-                                          //.FilterStatus(status)
                                           .FilterByKeyword(parameters.Keyword)
                                           .FilterByCategoryId(parameters.CategoryId)
                                           .FilterByAudioLanguageIds(parameters.AudioLanguageIds)
@@ -183,10 +182,9 @@ namespace Repository.Repositories
             var courses = await BuildQuery().IncludeCategory()
                                             .IncludeUser()
                                             .IncludeOrder()
-                                            //.FilterByUserId(userId)
                                             .IncludeDiscount()
                                             .FilterByEnroll(userId)
-                                            .FilterByOrderd(userId)
+                                            //.FilterByOrderd(userId)
                                             .FilterStatus(status)
                                             .FilterByKeyword(parameters.Keyword)
                                             .FilterByCategoryId(parameters.CategoryId)
@@ -200,17 +198,18 @@ namespace Repository.Repositories
                                             .Take(parameters.PageSize)
                                             .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 
-            var count = await BuildQuery().FilterByOrderd(userId)
-                                          .FilterByEnroll(userId)
-                                          .FilterStatus(status)
-                                          .FilterByKeyword(parameters.Keyword)
-                                          .FilterByCategoryId(parameters.CategoryId)
-                                          .FilterByAudioLanguageIds(parameters.AudioLanguageIds)
-                                          .FilterByCloseCaptionIds(parameters.CloseCaptionIds)
-                                          .FilterByLevelIds(parameters.LevelIds)
-                                          .FilterByPrice(parameters.IsFree, parameters.IsDiscount, parameters.MinPrice, parameters.MaxPrice)
-                                          .FilterByRating(parameters.Rate)
-                                          .CountAsync();
+            var count = await BuildQuery()
+                //.FilterByOrderd(userId)
+                .FilterByEnroll(userId)
+                .FilterStatus(status)
+                .FilterByKeyword(parameters.Keyword)
+                .FilterByCategoryId(parameters.CategoryId)
+                .FilterByAudioLanguageIds(parameters.AudioLanguageIds)
+                .FilterByCloseCaptionIds(parameters.CloseCaptionIds)
+                .FilterByLevelIds(parameters.LevelIds)
+                .FilterByPrice(parameters.IsFree, parameters.IsDiscount, parameters.MinPrice, parameters.MaxPrice)
+                .FilterByRating(parameters.Rate)
+                .CountAsync();
 
             return new PagedList<CourseDTO>(courses, count, parameters.PageNumber, parameters.PageSize);
         }

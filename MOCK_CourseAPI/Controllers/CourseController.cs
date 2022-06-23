@@ -181,19 +181,6 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
 
-        /// <summary>
-        /// Get all Course, User already purchased
-        /// </summary>
-        /// <returns>List Courses</returns>
-        [HttpGet("Get-all-my-purchased")]
-        //public async Task<ActionResult<Responses<CourseDTO>>> GetAllMyPurchase()
-        //{
-        //    var userId = User.GetUserId();
-        //    var result = await _coursesService.GetAllMyPurchase(userId);
-        //    if (result.IsSuccess == false)
-        //        return BadRequest(result);
-        //    return Ok(result);
-        //}
         public async Task<ActionResult<ApiOkResponse<CourseDTO>>> GetAllMyPurchase([FromQuery] CourseParameters parameters)
         {
             var userId = User.GetUserId();
