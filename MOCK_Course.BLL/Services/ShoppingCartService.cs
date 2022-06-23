@@ -38,7 +38,7 @@ namespace Course.BLL.Services
             if (course is null)
                 return new CourseNotFoundResponse(courseId);
 
-            if (course.Price <= 0)
+            if (course.IsFree.GetValueOrDefault())
                 return new InvalidPriceCartResponse(courseId);
 
             if (await _shoppingCartRepository.BuildQuery()

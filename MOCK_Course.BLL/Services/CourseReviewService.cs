@@ -239,6 +239,8 @@ namespace Course.BLL.Services
 
                 if (courseId is null && userId == Guid.Empty)
                     return new Response<float>(false, "must pass userId or CourseId", "400");
+                if (courseId != null)
+                    userId = null;
 
                 var IsExistEnrolls = await _enrollmentRepository.BuildQuery()
                                                                 .FilterByCourseId(courseId)
@@ -266,6 +268,8 @@ namespace Course.BLL.Services
 
                 if (courseId is null && userId == Guid.Empty)
                     return new Response<List<float>>(false, "must pass userId or CourseId", "400");
+                if (courseId != null)
+                    userId = null;
 
                 var IsExistEnrolls = await _enrollmentRepository.BuildQuery()
                                                                .FilterByCourseId(courseId)
