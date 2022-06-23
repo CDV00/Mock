@@ -77,6 +77,8 @@ namespace Course.BLL.Services
 
                 var userResponse = _mapper.Map<UserDTO>(user);
                 userResponse.isSubscribed = await _subscriptionService.IsSubscribed(userResponse.Id, userResponse.Id) == null ? false : true;
+                userResponse.TotalSubcripbers = (await _subscriptionService.GetTotalSubscriber(userResponse.Id)).data;
+                userResponse.TotalCourses = (await _courseService.GetTotalCourseOfUser(userResponse.Id)).data;
 
                 return new Response<UserDTO>(
                     true,
