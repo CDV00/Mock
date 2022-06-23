@@ -340,8 +340,10 @@ namespace Course.BLL.Services
         {
             try
             {
+                var status = Status.Aprrove;
                 var courses = await _cousesRepository.BuildQuery()
                                                      .FilterByUserId(userId)
+                                                     .FilterStatus(status)
                                                      .CountAsync();
 
                 return new Response<int>(true, courses);

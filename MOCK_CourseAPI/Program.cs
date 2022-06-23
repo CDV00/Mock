@@ -54,5 +54,7 @@ namespace CourseAPI
                 logging.SetMinimumLevel(LogLevel.Error);
             })
             .UseNLog();  // NLog: Setup NLog for Dependency injection
+
+
     }
 }
