@@ -31,6 +31,13 @@ namespace CourseAPI.Controllers
         /// <summary>
         /// Get all course with paging and filter
         /// </summary>
+        /// <remarks>
+        /// ## Remark
+        /// StatusOfUser
+        /// - 0 :Enrolled
+        /// - 0 :Saved
+        /// - 0 :AddedCart
+        /// </remarks>
         /// <param name="parameters"></param>
         /// <returns>List of course</returns>
         [HttpGet("Get-all-course")]

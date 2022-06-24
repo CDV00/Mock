@@ -48,7 +48,7 @@ namespace Repository.Repositories
             return _mapper.Map<CourseDTO>(course);
         }
 
-        public async Task<PagedList<CourseDTO>> GetAllCourseAsync(CourseParameters parameters)
+        public async Task<PagedList<CourseDTO>> GetAllCourseAsync(CourseParameters parameters, Guid? userId)
         {
             var courses = await BuildQuery().IncludeCategory()
                                             .IncludeUser()
@@ -62,6 +62,9 @@ namespace Repository.Repositories
                                             .FilterByLevelIds(parameters.LevelIds)
                                             .FilterByPrice(parameters.IsFree, parameters.IsDiscount, parameters.MinPrice, parameters.MaxPrice)
                                             .FilterByRating(parameters.Rate)
+                                            .FilterBySaved(parameters.StatusOfUser, userId)
+                                            .FilterByEnrollmented(parameters.StatusOfUser, userId)
+                                            .FilterByAddedCart(parameters.StatusOfUser, userId)
                                             .ApplySort(parameters.Orderby)
                                             .Skip((parameters.PageNumber - 1) * parameters.PageSize)
                                             .Take(parameters.PageSize)
@@ -76,6 +79,9 @@ namespace Repository.Repositories
                                           .FilterByLevelIds(parameters.LevelIds)
                                           .FilterByPrice(parameters.IsFree, parameters.IsDiscount, parameters.MinPrice, parameters.MaxPrice)
                                           .FilterByRating(parameters.Rate)
+                                          .FilterBySaved(parameters.StatusOfUser, userId)
+                                          .FilterByEnrollmented(parameters.StatusOfUser, userId)
+                                          .FilterByAddedCart(parameters.StatusOfUser, userId)
                                           .CountAsync();
 
             return new PagedList<CourseDTO>(courses, count, parameters.PageNumber, parameters.PageSize);
@@ -87,7 +93,7 @@ namespace Repository.Repositories
                                             .IncludeUser()
                                             .IncludeDiscount()
                                             .IncludeCategory()
-                                            //.FilterByApprove()
+                                            .FilterStatus(parameters.status)
                                             .FilterByUserId(userId)
                                             .FilterByKeyword(parameters.Keyword)
                                             .FilterByUserId(parameters.userId)
@@ -97,6 +103,7 @@ namespace Repository.Repositories
                                             .FilterByLevelIds(parameters.LevelIds)
                                             .FilterByPrice(parameters.IsFree, parameters.IsDiscount, parameters.MinPrice, parameters.MaxPrice)
                                             .FilterByRating(parameters.Rate)
+                                            .FilterIsActive(parameters.IsActive)
                                             .ApplySort(parameters.Orderby)
                                             .Skip((parameters.PageNumber - 1) * parameters.PageSize)
                                             .Take(parameters.PageSize)
@@ -105,11 +112,13 @@ namespace Repository.Repositories
             var count = await BuildQuery().FilterByKeyword(parameters.Keyword)
                                           .FilterByUserId(parameters.userId)
                                           .FilterByCategoryId(parameters.CategoryId)
+                                          .FilterStatus(parameters.status)
                                           .FilterByAudioLanguageIds(parameters.AudioLanguageIds)
                                           .FilterByCloseCaptionIds(parameters.CloseCaptionIds)
                                           .FilterByLevelIds(parameters.LevelIds)
                                           .FilterByPrice(parameters.IsFree, parameters.IsDiscount, parameters.MinPrice, parameters.MaxPrice)
                                           .FilterByRating(parameters.Rate)
+                                          .FilterIsActive(parameters.IsActive)
                                           .CountAsync();
 
             return new PagedList<CourseDTO>(courses, count, parameters.PageNumber, parameters.PageSize);

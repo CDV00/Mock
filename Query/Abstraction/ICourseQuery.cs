@@ -1,5 +1,6 @@
 ﻿using Course.DAL.Models;
 using Course.DAL.Queries.Abstraction;
+using Entities.ParameterRequest;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -36,5 +37,8 @@ namespace Course.DAL.Queries
         ICourseQuery FilterByIds(List<Guid> Ids);
         ICourseQuery FilterStatus(Status? status);
         ICourseQuery FilterByEnroll(Guid userId);
+        ICourseQuery FilterBySaved(StatusOfUser? status, Guid? userId);
+        ICourseQuery FilterByAddedCart(StatusOfUser? status, Guid? userId);
+        ICourseQuery FilterByEnrollmented(StatusOfUser? status, Guid? userId);
     }
 }

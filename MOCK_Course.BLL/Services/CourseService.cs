@@ -74,7 +74,7 @@ namespace Course.BLL.Services
 
         public async Task<ApiBaseResponse> GetAllCourses(CourseParameters parameter, Guid? userId)
         {
-            var courses = await _cousesRepository.GetAllCourseAsync(parameter);
+            var courses = await _cousesRepository.GetAllCourseAsync(parameter, userId);
             await AddLast(courses, userId);
 
             return new ApiOkResponse<PagedList<CourseDTO>>(courses);
@@ -151,6 +151,9 @@ namespace Course.BLL.Services
 
             if (!await _levelRepository.CheckExists(courseRequest.LevelIds))
                 return new NotMathIdResponse(nameof(Level), string.Join(',', courseRequest.AudioLanguageIds));
+
+            //if (!courseRequest.IsFree && courseRequest.Price <= 0)
+            //    return;
 
             var course = _mapper.Map<Courses>(courseRequest);
             course.UserId = userId;

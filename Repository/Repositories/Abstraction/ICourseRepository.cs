@@ -13,7 +13,7 @@ namespace Course.DAL.Repositories.Abstraction
     public interface ICourseRepository : IRepository<Courses>
     {
         ICourseQuery BuildQuery();
-        Task<PagedList<CourseDTO>> GetAllCourseAsync(CourseParameters parameters);
+        Task<PagedList<CourseDTO>> GetAllCourseAsync(CourseParameters parameters, Guid? userId);
         Task<PagedList<CourseDTO>> GetAllMyCoures(Guid? userId, CourseParameters parameters);
         Task<PagedList<CourseDTO>> UpcomingCourse(Guid? userId, CourseParameters parameters);
         Task<PagedList<CourseDTO>> GetAllMyPurchase(Guid userId, CourseParameters parameters);

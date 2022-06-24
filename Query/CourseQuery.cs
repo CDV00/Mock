@@ -1,5 +1,6 @@
 ﻿using Course.DAL.Data;
 using Course.DAL.Models;
+using Entities.ParameterRequest;
 using Microsoft.EntityFrameworkCore;
 using SES.HomeServices.Data.Queries.Abstractions;
 using System;
@@ -55,7 +56,9 @@ namespace Course.DAL.Queries
         /// <returns></returns>
         public ICourseQuery FilterIsActive(bool? isActice)
         {
-            Query = Query.Where(type => isActice == null || type.IsActive == isActice);
+            if (isActice is null)
+                return this;
+            Query = Query.Where(type => type.IsActive == isActice);
             return this;
         }
 
@@ -179,6 +182,36 @@ namespace Course.DAL.Queries
 
             return this;
         }
+
+        public ICourseQuery FilterBySaved(StatusOfUser? status, Guid? userId)
+        {
+            if (status == null || status != StatusOfUser.IsSaved || userId == null)
+                return this;
+
+
+            Query = Query.Where(c => c.SavedCourses.Any(s => s.UserId == userId));
+            return this;
+        }
+
+        public ICourseQuery FilterByAddedCart(StatusOfUser? status, Guid? userId)
+        {
+            if (status == null || status != StatusOfUser.IsCart || userId == null)
+                return this;
+
+            Query = Query.Where(c => c.Carts.Any(s => s.UserId == userId));
+            return this;
+        }
+
+        public ICourseQuery FilterByEnrollmented(StatusOfUser? status, Guid? userId)
+        {
+            if (status == null || status != StatusOfUser.IsEnrollemt || userId == null)
+                return this;
+
+            Query = Query.Where(c => c.Enrollments.Any(s => s.UserId == userId));
+            return this;
+        }
+
+
 
         public ICourseQuery FilterByAudioLanguageIds(List<Guid?> AudioLanguageIds)
         {
