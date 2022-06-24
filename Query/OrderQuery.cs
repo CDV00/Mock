@@ -1,6 +1,7 @@
 ﻿using Course.DAL.Data;
 using Course.DAL.Models;
 using Course.DAL.Queries.Abstraction;
+using Microsoft.EntityFrameworkCore;
 using SES.HomeServices.Data.Queries.Abstractions;
 using System;
 using System.Linq;
@@ -48,6 +49,26 @@ namespace Course.DAL.Queries
         {
 
             Query = Query.Where(type => type.UserId == userId);
+            return this;
+        }
+        public IOrderQuery IncludeCourse()
+        {
+            Query.Include(c => c.OrderItem).ThenInclude(o=>o.Course).Load();
+            return this;
+        }
+        public IOrderQuery IncludeUser()
+        {
+            Query.Include(c => c.User).Load();
+            return this;
+        }
+        public IOrderQuery IncludeDiscount()
+        {
+            Query.Include(o => o.OrderItem).ThenInclude(or => or.Course).ThenInclude(c => c.Discounts).Load();
+            return this;
+        }
+        public IOrderQuery FilterById(Guid Id)
+        {
+            Query = Query.Where(type => type.Id == Id);
             return this;
         }
     }
