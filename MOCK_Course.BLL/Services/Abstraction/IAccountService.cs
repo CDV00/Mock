@@ -12,7 +12,7 @@ namespace Course.BLL.Services.Abstraction
         Task<bool> ValidateUser(LoginRequest userForAuth);
         Task<string> CreateToken();
         Task<Response<TokenDTO>> RefreshToken(TokenDTO tokenDto);
-        Task<Response<BaseResponse>> ForgetPassWord(string email, string originValue);
+        Task<Response<BaseResponse>> ForgetPassWord(string email);
         Task<Response<BaseResponse>> ResetPassWord(ResetPasswordRequest resetPasswordRequest);
         Task<Response<LoginDTO>> ExternalLogin(ExternalLoginResquest externalLoginResquest);
         Task<BaseResponse> Confirm(string email, string codeNumber);

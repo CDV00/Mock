@@ -38,7 +38,11 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
 
-
+        /// <summary>
+        /// Add New Order
+        /// </summary>
+        /// <param name="orderRequest"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<ApiOkResponse<OrderDTO>>> Add([FromBody] OrderRequest orderRequest)
         {
@@ -49,7 +53,11 @@ namespace CourseAPI.Controllers
 
             return Ok(result);
         }
-
+        /// <summary>
+        /// Is Purchased User Order
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <returns></returns>
         [HttpGet("Is-Purchased")]
         [AllowAnonymous]
         public async Task<ActionResult<ApiBaseResponse>> IsPurchased(Guid courseId)
@@ -60,7 +68,21 @@ namespace CourseAPI.Controllers
                 return ProcessError(result);
             return Ok(result);
         }
+        /// <summary>
+        /// Get Detail Order
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<ActionResult<ApiOkResponse<OrderDTO>>> GetDetailOrder(Guid id)
+        {
+            var result = await _orderService.GetDetail(id);
+            if (!result.IsSuccess)
+                return ProcessError(result);
 
+            return Ok(result);
+        }
         //[HttpGet]
         //public async Task<ActionResult<>>
         // Get total purchase of user

@@ -1,11 +1,14 @@
-﻿using System;
+﻿using Course.BLL.DTO;
+using System;
 using System.Collections.Generic;
 
 namespace Course.BLL.Responses
 {
     public class OrderDTO
     {
-        public Guid UserId { get; set; }
+        public Guid Id { get; set; }
+        //public Guid UserId { get; set; }
+        public UserDTO User { get; set; }
         public List<OrderItemDTO> OrderItem { get; set; }
         public string FirstName { set; get; }
         public string LastName { set; get; }
@@ -17,7 +20,9 @@ namespace Course.BLL.Responses
 
     public class OrderItemDTO
     {
-        public Guid OrderId { get; set; }
-        public Guid CourseId { set; get; }
+        //public Guid OrderId { get; set; }
+        //public Guid CourseId { set; get; }
+        public CourseDTO Course { get; set; }
+        public DiscountDTO_ Discount { get; set; }
     }
 }
