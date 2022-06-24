@@ -77,15 +77,15 @@ namespace CourseAPI.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<BaseResponse>> ForgetPassword(string email)
         {
-            var originValue = Request.Headers["Origin"].FirstOrDefault();
+            /*var originValue = Request.Headers["Origin"].FirstOrDefault();
 
             // or
 
             StringValues originValues;
             Request.Headers.TryGetValue("Origin", out originValues);
-            Console.WriteLine(originValue);
+            Console.WriteLine(originValue);*/
 
-            var result = await _userService.ForgetPassWord(email, originValue);
+            var result = await _userService.ForgetPassWord(email);
             if (result.IsSuccess)
             {
                 return Ok(result);

@@ -22,6 +22,8 @@ using Newtonsoft.Json;
 using static Course.BLL.Responses.FacebookApiDTO;
 using Course.BLL.Services.Abstraction;
 using Entities.Constants;
+using static Google.Apis.Auth.JsonWebToken;
+using Google.Apis.Auth.OAuth2;
 
 namespace Course.BLL.Services
 {
@@ -132,14 +134,19 @@ namespace Course.BLL.Services
         {
             var user = await _userManager.FindByEmailAsync(email);
             DateTime endTime = (user.UpdatedAt != null) ? user.UpdatedAt.Value.AddMinutes(3) : user.CreatedAt.AddMinutes(3);
+            if(user.CodeNumber is null)
+            {
+                return new Response<BaseResponse>(false, "Something went wrong!", null);
+            }
             if (user.CodeNumber != codeNumber || DateTime.Now >= endTime)
             {
                 return new Response<BaseResponse>(false, "Something went wrong!", null);
             }
             user.EmailConfirmed = true;
+            user.CodeNumber = null;
             await _userManager.UpdateAsync(user);
             //
-            await AddCodeNumber(user.Email);
+            //await AddCodeNumber(user.Email);
 
             return new BaseResponse(true);
         }
@@ -159,7 +166,7 @@ namespace Course.BLL.Services
 
         private async Task AddInstructorRole(AppUser user)
         {
-            var InstructorRole = "Instructor";
+            var InstructorRole = UserRolesConstant.Instructor;
 
             bool existRole = await _roleManager.RoleExistsAsync(InstructorRole);
 
@@ -174,7 +181,7 @@ namespace Course.BLL.Services
         }
         private async Task AddStudentRole(AppUser user)
         {
-            var InstructorRole = "Student";
+            var InstructorRole = UserRolesConstant.Student;
 
             bool existRole = await _roleManager.RoleExistsAsync(InstructorRole);
 
@@ -335,23 +342,21 @@ namespace Course.BLL.Services
         {
 
             string subjects;
-            string message;
             switch (working.ToUpper())
             {
-                case "FORGET PASSWORD":
+                case WorkingMail.ForgetPassword:
                     {
-                        subjects = "FORGET PASSWORD";
-                        message = $"<p>Your verification code {codeNumber}</a></p>";
+                        subjects = WorkingMail.ForgetPassword;
                         break;
                     }
-                case "REGISTER":
+                case WorkingMail.Register:
                     {
-                        subjects = "CONFIRM REGISTRATION";
-                        message = $"<p>Your verification code {codeNumber}</a></p>";
+                        subjects = WorkingMail.SubjectsRegister;
                         break;
                     }
                 default: throw new Exception("Provider cannot find out");
             }
+            string message = WorkingMail.Message(codeNumber);
             var senderEmail = _configurations["SMTP:Sender"];
             var result = (await _emailService.SendEmailAsync(senderEmail, email, subjects, message));
             if (!result.IsSuccess)
@@ -409,7 +414,7 @@ namespace Course.BLL.Services
         /// </summary>
         /// <param name="email">abc@gmail.com</param>
         /// <returns></returns>
-        public async Task<Response<BaseResponse>> ForgetPassWord(string email, string originValue)
+        public async Task<Response<BaseResponse>> ForgetPassWord(string email)
         {
             try
             {
@@ -423,7 +428,7 @@ namespace Course.BLL.Services
                 {
                     return new Response<BaseResponse>(false, "Add Code Number went wrong!", null);
                 }
-                var isSendEmailConfirm = await SendEmailConfirm(user.Email, "Forget PassWord", codeNumber);
+                var isSendEmailConfirm = await SendEmailConfirm(user.Email, WorkingMail.ForgetPassword, codeNumber);
                 if (!isSendEmailConfirm.IsSuccess)
                 {
                     return new Response<BaseResponse>(false, "Send Email went wrong!", null);
@@ -445,6 +450,10 @@ namespace Course.BLL.Services
                 {
                     return new Response<BaseResponse>(false, "No user associated with email", null);
                 }
+                if (user.CodeNumber is null)
+                {
+                    return new Response<BaseResponse>(false, "Something went wrong!", null);
+                }
                 if (user.CodeNumber != resetPasswordRequest.codeNumber || DateTime.Now >= user.UpdatedAt.Value.AddMinutes(3))
                 {
                     return new Response<BaseResponse>(false, "Something went wrong!", null);
@@ -455,11 +464,14 @@ namespace Course.BLL.Services
                 }
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var Result = await _userManager.ResetPasswordAsync(user, token, resetPasswordRequest.newPassword);
-                await AddCodeNumber(user.Email);
+
+                //await AddCodeNumber(user.Email);
                 if (!Result.Succeeded)
                 {
                     return new Response<BaseResponse>(false, "Something went wrong!", null);
                 }
+                user.CodeNumber = null;
+                await _userManager.UpdateAsync(user);
                 return new Response<BaseResponse>(true, "Password has been reset successfully", null);
             }
             catch (Exception ex)
@@ -477,11 +489,12 @@ namespace Course.BLL.Services
         {
             try
             {
+
                 switch (externalLoginResquest.Provider.ToUpper())
                 {
-                    case "GOOGLE":
+                    case Provider.GOOGLE:
                         return new Response<LoginDTO>(true, await GoogleLogin(externalLoginResquest));
-                    case "FACEBOOK":
+                    case Provider.FACEBOOK:
                         return new Response<LoginDTO>(true, await FacebookLogin(externalLoginResquest));
                     default: throw new Exception("Provider cannot find out");
                 }
@@ -501,8 +514,6 @@ namespace Course.BLL.Services
         /// <exception cref="NotImplementedException"></exception>
         private async Task<LoginDTO> FacebookLogin(ExternalLoginResquest externalLoginResquest)
         {
-            
-
             // 1.generate an app access token
             string AppId = _configurations["Authentication:Facebook:AppId"];
             string AppSecret = _configurations["Authentication:Facebook:AppSecret"];
@@ -627,9 +638,10 @@ namespace Course.BLL.Services
                 var googleAuth = _configurations.GetSection("Authentication:Google");
                 var settings = new GoogleJsonWebSignature.ValidationSettings()
                 {
-                    Audience = new List<string>() { googleAuth["ClientId"] }
+                    Audience = new List<string>() { googleAuth["ClientId"]}
                 };
                 var payload = await GoogleJsonWebSignature.ValidateAsync(externalAuth.Token, settings);
+
                 return payload;
             }
             catch (Exception ex)
@@ -637,6 +649,8 @@ namespace Course.BLL.Services
                 throw new Exception(ex.Message);
             }
         }
-
     }
+
+
+
 }
