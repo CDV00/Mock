@@ -226,5 +226,13 @@ namespace Course.BLL.Services
 
             return new ApiBaseResponse(true);
         }
+        public async Task<ApiBaseResponse> GetDetail(Guid id)
+        {
+            var order = await _orderRepository.GetDetailOrder(id);
+            if (order is null)
+                return new OrderNotFoundResponse(id);
+
+            return new ApiOkResponse<OrderDTO>(order);
+        }
     }
 }
