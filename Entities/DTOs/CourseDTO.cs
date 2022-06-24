@@ -33,6 +33,7 @@ namespace Course.BLL.Responses
         public bool IsEnroll { get; set; }
         public bool IsPurchased { get; set; }
         public float MyRating { get; set; }
+        public bool IsActive { get; set; } = false;
 
         public decimal Price { get; set; }
         public float AvgRate { get; set; } = 0;
@@ -49,7 +50,6 @@ namespace Course.BLL.Responses
         //public float PercentComplete { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-        public bool IsActive { get; set; }
         public UserDTO User { get; set; }
         public CategoryDTO Category { get; set; }
         public List<DiscountDTO> Discounts { get; set; }

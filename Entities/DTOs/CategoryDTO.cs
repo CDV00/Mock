@@ -11,7 +11,7 @@ namespace Course.BLL.DTO
 
     public class CategoryDTO_
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; } = null;
         public string Name { get; set; }
         public Guid? ParentId { get; set; }
         public ICollection<CategoryDTO> SubCategories { get; set; }

@@ -13,13 +13,13 @@ namespace Course.BLL.Requests
     }
     public class AttachmentForCreateRequest
     {
-        public string FileUrl { get; set; }
+        public string FileUrl { get; set; } = "";
         public bool IsDeleted { get; set; } = false;
     }
     public class AttachmentForUpdateRequest
     {
         public Guid Id { get; set; }
-        public string FileUrl { get; set; }
+        public string FileUrl { get; set; } = "";
         public bool IsDeleted { get; set; } = false;
         public bool IsNew { get; set; } = true;
     }

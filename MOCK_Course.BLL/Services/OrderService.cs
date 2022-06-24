@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using Repository.Repositories;
 using MOCK_Course.BLL.Services.Implementations;
 using Microsoft.AspNetCore.Identity;
+using Entities.Responses;
 
 namespace Course.BLL.Services
 {
@@ -29,15 +30,15 @@ namespace Course.BLL.Services
         private readonly UserManager<AppUser> _userManager;
 
         public OrderService(IOrderRepository orderRepository,
-            IMapper mapper,
-            IUnitOfWork unitOfWork,
-            ICourseRepository cousesRepository,
-            IShoppingCartRepository shoppingCartRepository,
-            IOrderItemRepository orderItemRepository,
-            IPaymentService paymentService,
-            IEnrollmentRepository enrollmentRepository,
-            UserManager<AppUser> userManager,
-            IDiscountRepository discountRepository)
+                            IMapper mapper,
+                            IUnitOfWork unitOfWork,
+                            ICourseRepository cousesRepository,
+                            IShoppingCartRepository shoppingCartRepository,
+                            IOrderItemRepository orderItemRepository,
+                            IPaymentService paymentService,
+                            IEnrollmentRepository enrollmentRepository,
+                            UserManager<AppUser> userManager,
+                            IDiscountRepository discountRepository)
         {
             _userManager = userManager;
             _orderRepository = orderRepository;
@@ -51,38 +52,21 @@ namespace Course.BLL.Services
             _discountRepository = discountRepository;
         }
 
-        public async Task<Response<int>> GetTotal(Guid courseId)
+        public async Task<ApiBaseResponse> GetTotal(Guid courseId)
         {
-            try
-            {
+            var count = await _orderRepository.BuildQuery()
+                                              .FilterByCourseId(courseId)
+                                              .CountAsync();
 
-                var count = await _orderRepository.BuildQuery()
-                                                  .FilterByCourseId(courseId)
-                                                  .CountAsync();
-
-                return new Response<int>(
-                    true,
-                    _mapper.Map<int>(count)
-                );
-            }
-            catch (Exception ex)
-            {
-                return new Response<int>(false, ex.Message, null);
-            }
+            return new ApiOkResponse<int>(_mapper.Map<int>(count));
         }
-        public async Task<Responses<OrderDTO>> GetAll(Guid UserId)
+        public async Task<ApiBaseResponse> GetAll(Guid UserId)
         {
-            try
-            {
-                var result = await _orderRepository.BuildQuery()
-                                                   .FilterByUserId(UserId)
-                                                   .ToListAsync(o => _mapper.Map<OrderDTO>(o));
-                return new Responses<OrderDTO>(true, result);
-            }
-            catch (Exception ex)
-            {
-                return new Responses<OrderDTO>(false, ex.Message, null);
-            }
+            var result = await _orderRepository.BuildQuery()
+                                               .FilterByUserId(UserId)
+                                               .ToListAsync(o => _mapper.Map<OrderDTO>(o));
+
+            return new ApiOkResponse<List<OrderDTO>>(result);
         }
 
         /// <summary>
@@ -90,101 +74,86 @@ namespace Course.BLL.Services
         /// </summary>
         /// <param name="orderRequest"></param>
         /// <returns></returns>
-        public async Task<Response<OrderDTO>> Add(Guid userId, OrderRequest orderRequest)
+        public async Task<ApiBaseResponse> Add(Guid userId, OrderRequest orderRequest)
         {
-            try
+            var courses = await _cousesRepository.BuildQuery()
+                                                 .FilterByIds(orderRequest.CourseIds)
+                                                 .IncludeDiscount()
+                                                 .ToListAsync(c => c);
+
+            if (courses == null || courses.Count <= 0)
+                return new CourseNotFoundToPayResponse();
+
+            var orderId = Guid.NewGuid();
+            var order = _mapper.Map<Order>(orderRequest);
+            order.UserId = userId;
+            order.Id = orderId;
+            decimal totalPrice = 0;
+
+            var orderItems = new List<OrderItem>();
+            //Create Order
+            foreach (var course in courses)
             {
-                var courses = await _cousesRepository.BuildQuery()
-                                                     .FilterByIds(orderRequest.CourseIds)
-                                                     .IncludeDiscount()
-                                                     .ToListAsync(c => c);
+                var orderItem = new OrderItem { CourseId = course.Id, OrderId = orderId };
+                orderItems.Add(orderItem);
 
-                if (courses == null || courses.Count <= 0)
-                    return new Response<OrderDTO>(false, "Don't have any course to payment", null);
+                decimal discountPercent = await GetDiscountPercent(course, orderItem);
 
-                var orderId = Guid.NewGuid();
-                var order = _mapper.Map<Order>(orderRequest);
-                order.UserId = userId;
-                order.Id = orderId;
-                decimal totalPrice = 0;
+                var coursePrice = course.Price * (100 - discountPercent) / 100;
+                totalPrice += coursePrice;
 
-                var orderItems = new List<OrderItem>();
-                //Create Order
-                foreach (var course in courses)
-                {
-                    var orderItem = new OrderItem { CourseId = course.Id, OrderId = orderId };
-                    orderItems.Add(orderItem);
+                //await CreateEnroll(userId, course);
+                await UpdateBalanceOfInstrucctor(course, coursePrice);
+                await RemoveCart(userId, course);
+            }
 
-                    decimal discountPercent = await GetDiscountPercent(course, orderItem);
+            order.OrderItem = orderItems;
+            order.TotalPrice = totalPrice;
+            orderRequest.Payment.value = (int)totalPrice;
 
-                    var coursePrice = course.Price * (100 - discountPercent) / 100;
-                    totalPrice += coursePrice;
+            await _orderRepository.CreateAsync(order);
 
-                    //await CreateEnroll(userId, course);
-                    await UpdateBalanceOfInstrucctor(course, coursePrice);
-                    await RemoveCart(userId, course);
-                }
-
-                order.OrderItem = orderItems;
-                order.TotalPrice = totalPrice;
-                orderRequest.Payment.value = (int)totalPrice;
-
-                await _orderRepository.CreateAsync(order);
-
-                //payment stripe
-                switch (orderRequest.PaymentType)
-                {
-                    case PaymentType.Stripe:
+            //payment stripe
+            switch (orderRequest.PaymentType)
+            {
+                case PaymentType.Stripe:
+                    {
+                        var resultPayment = await _paymentService.PayAsync(orderRequest.Payment);
+                        if (!resultPayment.IsSuccess)
                         {
-                            var resultPayment = await _paymentService.PayAsync(orderRequest.Payment);
-                            if (!resultPayment.IsSuccess)
-                            {
-                                return new Response<OrderDTO>(false, resultPayment.Message, resultPayment.StatusCode);
-                            }
-
-                            break;
+                            return new PaymentFailResponse(resultPayment.Message, int.Parse(resultPayment.StatusCode));
                         }
 
-                    default:
+                        break;
+                    }
+
+                default:
+                    {
+                        var user = await _userManager.FindByIdAsync(userId.ToString());
+                        user.Balance -= totalPrice;
+                        if (user.Balance < 0)
                         {
-                            var user = await _userManager.FindByIdAsync(userId.ToString());
-                            user.Balance -= totalPrice;
-                            if (user.Balance < 0)
-                            {
-                                return new Response<OrderDTO>
-                                {
-                                    IsSuccess = false,
-                                    StatusCode = "You don't have enough money to payment"
-                                };
-                            }
-                            await _userManager.UpdateAsync(user);
-                            break;
+                            return new DontEnoughtMoney(user.Balance, totalPrice);
                         }
-                }
-
-                await _unitOfWork.SaveChangesAsync();
-
-                return new Response<OrderDTO>
-                {
-                    IsSuccess = true,
-                    data = _mapper.Map<OrderDTO>(order)
-                };
+                        await _userManager.UpdateAsync(user);
+                        break;
+                    }
             }
-            catch (Exception ex)
-            {
-                return new Response<OrderDTO>(false, ex.Message, null);
-            }
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return new ApiOkResponse<OrderDTO>(_mapper.Map<OrderDTO>(order));
         }
 
-        private async Task RemoveCart(Guid userId, Courses course)
-        {
-            var cart = await _shoppingCartRepository.BuildQuery()
-                                              .FilterByCourseId(course.Id)
-                                              .FilterByUserId(userId)
-                                              .AsSelectorAsync(c => c);
-            if (cart != null)
-                _shoppingCartRepository.Remove(cart, true);
-        }
+        //private async Task RemoveCart(Guid userId, Courses course)
+        //{
+        //    var cart = await _shoppingCartRepository.BuildQuery()
+        //                                      .FilterByCourseId(course.Id)
+        //                                      .FilterByUserId(userId)
+        //                                      .AsSelectorAsync(c => c);
+        //    if (cart != null)
+        //        _shoppingCartRepository.Remove(cart, true);
+        //}
 
         private async Task UpdateBalanceOfInstrucctor(Courses course, decimal coursePrice)
         {
@@ -226,52 +195,36 @@ namespace Course.BLL.Services
             return discountPercent;
         }
 
+        private async Task RemoveCart(Guid userId, Courses course)
+        {
+            var cart = await _shoppingCartRepository.BuildQuery()
+                                              .FilterByCourseId(course.Id)
+                                              .FilterByUserId(userId)
+                                              .AsSelectorAsync(c => c);
+            if (cart != null)
+                _shoppingCartRepository.Remove(cart, true);
+        }
+
+
         /// <summary>
         /// delete order
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<BaseResponse> Delete(Guid id)
+
+        public async Task<ApiBaseResponse> IsPurchased(Guid userId, Guid courseId)
         {
-            try
+            var purchase = await _orderRepository.BuildQuery()
+                                                 .FilterByUserId(userId)
+                                                 .FilterByCourseId(courseId)
+                                                 .AsSelectorAsync(e => _mapper.Map<OrderItemDTO>(e));
+
+            if (purchase == null)
             {
-                var order = await _orderRepository.GetByIdAsync(id);
-                if (order is null)
-                {
-                    return new BaseResponse(false, null, "can't order lesson");
-                }
-                _orderRepository.Remove(order, false);
-
-                await _unitOfWork.SaveChangesAsync();
-                return new BaseResponse(true);
+                return new NotFoundOrder(courseId);
             }
-            catch (Exception ex)
-            {
-                return new BaseResponse(false, ex.Message, null);
 
-            }
-        }
-
-        public async Task<Response<OrderItemDTO>> IsPurchased(Guid userId, Guid courseId)
-        {
-            try
-            {
-                var purchase = await _orderRepository.BuildQuery()
-                                                       .FilterByUserId(userId)
-                                                       .FilterByCourseId(courseId)
-                                                       .AsSelectorAsync(e => _mapper.Map<OrderItemDTO>(e));
-
-                if (purchase == null)
-                {
-                    return new Response<OrderItemDTO>(true, null);
-                }
-
-                return new Response<OrderItemDTO>(true, purchase);
-            }
-            catch (Exception ex)
-            {
-                return new Response<OrderItemDTO>(false, ex.Message, null);
-            }
+            return new ApiBaseResponse(true);
         }
     }
 }

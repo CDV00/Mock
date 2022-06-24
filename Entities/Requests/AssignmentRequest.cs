@@ -17,22 +17,22 @@ namespace Course.BLL.Requests
     }
     public class AssignmentForCreateRequest
     {
-        public string Title { get; set; }
-        public string Content { get; set; }
+        public string Title { get; set; } = "";
+        public string Content { get; set; } = "";
         public IList<AttachmentForCreateRequest> Attachments { get; set; }
         //public Guid SectionId { get; set; }
-        public int Index { get; set; }
+        public int Index { get; set; } = 0;
 
         public bool IsDeleted { get; set; } = false;
     }
     public class AssignmentForUpdateRequest
     {
         public Guid Id { get; set; }
-        public string Title { get; set; }
-        public string Content { get; set; }
+        public string Title { get; set; } = "";
+        public string Content { get; set; } = "";
         public IList<AttachmentForUpdateRequest> Attachments { get; set; }
         //public Guid SectionId { get; set; }
-        public int Index { get; set; }
+        public int Index { get; set; } = 0;
         public bool IsDeleted { get; set; } = false;
         public bool IsNew { get; set; } = true;
     }

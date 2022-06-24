@@ -57,8 +57,10 @@ namespace Course.DAL.Queries
             return result;
         }
 
-        public ICourseReviewQuery FilterByRating(float Rating)
+        public ICourseReviewQuery FilterByRating(float? Rating)
         {
+            if (Rating == null)
+                return this;
             Query = Query.Where(type => type.Rating == Rating);
             return this;
         }

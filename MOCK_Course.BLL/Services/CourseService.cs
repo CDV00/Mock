@@ -261,7 +261,7 @@ namespace Course.BLL.Services
                 return new NotMathIdResponse(nameof(AudioLanguage), string.Join(',', courseRequest.AudioLanguageIds));
 
             if (!await _categoryRepository.Existing(courseRequest.CategoryId))
-                return new CategoryNotFoundResponse(courseRequest.CategoryId);
+                return new CategoryNotFoundResponse(courseRequest.CategoryId.GetValueOrDefault());
 
             if (!await _closeCaptionRepository.CheckExists(courseRequest.CloseCaptionIds))
                 return new NotMathIdResponse(nameof(CloseCaption), string.Join(',', courseRequest.AudioLanguageIds));

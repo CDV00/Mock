@@ -7,7 +7,7 @@ namespace Course.DAL.Queries.Abstraction
     public interface ICourseReviewQuery : IQuery<CourseReview>
     {
         ICourseReviewQuery FilterByCourseId(Guid? CourseId);
-        ICourseReviewQuery FilterByRating(float Rating);
+        ICourseReviewQuery FilterByRating(float? Rating);
         ICourseReviewQuery FilterByUserId(Guid UserId);
         ICourseReviewQuery FilterByKeyword(string Keyword);
         Task<float> GetAvgRate();

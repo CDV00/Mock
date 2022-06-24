@@ -19,10 +19,10 @@ namespace Course.BLL.Requests
     }
     public class QuizForCreateRequest
     {
-        public string Title { get; set; }
-        public string Description { get; set; }
+        public string Title { get; set; } = "";
+        public string Description { get; set; } = "";
         public IList<QuestionForCreateRequest> Questions { get; set; }
-        public int Index { get; set; }
+        public int Index { get; set; } = 0;
 
         public bool IsShowTime { get; set; } = true;
         [Required]

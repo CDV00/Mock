@@ -19,12 +19,12 @@ namespace Course.BLL.Requests
     }
     public class QuestionForCreateRequest
     {
-        public string Image { get; set; }
-        public string Title { get; set; }
-        public byte Score { get; set; }
-        public TypeQuestion Type { get; set; }
+        public string Image { get; set; } = "";
+        public string Title { get; set; } = "";
+        public byte Score { get; set; } = 0;
+        public TypeQuestion Type { get; set; } = TypeQuestion.SingleChoice;
         public IList<QuizOptionCreateForRequest> Options { get; set; }
-        public string TextAnswer { get; set; }
+        public string TextAnswer { get; set; } = "";
 
         public bool IsDeleted { get; set; } = false;
     }

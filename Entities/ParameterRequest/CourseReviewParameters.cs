@@ -8,6 +8,7 @@ namespace Entities.ParameterRequest
     {
         public string Keyword { get; set; }
         public string Orderby { get; set; }
+        public float? Rating { get; set; }
         //public bool? IsDiscount { get; set; }
     }
 }
