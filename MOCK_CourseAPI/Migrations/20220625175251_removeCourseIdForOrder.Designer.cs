@@ -4,14 +4,16 @@ using Course.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CourseAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220625175251_removeCourseIdForOrder")]
+    partial class removeCourseIdForOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -712,6 +714,9 @@ namespace CourseAPI.Migrations
                     b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("CoursesId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -746,6 +751,8 @@ namespace CourseAPI.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CoursesId");
 
                     b.HasIndex("UserId");
 
@@ -1405,6 +1412,10 @@ namespace CourseAPI.Migrations
 
             modelBuilder.Entity("Course.DAL.Models.Order", b =>
                 {
+                    b.HasOne("Course.DAL.Models.Courses", null)
+                        .WithMany("Orders")
+                        .HasForeignKey("CoursesId");
+
                     b.HasOne("Course.DAL.Models.AppUser", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId")
@@ -1417,7 +1428,7 @@ namespace CourseAPI.Migrations
             modelBuilder.Entity("Course.DAL.Models.OrderItem", b =>
                 {
                     b.HasOne("Course.DAL.Models.Courses", "Course")
-                        .WithMany("OrderItems")
+                        .WithMany()
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1681,7 +1692,7 @@ namespace CourseAPI.Migrations
 
                     b.Navigation("Enrollments");
 
-                    b.Navigation("OrderItems");
+                    b.Navigation("Orders");
 
                     b.Navigation("SavedCourses");
 

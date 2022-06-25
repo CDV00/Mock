@@ -6,6 +6,7 @@ namespace Course.DAL.Models
     public class Order : BaseEntity<Guid>
     {
         public Guid UserId { get; set; }
+        public AppUser User { get; set; }
         public decimal TotalPrice { get; set; }
 
         public string FirstName { set; get; }
@@ -14,7 +15,6 @@ namespace Course.DAL.Models
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
 
-        public AppUser User { get; set; }
         public ICollection<OrderItem> OrderItem { get; set; }
     }
 

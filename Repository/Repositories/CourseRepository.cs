@@ -95,7 +95,6 @@ namespace Repository.Repositories
                                             .IncludeDiscount()
                                             .IncludeCategory()
                                             .FilterStatus(parameters.status)
-                                            //.FilterByUserId(userId)
                                             .FilterByKeyword(parameters.Keyword)
                                             .FilterByUserId(parameters.userId)
                                             .FilterByCategoryId(parameters.CategoryId)
