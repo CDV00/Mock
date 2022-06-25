@@ -386,6 +386,12 @@ namespace Course.BLL.Services
 
 
 
+
+
+
+
+
+
         private async Task UpdateSection(CourseForUpdateRequest courseRequest, Guid courseId)
         {
             if (courseRequest == null)

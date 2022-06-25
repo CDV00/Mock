@@ -193,8 +193,7 @@ namespace Repository.Repositories
                                             .IncludeUser()
                                             .IncludeOrder()
                                             .IncludeDiscount()
-                                            .FilterByEnroll(userId)
-                                            //.FilterByOrderd(userId)
+                                            .FilterByEnrollOrOrderd(userId)
                                             .FilterStatus(status)
                                             .FilterByKeyword(parameters.Keyword)
                                             .FilterByCategoryId(parameters.CategoryId)
@@ -209,8 +208,7 @@ namespace Repository.Repositories
                                             .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 
             var count = await BuildQuery()
-                //.FilterByOrderd(userId)
-                .FilterByEnroll(userId)
+                .FilterByEnrollOrOrderd(userId)
                 .FilterStatus(status)
                 .FilterByKeyword(parameters.Keyword)
                 .FilterByCategoryId(parameters.CategoryId)

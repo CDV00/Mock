@@ -108,7 +108,7 @@ namespace CourseAPI.Controllers
         /// <remarks>
         /// ## Remarks
         /// When add new records in course like section, quiz, lecture,...
-        /// user must pass IsNew = true. if you want deleted it, just set IsDeleted = true
+        /// You must Generate Id Guid type, it will save id you pass in. if you want deleted it, just set IsDeleted = true
         /// </remarks>
         /// <param name="id"></param>
         /// <param name="CoursesUpdateRequest"></param>
@@ -216,14 +216,6 @@ namespace CourseAPI.Controllers
         }
 
         [HttpGet("Get-all-up-coming-Course")]
-        //public async Task<ActionResult<Responses<CourseDTO>>> GetUpcomingCourse()
-        //{
-        //    var userId = User.GetUserId();
-        //    var result = await _coursesService.UpcomingCourse(userId);
-        //    if (result.IsSuccess == false)
-        //        return BadRequest(result);
-        //    return Ok(result);
-        //}
         public async Task<ActionResult<ApiOkResponse<CourseDTO>>> GetUpcomingCourse([FromQuery] CourseParameters parameters)
         {
             Guid? userId = (User.GetUserId() == Guid.Empty) ? null : User.GetUserId();

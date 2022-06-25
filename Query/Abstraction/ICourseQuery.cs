@@ -41,5 +41,6 @@ namespace Course.DAL.Queries
         ICourseQuery FilterByAddedCart(StatusOfUser? status, Guid? userId);
         ICourseQuery FilterByEnrollmented(StatusOfUser? status, Guid? userId);
         ICourseQuery IncludeQuizCompletion();
+        ICourseQuery FilterByEnrollOrOrderd(Guid userId);
     }
 }
