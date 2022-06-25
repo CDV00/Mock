@@ -35,8 +35,8 @@ namespace CourseAPI.Controllers
         /// ## Remark
         /// StatusOfUser
         /// - 0 :Enrolled
-        /// - 0 :Saved
-        /// - 0 :AddedCart
+        /// - 1 :Saved
+        /// - 2 :AddedCart
         /// </remarks>
         /// <param name="parameters"></param>
         /// <returns>List of course</returns>

@@ -3,11 +3,6 @@ using Course.DAL.Models;
 using Course.DAL.Queries;
 using Course.DAL.Queries.Abstraction;
 using Course.DAL.Repositories.Abstraction;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Repository.Repositories
 {

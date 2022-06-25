@@ -23,5 +23,6 @@ namespace Course.DAL.Repositories.Abstraction
         void Remove(object _object, bool? permanent);
         void RemoveRange(List<T> _object);
         bool UpdateRange(List<T> _objects);
+        void ChangeDetachedState(T _object);
     }
 }

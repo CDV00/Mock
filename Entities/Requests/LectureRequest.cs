@@ -30,6 +30,6 @@ namespace Course.BLL.Requests
         public bool IsPreview { get; set; } = false;
         public int TotalTime { get; set; } = 0;
         public bool IsDeleted { get; set; } = false;
-        public bool IsNew { get; set; } = true;
+        //public bool IsNew { get; set; } = true;
     }
 }

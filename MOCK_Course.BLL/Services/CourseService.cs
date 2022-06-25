@@ -11,6 +11,9 @@ using Course.BLL.Services.Abstraction;
 using Course.BLL.Share.RequestFeatures;
 using Entities.Responses;
 using Entities.ParameterRequest;
+using Repository.Repositories;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Course.BLL.Services
 {
@@ -24,14 +27,18 @@ namespace Course.BLL.Services
         private readonly ISectionRepositoty _sectionRepositoty;
         private readonly ICourseReviewRepository _courseReviewRepository;
         private readonly ICourseReviewService _courseReviewService;
-        private readonly ICourseRepository _courseRepository;
         private readonly IEnrollmentService _enrollmentService;
         private readonly ISavedCoursesService _savedCoursesService;
         private readonly ISectionService _sectionService;
+        private readonly ILectureRepository _lectureRepository;
+        private readonly IQuizRepository _quizRepository;
+        private readonly IQuestionRepository _questionRepository;
+        private readonly IQuizOptionRepository _quizOptionRepository;
         private readonly IOrderService _orderService;
         private readonly IOrderItemService _orderItemService;
-        private readonly IQuestionRepository _questionRepository;
         private readonly ILectureService _lectureService;
+        private readonly IAssignmentRepository _assignmentRepository;
+        private readonly IAttachmentRepository _attachmentRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
@@ -51,7 +58,13 @@ namespace Course.BLL.Services
                              ICategoryRepository categoryRepository,
                              IOrderItemService orderItemService,
                              IQuestionRepository questionRepository,
-                             ICourseReviewRepository courseReviewRepository)
+                             ICourseReviewRepository courseReviewRepository,
+                             ILectureRepository lectureRepository,
+                             IQuizRepository quizRepository,
+                             IQuizOptionRepository quizOptionRepository,
+                             IAttachmentRepository attachmentRepository,
+                             IAssignmentRepository assignmentRepository
+            )
         {
             _cousesRepository = cousesRepository;
             _mapper = mapper;
@@ -70,6 +83,11 @@ namespace Course.BLL.Services
             _orderItemService = orderItemService;
             _questionRepository = questionRepository;
             _courseReviewRepository = courseReviewRepository;
+            _lectureRepository = lectureRepository;
+            _quizRepository = quizRepository;
+            _quizOptionRepository = quizOptionRepository;
+            _attachmentRepository = attachmentRepository;
+            _assignmentRepository = assignmentRepository;
         }
 
         public async Task<ApiBaseResponse> GetAllCourses(CourseParameters parameter, Guid? userId)
@@ -151,9 +169,6 @@ namespace Course.BLL.Services
 
             if (!await _levelRepository.CheckExists(courseRequest.LevelIds))
                 return new NotMathIdResponse(nameof(Level), string.Join(',', courseRequest.AudioLanguageIds));
-
-            //if (!courseRequest.IsFree && courseRequest.Price <= 0)
-            //    return;
 
             var course = _mapper.Map<Courses>(courseRequest);
             course.UserId = userId;
@@ -272,7 +287,7 @@ namespace Course.BLL.Services
             if (!await _levelRepository.CheckExists(courseRequest.LevelIds))
                 return new NotMathIdResponse(nameof(Level), string.Join(',', courseRequest.AudioLanguageIds));
 
-            AddNewSection(courseRequest);
+            await UpdateSection(courseRequest, id);
 
             _mapper.Map(courseRequest, course);
 
@@ -358,30 +373,6 @@ namespace Course.BLL.Services
         }
 
 
-        /// <summary>
-        /// làm thêm phân trang và filter ở đâu
-        /// </summary>
-        /// <returns></returns>
-        //public async Task<Response<CourseDTO>> GetAll(Guid? userId)
-        //{
-        //    try
-        //    {
-        //        var courses = await _cousesRepository.BuildQuery()
-        //                                             .IncludeCategory()
-        //                                             .IncludeUser()
-        //                                             .IncludeEnrolment()
-        //                                             .AsSelectorAsync(x => _mapper.Map<CourseDTO>(x));
-        //        if (userId != null)
-        //        {
-        //            //await AddLast(courses, userId);
-        //        }
-        //        return new Response<CourseDTO>(true, courses);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new Response<CourseDTO>(false, ex.Message, null);
-        //    }
-        //}
 
 
 
@@ -395,169 +386,164 @@ namespace Course.BLL.Services
 
 
 
-        private static void AddNewSection(CourseForUpdateRequest courseRequest)
+        private async Task UpdateSection(CourseForUpdateRequest courseRequest, Guid courseId)
         {
-            var sections = courseRequest.Sections;
-            if (sections == null)
+            if (courseRequest == null)
                 return;
+
+            var sections = _mapper.Map<List<Section>>(courseRequest.Sections.ToList());
 
             for (var i = 0; i < sections.Count; i++)
             {
+                var lectures = _mapper.Map<List<Lecture>>(sections[i].Lectures.ToList());
+                var quizs = _mapper.Map<List<Quiz>>(sections[i].Quizzes.ToList());
+                var assignments = _mapper.Map<List<Assignment>>(sections[i].Assignments.ToList());
+                sections[i].Lectures = null;
+                sections[i].Quizzes = null;
+                sections[i].Assignments = null;
+
                 var section = sections[i];
-
-                if (section.IsDeleted && section.IsNew)
+                section.CourseId = courseId;
+                if (!await _sectionRepositoty.FindByCondition(s => s.Id == section.Id)
+                                             .AnyAsync())
                 {
-                    sections.Remove(section);
-                    continue;
+                    await _sectionRepositoty.CreateAsync(section);
+                    await _unitOfWork.SaveChangesAsync();
+                    _sectionRepositoty.ChangeDetachedState(section);
                 }
 
-                if (section.IsNew)
-                {
-                    section.Id = Guid.Empty;
-                }
-
-                NewLecture(section);
-                NewAssignment(section);
-                NewQuiz(section);
+                await UpdateLecture(lectures, section.Id);
+                await UpdateQuiz(quizs, section.Id);
+                await UpdateAssignment(assignments, section.Id);
             }
         }
 
-        private static void NewQuiz(SectionUpdateRequest section)
+        private async Task UpdateLecture(List<Lecture> lectures, Guid sectionId)
         {
-            var quizzes = section.Quizzes;
-            if (quizzes != null)
-            {
-                for (var j = 0; j < quizzes.Count; j++)
-                {
-                    var quiz = quizzes[j];
-                    if (quiz.IsDeleted && quiz.IsNew)
-                    {
-                        quizzes.Remove(quiz);
-                        continue;
-                    }
-                    if (quiz.IsNew || section.IsNew)
-                    {
-                        quiz.Id = Guid.Empty;
-                    }
+            if (lectures == null || lectures.Count == 0)
+                return;
 
-                    AddNewQuestionAsync(quiz);
+            for (var i = 0; i < lectures.Count; i++)
+            {
+
+                Lecture lecture = lectures[i];
+                if (!await _lectureRepository.FindByCondition(l => l.Id == lecture.Id)
+                                             .AnyAsync())
+                {
+                    lecture.SectionId = sectionId;
+                    await _lectureRepository.CreateAsync(lecture);
+                    await _unitOfWork.SaveChangesAsync();
+                    _lectureRepository.ChangeDetachedState(lecture);
                 }
             }
         }
 
-        private static void AddNewQuestionAsync(QuizForUpdateRequest quiz)
+        private async Task UpdateQuiz(List<Quiz> quizs, Guid sectionId)
         {
-            #region Update Question
-            var questions = quiz.Questions;
-            if (questions != null)
-            {
-                for (var k = 0; k < questions.Count; k++)
-                {
-                    var question = questions[k];
-                    if (question.IsDeleted && question.IsNew)
-                    {
-                        questions.Remove(question);
-                        continue;
-                    }
-                    if (question.IsNew || quiz.IsNew)
-                    {
-                        question.Id = Guid.Empty;
-                    }
+            if (quizs == null || quizs.Count == 0)
+                return;
 
-                    NewQuizOption(question);
-                    #endregion
+            for (var i = 0; i < quizs.Count; i++)
+            {
+                Quiz quiz = quizs[i];
+                var questions = quiz.Questions.ToList();
+                quiz.Questions = null;
+
+                if (!await _quizRepository.FindByCondition(l => l.Id == quiz.Id)
+                                          .AnyAsync())
+                {
+                    quiz.SectionId = sectionId;
+                    await _quizRepository.CreateAsync(quiz);
+                    await _unitOfWork.SaveChangesAsync();
+                    _quizRepository.ChangeDetachedState(quiz);
                 }
+
+                await UpdateQuestion(questions, quiz.Id);
             }
         }
 
-        private static void NewQuizOption(QuestionForUpdateRequest question)
+        private async Task UpdateQuestion(List<Question> questions, Guid quizId)
         {
-            var quizoptions = question.Options;
-            if (quizoptions != null)
+            if (questions == null || questions.Count == 0)
+                return;
+
+            for (var i = 0; i < questions.Count; i++)
             {
-                for (var l = 0; l < quizoptions.Count; l++)
+                Question question = questions[i];
+                var options = question.Options.ToList();
+                question.Options = null;
+
+                if (!await _questionRepository.FindByCondition(l => l.Id == question.Id)
+                                              .AnyAsync())
                 {
-                    var quizoption = quizoptions[l];
-                    if (quizoption.IsDeleted && quizoption.IsNew)
-                    {
-                        quizoptions.Remove(quizoption);
-                        continue;
-                    }
-                    if (quizoption.IsNew || question.IsNew)
-                    {
-                        quizoption.Id = Guid.Empty;
-                    }
+                    question.QuizId = quizId;
+                    await _questionRepository.CreateAsync(question);
+                    await _unitOfWork.SaveChangesAsync();
+                    _questionRepository.ChangeDetachedState(question);
                 }
+
+                await UpdateQuizOption(options, question.Id);
             }
         }
 
-        private static void NewAssignment(SectionUpdateRequest section)
+        private async Task UpdateQuizOption(List<QuizOption> quizOptions, Guid questionId)
         {
-            var assignments = section.Assignments;
-            if (assignments != null)
+            if (quizOptions == null || quizOptions.Count == 0)
+                return;
+            for (var i = 0; i < quizOptions.Count; i++)
             {
-                for (var j = 0; j < assignments.Count; j++)
+                QuizOption quizOption = quizOptions[i];
+                if (!await _quizOptionRepository.FindByCondition(l => l.Id == quizOption.Id)
+                                                .AnyAsync())
                 {
-                    var assignment = assignments[j];
-
-                    if (assignment.IsDeleted && assignment.IsNew)
-                    {
-                        assignments.Remove(assignment);
-                        continue;
-                    }
-                    if (assignment.IsNew || section.IsNew)
-                    {
-                        assignment.Id = Guid.Empty;
-                    }
-
-                    NewAttachment(section, assignment);
+                    quizOption.QuestionId = questionId;
+                    await _quizOptionRepository.CreateAsync(quizOption);
+                    await _unitOfWork.SaveChangesAsync();
+                    _quizOptionRepository.ChangeDetachedState(quizOption);
                 }
             }
         }
-
-        private static void NewAttachment(SectionUpdateRequest section, AssignmentForUpdateRequest assignment)
+        private async Task UpdateAssignment(List<Assignment> assigments, Guid sectionId)
         {
-            var attachments = assignment.Attachments;
-            if (attachments != null)
-            {
-                for (var k = 0; k < attachments.Count; k++)
-                {
-                    var attachment = attachments[k];
+            if (assigments == null || assigments.Count == 0)
+                return;
 
-                    if (attachment.IsDeleted && attachment.IsNew)
-                    {
-                        attachments.Remove(attachment);
-                        continue;
-                    }
-                    if (attachment.IsNew || assignment.IsNew)
-                    {
-                        attachment.Id = Guid.Empty;
-                    }
+            for (var i = 0; i < assigments.Count; i++)
+            {
+                Assignment assignment = assigments[i];
+                var attachments = assignment.Attachments.ToList();
+                assignment.Attachments = null;
+
+                if (!await _assignmentRepository.FindByCondition(l => l.Id == assignment.Id)
+                                                .AnyAsync())
+                {
+                    assignment.SectionId = sectionId;
+                    await _assignmentRepository.CreateAsync(assignment);
+                    await _unitOfWork.SaveChangesAsync();
+                    _assignmentRepository.ChangeDetachedState(assignment);
                 }
+                await UpdateAttachment(attachments, assignment.Id);
             }
         }
 
-        private static void NewLecture(SectionUpdateRequest section)
+        private async Task UpdateAttachment(List<Attachment> attachments, Guid asignmentId)
         {
-            var lectures = section.Lectures;
-            if (lectures != null)
+            if (attachments == null || attachments.Count == 0)
+                return;
+
+            for (var i = 0; i < attachments.Count; i++)
             {
-                for (var j = 0; j < lectures.Count; j++)
+                Attachment attachment = attachments[i];
+                if (!await _attachmentRepository.FindByCondition(l => l.Id == attachment.Id)
+                                                .AnyAsync())
                 {
-                    var lecture = lectures[j];
-
-                    if (lecture.IsDeleted && lecture.IsNew)
-                    {
-                        lectures.Remove(lecture);
-                        continue;
-                    }
-
-                    if (lecture.IsNew || section.IsNew)
-                    {
-                        lecture.Id = Guid.Empty;
-                    }
+                    attachment.AssignmentId = asignmentId;
+                    await _attachmentRepository.CreateAsync(attachment);
+                    await _unitOfWork.SaveChangesAsync();
+                    _attachmentRepository.ChangeDetachedState(attachment);
                 }
             }
         }
     }
 }
+

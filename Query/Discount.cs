@@ -27,9 +27,6 @@ namespace Course.Queries
         }
         public IDiscountQuery FilterByUserId(Guid UserId)
         {
-            //Query.Include(c => c.Course).Load();
-            //var course = Query.Where(type => type.Courses.UserId == UserId).ToList();
-
             Query = Query.Where(type => type.Course.UserId == UserId);
             return this;
         }

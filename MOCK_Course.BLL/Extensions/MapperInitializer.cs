@@ -29,7 +29,6 @@ namespace Course.BLL.Extensions
             // lesion
             CreateMap<Lecture, LectureForCreateRequest>().ReverseMap();
             CreateMap<Lecture, LectureForUpdateRequest>().ReverseMap();
-            CreateMap<LectureForUpdateRequest, Lecture>().ForMember(des => des.Id, src => src.MapFrom(opt => opt.IsNew == true ? Guid.Empty : opt.Id)).ReverseMap();
             CreateMap<Lecture, LectureDTO>().ReverseMap();
 
             // language
@@ -143,12 +142,12 @@ namespace Course.BLL.Extensions
 
             // section
             CreateMap<Section, SectionCreateRequest>().ReverseMap();
-            CreateMap<Section, SectionUpdateRequest>().ReverseMap();
+            CreateMap<SectionUpdateRequest, Section>().ReverseMap();
             CreateMap<Section, SectionDTO>().ReverseMap();
 
             //course
             CreateMap<Courses, CourseForCreateRequest>().ReverseMap();
-            CreateMap<CourseForUpdateRequest, Courses>().ReverseMap();
+            CreateMap<Courses, CourseForUpdateRequest>().ReverseMap();
         }
     }
 }

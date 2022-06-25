@@ -21,6 +21,5 @@ namespace Course.BLL.Requests
         public Guid Id { get; set; }
         public string FileUrl { get; set; } = "";
         public bool IsDeleted { get; set; } = false;
-        public bool IsNew { get; set; } = true;
     }
 }
