@@ -6,6 +6,7 @@ using Course.DAL.Models;
 using Course.BLL.DTO;
 using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
+using Course.BLL.Responses;
 
 namespace Course.BLL.Services
 {
@@ -24,23 +25,39 @@ namespace Course.BLL.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<BaseResponse> Add(Guid userId, LectureCompletionRequest lessonCompletionRequest)
+        public async Task<Response<LectureCompletionDTO>> Add(Guid userId, LectureCompletionRequest lectureCompletionRequest)
         {
-            try
-            {
-                var lessoncompletion = _mapper.Map<LectureCompletion>(lessonCompletionRequest);
+            if (await _lessonCompletionRepository.BuildQuery()
+                                                 .FilterByLecture(lectureCompletionRequest.LectureId)
+                                                 .FilterByUser(userId)
+                                                 .AnyAsync())
+                return new Response<LectureCompletionDTO>(false, $"Duplicate lecture completion with lecture id:{lectureCompletionRequest.LectureId}", "400");
 
-                lessoncompletion.UserId = userId;
+            var lessoncompletion = _mapper.Map<LectureCompletion>(lectureCompletionRequest);
 
-                await _lessonCompletionRepository.CreateAsync(lessoncompletion);
-                await _unitOfWork.SaveChangesAsync();
+            lessoncompletion.UserId = userId;
 
-                return new BaseResponse(true);
-            }
-            catch (Exception ex)
-            {
-                return new Response<BaseResponse>(false, ex.Message, null);
-            }
+            await _lessonCompletionRepository.CreateAsync(lessoncompletion);
+            await _unitOfWork.SaveChangesAsync();
+
+            return new Response<LectureCompletionDTO>(true, _mapper.Map<LectureCompletionDTO>(lessoncompletion));
+        }
+
+        public async Task<Response<LectureCompletionDTO>> Update(Guid userId, LectureCompletionRequest lectureCompletionRequest)
+        {
+            var lecureCompletion = await _lessonCompletionRepository.BuildQuery()
+                                                                    .FilterByLecture(lectureCompletionRequest.LectureId)
+                                                                    .FilterByUser(userId)
+                                                                    .AsSelectorAsync(l => l);
+            if (lecureCompletion == null)
+                return new Response<LectureCompletionDTO>(false, $"Don't have lecture completion with lecture id:{lectureCompletionRequest.LectureId}", "400");
+
+            _mapper.Map(lectureCompletionRequest, lecureCompletion);
+
+            _lessonCompletionRepository.Update(lecureCompletion);
+            await _unitOfWork.SaveChangesAsync();
+
+            return new Response<LectureCompletionDTO>(true, _mapper.Map<LectureCompletionDTO>(lecureCompletion));
         }
         public async Task<BaseResponse> IsCompletion(Guid userId, Guid lectureId)
         {

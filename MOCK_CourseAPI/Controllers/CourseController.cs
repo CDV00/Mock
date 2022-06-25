@@ -76,7 +76,6 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
 
-        #region document
         /// <summary>
         /// Create new course  
         /// </summary>
@@ -91,7 +90,6 @@ namespace CourseAPI.Controllers
         /// </remarks>
         /// <param name="course"></param>
         /// <returns></returns>
-        #endregion
         [HttpPost]
         [Authorize(Roles = "Admin, Instructor")]
         public async Task<ActionResult<ApiOkResponse<CourseDTO>>> Create([FromBody] CourseForCreateRequest course)

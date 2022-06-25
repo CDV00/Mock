@@ -41,7 +41,7 @@ namespace MOCK_Course.BLL.Services.Implementations
             var diposite = new Deposit
             {
                 UserId = Guid.Parse(userId),
-                Amount = payment.value.GetValueOrDefault()
+                Amount = payment.value.GetValueOrDefault(),
             };
             await _dipositRepository.CreateAsync(diposite);
             await _unitOfWork.SaveChangesAsync();
@@ -76,7 +76,9 @@ namespace MOCK_Course.BLL.Services.Implementations
                     Amount = payment.value * 100,
                     Currency = "USD",
                     Description = "Get Buy Course",
-                    Source = stripeToken.Id
+                    Source = stripeToken.Id,
+
+
                 };
 
                 var service = new ChargeService();

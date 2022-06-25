@@ -9,5 +9,7 @@ namespace Course.DAL.Models
 
         public Guid LectureId { get; set; }
         public Lecture Lecture { get; set; }
+
+        public int Time { get; set; }
     }
 }

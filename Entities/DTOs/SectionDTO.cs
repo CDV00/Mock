@@ -1,5 +1,6 @@
 ﻿using Course.DAL.DTOs;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Course.BLL.Responses
@@ -30,6 +31,8 @@ namespace Course.BLL.Responses
         public int Index { get; set; }
         public bool IsPreview { get; set; }
         public int TotalTime { get; set; }
+
+        public IList<LectureCompletionDTO> LectureCompletions { get; set; }
 
         public bool IsDeleted { get; set; } = false;
         public bool IsNew { get; set; } = false;

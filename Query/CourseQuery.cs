@@ -267,6 +267,7 @@ namespace Course.DAL.Queries
         {
             Query.Include(c => c.Sections)
                  .ThenInclude(s => s.Lectures)
+                 .ThenInclude(l => l.LectureCompletions)
                  .Load();
 
             return this;
@@ -288,6 +289,16 @@ namespace Course.DAL.Queries
                  .Load();
             return this;
         }
+
+        public ICourseQuery IncludeQuizCompletion()
+        {
+            Query.Include(c => c.Sections)
+                 .ThenInclude(s => s.Quizzes)
+                 .ThenInclude(q => q.QuizCompletions)
+                 .Load();
+            return this;
+        }
+
 
 
         /// <summary>
