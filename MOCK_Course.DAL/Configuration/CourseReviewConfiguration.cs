@@ -9,9 +9,9 @@ namespace Course.DAL.Configuration
         public void Configure(EntityTypeBuilder<CourseReview> builder)
         {
             // 1-n:enrollment-courseReview
-            builder.HasOne(cr => cr.Enrollment)
-                .WithMany(e => e.CourseReviews)
-                .HasForeignKey(cr => cr.EnrollmentId);
+            //builder.HasOne(cr => cr.Enrollment)
+            //       .WithOne(e => e.CourseReview)
+            //       .HasForeignKey(cr => cr.);
 
             builder.HasQueryFilter(u => !u.IsDeleted);
 
