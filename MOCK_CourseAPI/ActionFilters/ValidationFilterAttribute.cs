@@ -7,8 +7,8 @@ namespace CourseAPI.ActionFilters
 {
     public class ValidationFilterAttribute : IActionFilter
     {
-        private readonly ILoggerManager _logger;
-        public ValidationFilterAttribute(ILoggerManager logger)
+        private readonly ILoggerManagerService _logger;
+        public ValidationFilterAttribute(ILoggerManagerService logger)
         {
             _logger = logger;
         }

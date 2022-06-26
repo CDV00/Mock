@@ -9,10 +9,9 @@ using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
 using System.Linq;
 using System.Collections.Generic;
-using Repository.Repositories;
-using MOCK_Course.BLL.Services.Implementations;
 using Microsoft.AspNetCore.Identity;
 using Entities.Responses;
+using Repository.Repositories.Abstraction;
 
 namespace Course.BLL.Services
 {

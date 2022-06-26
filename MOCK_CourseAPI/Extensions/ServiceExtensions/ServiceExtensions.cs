@@ -26,6 +26,7 @@ using Microsoft.OpenApi.Models;
 using MOCK_Course.BLL.Services.Implementations;
 using Newtonsoft.Json;
 using Repository.Repositories;
+using Repository.Repositories.Abstraction;
 
 namespace CourseAPI.Extensions.ServiceExtensions
 {
@@ -179,7 +180,7 @@ namespace CourseAPI.Extensions.ServiceExtensions
             });
         }
         public static void ConfigureLoggerService(this IServiceCollection services) =>
-            services.AddSingleton<ILoggerManager, LoggerManager>();
+            services.AddSingleton<ILoggerManagerService, LoggerManagerService>();
         public static void ConfigureRepositories(this IServiceCollection services)
         {
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));

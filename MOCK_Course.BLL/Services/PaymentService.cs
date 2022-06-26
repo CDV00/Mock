@@ -1,11 +1,12 @@
 ﻿using Course.BLL.DTO;
 using Course.BLL.Requests;
+using Course.BLL.Services.Abstraction;
 using Course.DAL.DTOs;
 using Course.DAL.Models;
 using Course.DAL.Repositories.Abstraction;
 using Entities.Models;
 using Microsoft.AspNetCore.Identity;
-using Repository.Repositories;
+using Repository.Repositories.Abstraction;
 using Stripe;
 using System;
 using System.Threading.Tasks;

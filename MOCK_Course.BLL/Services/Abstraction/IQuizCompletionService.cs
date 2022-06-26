@@ -4,7 +4,7 @@ using Entities.DTOs;
 using System;
 using System.Threading.Tasks;
 
-namespace Course.BLL.Services
+namespace Course.BLL.Services.Abstraction
 {
     public interface IQuizCompletionService
     {

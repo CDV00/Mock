@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using CourseAPI.Extensions.ControllerBase;
 using Course.BLL.Services.Abstraction;
 using System;
-using Course.BLL.Services;
 using Entities.DTOs;
 
 namespace CourseAPI.Controllers

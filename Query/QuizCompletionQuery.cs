@@ -1,6 +1,7 @@
 ﻿using Course.DAL.Data;
 using Course.DAL.Models;
 using Course.DAL.Queries.Abstraction;
+using Query.Abstraction;
 using SES.HomeServices.Data.Queries.Abstractions;
 using System;
 using System.Linq;

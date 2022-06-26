@@ -1,5 +1,5 @@
 ﻿using Course.DAL.Models;
-using Course.DAL.Queries;
+using Query.Abstraction;
 using System;
 using System.Threading.Tasks;
 

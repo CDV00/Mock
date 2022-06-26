@@ -28,9 +28,11 @@
 		<PackageReference Include="Vimeo.Api" Version="1.0.6" />
 		<PackageReference Include="VimeoDotNet" Version="2.1.2" />
 		<PackageReference Include="ZendeskApi_v2" Version="3.12.0" />
+		<PackageReference Include="NLog.Extensions.Logging" Version="5.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Contracts\Contracts.csproj" />
 		<ProjectReference Include="..\Entities\Entities.csproj" />
 		<ProjectReference Include="..\MOCK_Course.DAL\Course.DAL.csproj" />
 		<ProjectReference Include="..\Repository\Repository.csproj" />

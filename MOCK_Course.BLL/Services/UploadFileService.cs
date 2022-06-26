@@ -1,13 +1,13 @@
 ﻿using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Course.BLL.DTO;
+using Course.BLL.Services.Abstraction;
 using Dropbox.Api;
 using Dropbox.Api.Files;
 using Google.Apis.Download;
 using Google.Apis.Upload;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using MOCK_Course.BLL.Services.Implementations;
 using System;
 using System.IO;
 using System.Linq;

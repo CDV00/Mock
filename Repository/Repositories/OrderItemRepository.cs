@@ -3,6 +3,8 @@ using Course.DAL.Models;
 using Course.DAL.Queries;
 using Course.DAL.Queries.Abstraction;
 using Course.DAL.Repositories.Abstraction;
+using Query.Abstraction;
+using Repository.Repositories.Abstraction;
 using System;
 
 namespace Repository.Repositories

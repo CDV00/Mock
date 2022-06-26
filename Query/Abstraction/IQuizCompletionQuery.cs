@@ -2,7 +2,7 @@
 using Course.DAL.Queries.Abstraction;
 using System;
 
-namespace Query
+namespace Query.Abstraction
 {
     public interface IQuizCompletionQuery : IQuery<QuizCompletion>
     {

@@ -13,9 +13,9 @@ namespace CourseAPI.ActionFilters
     public class ValidationCourseExistAttribut : IAsyncActionFilter
     {
         private readonly ICourseRepository _repository;
-        private readonly ILoggerManager _logger;
+        private readonly ILoggerManagerService _logger;
         public ValidationCourseExistAttribut(ICourseRepository repository,
-       ILoggerManager logger)
+       ILoggerManagerService logger)
         {
             _repository = repository;
             _logger = logger;

@@ -2,6 +2,8 @@
 using Course.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using Query;
+using Query.Abstraction;
+using Repository.Repositories.Abstraction;
 using System.Threading.Tasks;
 
 namespace Repository.Repositories

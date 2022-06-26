@@ -13,9 +13,9 @@ namespace CourseAPI.ActionFilters
     public class ValidationDiscountExistAttribute : IAsyncActionFilter
     {
         private readonly IDiscountRepository _repository;
-        private readonly ILoggerManager _logger;
+        private readonly ILoggerManagerService _logger;
         public ValidationDiscountExistAttribute(IDiscountRepository repository,
-       ILoggerManager logger)
+       ILoggerManagerService logger)
         {
             _repository = repository;
             _logger = logger;

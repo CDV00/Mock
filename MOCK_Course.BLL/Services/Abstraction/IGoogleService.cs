@@ -1,7 +1,7 @@
 ﻿using Google.Apis.Drive.v3;
 using System.Threading.Tasks;
 
-namespace MOCK_Course.BLL.Services.Implementations
+namespace Course.BLL.Services.Abstraction
 {
     public interface IGoogleService
     {

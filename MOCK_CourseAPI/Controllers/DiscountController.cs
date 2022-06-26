@@ -26,8 +26,8 @@ namespace CourseAPI.Controllers
     public class DiscountController : ApiControllerBase
     {
         private readonly IDiscountService _discountService;
-        private readonly ILoggerManager _logger;
-        public DiscountController(IDiscountService discountService, ILoggerManager logger)
+        private readonly ILoggerManagerService _logger;
+        public DiscountController(IDiscountService discountService, ILoggerManagerService logger)
         {
             _discountService = discountService;
             _logger = logger;

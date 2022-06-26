@@ -2,6 +2,7 @@
 using Course.DAL.Queries;
 using Course.DAL.Queries.Abstraction;
 using Entities.Models;
+using Repository.Repositories.Abstraction;
 
 namespace Repository.Repositories
 {

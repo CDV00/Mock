@@ -2,7 +2,7 @@
 using Course.DAL.Queries.Abstraction;
 using System;
 
-namespace Course.DAL.Queries
+namespace Query.Abstraction
 {
     public interface IOrderItemQuery : IQuery<OrderItem>
     {

@@ -2,6 +2,7 @@
 using Course.DAL.Models;
 using Course.DAL.Queries;
 using Course.DAL.Repositories.Abstraction;
+using Query.Abstraction;
 using System;
 using System.Collections.Generic;
 using System.Linq;

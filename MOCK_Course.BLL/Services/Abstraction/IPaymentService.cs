@@ -3,7 +3,7 @@ using Course.BLL.Requests;
 using Course.DAL.DTOs;
 using System.Threading.Tasks;
 
-namespace MOCK_Course.BLL.Services.Implementations
+namespace Course.BLL.Services.Abstraction
 {
     public interface IPaymentService
     {

@@ -13,9 +13,9 @@ namespace CourseAPI.ActionFilters
     public class ValidationDateTimeForDiscountAttribute : IAsyncActionFilter
     {
         private readonly IDiscountRepository _discountRepository;
-        private readonly ILoggerManager _logger;
+        private readonly ILoggerManagerService _logger;
         public ValidationDateTimeForDiscountAttribute(
-       ILoggerManager logger, IDiscountRepository discountRepository)
+       ILoggerManagerService logger, IDiscountRepository discountRepository)
         {
             _logger = logger;
             _discountRepository = discountRepository;

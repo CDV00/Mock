@@ -7,8 +7,8 @@ using Course.BLL.DTO;
 using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
 using Course.BLL.Responses;
-using Repository.Repositories;
 using Entities.DTOs;
+using Repository.Repositories.Abstraction;
 
 namespace Course.BLL.Services
 {
