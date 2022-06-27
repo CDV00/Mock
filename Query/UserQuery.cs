@@ -49,5 +49,19 @@ namespace Course.DAL.Queries
 
             return this;
         }
+        public IUserQuery FilterByKeyword(string Keyword)
+        {
+            if (string.IsNullOrWhiteSpace(Keyword))
+                return this;
+
+            var KEYWORD = Keyword.ToUpper();
+            Query = Query.Where(c => c.Fullname.ToUpper()
+                                            .Contains(KEYWORD) || c.Fullname
+                                            .ToUpper().Contains(KEYWORD) || c.Email
+                                            .ToUpper().Contains(KEYWORD));
+            return this;
+        }
+
+
     }
 }
