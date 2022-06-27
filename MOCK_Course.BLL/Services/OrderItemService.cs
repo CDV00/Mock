@@ -12,6 +12,9 @@ using System.Collections.Generic;
 using Repository.Repositories;
 using MOCK_Course.BLL.Services.Implementations;
 using Microsoft.AspNetCore.Identity;
+using Entities.ParameterRequest;
+using Course.BLL.Share.RequestFeatures;
+using Entities.Responses;
 
 namespace Course.BLL.Services
 {
@@ -53,5 +56,12 @@ namespace Course.BLL.Services
                 return new Response<OrderItemDTO>(false, ex.Message, null);
             }
         }
+        //
+        public async Task<ApiBaseResponse> GetStatements(DepositParameters orderParameters, Guid userId)
+        {
+            var order = await _orderItemRepository.GetStatements(orderParameters, userId);
+            return new ApiOkResponse<PagedList<OrderItemDTO>>(order);
+        }
+        //
     }
 }

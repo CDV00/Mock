@@ -8,6 +8,6 @@ namespace Entities.Models
         public Guid UserId { get; set; }
         public AppUser User { get; set; }
 
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
     }
 }

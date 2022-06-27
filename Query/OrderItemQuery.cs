@@ -32,5 +32,39 @@ namespace Course.DAL.Queries
             Query = Query.Where(type => type.Order.UserId == userId);
             return this;
         }
+        public IOrderItemQuery IncludeCourse()
+        {
+
+            Query.Include(o => o.Course).Load();
+            return this;
+        }
+
+        //
+        public IOrderItemQuery FilterStartDate(DateTime? CreateAt)
+        {
+            if (CreateAt is null)
+            {
+                return this;
+            }
+            Query = Query.Where(type => type.Order.CreatedAt >= CreateAt);
+            return this;
+        }
+        public IOrderItemQuery FilterEndtDate(DateTime? CreateAt)
+        {
+            if (CreateAt is null)
+            {
+                return this;
+            }
+            Query = Query.Where(type => type.Order.CreatedAt <= CreateAt);
+            return this;
+        }
+        public IOrderItemQuery FilterByUserIdInstructor(Guid userId)
+        {
+            //var orderItems = _dbContext.OrderItems.AsQueryable().Where(orderItem => orderItem.Course.UserId == userId);
+            Query = Query.Where(o => o.Course.UserId == userId);
+
+            return this;
+        }
+        //
     }
 }

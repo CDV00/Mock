@@ -4,6 +4,7 @@ using System;
 using System.Threading.Tasks;
 using Course.BLL.Share.RequestFeatures;
 using Entities.ParameterRequest;
+using Entities.DTOs;
 
 namespace Course.BLL.Services.Abstraction
 {
@@ -16,5 +17,6 @@ namespace Course.BLL.Services.Abstraction
         Task<PagedList<UserDTO>> GetPopularInstructor(UserParameter userParameter, Guid userid);
         Task<BaseResponse> UpdateActive(UpdateUserActiveRequest updateUserActiveRequest);
         Task<Responses<UserDTO>> GetAllUserByRole(string role);
+        Task<PagedList<DepositDTO>> GetDeposit(DepositParameters depositParameters, Guid userid);
     }
 }

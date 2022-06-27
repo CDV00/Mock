@@ -8,6 +8,7 @@ using CourseAPI.Extensions.ControllerBase;
 using Course.BLL.Services.Abstraction;
 using System.Text.Json;
 using Entities.ParameterRequest;
+using Entities.DTOs;
 
 namespace CourseAPI.Controllers
 {
@@ -98,6 +99,22 @@ namespace CourseAPI.Controllers
         {
             var userId = User.GetUserId();
             var result = await _userService.GetPopularInstructor(userParameter,userId);
+
+            Response.Headers.Add("X-Pagination",
+                               JsonSerializer.Serialize(result.MetaData));
+
+            return Ok(result);
+        }
+        /// <summary>
+        /// Get Popular Instructor
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("Get-Deposit-Instructor")]
+        [AllowAnonymous]
+        public async Task<ActionResult<Responses<DepositDTO>>> GetDepositInstructor([FromQuery] DepositParameters depositParameters)
+        {
+            var userId = User.GetUserId();
+            var result = await _userService.GetDeposit(depositParameters, userId);
 
             Response.Headers.Add("X-Pagination",
                                JsonSerializer.Serialize(result.MetaData));

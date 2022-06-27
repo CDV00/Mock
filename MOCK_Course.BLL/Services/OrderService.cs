@@ -242,7 +242,6 @@ namespace Course.BLL.Services
             var earning = await _orderRepository.GetEarningAsync(orderParameters, userId);
             return new ApiOkResponse<PagedList<EarningDTO>>(earning);
         }
-        //
-       
+
     }
 }

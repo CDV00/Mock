@@ -23,9 +23,11 @@ namespace CourseAPI.Controllers
     public class OrderController : ApiControllerBase
     {
         private readonly IOrderService _orderService;
-        public OrderController(IOrderService orderService)
+        private readonly IOrderItemService _orderItemService;
+        public OrderController(IOrderService orderService, IOrderItemService orderItemService)
         {
             _orderService = orderService;
+            _orderItemService = orderItemService;
         }
 
         /// <summary>
@@ -112,7 +114,7 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <param name="orderRequest"></param>
         /// <returns></returns>
-        [HttpGet("Get-all-Earning")]
+        [HttpGet("Get-all-earning")]
         [AllowAnonymous]
         public async Task<ActionResult<ApiOkResponses<EarningDTO>>> GetEarning([FromQuery] OrderParameters orderParameters)
         {
@@ -122,10 +124,27 @@ namespace CourseAPI.Controllers
             if (!result.IsSuccess)
                 return ProcessError(result);
 
-            var coursePagedList = result.GetResult<PagedList<EarningDTO>>();
+            var earningPagedList = result.GetResult<PagedList<EarningDTO>>();
 
             Response.Headers.Add(SystemConstant.PagedHeader,
-                                 JsonSerializer.Serialize(coursePagedList.MetaData));
+                                 JsonSerializer.Serialize(earningPagedList.MetaData));
+
+            return Ok(result);
+        }
+        [HttpGet("Get-all-Statements")]
+        [AllowAnonymous]
+        public async Task<ActionResult<ApiOkResponses<OrderItemDTO>>> GetStatements([FromQuery] DepositParameters orderParameters)
+        {
+            Guid userId = User.GetUserId();
+
+            var result = await _orderItemService.GetStatements(orderParameters, userId);
+            if (!result.IsSuccess)
+                return ProcessError(result);
+
+            var statements = result.GetResult<PagedList<OrderItemDTO>>();
+
+            Response.Headers.Add(SystemConstant.PagedHeader,
+                                 JsonSerializer.Serialize(statements.MetaData));
 
             return Ok(result);
         }

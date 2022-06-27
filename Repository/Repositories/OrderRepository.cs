@@ -43,7 +43,7 @@ namespace Repository.Repositories
         public async Task<PagedList<EarningDTO>> GetEarningAsync(OrderParameters orderParameters, Guid userId)
         {
             var earning = await BuildQuery().FilterByUserIdInstructor(userId)
-                                            .FilterStartDate(orderParameters.startDay)
+                                            .FilterStartDate(orderParameters.startDate)
                                             .FilterEndtDate(orderParameters.endDate)
                                             //.SumAsync(o=>(long)o.TotalPrice)
                                             .GroupByCreateAt()
@@ -51,7 +51,7 @@ namespace Repository.Repositories
                                             .Take(orderParameters.PageSize)
                                             .ApplySort(orderParameters.Orderby)
                                             //.ToListAsync(o => _mapper.Map<EarningDTO>(o));
-                                            .ToListAsync(o =>  new EarningDTO { Date =  o.CreatedAt, Earning = 0 /*TotalPriceDate(userId,o.CreatedAt).Result*/, Count =0 });
+                                            .ToListAsync(o =>  new EarningDTO { Date =  o.CreatedAt});
             await AddLast(earning,userId);
 
             var count = await BuildQuery().FilterByUserId(userId)
@@ -69,13 +69,18 @@ namespace Repository.Repositories
         }
         private async Task<decimal> TotalPriceDate(Guid userId, DateTime createAt)
         {
-            decimal totalPrice = await BuildQuery().FilterByUserIdInstructor(userId).FilterByCreateAt(createAt).SumAsync(o => (long)o.TotalPrice);
+            decimal totalPrice = await BuildQuery().FilterByUserIdInstructor(userId)
+                                                   .FilterByCreateAt(createAt)
+                                                   .SumAsync(o => (long)o.TotalPrice);
             return totalPrice;
         }
         private async Task<int> CountOrderDate(Guid userId, DateTime createAt)
         {
-            int count = await BuildQuery().FilterByUserIdInstructor(userId).FilterByCreateAt(createAt).CountAsync();
+            int count = await BuildQuery().FilterByUserIdInstructor(userId)
+                                          .FilterByCreateAt(createAt)
+                                          .CountAsync();
             return count;
         }
+
     }
 }

@@ -13,9 +13,9 @@ namespace Repository.Repositories
             _context = context;
         }
 
-        public ICategoryQuery BuildQuery()
+        public IDepositQuery BuildQuery()
         {
-            return new CategoryQuery(_context.Categories.AsQueryable(), _context);
+            return new DepositQuery(_context.Deposits.AsQueryable(), _context);
         }
     }
 }

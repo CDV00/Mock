@@ -73,8 +73,7 @@ namespace Course.DAL.Queries
         }
         public IOrderQuery GroupByCreateAt()
         {
-            //Query.GroupBy(type => type.CreatedAt);
-            Query.GroupBy(type => type.CreatedAt.Day);
+            Query.GroupBy(type => type.CreatedAt.Date);
             return this;
         }
         public IOrderQuery FilterByCreateAt(DateTime CreatedAt)

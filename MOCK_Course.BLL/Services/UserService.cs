@@ -6,8 +6,10 @@ using Course.BLL.Share.RequestFeatures;
 using Course.DAL.Models;
 using Course.DAL.Repositories.Abstraction;
 using Entities.Constants;
+using Entities.DTOs;
 using Entities.ParameterRequest;
 using Microsoft.AspNetCore.Identity;
+using Repository.Repositories;
 using System;
 using System.Threading.Tasks;
 
@@ -24,8 +26,9 @@ namespace Course.BLL.Services
         private readonly ISubscriptionService _subscriptionService;
         private readonly ICourseService _courseService;
         private readonly IUserRepository _userRepository;
+        private readonly IDipositRepository _dipositRepository;
         public UserService(UserManager<AppUser> userManager,
-           IMapper mapper, IEnrollmentRepository enrollmentRepository, ICourseRepository cousesRepository, ICourseReviewRepository courseReviewRepository, ISubscriptionRepository subscriptionRepository, IUserRepository userRepository, ISubscriptionService subscriptionService, ICourseService courseService)
+           IMapper mapper, IEnrollmentRepository enrollmentRepository, ICourseRepository cousesRepository, ICourseReviewRepository courseReviewRepository, ISubscriptionRepository subscriptionRepository, IUserRepository userRepository, ISubscriptionService subscriptionService, ICourseService courseService, IDipositRepository dipositRepository)
         {
             _userManager = userManager;
             _mapper = mapper;
@@ -36,6 +39,7 @@ namespace Course.BLL.Services
             _userRepository = userRepository;
             _subscriptionService = subscriptionService;
             _courseService = courseService;
+            _dipositRepository = dipositRepository;
         }
 
         // Get All User(role):Full Name, Birthday,... IsActive
@@ -178,5 +182,23 @@ namespace Course.BLL.Services
             var pageList = new PagedList<UserDTO>(users, count, userParameter.PageNumber, userParameter.PageSize);
             return pageList;
         }
+        public async Task<PagedList<DepositDTO>> GetDeposit(DepositParameters depositParameters, Guid userid)
+        {
+            var users = await _dipositRepository.BuildQuery()
+                                             .FilterByUser(userid)
+                                             .FilterDateStart(depositParameters.startDate)
+                                             .FilterDateEnd(depositParameters.endDate)
+                                             .ApplySort(depositParameters.Orderby)
+                                             .Skip((depositParameters.PageNumber - 1) * depositParameters.PageSize)
+                                             .Take(depositParameters.PageSize)
+                                             .ToListAsync(d => _mapper.Map<DepositDTO>(d));
+
+            var count = await _dipositRepository.BuildQuery()
+                                             .FilterByUser(userid)
+                                             .CountAsync();
+            var pageList = new PagedList<DepositDTO>(users, count, depositParameters.PageNumber, depositParameters.PageSize);
+            return pageList;
+        }
+        
     }
 }
