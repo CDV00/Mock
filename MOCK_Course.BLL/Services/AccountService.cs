@@ -536,6 +536,7 @@ namespace Course.BLL.Services
             var userInfoResponse = await httpClient.GetStringAsync($"https://graph.facebook.com/v2.8/me?fields=id,email,first_name,last_name,name,gender,locale,birthday,picture&access_token={externalLoginResquest.Token}");
             var userInfo = JsonConvert.DeserializeObject<FacebookUserData>(userInfoResponse);
             // 4. ready to create the local user account (if necessary) and jwt
+
             _user = await _userManager.FindByEmailAsync(userInfo.Email);
 
             if (_user == null || _user.Fullname == null)
@@ -551,29 +552,23 @@ namespace Course.BLL.Services
                     AvatarUrl = userInfo.Picture.Data.Url,
                     EmailConfirmed = true
                 };
-
                 var result = await _userManager.CreateAsync(appUser);
-
                 if (!result.Succeeded)
                     throw new Exception();
                 await _userManager.AddToRoleAsync(appUser, UserRolesConstant.Student);
                 _user = await _userManager.FindByNameAsync(userInfo.Email);
             }
+            //
             if (!_user.IsActive)
                 throw new("Authentication failed. Account has been blocked.");
+            //
+            _mapper.Map(_user, _userResponse);
             // create token
             var token = await CreateToken(populateExp: true);
-
             if (token == null)
                 throw new ("Authentication Error. User don't have any role, please create new account!");
-
-
-            return new LoginDTO( token, new UserDTO()
-            {
-                FullName = _user.Fullname,
-                Email = _user.Email,
-                Role = UserRolesConstant.Student
-            });
+            //
+            return new LoginDTO( token, _userResponse);
         }
 
         /// <summary>
@@ -589,7 +584,7 @@ namespace Course.BLL.Services
             {
                 throw new Exception("Payload is null");
             }
-            var _user = await _userManager.FindByEmailAsync(payload.Email);
+            _user = await _userManager.FindByEmailAsync(payload.Email);
 
             if (_user is null)
             {
@@ -610,19 +605,14 @@ namespace Course.BLL.Services
             }
             if (!_user.IsActive)
                 throw new("Authentication failed. Account has been blocked.");
-            //var userRoles = await _userManager.GetRolesAsync(user);
+            //
+            _mapper.Map(_user, _userResponse);
             // create token
             var token = await CreateToken(populateExp: true);
-
             if (token == null)
                 throw new("Authentication Error. User don't have any role, please create new account!");
-
-            return new LoginDTO(token, new UserDTO()
-            {
-                FullName = _user.Fullname,
-                Email = _user.Email,
-                Role = UserRolesConstant.Student
-            });
+            //
+            return new LoginDTO(token, _userResponse);
 
         }
         /// <summary>
@@ -631,17 +621,13 @@ namespace Course.BLL.Services
         /// <param name="externalAuth"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        private async Task<GoogleJsonWebSignature.Payload> VerifyGoogleToken(ExternalLoginResquest externalAuth)
+        private async Task<GoogleJsonWebSignature.Payload> VerifyGoogleToken(ExternalLoginResquest externalLoginResquest)
         {
             try
             {
-                var googleAuth = _configurations.GetSection("Authentication:Google");
-                var settings = new GoogleJsonWebSignature.ValidationSettings()
-                {
-                    Audience = new List<string>() { googleAuth["ClientId"]}
-                };
-                var payload = await GoogleJsonWebSignature.ValidateAsync(externalAuth.Token, settings);
-
+                var httpClient = new HttpClient();
+                var userInfoResponse = await httpClient.GetStringAsync($"https://www.googleapis.com/oauth2/v2/userinfo?alt=json&access_token={externalLoginResquest.Token}");
+                var payload = JsonConvert.DeserializeObject<GoogleJsonWebSignature.Payload>(userInfoResponse);
                 return payload;
             }
             catch (Exception ex)

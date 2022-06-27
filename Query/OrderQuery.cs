@@ -71,5 +71,41 @@ namespace Course.DAL.Queries
             Query = Query.Where(type => type.Id == Id);
             return this;
         }
+        public IOrderQuery GroupByCreateAt()
+        {
+            //Query.GroupBy(type => type.CreatedAt);
+            Query.GroupBy(type => type.CreatedAt.Day);
+            return this;
+        }
+        public IOrderQuery FilterByCreateAt(DateTime CreatedAt)
+        {
+            Query = Query.Where(type => type.CreatedAt.Date == CreatedAt.Date);
+            return this;
+        }
+        public IOrderQuery FilterStartDate(DateTime? CreateAt)
+        {
+            if(CreateAt is null)
+            {
+                return this;
+            }
+            Query = Query.Where(type => type.CreatedAt >= CreateAt);
+            return this;
+        }
+        public IOrderQuery FilterEndtDate(DateTime? CreateAt)
+        {
+            if (CreateAt is null)
+            {
+                return this;
+            }
+            Query = Query.Where(type => type.CreatedAt <= CreateAt);
+            return this;
+        }
+        public IOrderQuery FilterByUserIdInstructor(Guid userId)
+        {
+            var orderItems = _dbContext.OrderItems.AsQueryable().Where(orderItem => orderItem.Course.UserId == userId);
+            Query = Query.Where(o => orderItems.Any(oi => oi.OrderId == o.Id));
+
+            return this;
+        }
     }
 }
