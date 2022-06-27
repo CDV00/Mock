@@ -64,7 +64,8 @@ namespace CourseAPI.Controllers
         //[ServiceFilter(typeof(ValidationDateTimeForDiscountAttribute))]
         public async Task<ActionResult<Response<DiscountDTO_>>> Add(DiscountForCreateRequest discount)
         {
-            var result = await _discountService.Add(discount);
+            var userId = User.GetUserId();
+            var result = await _discountService.Add(discount, userId);
             if (!result.IsSuccess)
                 return ProcessError(result);
 
@@ -83,7 +84,8 @@ namespace CourseAPI.Controllers
         public async Task<ActionResult<Response<DiscountDTO_>>> Update(Guid id, DiscountForUpdateRequest discountForUpdate)
         {
             //var discount = HttpContext.Items[DiscountConstant.Name] as Discount;
-            var result = await _discountService.Update(id, discountForUpdate);
+            var userId = User.GetUserId();
+            var result = await _discountService.Update(id, discountForUpdate, userId);
             if (!result.IsSuccess)
                 return ProcessError(result);
 
@@ -102,7 +104,8 @@ namespace CourseAPI.Controllers
         public async Task<ActionResult<BaseResponse>> Delete(Guid id)
         {
             //var discount = HttpContext.Items[DiscountConstant.Name] as Discount;
-            var result = await _discountService.Remove(id);
+            var userId = User.GetUserId();
+            var result = await _discountService.Remove(id, userId);
             if (!result.IsSuccess)
                 return ProcessError(result);
 
