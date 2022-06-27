@@ -37,6 +37,7 @@ namespace Course.BLL.Extensions
             services.AddScoped<IQuestionRepository, QuestionRepository>();
             services.AddScoped<IQuizRepository, QuizRepository>();
             services.AddScoped<IQuizOptionRepository, QuizOptionRepository>();
+            services.AddScoped<IAssignmentCompletionRepository, AssignmentCompletionRepository>();
         }
         /// <summary>
         /// Configure Services
@@ -66,6 +67,7 @@ namespace Course.BLL.Extensions
             services.AddScoped<IAttachmentService, AttachmentService>();
             services.AddScoped<IUploadFileService, UploadFileService>();
             services.AddScoped<IQuizService, QuizService>();
+            services.AddScoped<IAssignmentCompletionService, AssignmentCompletionService>();
 
         }
     }

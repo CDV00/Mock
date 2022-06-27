@@ -33,6 +33,7 @@ namespace Course.DAL.Data
         public DbSet<CloseCaption> CloseCaptions { get; set; }
         public DbSet<Level> Levels { get; set; }
         public DbSet<Assignment> Assignments { get; set; }
+        public DbSet<AssignmentCompletion> AssignmentCompletions { get; set; }
         public DbSet<Attachment> Attachments { get; set; }
 
         public DbSet<Quiz> Quizs { get; set; }
@@ -78,6 +79,7 @@ namespace Course.DAL.Data
             modelBuilder.ApplyConfiguration(new QuizConfiguration());
             modelBuilder.ApplyConfiguration(new DipositeConfiguration());
             modelBuilder.ApplyConfiguration(new QuizCompletionConfiguration());
+            modelBuilder.ApplyConfiguration(new AssignmentCompletionConfiguration());
 
             modelBuilder.ConfigTablesOfIdentity();
             //modelBuilder.SeedData();
