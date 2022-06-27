@@ -1,9 +1,6 @@
-﻿using Course.DAL.Models;
+﻿using Entities.DTOs;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Course.DAL.DTOs
 {
@@ -15,8 +12,10 @@ namespace Course.DAL.DTOs
         public ICollection<AttachmentDTO> Attachments { get; set; }
         public Guid SectionId { get; set; }
         public int Index { get; set; }
+        public bool Completion { get; set; } = false;
 
         public bool IsDeleted { get; set; } = false;
+        public AssignmentCompletionDTO assignmentCompletion { get; set; }
         //public bool IsNew { get; set; } = false;
     }
 }

@@ -25,7 +25,7 @@ namespace CourseAPI.Controllers
         /// <summary>
         /// Create new Assignment completion
         ///</summary>
-        /// <param name="quizCompletionRequest"></param>
+        /// <param name="assignmentCompletionRequest"></param>
         /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<AssignmentCompletionDTO>> Create([FromBody] AssignmentCompletionRequest assignmentCompletionRequest)
@@ -40,7 +40,7 @@ namespace CourseAPI.Controllers
         /// <summary>
         /// check completion lecture
         /// </summary>
-        /// <param name="lectureId"></param>
+        /// <param name="assignmentId"></param>
         /// <returns></returns>
         [HttpGet("Is-Completion")]
         public async Task<ActionResult<BaseResponse>> IsCompletion(Guid assignmentId)

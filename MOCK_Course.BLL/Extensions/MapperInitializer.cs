@@ -6,6 +6,7 @@ using Course.BLL.Responses;
 using Course.DAL.DTOs;
 using System;
 using Entities.DTOs;
+using Entities.Requests;
 
 namespace Course.BLL.Extensions
 {
