@@ -14,8 +14,8 @@ namespace Course.DAL.Repositories.Abstraction
     {
         ICourseQuery BuildQuery();
         Task<PagedList<CourseDTO>> GetAllCourseAsync(CourseParameters parameters, Guid? userId);
-        Task<PagedList<CourseDTO>> GetAllMyCoures(Guid? userId, CourseParameters parameters);
-        Task<PagedList<CourseDTO>> UpcomingCourse(Guid? userId, CourseParameters parameters);
+        Task<PagedList<CourseDTO>> GetAllMyCoures(Guid userId, CourseParameters parameters);
+        Task<PagedList<CourseDTO>> UpcomingCourse(Guid userId, CourseParameters parameters);
         Task<PagedList<CourseDTO>> GetAllMyPurchase(Guid userId, CourseParameters parameters);
         Task<CourseDTO> GetDetailCourseAsync(Guid id);
         Task<bool> IsExist(Guid id);

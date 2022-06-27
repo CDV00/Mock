@@ -162,17 +162,9 @@ namespace CourseAPI.Controllers
         /// <returns>List Courses</returns>
         [HttpGet("Get-all-my-course")]
         [Authorize(Roles = "Admin, Instructor")]
-        /*public async Task<ActionResult<Responses<CourseDTO>>> GetAllMyCoures()
-        {
-            var userId = User.GetUserId();
-            var result = await _coursesService.GetAllMyCoures(userId);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
-            return Ok(result);
-        }*/
         public async Task<ActionResult<ApiOkResponse<CourseDTO>>> GetAllMyCoures([FromQuery] CourseParameters parameters)
         {
-            Guid? userId = (User.GetUserId() == Guid.Empty) ? null : User.GetUserId();
+            var userId = User.GetUserId();
 
             var result = await _coursesService.GetAllMyCoures(parameters, userId);
             if (!result.IsSuccess)
@@ -191,14 +183,6 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <returns>List Courses</returns>
         [HttpGet("Get-all-my-purchased")]
-        //public async Task<ActionResult<Responses<CourseDTO>>> GetAllMyPurchase()
-        //{
-        //    var userId = User.GetUserId();
-        //    var result = await _coursesService.GetAllMyPurchase(userId);
-        //    if (result.IsSuccess == false)
-        //        return BadRequest(result);
-        //    return Ok(result);
-        //}
         public async Task<ActionResult<ApiOkResponse<CourseDTO>>> GetAllMyPurchase([FromQuery] CourseParameters parameters)
         {
             var userId = User.GetUserId();
@@ -218,7 +202,7 @@ namespace CourseAPI.Controllers
         [HttpGet("Get-all-up-coming-Course")]
         public async Task<ActionResult<ApiOkResponse<CourseDTO>>> GetUpcomingCourse([FromQuery] CourseParameters parameters)
         {
-            Guid? userId = (User.GetUserId() == Guid.Empty) ? null : User.GetUserId();
+            var userId = User.GetUserId();
 
             var result = await _coursesService.UpcomingCourse(parameters, userId);
             if (!result.IsSuccess)

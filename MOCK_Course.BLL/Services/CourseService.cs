@@ -116,7 +116,7 @@ namespace Course.BLL.Services
             }
         }
 
-        public async Task<ApiBaseResponse> GetAllMyCoures(CourseParameters parameter, Guid? userId)
+        public async Task<ApiBaseResponse> GetAllMyCoures(CourseParameters parameter, Guid userId)
         {
             var courses = await _cousesRepository.GetAllMyCoures(userId, parameter);
             //await AddLast(courses, userId);
@@ -130,7 +130,7 @@ namespace Course.BLL.Services
 
             return new ApiOkResponse<PagedList<CourseDTO>>(courses);
         }
-        public async Task<ApiBaseResponse> UpcomingCourse(CourseParameters parameter, Guid? userId)
+        public async Task<ApiBaseResponse> UpcomingCourse(CourseParameters parameter, Guid userId)
         {
             var courses = await _cousesRepository.UpcomingCourse(userId, parameter);
 
@@ -244,8 +244,6 @@ namespace Course.BLL.Services
                 {
                     return new Response<BaseResponse>(false, "can't find course", null);
                 }
-                /*if (course.UserId != userId)
-                    return new Response<CourseDTO>(false, "You aren't the owner of the course", null);*/
 
                 course.status = (Status)courseStatusUpdateRequest.status;
                 await _unitOfWork.SaveChangesAsync();
