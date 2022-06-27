@@ -12,14 +12,12 @@ namespace Course.DAL.DTOs
         public int Index { get; set; }
 
         public bool IsDeleted { get; set; } = false;
-        //public bool IsNew { get; set; } = false;
-        //[JsonIgnore]
-        //public QuizSettingDTO Settings { get; set; }
 
         public bool IsShowTime { get; set; }
         public long TimeLimit { get; set; }
         public byte PassingScore { get; set; }
         public uint QuestionsLimit { get; set; }
-        public ICollection<QuizCompletionDTO> QuizCompletions { get; set; }
+        public bool isCompleted { get; set; } = false;
+        public QuizCompletionDTO QuizCompletion { get; set; }
     }
 }

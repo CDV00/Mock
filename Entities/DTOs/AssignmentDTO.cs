@@ -12,7 +12,7 @@ namespace Course.DAL.DTOs
         public ICollection<AttachmentDTO> Attachments { get; set; }
         public Guid SectionId { get; set; }
         public int Index { get; set; }
-        public bool Completion { get; set; } = false;
+        public bool isCompleted { get; set; } = false;
 
         public bool IsDeleted { get; set; } = false;
         public AssignmentCompletionDTO assignmentCompletion { get; set; }

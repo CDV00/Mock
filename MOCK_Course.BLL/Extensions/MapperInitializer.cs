@@ -30,7 +30,8 @@ namespace Course.BLL.Extensions
             // lesion
             CreateMap<Lecture, LectureForCreateRequest>().ReverseMap();
             CreateMap<Lecture, LectureForUpdateRequest>().ReverseMap();
-            CreateMap<Lecture, LectureDTO>().ReverseMap();
+            CreateMap<Lecture, LectureDTO>().ForMember(des => des.isCompleted,
+                                                            src => src.MapFrom(opt => opt.LectureCompletion != null)).ReverseMap();
 
             // language
             CreateMap<AudioLanguage, AudioLanguageForCreateRequest>().ReverseMap();
@@ -124,7 +125,7 @@ namespace Course.BLL.Extensions
             CreateMap<AttachmentForCreateRequest, AttachmentDTO>().ReverseMap();
             CreateMap<Attachment, AttachmentForUpdateRequest>().ReverseMap();
 
-            CreateMap<Assignment, AssignmentDTO>().ForMember(des => des.Completion, src => src.MapFrom(opt => opt.AssignmentCompletion != null))
+            CreateMap<Assignment, AssignmentDTO>().ForMember(des => des.isCompleted, src => src.MapFrom(opt => opt.AssignmentCompletion != null))
                                                   .ReverseMap();
             CreateMap<Assignment, AssignmentRequest>().ReverseMap();
             CreateMap<Assignment, AssignmentForCreateRequest>().ReverseMap();
@@ -142,7 +143,7 @@ namespace Course.BLL.Extensions
             CreateMap<Question, QuestionForUpdateRequest>().ReverseMap();
 
             //map quiz
-            CreateMap<Quiz, QuizDTO>().ReverseMap();
+            CreateMap<Quiz, QuizDTO>().ForMember(des => des.isCompleted, src => src.MapFrom(opt => opt.QuizCompletion != null)).ReverseMap();
             CreateMap<Quiz, QuizRequest>().ReverseMap();
             CreateMap<Quiz, QuizForCreateRequest>().ReverseMap();
             CreateMap<Quiz, QuizForUpdateRequest>().ReverseMap();

@@ -218,6 +218,16 @@ namespace Course.DAL.Queries
             return this;
         }
 
+        public ICourseQuery FilterByPurchased(StatusOfUser? status, Guid? userId)
+        {
+            if (status == null || status != StatusOfUser.IsPurchased || userId == null)
+                return this;
+
+            Query = Query.Where(c => c.OrderItems.Any(s => s.Order.UserId == userId));
+            return this;
+        }
+
+
 
 
         public ICourseQuery FilterByAudioLanguageIds(List<Guid?> AudioLanguageIds)
@@ -287,6 +297,16 @@ namespace Course.DAL.Queries
                  .Load();
             return this;
         }
+
+        public ICourseQuery IncludeAssignmentCompletion()
+        {
+            Query.Include(c => c.Sections)
+                 .ThenInclude(s => s.Assignments)
+                 .ThenInclude(a => a.AssignmentCompletion)
+                 .Load();
+            return this;
+        }
+
         public ICourseQuery IncludeQuiz()
         {
             Query.Include(c => c.Sections)

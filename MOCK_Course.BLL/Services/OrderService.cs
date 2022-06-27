@@ -109,6 +109,8 @@ namespace Course.BLL.Services
 
             order.OrderItem = orderItems;
             order.TotalPrice = totalPrice;
+            order.CreatedAt = DateTime.UtcNow;
+
             orderRequest.Payment.value = (int)totalPrice;
 
             await _orderRepository.CreateAsync(order);
@@ -231,6 +233,6 @@ namespace Course.BLL.Services
             return new ApiOkResponse<PagedList<EarningDTO>>(earning);
         }
         //
-       
+
     }
 }

@@ -25,7 +25,7 @@ namespace Course.BLL.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public CourseReviewService(ICourseReviewRepository courseReviewRepository, ICourseRepository cousesRepository, IEnrollmentRepository enrollmentRepository, INotificationRepository notificationRepository, IHubContext<BroadcastHub, IHubClient> hubContext,IUnitOfWork unitOfWork, IMapper mapper)
+        public CourseReviewService(ICourseReviewRepository courseReviewRepository, ICourseRepository cousesRepository, IEnrollmentRepository enrollmentRepository, INotificationRepository notificationRepository, IHubContext<BroadcastHub, IHubClient> hubContext, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _courseReviewRepository = courseReviewRepository;
             _unitOfWork = unitOfWork;
@@ -37,7 +37,6 @@ namespace Course.BLL.Services
         }
 
 
-        // Todo: filter and paging
         /// <summary>
         /// Get all course review
         /// </summary>
@@ -58,9 +57,6 @@ namespace Course.BLL.Services
             var courseReview = _mapper.Map<CourseReview>(courseReviewRequest);
             courseReview.CreatedAt = DateTime.Now;
 
-         
-            await _courseReviewRepository.CreateAsync(courseReview);
-
             await IncreateRate(enrollment, courseReview);
             await _courseReviewRepository.CreateAsync(courseReview);
 
@@ -69,6 +65,7 @@ namespace Course.BLL.Services
                 UserId = courseReview.Enrollment.UserId,
                 Messenge = "Add"
             };
+
             await _notificationRepository.CreateAsync(notification);
 
             await _unitOfWork.SaveChangesAsync();
@@ -155,7 +152,7 @@ namespace Course.BLL.Services
 
             await RemoveRateCourse(courseReview);
 
-            _courseReviewRepository.Remove(courseReview, false);
+            _courseReviewRepository.Remove(courseReview, true);
             await _unitOfWork.SaveChangesAsync();
             return new ApiBaseResponse(true);
         }
@@ -462,7 +459,6 @@ namespace Course.BLL.Services
                 for (var i = 1; i <= 5; i++)
                 {
                     rates.Add(await _courseReviewRepository.BuildQuery()
-                                                            //.FilterByUserId(userId)
                                                             .FilterCourseByUSer(userId)
                                                            .FilterByRating(i)
                                                            .GetAvgRatePercent(sumRating));

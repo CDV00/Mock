@@ -42,5 +42,7 @@ namespace Course.DAL.Queries
         ICourseQuery FilterByEnrollmented(StatusOfUser? status, Guid? userId);
         ICourseQuery IncludeQuizCompletion();
         ICourseQuery FilterByEnrollOrOrderd(Guid userId);
+        ICourseQuery IncludeAssignmentCompletion();
+        ICourseQuery FilterByPurchased(StatusOfUser? status, Guid? userId);
     }
 }

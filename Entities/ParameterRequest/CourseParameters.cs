@@ -30,6 +30,7 @@ namespace Entities.ParameterRequest
     {
         IsEnrollemt,
         IsSaved,
-        IsCart
+        IsCart,
+        IsPurchased
     }
 }

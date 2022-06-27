@@ -37,6 +37,7 @@ namespace CourseAPI.Controllers
         /// - 0 :Enrolled
         /// - 1 :Saved
         /// - 2 :AddedCart
+        /// - 3 :Purchased
         /// </remarks>
         /// <param name="parameters"></param>
         /// <returns>List of course</returns>
