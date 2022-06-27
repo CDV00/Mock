@@ -7,6 +7,7 @@ using Course.DAL.Models;
 using Course.DAL.Repositories.Abstraction;
 using Entities.Constants;
 using Entities.ParameterRequest;
+using Entities.Responses;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Threading.Tasks;
@@ -39,20 +40,30 @@ namespace Course.BLL.Services
         }
 
         // Get All User(role):Full Name, Birthday,... IsActive
-        public async Task<Responses<UserDTO>> GetAllUserByRole(string role)
+        /*public async Task<Responses<UserDTO>> GetAllUserByRole(string role)
         {
             try
             {
                 var users = await _userRepository.BuildQuery()
                                                  .FilterByRole(role)
                                                  .ToListAsync(u => _mapper.Map<UserDTO>(u));
-
+                foreach (var user in users)
+                {
+                    user.Role = role;
+                }    
                 return new Responses<UserDTO>(true, users);
             }
             catch (Exception ex)
             {
                 return new Responses<UserDTO>(false, ex.Message, null);
             }
+        }*/
+        public async Task<ApiBaseResponse> GetAllUserByRole(UserParameter parameter)
+        {
+            
+            var users = await _userRepository.GetAllUserByRole(parameter);
+
+            return new ApiOkResponse<PagedList<UserDTO>>(users);
         }
         // Update User: Id, IsActive
         public async Task<BaseResponse> UpdateActive(UpdateUserActiveRequest updateUserActiveRequest)

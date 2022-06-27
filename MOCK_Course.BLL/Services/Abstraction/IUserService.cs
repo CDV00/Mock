@@ -4,6 +4,7 @@ using System;
 using System.Threading.Tasks;
 using Course.BLL.Share.RequestFeatures;
 using Entities.ParameterRequest;
+using Entities.Responses;
 
 namespace Course.BLL.Services.Abstraction
 {
@@ -15,6 +16,7 @@ namespace Course.BLL.Services.Abstraction
         Task<BaseResponse> CheckExistEmail(string Email);
         Task<PagedList<UserDTO>> GetPopularInstructor(UserParameter userParameter, Guid userid);
         Task<BaseResponse> UpdateActive(UpdateUserActiveRequest updateUserActiveRequest);
-        Task<Responses<UserDTO>> GetAllUserByRole(string role);
+        //Task<Responses<UserDTO>> GetAllUserByRole(string role);
+        Task<ApiBaseResponse> GetAllUserByRole(UserParameter parameter);
     }
 }
