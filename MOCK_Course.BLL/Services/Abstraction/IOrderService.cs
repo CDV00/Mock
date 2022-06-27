@@ -4,6 +4,7 @@ using Course.BLL.DTO;
 using System;
 using System.Threading.Tasks;
 using Entities.Responses;
+using Entities.ParameterRequest;
 
 namespace Course.BLL.Services.Abstraction
 {
@@ -11,6 +12,7 @@ namespace Course.BLL.Services.Abstraction
     {
         Task<ApiBaseResponse> Add(Guid userId, OrderRequest orderRequest);
         Task<ApiBaseResponse> GetDetail(Guid id);
+        Task<ApiBaseResponse> GetEarning(OrderParameters orderParameters, Guid userId);
         Task<ApiBaseResponse> GetTotal(Guid courseId);
         Task<ApiBaseResponse> IsPurchased(Guid userId, Guid courseId);
     }

@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using AutoMapper;
-using Course.BLL.DTO;
 using Course.BLL.Requests;
 using Course.DAL.Models;
 using Course.BLL.Responses;
 using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
 using Entities.Responses;
-using System.Linq;
 using Course.BLL.Share.RequestFeatures;
 using Entities.ParameterRequest;
 
@@ -33,7 +31,8 @@ namespace Course.BLL.Services
 
         public async Task<ApiBaseResponse> Add(DiscountForCreateRequest discount)
         {
-            if (!await _coursesRepository.IsExist(discount.CourseId))
+            var course = await _coursesRepository.GetByIdAsync(discount.CourseId);
+            if (course == null || !course.IsActive || course.status != Status.Aprrove)
                 return new CourseNotFoundResponse(discount.CourseId);
 
             if (await _discountRepository.CheckDiscountTimeExisting(discount.CourseId, discount.StartDate, discount.EndDate, null))

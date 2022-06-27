@@ -15,9 +15,9 @@ namespace CourseAPI.ActionFilters
     {
         private readonly ICourseRepository _courseRepository;
         private readonly IDiscountRepository _discountRepository;
-        private readonly ILoggerManager _logger;
+        private readonly ILoggerManagerService _logger;
         public ValidationCourseForDiscountExistAttribute(ICourseRepository courseRepository,
-       ILoggerManager logger, IDiscountRepository discountRepository)
+       ILoggerManagerService logger, IDiscountRepository discountRepository)
         {
             _logger = logger;
             _courseRepository = courseRepository;

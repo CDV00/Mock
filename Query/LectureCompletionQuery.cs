@@ -20,6 +20,18 @@ namespace Query
         public LectureCompletionQuery(IQueryable<LectureCompletion> lectureCompletionQuery, AppDbContext dbContext) : base(lectureCompletionQuery)
         { _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext)); }
 
+        public ILectureCompletionQuery FilterByUser(Guid userId)
+        {
+            Query = Query.Where(type => type.UserId == userId);
+            return this;
+        }
+
+        public ILectureCompletionQuery FilterByLecture(Guid lectureId)
+        {
+            Query = Query.Where(type => type.LectureId == lectureId);
+            return this;
+        }
+
 
         public ILectureCompletionQuery FilterLectureCompletion(Guid userId, Guid sectionId)
         {

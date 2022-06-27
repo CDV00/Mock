@@ -412,7 +412,8 @@ namespace CourseAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EnrollmentId");
+                    b.HasIndex("EnrollmentId")
+                        .IsUnique();
 
                     b.ToTable("CourseReviews");
                 });
@@ -658,7 +659,13 @@ namespace CourseAPI.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("Time")
+                        .HasColumnType("int");
+
                     b.HasKey("LectureId", "UserId");
+
+                    b.HasIndex("LectureId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -746,9 +753,6 @@ namespace CourseAPI.Migrations
                     b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("CoursesId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -783,8 +787,6 @@ namespace CourseAPI.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CoursesId");
 
                     b.HasIndex("UserId");
 
@@ -917,6 +919,24 @@ namespace CourseAPI.Migrations
                     b.HasIndex("SectionId");
 
                     b.ToTable("Quizs");
+                });
+
+            modelBuilder.Entity("Course.DAL.Models.QuizCompletion", b =>
+                {
+                    b.Property<Guid>("QuizId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("QuizId", "UserId");
+
+                    b.HasIndex("QuizId")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("QuizCompletions");
                 });
 
             modelBuilder.Entity("Course.DAL.Models.QuizOption", b =>
@@ -1342,8 +1362,8 @@ namespace CourseAPI.Migrations
             modelBuilder.Entity("Course.DAL.Models.CourseReview", b =>
                 {
                     b.HasOne("Course.DAL.Models.Enrollment", "Enrollment")
-                        .WithMany("CourseReviews")
-                        .HasForeignKey("EnrollmentId")
+                        .WithOne("CourseReview")
+                        .HasForeignKey("Course.DAL.Models.CourseReview", "EnrollmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1411,9 +1431,9 @@ namespace CourseAPI.Migrations
             modelBuilder.Entity("Course.DAL.Models.LectureCompletion", b =>
                 {
                     b.HasOne("Course.DAL.Models.Lecture", "Lecture")
-                        .WithMany("LectureCompletions")
-                        .HasForeignKey("LectureId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .WithOne("LectureCompletion")
+                        .HasForeignKey("Course.DAL.Models.LectureCompletion", "LectureId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Course.DAL.Models.AppUser", "User")
@@ -1440,10 +1460,6 @@ namespace CourseAPI.Migrations
 
             modelBuilder.Entity("Course.DAL.Models.Order", b =>
                 {
-                    b.HasOne("Course.DAL.Models.Courses", null)
-                        .WithMany("Orders")
-                        .HasForeignKey("CoursesId");
-
                     b.HasOne("Course.DAL.Models.AppUser", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId")
@@ -1456,7 +1472,7 @@ namespace CourseAPI.Migrations
             modelBuilder.Entity("Course.DAL.Models.OrderItem", b =>
                 {
                     b.HasOne("Course.DAL.Models.Courses", "Course")
-                        .WithMany()
+                        .WithMany("OrderItems")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1496,6 +1512,25 @@ namespace CourseAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Section");
+                });
+
+            modelBuilder.Entity("Course.DAL.Models.QuizCompletion", b =>
+                {
+                    b.HasOne("Course.DAL.Models.Quiz", "Quiz")
+                        .WithOne("QuizCompletion")
+                        .HasForeignKey("Course.DAL.Models.QuizCompletion", "QuizId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Course.DAL.Models.AppUser", "User")
+                        .WithMany("QuizCompletions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Quiz");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Course.DAL.Models.QuizOption", b =>
@@ -1672,6 +1707,8 @@ namespace CourseAPI.Migrations
 
                     b.Navigation("Orders");
 
+                    b.Navigation("QuizCompletions");
+
                     b.Navigation("SavedCourses");
 
                     b.Navigation("Subscriptions");
@@ -1701,7 +1738,7 @@ namespace CourseAPI.Migrations
 
                     b.Navigation("Enrollments");
 
-                    b.Navigation("Orders");
+                    b.Navigation("OrderItems");
 
                     b.Navigation("SavedCourses");
 
@@ -1715,12 +1752,12 @@ namespace CourseAPI.Migrations
 
             modelBuilder.Entity("Course.DAL.Models.Enrollment", b =>
                 {
-                    b.Navigation("CourseReviews");
+                    b.Navigation("CourseReview");
                 });
 
             modelBuilder.Entity("Course.DAL.Models.Lecture", b =>
                 {
-                    b.Navigation("LectureCompletions");
+                    b.Navigation("LectureCompletion");
                 });
 
             modelBuilder.Entity("Course.DAL.Models.Order", b =>
@@ -1736,6 +1773,8 @@ namespace CourseAPI.Migrations
             modelBuilder.Entity("Course.DAL.Models.Quiz", b =>
                 {
                     b.Navigation("Questions");
+
+                    b.Navigation("QuizCompletion");
                 });
 
             modelBuilder.Entity("Course.DAL.Models.Section", b =>

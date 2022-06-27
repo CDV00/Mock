@@ -31,6 +31,13 @@ namespace CourseAPI.Controllers
         /// <summary>
         /// Get all course with paging and filter
         /// </summary>
+        /// <remarks>
+        /// ## Remark
+        /// StatusOfUser
+        /// - 0 :Enrolled
+        /// - 1 :Saved
+        /// - 2 :AddedCart
+        /// </remarks>
         /// <param name="parameters"></param>
         /// <returns>List of course</returns>
         [HttpGet("Get-all-course")]
@@ -69,7 +76,6 @@ namespace CourseAPI.Controllers
             return Ok(result);
         }
 
-        #region document
         /// <summary>
         /// Create new course  
         /// </summary>
@@ -84,7 +90,6 @@ namespace CourseAPI.Controllers
         /// </remarks>
         /// <param name="course"></param>
         /// <returns></returns>
-        #endregion
         [HttpPost]
         [Authorize(Roles = "Admin, Instructor")]
         public async Task<ActionResult<ApiOkResponse<CourseDTO>>> Create([FromBody] CourseForCreateRequest course)
@@ -103,7 +108,7 @@ namespace CourseAPI.Controllers
         /// <remarks>
         /// ## Remarks
         /// When add new records in course like section, quiz, lecture,...
-        /// user must pass IsNew = true. if you want deleted it, just set IsDeleted = true
+        /// You must Generate Id Guid type, it will save id you pass in. if you want deleted it, just set IsDeleted = true
         /// </remarks>
         /// <param name="id"></param>
         /// <param name="CoursesUpdateRequest"></param>
@@ -157,17 +162,9 @@ namespace CourseAPI.Controllers
         /// <returns>List Courses</returns>
         [HttpGet("Get-all-my-course")]
         [Authorize(Roles = "Admin, Instructor")]
-        /*public async Task<ActionResult<Responses<CourseDTO>>> GetAllMyCoures()
-        {
-            var userId = User.GetUserId();
-            var result = await _coursesService.GetAllMyCoures(userId);
-            if (result.IsSuccess == false)
-                return BadRequest(result);
-            return Ok(result);
-        }*/
         public async Task<ActionResult<ApiOkResponse<CourseDTO>>> GetAllMyCoures([FromQuery] CourseParameters parameters)
         {
-            Guid? userId = (User.GetUserId() == Guid.Empty) ? null : User.GetUserId();
+            var userId = User.GetUserId();
 
             var result = await _coursesService.GetAllMyCoures(parameters, userId);
             if (!result.IsSuccess)
@@ -186,14 +183,6 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <returns>List Courses</returns>
         [HttpGet("Get-all-my-purchased")]
-        //public async Task<ActionResult<Responses<CourseDTO>>> GetAllMyPurchase()
-        //{
-        //    var userId = User.GetUserId();
-        //    var result = await _coursesService.GetAllMyPurchase(userId);
-        //    if (result.IsSuccess == false)
-        //        return BadRequest(result);
-        //    return Ok(result);
-        //}
         public async Task<ActionResult<ApiOkResponse<CourseDTO>>> GetAllMyPurchase([FromQuery] CourseParameters parameters)
         {
             var userId = User.GetUserId();
@@ -211,17 +200,9 @@ namespace CourseAPI.Controllers
         }
 
         [HttpGet("Get-all-up-coming-Course")]
-        //public async Task<ActionResult<Responses<CourseDTO>>> GetUpcomingCourse()
-        //{
-        //    var userId = User.GetUserId();
-        //    var result = await _coursesService.UpcomingCourse(userId);
-        //    if (result.IsSuccess == false)
-        //        return BadRequest(result);
-        //    return Ok(result);
-        //}
         public async Task<ActionResult<ApiOkResponse<CourseDTO>>> GetUpcomingCourse([FromQuery] CourseParameters parameters)
         {
-            Guid? userId = (User.GetUserId() == Guid.Empty) ? null : User.GetUserId();
+            var userId = User.GetUserId();
 
             var result = await _coursesService.UpcomingCourse(parameters, userId);
             if (!result.IsSuccess)

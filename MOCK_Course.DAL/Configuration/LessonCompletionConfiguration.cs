@@ -16,10 +16,10 @@ namespace Course.DAL.Configuration
                 .OnDelete(DeleteBehavior.NoAction);
 
             // 1-n:lecture-lessionCompletion
-            builder.HasOne(lc => lc.Lecture)
-                   .WithMany(l => l.LectureCompletions)
-                   .HasForeignKey(lc => lc.LectureId)
-                   .OnDelete(DeleteBehavior.NoAction);
+            // builder.HasOne(lc => lc.Lecture)
+            //        .WithMany(l => l.LectureCompletions)
+            //        .HasForeignKey(lc => lc.LectureId)
+            //        .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

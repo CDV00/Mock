@@ -10,6 +10,7 @@ namespace Course.DAL.Models
 
         public AppUser User { get; set; }
         public Courses Courses { get; set; }
-        public ICollection<CourseReview> CourseReviews { get; set; }
+
+        public CourseReview CourseReview { get; set; }
     }
 }

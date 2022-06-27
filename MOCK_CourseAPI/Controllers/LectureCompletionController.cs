@@ -37,6 +37,21 @@ namespace CourseAPI.Controllers
         }
 
         /// <summary>
+        /// Update Time lecture completion
+        /// </summary>
+        /// <param name="lessonCompletionRequest"></param>
+        /// <returns></returns>
+        [HttpPut]
+        public async Task<ActionResult<BaseResponse>> Update([FromBody] LectureCompletionRequest lessonCompletionRequest)
+        {
+            var userId = User.GetUserId();
+            var result = await _lessonCompletionService.Update(userId, lessonCompletionRequest);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
+        /// <summary>
         /// check completion lecture
         /// </summary>
         /// <param name="lectureId"></param>

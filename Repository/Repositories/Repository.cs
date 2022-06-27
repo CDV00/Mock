@@ -24,6 +24,11 @@ namespace Repository.Repositories
             return DbSet;
         }
 
+        public void ChangeDetachedState(T _object)
+        {
+            _context.Entry(_object).State = EntityState.Detached;
+        }
+
         public virtual async Task CreateAsync(T _object) => await DbSet.AddAsync(_object);
 
         public virtual async Task CreateRangeAsync(List<T> _object) => await DbSet.AddRangeAsync(_object);
@@ -43,11 +48,6 @@ namespace Repository.Repositories
         public virtual void RemoveRange(List<T> _objects)
         {
             Entity().RemoveRange(_objects);
-            //_context.Entry(_object).State = EntityState.Modified;
-            //for (var i = 0; i < _object.Count; i++)
-            //{
-            //    _object[0].IsDeleted = true;
-            //}
         }
 
 

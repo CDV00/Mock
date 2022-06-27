@@ -18,7 +18,18 @@ namespace Entities.ParameterRequest
         public string Orderby { get; set; }
         public bool IsDiscount { get; set; } = false;
         public bool IsFree { get; set; } = false;
+        public bool? IsActive { get; set; } = null;
         public decimal MinPrice { get; set; } = 0;
         public decimal MaxPrice { get; set; } = 999999999;
+
+        public bool? IsEnrollemt { get; set; }
+        public StatusOfUser? StatusOfUser { get; set; } = null;
+    }
+
+    public enum StatusOfUser
+    {
+        IsEnrollemt,
+        IsSaved,
+        IsCart
     }
 }

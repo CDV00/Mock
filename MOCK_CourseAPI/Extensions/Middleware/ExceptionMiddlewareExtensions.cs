@@ -10,7 +10,7 @@ namespace CourseAPI.Extensions.Middleware
     public static class ExceptionMiddlewareExtensions
     {
         public static void ConfigureExceptionHandler(this IApplicationBuilder app,
-ILoggerManager logger)
+ILoggerManagerService logger)
         {
             app.UseExceptionHandler(appError =>
             {

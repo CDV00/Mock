@@ -5,7 +5,6 @@ using Course.DAL.Models;
 using Course.BLL.Responses;
 using Course.DAL.DTOs;
 using System;
-using Entities.Requests;
 using Entities.DTOs;
 
 namespace Course.BLL.Extensions
@@ -30,7 +29,6 @@ namespace Course.BLL.Extensions
             // lesion
             CreateMap<Lecture, LectureForCreateRequest>().ReverseMap();
             CreateMap<Lecture, LectureForUpdateRequest>().ReverseMap();
-            CreateMap<LectureForUpdateRequest, Lecture>().ForMember(des => des.Id, src => src.MapFrom(opt => opt.IsNew == true ? Guid.Empty : opt.Id)).ReverseMap();
             CreateMap<Lecture, LectureDTO>().ReverseMap();
 
             // language
@@ -66,6 +64,7 @@ namespace Course.BLL.Extensions
             CreateMap<Order, OrderRequest>().ReverseMap();
             CreateMap<Order, OrderDTO>().ReverseMap();
             CreateMap<Order, OrderUpdateRequest>().ReverseMap();
+            CreateMap<Order, EarningDTO>().ReverseMap();
 
 
 
@@ -81,6 +80,10 @@ namespace Course.BLL.Extensions
             CreateMap<LectureCompletionRequest, LectureCompletion>().ReverseMap();
             CreateMap<LectureCompletion, LectureCompletionDTO>().ReverseMap();
             CreateMap<LectureCompletion, LectureCompletionRequest>().ReverseMap();
+
+
+            CreateMap<QuizCompletion, QuizCompletionRequest>().ReverseMap();
+            CreateMap<QuizCompletion, QuizCompletionDTO>().ReverseMap();
 
             //CourseReview
             CreateMap<CourseReview, CourseReviewRequest>().ReverseMap();
@@ -140,7 +143,7 @@ namespace Course.BLL.Extensions
 
             // section
             CreateMap<Section, SectionCreateRequest>().ReverseMap();
-            CreateMap<Section, SectionUpdateRequest>().ReverseMap();
+            CreateMap<SectionUpdateRequest, Section>().ReverseMap();
             CreateMap<Section, SectionDTO>().ReverseMap();
 
             //course

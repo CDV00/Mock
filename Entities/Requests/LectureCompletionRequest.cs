@@ -7,6 +7,8 @@ namespace Course.BLL.Requests
     {
         [Required]
         public Guid LectureId { get; set; }
+
+        public int Time { get; set; } = 0;
     }
     public class LectureCompletionUpdateRequest : LectureCompletionRequest
     {

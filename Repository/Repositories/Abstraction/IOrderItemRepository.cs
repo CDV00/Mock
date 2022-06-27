@@ -1,8 +1,8 @@
 ﻿using Course.DAL.Models;
-using Course.DAL.Queries;
 using Course.DAL.Repositories.Abstraction;
+using Query.Abstraction;
 
-namespace Repository.Repositories
+namespace Repository.Repositories.Abstraction
 {
     public interface IOrderItemRepository : IRepository<OrderItem>
     {

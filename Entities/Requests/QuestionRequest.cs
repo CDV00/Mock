@@ -40,6 +40,6 @@ namespace Course.BLL.Requests
         //public bool IsDeleted { get; set; } = false;
         //public bool IsNew { get; set; } = true;
         public bool IsDeleted { get; set; } = false;
-        public bool IsNew { get; set; } = true;
+        //public bool IsNew { get; set; } = true;
     }
 }

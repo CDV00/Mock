@@ -1,11 +1,12 @@
 ﻿using Course.BLL.DTO;
 using Course.BLL.Requests;
+using Course.BLL.Services.Abstraction;
 using Course.DAL.DTOs;
 using Course.DAL.Models;
 using Course.DAL.Repositories.Abstraction;
 using Entities.Models;
 using Microsoft.AspNetCore.Identity;
-using Repository.Repositories;
+using Repository.Repositories.Abstraction;
 using Stripe;
 using System;
 using System.Threading.Tasks;
@@ -41,7 +42,7 @@ namespace MOCK_Course.BLL.Services.Implementations
             var diposite = new Deposit
             {
                 UserId = Guid.Parse(userId),
-                Amount = payment.value.GetValueOrDefault()
+                Amount = payment.value.GetValueOrDefault(),
             };
             await _dipositRepository.CreateAsync(diposite);
             await _unitOfWork.SaveChangesAsync();
@@ -76,7 +77,9 @@ namespace MOCK_Course.BLL.Services.Implementations
                     Amount = payment.value * 100,
                     Currency = "USD",
                     Description = "Get Buy Course",
-                    Source = stripeToken.Id
+                    Source = stripeToken.Id,
+
+
                 };
 
                 var service = new ChargeService();

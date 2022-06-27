@@ -25,4 +25,11 @@ namespace Course.BLL.Responses
         public CourseDTO Course { get; set; }
         public DiscountDTO_ Discount { get; set; }
     }
+    public class EarningDTO
+    {
+        public int Count { get; set; }
+        public Decimal Earning { get; set; }
+        public DateTime Date { get; set; }
+        
+    }
 }

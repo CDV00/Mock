@@ -34,6 +34,6 @@ namespace Course.BLL.Requests
         //public Guid SectionId { get; set; }
         public int Index { get; set; } = 0;
         public bool IsDeleted { get; set; } = false;
-        public bool IsNew { get; set; } = true;
+        //public bool IsNew { get; set; } = true;
     }
 }

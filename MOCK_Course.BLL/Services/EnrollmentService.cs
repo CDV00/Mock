@@ -34,6 +34,7 @@ namespace Course.BLL.Services
         public async Task<ApiBaseResponse> Add(Guid userId, Guid CourseId)
         {
             var course = await _cousesRepository.GetByIdAsync(CourseId);
+
             var IsOrder = await _orderRepository.BuildQuery()
                                                 .FilterByUserId(userId)
                                                 .FilterByCourseId(CourseId)
@@ -42,11 +43,11 @@ namespace Course.BLL.Services
             if (course is null)
                 return new CourseNotFoundResponse(CourseId);
 
-            if (!course.IsFree.HasValue)
+            if (!course.IsFree.HasValue && !IsOrder)
                 return new InvalidEnrollCoursePrice(CourseId);
 
-            if (!IsOrder)
-                return new NotOrderCourseResponse(CourseId);
+            //if ()
+            //    return new NotOrderCourseResponse(CourseId);
 
             if (await _enrollmentRepository.BuildQuery()
                                            .FilterByCourseId(CourseId)

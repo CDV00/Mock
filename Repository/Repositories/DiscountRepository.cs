@@ -34,6 +34,7 @@ namespace Repository.Repositories
         {
             var discounts = await BuildQuery().IncludeCourses()
                                               .FilterByUserId(userId)
+                                              .ApplySort(parameter.OrderBy)
                                               .Skip((parameter.PageNumber - 1) * parameter.PageSize)
                                               .Take(parameter.PageSize)
                                               .ToListAsync(d => _mapper.Map<DiscountDTO_>(d));

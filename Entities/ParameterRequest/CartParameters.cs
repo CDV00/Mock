@@ -9,5 +9,6 @@ namespace Entities.ParameterRequest
 {
     public class DiscountParameters : RequestParameters
     {
+        public string OrderBy { get; set; } = "CreateAt desc";
     }
 }

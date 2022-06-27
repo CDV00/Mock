@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using Course.DAL.Configuration;
 using Course.DAL.Extensions;
@@ -36,6 +36,7 @@ namespace Course.DAL.Data
         public DbSet<Attachment> Attachments { get; set; }
 
         public DbSet<Quiz> Quizs { get; set; }
+        public DbSet<QuizCompletion> QuizCompletions { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<QuizOption> QuizOptions { get; set; }
         //public DbSet<QuizSetting> QuizSettings { get; set; }
@@ -78,7 +79,7 @@ namespace Course.DAL.Data
             modelBuilder.ApplyConfiguration(new QuizConfiguration());
             modelBuilder.ApplyConfiguration(new DipositeConfiguration());
             modelBuilder.ApplyConfiguration(new NotificationConfiguration());
-            
+            modelBuilder.ApplyConfiguration(new QuizCompletionConfiguration());
 
             modelBuilder.ConfigTablesOfIdentity();
             //modelBuilder.SeedData();

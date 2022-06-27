@@ -4,6 +4,7 @@ using Course.DAL.Queries;
 using Course.DAL.Queries.Abstraction;
 using Course.DAL.Repositories.Abstraction;
 using Microsoft.EntityFrameworkCore;
+using Query.Abstraction;
 using System;
 using System.Linq;
 using System.Threading.Tasks;

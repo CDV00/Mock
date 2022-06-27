@@ -9,10 +9,11 @@ using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
 using System.Linq;
 using System.Collections.Generic;
-using Repository.Repositories;
-using MOCK_Course.BLL.Services.Implementations;
 using Microsoft.AspNetCore.Identity;
 using Entities.Responses;
+using Repository.Repositories.Abstraction;
+using Course.BLL.Share.RequestFeatures;
+using Entities.ParameterRequest;
 
 namespace Course.BLL.Services
 {
@@ -102,7 +103,6 @@ namespace Course.BLL.Services
                 var coursePrice = course.Price * (100 - discountPercent) / 100;
                 totalPrice += coursePrice;
 
-                //await CreateEnroll(userId, course);
                 await UpdateBalanceOfInstrucctor(course, coursePrice);
                 await RemoveCart(userId, course);
             }
@@ -144,16 +144,6 @@ namespace Course.BLL.Services
 
             return new ApiOkResponse<OrderDTO>(_mapper.Map<OrderDTO>(order));
         }
-
-        //private async Task RemoveCart(Guid userId, Courses course)
-        //{
-        //    var cart = await _shoppingCartRepository.BuildQuery()
-        //                                      .FilterByCourseId(course.Id)
-        //                                      .FilterByUserId(userId)
-        //                                      .AsSelectorAsync(c => c);
-        //    if (cart != null)
-        //        _shoppingCartRepository.Remove(cart, true);
-        //}
 
         private async Task UpdateBalanceOfInstrucctor(Courses course, decimal coursePrice)
         {
@@ -198,9 +188,9 @@ namespace Course.BLL.Services
         private async Task RemoveCart(Guid userId, Courses course)
         {
             var cart = await _shoppingCartRepository.BuildQuery()
-                                              .FilterByCourseId(course.Id)
-                                              .FilterByUserId(userId)
-                                              .AsSelectorAsync(c => c);
+                                                    .FilterByCourseId(course.Id)
+                                                    .FilterByUserId(userId)
+                                                    .AsSelectorAsync(c => c);
             if (cart != null)
                 _shoppingCartRepository.Remove(cart, true);
         }
@@ -234,5 +224,13 @@ namespace Course.BLL.Services
 
             return new ApiOkResponse<OrderDTO>(order);
         }
+        //
+        public async Task<ApiBaseResponse> GetEarning(OrderParameters orderParameters, Guid userId)
+        {
+            var earning = await _orderRepository.GetEarningAsync(orderParameters, userId);
+            return new ApiOkResponse<PagedList<EarningDTO>>(earning);
+        }
+        //
+       
     }
 }

@@ -17,6 +17,6 @@ namespace Course.DAL.DTOs
         public int Index { get; set; }
 
         public bool IsDeleted { get; set; } = false;
-        public bool IsNew { get; set; } = false;
+        //public bool IsNew { get; set; } = false;
     }
 }

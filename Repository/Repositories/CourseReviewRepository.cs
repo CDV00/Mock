@@ -43,16 +43,17 @@ namespace Repository.Repositories
             var courseReview = await BuildQuery()
                                      .FilterByCourseId(courseId)
                                      .FilterByKeyword(parameter.Keyword)
+                                     .FilterByRating(parameter.Rating)
                                      .IncludeUser()
                                      .ApplySort(parameter.Orderby)
                                      .Skip((parameter.PageNumber - 1) * parameter.PageSize)
                                      .Take(parameter.PageSize)
                                      .ToListAsync(c => _mapper.Map<CourseReviewDTO>(c));
 
-            var count = await BuildQuery()
-                              .FilterByCourseId(courseId)
-                              .FilterByKeyword(parameter.Keyword)
-                              .CountAsync();
+            var count = await BuildQuery().FilterByCourseId(courseId)
+                                          .FilterByRating(parameter.Rating)
+                                          .FilterByKeyword(parameter.Keyword)
+                                          .CountAsync();
 
             return new PagedList<CourseReviewDTO>(courseReview, count, parameter.PageNumber, parameter.PageSize);
         }

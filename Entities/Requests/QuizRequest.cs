@@ -41,8 +41,7 @@ namespace Course.BLL.Requests
         public IList<QuestionForUpdateRequest> Questions { get; set; }
         public int Index { get; set; }
         public bool IsDeleted { get; set; } = false;
-        public bool IsNew { get; set; } = true;
-
+        //public bool IsNew { get; set; } = true;
         public bool IsShowTime { get; set; } = true;
         [Required]
         public long TimeLimit { get; set; } = 999999;

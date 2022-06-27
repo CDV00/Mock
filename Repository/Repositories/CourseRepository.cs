@@ -40,6 +40,7 @@ namespace Repository.Repositories
                                            .IncludeLevel()
                                            .IncludeSection()
                                            .IncludeQuiz()
+                                           .IncludeQuizCompletion()
                                            .IncludeAssignment()
                                            .IncludeUser()
                                            .FilterById(id)
@@ -48,7 +49,7 @@ namespace Repository.Repositories
             return _mapper.Map<CourseDTO>(course);
         }
 
-        public async Task<PagedList<CourseDTO>> GetAllCourseAsync(CourseParameters parameters)
+        public async Task<PagedList<CourseDTO>> GetAllCourseAsync(CourseParameters parameters, Guid? userId)
         {
             var courses = await BuildQuery().IncludeCategory()
                                             .IncludeUser()
@@ -62,6 +63,11 @@ namespace Repository.Repositories
                                             .FilterByLevelIds(parameters.LevelIds)
                                             .FilterByPrice(parameters.IsFree, parameters.IsDiscount, parameters.MinPrice, parameters.MaxPrice)
                                             .FilterByRating(parameters.Rate)
+                                            .FilterBySaved(parameters.StatusOfUser, userId)
+                                            .FilterByEnrollmented(parameters.StatusOfUser, userId)
+                                            .FilterByAddedCart(parameters.StatusOfUser, userId)
+                                            .FilterByApprove()
+                                            .FilterIsActive(true)
                                             .ApplySort(parameters.Orderby)
                                             .Skip((parameters.PageNumber - 1) * parameters.PageSize)
                                             .Take(parameters.PageSize)
@@ -76,52 +82,59 @@ namespace Repository.Repositories
                                           .FilterByLevelIds(parameters.LevelIds)
                                           .FilterByPrice(parameters.IsFree, parameters.IsDiscount, parameters.MinPrice, parameters.MaxPrice)
                                           .FilterByRating(parameters.Rate)
+                                          .FilterBySaved(parameters.StatusOfUser, userId)
+                                          .FilterByEnrollmented(parameters.StatusOfUser, userId)
+                                          .FilterByAddedCart(parameters.StatusOfUser, userId)
+                                          .FilterByApprove()
+                                          .FilterIsActive(true)
                                           .CountAsync();
 
             return new PagedList<CourseDTO>(courses, count, parameters.PageNumber, parameters.PageSize);
         }
 
-        public async Task<PagedList<CourseDTO>> GetAllMyCoures(Guid? userId, CourseParameters parameters)
+        public async Task<PagedList<CourseDTO>> GetAllMyCoures(Guid userId, CourseParameters parameters)
         {
             var courses = await BuildQuery().IncludeCategory()
                                             .IncludeUser()
                                             .IncludeDiscount()
                                             .IncludeCategory()
-                                            //.FilterByApprove()
-                                            .FilterByUserId(userId)
+                                            .FilterStatus(parameters.status)
                                             .FilterByKeyword(parameters.Keyword)
-                                            .FilterByUserId(parameters.userId)
+                                            .FilterByUserId(userId)
                                             .FilterByCategoryId(parameters.CategoryId)
                                             .FilterByAudioLanguageIds(parameters.AudioLanguageIds)
                                             .FilterByCloseCaptionIds(parameters.CloseCaptionIds)
                                             .FilterByLevelIds(parameters.LevelIds)
                                             .FilterByPrice(parameters.IsFree, parameters.IsDiscount, parameters.MinPrice, parameters.MaxPrice)
                                             .FilterByRating(parameters.Rate)
+                                            .FilterIsActive(parameters.IsActive)
                                             .ApplySort(parameters.Orderby)
                                             .Skip((parameters.PageNumber - 1) * parameters.PageSize)
                                             .Take(parameters.PageSize)
                                             .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 
             var count = await BuildQuery().FilterByKeyword(parameters.Keyword)
-                                          .FilterByUserId(parameters.userId)
+                                          .FilterByUserId(userId)
                                           .FilterByCategoryId(parameters.CategoryId)
+                                          .FilterStatus(parameters.status)
                                           .FilterByAudioLanguageIds(parameters.AudioLanguageIds)
                                           .FilterByCloseCaptionIds(parameters.CloseCaptionIds)
                                           .FilterByLevelIds(parameters.LevelIds)
                                           .FilterByPrice(parameters.IsFree, parameters.IsDiscount, parameters.MinPrice, parameters.MaxPrice)
                                           .FilterByRating(parameters.Rate)
+                                          .FilterIsActive(parameters.IsActive)
                                           .CountAsync();
 
             return new PagedList<CourseDTO>(courses, count, parameters.PageNumber, parameters.PageSize);
         }
-        public async Task<PagedList<CourseDTO>> UpcomingCourse(Guid? userId, CourseParameters parameters)
+        public async Task<PagedList<CourseDTO>> UpcomingCourse(Guid userId, CourseParameters parameters)
         {
             Status status = Status.Review;
             var courses = await BuildQuery().IncludeCategory()
+                                            .FilterIsActive(true)
                                             .FilterByUserId(userId)
                                             .FilterStatus(status)
                                             .FilterByKeyword(parameters.Keyword)
-                                            .FilterByUserId(parameters.userId)
                                             .FilterByCategoryId(parameters.CategoryId)
                                             .FilterByAudioLanguageIds(parameters.AudioLanguageIds)
                                             .FilterByCloseCaptionIds(parameters.CloseCaptionIds)
@@ -134,7 +147,7 @@ namespace Repository.Repositories
                                             .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 
             var count = await BuildQuery().FilterByKeyword(parameters.Keyword)
-                                          .FilterByUserId(parameters.userId)
+                                          .FilterByUserId(userId)
                                           .FilterByCategoryId(parameters.CategoryId)
                                           .FilterByAudioLanguageIds(parameters.AudioLanguageIds)
                                           .FilterByCloseCaptionIds(parameters.CloseCaptionIds)
@@ -183,8 +196,7 @@ namespace Repository.Repositories
                                             .IncludeUser()
                                             .IncludeOrder()
                                             .IncludeDiscount()
-                                            .FilterByEnroll(userId)
-                                            //.FilterByOrderd(userId)
+                                            .FilterByEnrollOrOrderd(userId)
                                             .FilterStatus(status)
                                             .FilterByKeyword(parameters.Keyword)
                                             .FilterByCategoryId(parameters.CategoryId)
@@ -199,8 +211,7 @@ namespace Repository.Repositories
                                             .ToListAsync(c => _mapper.Map<CourseDTO>(c));
 
             var count = await BuildQuery()
-                //.FilterByOrderd(userId)
-                .FilterByEnroll(userId)
+                .FilterByEnrollOrOrderd(userId)
                 .FilterStatus(status)
                 .FilterByKeyword(parameters.Keyword)
                 .FilterByCategoryId(parameters.CategoryId)

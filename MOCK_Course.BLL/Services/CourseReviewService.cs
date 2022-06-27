@@ -259,11 +259,11 @@ namespace Course.BLL.Services
                 if (courseId != null)
                     userId = null;
 
-                var IsExistEnrolls = await _enrollmentRepository.BuildQuery()
-                                                                .FilterByCourseId(courseId)
-                                                                .FilterByUserId(userId)
-                                                                .AnyAsync();
-                if (!IsExistEnrolls)
+                var IsExistReviews = await _courseReviewRepository.BuildQuery()
+                                                           .FilterByCourseId(courseId)
+                                                           .FilterByUserId(userId)
+                                                           .AnyAsync();
+                if (!IsExistReviews)
                     return new Response<float>(true, 0);
 
                 var courses = await _courseReviewRepository.BuildQuery()
@@ -288,11 +288,11 @@ namespace Course.BLL.Services
                 if (courseId != null)
                     userId = null;
 
-                var IsExistEnrolls = await _enrollmentRepository.BuildQuery()
-                                                               .FilterByCourseId(courseId)
-                                                               .FilterByUserId(userId)
-                                                               .AnyAsync();
-                if (!IsExistEnrolls)
+                var IsExistReviews = await _courseReviewRepository.BuildQuery()
+                                                                  .FilterByCourseId(courseId)
+                                                                  .FilterByUserId(userId)
+                                                                  .AnyAsync();
+                if (!IsExistReviews)
                     return new Response<List<float>>(true, new() { 0, 0, 0, 0, 0 });
 
                 var sumRating = await _courseReviewRepository.BuildQuery()

@@ -19,16 +19,9 @@ namespace Course.DAL.Configuration
                 .WithMany(u => u.Courses)
                 .HasForeignKey(c => c.UserId);
 
-
-
             builder.Property(c => c.Price).HasColumnType("money");
-            //builder.Property(c => c.DiscountPrice).HasColumnType("money");
 
             builder.HasQueryFilter(u => !u.IsDeleted);
-
-            //builder.Property(c=>c.TotalSections)
-
-
         }
     }
 }

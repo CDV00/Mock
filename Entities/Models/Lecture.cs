@@ -20,6 +20,6 @@ namespace Course.DAL.Models
         public Guid SectionId { get; set; }
         public Section Section { get; set; }
 
-        public ICollection<LectureCompletion> LectureCompletions { get; set; }
+        public LectureCompletion LectureCompletion { get; set; }
     }
 }

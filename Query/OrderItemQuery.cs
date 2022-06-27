@@ -2,6 +2,7 @@
 using Course.DAL.Models;
 using Course.DAL.Queries.Abstraction;
 using Microsoft.EntityFrameworkCore;
+using Query.Abstraction;
 using SES.HomeServices.Data.Queries.Abstractions;
 using System;
 using System.Linq;

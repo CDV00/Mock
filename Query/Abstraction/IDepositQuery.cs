@@ -1,7 +1,7 @@
 ﻿using Course.DAL.Queries.Abstraction;
 using Entities.Models;
 
-namespace Course.DAL.Queries
+namespace Query.Abstraction
 {
     public interface IDepositQuery : IQuery<Deposit>
     {
