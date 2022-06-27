@@ -16,6 +16,5 @@ namespace Course.DAL.DTOs
 
         public bool IsDeleted { get; set; } = false;
         public AssignmentCompletionDTO assignmentCompletion { get; set; }
-        //public bool IsNew { get; set; } = false;
     }
 }

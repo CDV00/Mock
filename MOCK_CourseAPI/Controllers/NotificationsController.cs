@@ -31,7 +31,8 @@ namespace CourseAPI.Controllers
         public async Task<ActionResult<NotificationCountResult>> GetNotificationCount()
         {
             var userId = User.GetUserId();
-            var count = (from not in _context.Notifications where not.UserId == userId
+            var count = (from not in _context.Notifications
+                         where not.UserId == userId
                          select not).CountAsync();
             NotificationCountResult result = new NotificationCountResult
             {
@@ -47,13 +48,13 @@ namespace CourseAPI.Controllers
         {
             var userId = User.GetUserId();
             var results = from message in _context.Notifications
-                          where(message.UserId == userId)
-                        orderby message.Id descending
-                        select new NotificationDTO
-                        {
-                            UserId = message.UserId,
-                            Messenge = message.Messenge
-                        };
+                          where (message.UserId == userId)
+                          orderby message.Id descending
+                          select new NotificationDTO
+                          {
+                              UserId = message.UserId,
+                              Messenge = message.Messenge
+                          };
             return await results.ToListAsync();
         }
 

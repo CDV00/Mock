@@ -9,9 +9,9 @@ namespace Course.BLL.Services.Abstraction
 {
     public interface IDiscountService
     {
-        Task<ApiBaseResponse> Add(DiscountForCreateRequest discountForCreateRequest);
-        Task<ApiBaseResponse> Update(Guid id, DiscountForUpdateRequest discountForUpdateRequest);
-        Task<ApiBaseResponse> Remove(Guid id);
+        Task<ApiBaseResponse> Add(DiscountForCreateRequest discountForCreateRequest, Guid userId);
+        Task<ApiBaseResponse> Update(Guid id, DiscountForUpdateRequest discountForUpdateRequest, Guid userId);
+        Task<ApiBaseResponse> Remove(Guid id, Guid userId);
         Task<ApiBaseResponse> GetAllDiscount(Guid userId, DiscountParameters parameter);
     }
 }

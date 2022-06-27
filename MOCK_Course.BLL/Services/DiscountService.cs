@@ -29,11 +29,14 @@ namespace Course.BLL.Services
             _courseService = courseService;
         }
 
-        public async Task<ApiBaseResponse> Add(DiscountForCreateRequest discount)
+        public async Task<ApiBaseResponse> Add(DiscountForCreateRequest discount, Guid userId)
         {
             var course = await _coursesRepository.GetByIdAsync(discount.CourseId);
             if (course == null || !course.IsActive || course.status != Status.Aprrove)
                 return new CourseNotFoundResponse(discount.CourseId);
+
+            if (course.UserId != userId)
+                return new NotOwnOfCourseResponse(discount.CourseId);
 
             if (await _discountRepository.CheckDiscountTimeExisting(discount.CourseId, discount.StartDate, discount.EndDate, null))
                 return new ExistDiscountTimeResponse(discount.StartDate, discount.EndDate, discount.CourseId);
@@ -56,14 +59,16 @@ namespace Course.BLL.Services
             return new ApiOkResponse<PagedList<DiscountDTO_>>(discounts);
         }
 
-        public async Task<ApiBaseResponse> Remove(Guid id)
+        public async Task<ApiBaseResponse> Remove(Guid id, Guid userId)
         {
             var discountEntity = await _discountRepository.GetByIdAsync(id);
             if (discountEntity is null)
                 return new DiscountNotFound(id);
 
-            if (!await _coursesRepository.IsExist(discountEntity.CourseId))
-                return new CourseNotFoundResponse(discountEntity.CourseId);
+            var course = await _coursesRepository.GetByIdAsync(discountEntity.CourseId);
+
+            if (course.UserId != userId)
+                return new NotOwnOfCourseResponse(discountEntity.CourseId);
 
             _discountRepository.Remove(discountEntity, false);
             await _unitOfWork.SaveChangesAsync();
@@ -71,15 +76,19 @@ namespace Course.BLL.Services
             return new ApiBaseResponse(true);
         }
 
-        public async Task<ApiBaseResponse> Update(Guid id, DiscountForUpdateRequest discount)
+        public async Task<ApiBaseResponse> Update(Guid id, DiscountForUpdateRequest discount, Guid userId)
         {
             var discountEntity = await _discountRepository.GetByIdAsync(id);
 
             if (discountEntity is null)
                 return new DiscountNotFound(id);
 
-            if (!await _coursesRepository.IsExist(discountEntity.CourseId))
+            var course = await _coursesRepository.GetByIdAsync(discountEntity.CourseId);
+            if (course == null || !course.IsActive || course.status != Status.Aprrove)
                 return new CourseNotFoundResponse(discountEntity.CourseId);
+
+            if (course.UserId != userId)
+                return new NotOwnOfCourseResponse(discountEntity.CourseId);
 
             if (await _discountRepository.CheckDiscountTimeExisting(discountEntity.CourseId, discount.StartDate, discount.EndDate, id))
                 return new ExistDiscountTimeResponse(discount.StartDate, discount.EndDate, discountEntity.CourseId);

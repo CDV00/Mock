@@ -124,7 +124,8 @@ namespace Course.BLL.Extensions
             CreateMap<AttachmentForCreateRequest, AttachmentDTO>().ReverseMap();
             CreateMap<Attachment, AttachmentForUpdateRequest>().ReverseMap();
 
-            CreateMap<Assignment, AssignmentDTO>().ReverseMap();
+            CreateMap<Assignment, AssignmentDTO>().ForMember(des => des.Completion, src => src.MapFrom(opt => opt.AssignmentCompletion != null))
+                                                  .ReverseMap();
             CreateMap<Assignment, AssignmentRequest>().ReverseMap();
             CreateMap<Assignment, AssignmentForCreateRequest>().ReverseMap();
             CreateMap<Assignment, AssignmentForUpdateRequest>().ReverseMap();
