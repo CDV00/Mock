@@ -4,14 +4,16 @@ using Course.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CourseAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220627055115_setRerationshipQuizCompletion")]
+    partial class setRerationshipQuizCompletion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -663,9 +665,6 @@ namespace CourseAPI.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("LectureId", "UserId");
-
-                    b.HasIndex("LectureId")
-                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -1394,9 +1393,9 @@ namespace CourseAPI.Migrations
             modelBuilder.Entity("Course.DAL.Models.LectureCompletion", b =>
                 {
                     b.HasOne("Course.DAL.Models.Lecture", "Lecture")
-                        .WithOne("LectureCompletion")
-                        .HasForeignKey("Course.DAL.Models.LectureCompletion", "LectureId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithMany("LectureCompletions")
+                        .HasForeignKey("LectureId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Course.DAL.Models.AppUser", "User")
@@ -1707,7 +1706,7 @@ namespace CourseAPI.Migrations
 
             modelBuilder.Entity("Course.DAL.Models.Lecture", b =>
                 {
-                    b.Navigation("LectureCompletion");
+                    b.Navigation("LectureCompletions");
                 });
 
             modelBuilder.Entity("Course.DAL.Models.Order", b =>

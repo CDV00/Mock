@@ -119,7 +119,6 @@ namespace Course.BLL.Services
         public async Task<ApiBaseResponse> GetAllMyCoures(CourseParameters parameter, Guid userId)
         {
             var courses = await _cousesRepository.GetAllMyCoures(userId, parameter);
-            //await AddLast(courses, userId);
 
             return new ApiOkResponse<PagedList<CourseDTO>>(courses);
         }

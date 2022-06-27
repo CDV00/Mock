@@ -16,10 +16,10 @@ namespace Course.DAL.Configuration
                 .OnDelete(DeleteBehavior.NoAction);
 
             // 1-n:Quiz-lessionCompletion
-            builder.HasOne(lc => lc.Quiz)
-                   .WithMany(l => l.QuizCompletions)
-                   .HasForeignKey(lc => lc.QuizId)
-                   .OnDelete(DeleteBehavior.NoAction);
+            // builder.HasOne(lc => lc.Quiz)
+            //        .WithOne(l => l.QuizCompletions)
+            //        .HasForeignKey(lc => lc.QuizId)
+            //        .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

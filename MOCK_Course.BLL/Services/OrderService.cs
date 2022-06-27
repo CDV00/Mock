@@ -188,9 +188,9 @@ namespace Course.BLL.Services
         private async Task RemoveCart(Guid userId, Courses course)
         {
             var cart = await _shoppingCartRepository.BuildQuery()
-                                              .FilterByCourseId(course.Id)
-                                              .FilterByUserId(userId)
-                                              .AsSelectorAsync(c => c);
+                                                    .FilterByCourseId(course.Id)
+                                                    .FilterByUserId(userId)
+                                                    .AsSelectorAsync(c => c);
             if (cart != null)
                 _shoppingCartRepository.Remove(cart, true);
         }
