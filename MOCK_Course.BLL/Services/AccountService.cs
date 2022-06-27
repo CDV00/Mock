@@ -514,28 +514,9 @@ namespace Course.BLL.Services
         /// <exception cref="NotImplementedException"></exception>
         private async Task<LoginDTO> FacebookLogin(ExternalLoginResquest externalLoginResquest)
         {
-            // 1.generate an app access token
-            string AppId = _configurations["Authentication:Facebook:AppId"];
-            string AppSecret = _configurations["Authentication:Facebook:AppSecret"];
-            var url = new Uri($"https://graph.facebook.com/oauth/access_token?client_id={AppId}&client_secret={AppSecret}&grant_type=client_credentials");
-
             var httpClient = new HttpClient();
-            var appAccessTokenResponse = await httpClient.GetStringAsync(url);
-            var appAccessToken = JsonConvert.DeserializeObject<FacebookAppAccessToken>(appAccessTokenResponse);
-
-            // 2. validate the user access token
-            var userAccessTokenValidationResponse = await httpClient.GetStringAsync($"https://graph.facebook.com/debug_token?input_token={externalLoginResquest.Token}&access_token={appAccessToken.AccessToken}");
-            var userAccessTokenValidation = JsonConvert.DeserializeObject<FacebookUserAccessTokenValidation>(userAccessTokenValidationResponse);
-
-            if (!userAccessTokenValidation.Data.IsValid)
-            {
-                throw new Exception();
-            }
-
-            // 3. we've got a valid token so we can request user data from fb
             var userInfoResponse = await httpClient.GetStringAsync($"https://graph.facebook.com/v2.8/me?fields=id,email,first_name,last_name,name,gender,locale,birthday,picture&access_token={externalLoginResquest.Token}");
             var userInfo = JsonConvert.DeserializeObject<FacebookUserData>(userInfoResponse);
-            // 4. ready to create the local user account (if necessary) and jwt
 
             _user = await _userManager.FindByEmailAsync(userInfo.Email);
 
