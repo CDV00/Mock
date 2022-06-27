@@ -704,6 +704,43 @@ namespace CourseAPI.Migrations
                     b.ToTable("Levels");
                 });
 
+            modelBuilder.Entity("Course.DAL.Models.Notification", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Messenge")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notifications");
+                });
+
             modelBuilder.Entity("Course.DAL.Models.Order", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1410,6 +1447,17 @@ namespace CourseAPI.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Course.DAL.Models.Notification", b =>
+                {
+                    b.HasOne("Course.DAL.Models.AppUser", "User")
+                        .WithMany("Notifications")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Course.DAL.Models.Order", b =>
                 {
                     b.HasOne("Course.DAL.Models.AppUser", "User")
@@ -1654,6 +1702,8 @@ namespace CourseAPI.Migrations
                     b.Navigation("Enrollments");
 
                     b.Navigation("LectureCompletions");
+
+                    b.Navigation("Notifications");
 
                     b.Navigation("Orders");
 

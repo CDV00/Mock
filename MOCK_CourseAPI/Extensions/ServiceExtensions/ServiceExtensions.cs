@@ -217,6 +217,7 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IQuizCompletionRepository, QuizCompletionRepository>();
             services.AddScoped<IQuizOptionRepository, QuizOptionRepository>();
             services.AddScoped<IDipositRepository, DipositRepository>();
+            services.AddScoped<INotificationRepository, NotificationRepository>();
         }
         /// <summary>
         /// Configure Services

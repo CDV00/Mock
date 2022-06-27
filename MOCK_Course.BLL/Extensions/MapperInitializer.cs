@@ -148,7 +148,11 @@ namespace Course.BLL.Extensions
 
             //course
             CreateMap<Courses, CourseForCreateRequest>().ReverseMap();
-            CreateMap<Courses, CourseForUpdateRequest>().ReverseMap();
+            CreateMap<CourseForUpdateRequest, Courses>().ReverseMap();
+
+            //notification
+            CreateMap<Notification, NotificationDTO>().ReverseMap();
+            CreateMap<Notification, NotificationRequest>().ReverseMap();
         }
     }
 }
