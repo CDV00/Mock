@@ -9,6 +9,11 @@ using CourseAPI.Extensions.ControllerBase;
 using Course.BLL.Services.Abstraction;
 using CourseAPI.Presentation.Controllers;
 using Entities.Responses;
+using Entities.ParameterRequest;
+using Course.BLL.Share.RequestFeatures;
+using Entities.Extension;
+using Entities.Constants;
+using System.Text.Json;
 
 namespace CourseAPI.Controllers
 {
@@ -107,5 +112,22 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <param name="orderRequest"></param>
         /// <returns></returns>
+        [HttpGet("Get-all-Earning")]
+        [AllowAnonymous]
+        public async Task<ActionResult<ApiOkResponses<EarningDTO>>> GetEarning([FromQuery] OrderParameters orderParameters)
+        {
+            Guid userId = User.GetUserId();
+
+            var result = await _orderService.GetEarning(orderParameters, userId);
+            if (!result.IsSuccess)
+                return ProcessError(result);
+
+            var coursePagedList = result.GetResult<PagedList<EarningDTO>>();
+
+            Response.Headers.Add(SystemConstant.PagedHeader,
+                                 JsonSerializer.Serialize(coursePagedList.MetaData));
+
+            return Ok(result);
+        }
     }
 }

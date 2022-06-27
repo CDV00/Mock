@@ -13,6 +13,8 @@ using Repository.Repositories;
 using MOCK_Course.BLL.Services.Implementations;
 using Microsoft.AspNetCore.Identity;
 using Entities.Responses;
+using Course.BLL.Share.RequestFeatures;
+using Entities.ParameterRequest;
 
 namespace Course.BLL.Services
 {
@@ -234,5 +236,13 @@ namespace Course.BLL.Services
 
             return new ApiOkResponse<OrderDTO>(order);
         }
+        //
+        public async Task<ApiBaseResponse> GetEarning(OrderParameters orderParameters, Guid userId)
+        {
+            var earning = await _orderRepository.GetEarningAsync(orderParameters, userId);
+            return new ApiOkResponse<PagedList<EarningDTO>>(earning);
+        }
+        //
+       
     }
 }
