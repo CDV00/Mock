@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 using Course.BLL.Services.Abstraction;
 using System;
 using Course.BLL.Requests;
+using Entities.ParameterRequest;
+using Entities.Constants;
+using System.Text.Json;
 
 namespace CourseAPI.Controllers
 {
@@ -30,6 +33,24 @@ namespace CourseAPI.Controllers
             var result = await _categoryService.GetAll();
             if (result.IsSuccess == false)
                 return BadRequest(result);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Get top sub category with the most course
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("Get-sub-category")]
+        [AllowAnonymous]
+        public async Task<ActionResult<Responses<CategoryDTO_>>> GetAllSubcategory([FromQuery] CategoryParameters parameters)
+        {
+            var result = await _categoryService.GetSubCategory(parameters);
+            if (result.IsSuccess == false)
+                return BadRequest(result);
+
+            Response.Headers.Add(SystemConstant.PagedHeader,
+                             JsonSerializer.Serialize(result.data.MetaData));
+
             return Ok(result);
         }
 

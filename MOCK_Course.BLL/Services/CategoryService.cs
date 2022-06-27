@@ -6,6 +6,8 @@ using Course.BLL.Requests;
 using Course.DAL.Models;
 using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
+using Entities.ParameterRequest;
+using Course.BLL.Share.RequestFeatures;
 
 namespace Course.BLL.Services
 {
@@ -24,19 +26,31 @@ namespace Course.BLL.Services
         }
         public async Task<Responses<CategoryDTO_>> GetAll()
         {
-            try
-            {
-                var categories = await _categoryRepository.BuildQuery()
-                                                          .FilterByParent(null)
-                                                          .IncludeSubCategory()
-                                                          .ToListAsync(c => _mapper.Map<CategoryDTO_>(c));
+            var categories = await _categoryRepository.BuildQuery()
+                                                      .FilterByParent(null)
+                                                      .IncludeSubCategory()
+                                                      .ToListAsync(c => _mapper.Map<CategoryDTO_>(c));
 
-                return new Responses<CategoryDTO_>(true, categories);
-            }
-            catch (Exception ex)
-            {
-                return new Responses<CategoryDTO_>(false, ex.Message, null);
-            }
+            return new Responses<CategoryDTO_>(true, categories);
+        }
+
+        public async Task<Response<PagedList<CategoryDTO_>>> GetSubCategory(CategoryParameters parameters)
+        {
+            var categories = await _categoryRepository.BuildQuery()
+                                                      .FilterBySubCategory()
+                                                      .FilterTopCategory()
+                                                      .Skip((parameters.PageNumber - 1) * parameters.PageSize)
+                                                      .Take(parameters.PageSize)
+                                                      .ToListAsync(c => _mapper.Map<CategoryDTO_>(c));
+
+            var count = await _categoryRepository.BuildQuery()
+                                                 .FilterBySubCategory()
+                                                 .FilterTopCategory()
+                                                 .Skip((parameters.PageNumber - 1) * parameters.PageSize)
+                                                 .Take(parameters.PageSize)
+                                                 .CountAsync();
+
+            return new Response<PagedList<CategoryDTO_>>(true, new PagedList<CategoryDTO_>(categories, count, parameters.PageNumber, parameters.PageSize));
         }
 
         public async Task<Response<CategoryDTO_>> Add(CategoryRequest categoryRequest)

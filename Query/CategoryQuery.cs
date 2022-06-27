@@ -41,6 +41,18 @@ namespace Course.DAL.Queries
             return this;
         }
 
+        public ICategoryQuery FilterBySubCategory()
+        {
+            Query = Query.Where(type => type.ParentId != null);
+            return this;
+        }
+
+        public ICategoryQuery FilterTopCategory()
+        {
+            Query = Query.OrderByDescending(type => type.Courses.Count);
+            return this;
+        }
+
         public ICategoryQuery IncludeSubCategory()
         {
             Query.Include(c => c.SubCategories).Load();

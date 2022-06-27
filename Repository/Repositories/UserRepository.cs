@@ -38,6 +38,7 @@ namespace Repository.Repositories
                             .Skip((parameter.PageNumber - 1) * parameter.PageSize)
                             .Take(parameter.PageSize)
                             .ToListAsync(c => _mapper.Map<UserDTO>(c));
+
             foreach (var user in users)
             {
                 user.Role = parameter.Role;
@@ -49,8 +50,5 @@ namespace Repository.Repositories
 
             return new PagedList<UserDTO>(users, count, parameter.PageNumber, parameter.PageSize);
         }
-
-
-
     }
 }
