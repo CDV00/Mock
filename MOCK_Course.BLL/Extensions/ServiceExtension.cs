@@ -1,4 +1,4 @@
-﻿using Course.BLL.Services;
+using Course.BLL.Services;
 using Course.BLL.Services.Abstraction;
 using Course.DAL.Repositories.Abstraction;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,6 +38,7 @@ namespace Course.BLL.Extensions
             services.AddScoped<IQuizRepository, QuizRepository>();
             services.AddScoped<IQuizOptionRepository, QuizOptionRepository>();
             services.AddScoped<IAssignmentCompletionRepository, AssignmentCompletionRepository>();
+            services.AddScoped<INotificationRepository, NotificationRepository>();
         }
         /// <summary>
         /// Configure Services

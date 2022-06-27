@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -218,6 +218,7 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IQuizOptionRepository, QuizOptionRepository>();
             services.AddScoped<IDipositRepository, DipositRepository>();
             services.AddScoped<IAssignmentCompletionRepository, AssignmentCompletionRepository>();
+            services.AddScoped<INotificationRepository, NotificationRepository>();
         }
         /// <summary>
         /// Configure Services
