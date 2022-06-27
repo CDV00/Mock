@@ -1,4 +1,4 @@
-﻿using Course.BLL.Services;
+using Course.BLL.Services;
 using Course.BLL.Services.Abstraction;
 using Course.DAL.Repositories.Abstraction;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,6 +37,7 @@ namespace Course.BLL.Extensions
             services.AddScoped<IQuestionRepository, QuestionRepository>();
             services.AddScoped<IQuizRepository, QuizRepository>();
             services.AddScoped<IQuizOptionRepository, QuizOptionRepository>();
+            services.AddScoped<IAssignmentCompletionRepository, AssignmentCompletionRepository>();
             services.AddScoped<INotificationRepository, NotificationRepository>();
         }
         /// <summary>
@@ -67,6 +68,7 @@ namespace Course.BLL.Extensions
             services.AddScoped<IAttachmentService, AttachmentService>();
             services.AddScoped<IUploadFileService, UploadFileService>();
             services.AddScoped<IQuizService, QuizService>();
+            services.AddScoped<IAssignmentCompletionService, AssignmentCompletionService>();
 
         }
     }

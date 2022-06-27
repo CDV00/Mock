@@ -223,6 +223,21 @@ namespace CourseAPI.Migrations
                     b.ToTable("Assignments");
                 });
 
+            modelBuilder.Entity("Course.DAL.Models.AssignmentCompletion", b =>
+                {
+                    b.Property<Guid>("AssignmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("AssignmentId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AssignmentCompletions");
+                });
+
             modelBuilder.Entity("Course.DAL.Models.Attachment", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1319,6 +1334,25 @@ namespace CourseAPI.Migrations
                     b.Navigation("Section");
                 });
 
+            modelBuilder.Entity("Course.DAL.Models.AssignmentCompletion", b =>
+                {
+                    b.HasOne("Course.DAL.Models.AppUser", "User")
+                        .WithMany("AssignmentCompletions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Course.DAL.Models.Assignment", "Assignment")
+                        .WithMany("AssignmentCompletion")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Assignment");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Course.DAL.Models.Attachment", b =>
                 {
                     b.HasOne("Course.DAL.Models.Assignment", "Assignment")
@@ -1691,6 +1725,8 @@ namespace CourseAPI.Migrations
 
             modelBuilder.Entity("Course.DAL.Models.AppUser", b =>
                 {
+                    b.Navigation("AssignmentCompletions");
+
                     b.Navigation("Carts");
 
                     b.Navigation("CourseCompletions");
@@ -1716,6 +1752,8 @@ namespace CourseAPI.Migrations
 
             modelBuilder.Entity("Course.DAL.Models.Assignment", b =>
                 {
+                    b.Navigation("AssignmentCompletion");
+
                     b.Navigation("Attachments");
                 });
 

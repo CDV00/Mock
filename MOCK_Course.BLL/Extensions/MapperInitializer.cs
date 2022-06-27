@@ -81,6 +81,10 @@ namespace Course.BLL.Extensions
             CreateMap<LectureCompletion, LectureCompletionDTO>().ReverseMap();
             CreateMap<LectureCompletion, LectureCompletionRequest>().ReverseMap();
 
+            //map asignment completion
+            CreateMap<AssignmentCompletion, AssignmentCompletionRequest>().ReverseMap();
+            CreateMap<AssignmentCompletion, AssignmentCompletionDTO>().ReverseMap();
+
 
             CreateMap<QuizCompletion, QuizCompletionRequest>().ReverseMap();
             CreateMap<QuizCompletion, QuizCompletionDTO>().ReverseMap();

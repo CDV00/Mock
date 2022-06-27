@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -217,6 +217,7 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IQuizCompletionRepository, QuizCompletionRepository>();
             services.AddScoped<IQuizOptionRepository, QuizOptionRepository>();
             services.AddScoped<IDipositRepository, DipositRepository>();
+            services.AddScoped<IAssignmentCompletionRepository, AssignmentCompletionRepository>();
             services.AddScoped<INotificationRepository, NotificationRepository>();
         }
         /// <summary>
@@ -262,6 +263,7 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IQuizService, QuizService>();
             services.AddScoped<IGoogleService, GoogleService>();
             services.AddScoped<IQuizCompletionService, QuizCompletionService>();
+            services.AddScoped<IAssignmentCompletionService, AssignmentCompletionService>();
         }
 
         public static void ConfigureUpload(this IServiceCollection services)
