@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Contracts;
 using Course.BLL.Extensions;
+using Course.DAL.Models;
 using CourseAPI.Extensions.Middleware;
 using CourseAPI.Extensions.ServiceExtensions;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -45,6 +46,8 @@ namespace CourseAPI
             services.AddAutoMapper(typeof(MapperInitializer));
             services.ConfigureInvalidFilter();
             services.ConfigureUpload();
+
+            services.AddSignalR();
 
             services.AddControllers(config =>
             {
@@ -118,7 +121,14 @@ namespace CourseAPI
                 endpoints.MapControllers();
             });
 
-            
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<BroadcastHub>("/notify");
+            });
+
+
+
+
         }
     }
 }

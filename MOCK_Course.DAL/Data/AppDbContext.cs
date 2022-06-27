@@ -39,6 +39,7 @@ namespace Course.DAL.Data
         public DbSet<Question> Questions { get; set; }
         public DbSet<QuizOption> QuizOptions { get; set; }
         //public DbSet<QuizSetting> QuizSettings { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
         public DbSet<Logs> Logs { get; set; }
         #endregion
@@ -76,6 +77,8 @@ namespace Course.DAL.Data
             modelBuilder.ApplyConfiguration(new QuestionConfiguration());
             modelBuilder.ApplyConfiguration(new QuizConfiguration());
             modelBuilder.ApplyConfiguration(new DipositeConfiguration());
+            modelBuilder.ApplyConfiguration(new NotificationConfiguration());
+            
 
             modelBuilder.ConfigTablesOfIdentity();
             //modelBuilder.SeedData();

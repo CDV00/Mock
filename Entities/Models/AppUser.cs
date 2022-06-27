@@ -35,5 +35,7 @@ namespace Course.DAL.Models
         public ICollection<Deposit> Deposits { get; set; }
         public ICollection<ShoppingCart> Carts { get; set; }
         public ICollection<SavedCourses> SavedCourses { get; set; }
+        public ICollection<Notification> Notifications { get; set; }
+        //public ICollection<Notification> SentNotifications { get; set; }
     }
 }

@@ -36,6 +36,7 @@ namespace Course.BLL.Extensions
             services.AddScoped<IQuestionRepository, QuestionRepository>();
             services.AddScoped<IQuizRepository, QuizRepository>();
             services.AddScoped<IQuizOptionRepository, QuizOptionRepository>();
+            services.AddScoped<INotificationRepository, NotificationRepository>();
         }
         /// <summary>
         /// Configure Services

@@ -5,6 +5,8 @@ using Course.DAL.Models;
 using Course.BLL.Responses;
 using Course.DAL.DTOs;
 using System;
+using Entities.Requests;
+using Entities.DTOs;
 
 namespace Course.BLL.Extensions
 {
@@ -144,6 +146,10 @@ namespace Course.BLL.Extensions
             //course
             CreateMap<Courses, CourseForCreateRequest>().ReverseMap();
             CreateMap<CourseForUpdateRequest, Courses>().ReverseMap();
+
+            //notification
+            CreateMap<Notification, NotificationDTO>().ReverseMap();
+            CreateMap<Notification, NotificationRequest>().ReverseMap();
         }
     }
 }

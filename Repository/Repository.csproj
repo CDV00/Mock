@@ -17,6 +17,7 @@
 	  <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.17" />
 	  <PackageReference Include="Microsoft.AspNetCore.Authentication.OAuth" Version="2.2.0" />
 	  <PackageReference Include="Microsoft.Owin.Security.Facebook" Version="4.2.2" />
+		<PackageReference Include="Microsoft.AspNet.SignalR" Version="2.4.2" />
 	</ItemGroup>
 
 </Project>
