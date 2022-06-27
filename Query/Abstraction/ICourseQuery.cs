@@ -39,10 +39,10 @@ namespace Course.DAL.Queries
         ICourseQuery FilterByEnroll(Guid userId);
         ICourseQuery FilterBySaved(StatusOfUser? status, Guid? userId);
         ICourseQuery FilterByAddedCart(StatusOfUser? status, Guid? userId);
-        ICourseQuery FilterByEnrollmented(StatusOfUser? status, Guid? userId);
+        ICourseQuery FilterByEnrollmented(StatusOfUser? status, Guid? userId, bool isEnroll);
         ICourseQuery IncludeQuizCompletion();
         ICourseQuery FilterByEnrollOrOrderd(Guid userId);
         ICourseQuery IncludeAssignmentCompletion();
-        ICourseQuery FilterByPurchased(StatusOfUser? status, Guid? userId);
+        ICourseQuery FilterByPurchased(StatusOfUser? status, Guid? userId, bool isPurchased);
     }
 }

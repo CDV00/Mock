@@ -209,18 +209,18 @@ namespace Course.DAL.Queries
             return this;
         }
 
-        public ICourseQuery FilterByEnrollmented(StatusOfUser? status, Guid? userId)
+        public ICourseQuery FilterByEnrollmented(StatusOfUser? status, Guid? userId, bool IsEnroll)
         {
-            if (status == null || status != StatusOfUser.IsEnrollemt || userId == null)
+            if (status == null && status != StatusOfUser.IsEnrollemt && IsEnroll == false || userId == null)
                 return this;
 
             Query = Query.Where(c => c.Enrollments.Any(s => s.UserId == userId));
             return this;
         }
 
-        public ICourseQuery FilterByPurchased(StatusOfUser? status, Guid? userId)
+        public ICourseQuery FilterByPurchased(StatusOfUser? status, Guid? userId, bool isPurchased)
         {
-            if (status == null || status != StatusOfUser.IsPurchased || userId == null)
+            if (status == null && status != StatusOfUser.IsPurchased && isPurchased == false || userId == null)
                 return this;
 
             Query = Query.Where(c => c.OrderItems.Any(s => s.Order.UserId == userId));

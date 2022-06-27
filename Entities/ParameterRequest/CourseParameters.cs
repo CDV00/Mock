@@ -22,7 +22,9 @@ namespace Entities.ParameterRequest
         public decimal MinPrice { get; set; } = 0;
         public decimal MaxPrice { get; set; } = 999999999;
 
-        public bool? IsEnrollemt { get; set; }
+        public bool IsEnrollemt { get; set; } = false;
+        public bool IsPurchased { get; set; } = false;
+
         public StatusOfUser? StatusOfUser { get; set; } = null;
     }
 
