@@ -19,6 +19,6 @@ namespace Course.BLL.DTO
         public int TotalCourses { get; set; }
         public bool isSubscribed { get; set; }
         public decimal Balance { get; set; } = 0;
-        public bool Status { get; set; }
+        public bool IsActive { get; set; }
     }
 }

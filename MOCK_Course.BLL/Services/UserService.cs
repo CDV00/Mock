@@ -66,18 +66,25 @@ namespace Course.BLL.Services
             return new ApiOkResponse<PagedList<UserDTO>>(users);
         }
         // Update User: Id, IsActive
-        public async Task<BaseResponse> UpdateActive(UpdateUserActiveRequest updateUserActiveRequest)
+        public async Task<Response<BaseResponse>> UpdateActive(UpdateUserActiveRequest updateUserActiveRequest)
         {
             try
             {
                 var user = await _userManager.FindByIdAsync(updateUserActiveRequest.Id.ToString());
+                if (user == null)
+                {
+                    return new Response<BaseResponse>(false, "can't find user", null);
+                }
                 user.IsActive = updateUserActiveRequest.IsActive;
                 await _userManager.UpdateAsync(user);
-                return new BaseResponse(true);
+                return new Response<BaseResponse>(
+                    true
+                );
+
             }
             catch (Exception ex)
             {
-                return new BaseResponse(false, ex.Message, null);
+                return new Response<BaseResponse>(false, ex.Message, null);
             }
         }
         public async Task<Response<UserDTO>> GetUserProfile(Guid id)
