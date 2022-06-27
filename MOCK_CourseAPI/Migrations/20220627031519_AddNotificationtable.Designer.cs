@@ -4,14 +4,16 @@ using Course.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CourseAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220627031519_AddNotificationtable")]
+    partial class AddNotificationtable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -412,8 +414,7 @@ namespace CourseAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EnrollmentId")
-                        .IsUnique();
+                    b.HasIndex("EnrollmentId");
 
                     b.ToTable("CourseReviews");
                 });
@@ -659,13 +660,7 @@ namespace CourseAPI.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Time")
-                        .HasColumnType("int");
-
                     b.HasKey("LectureId", "UserId");
-
-                    b.HasIndex("LectureId")
-                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -753,6 +748,9 @@ namespace CourseAPI.Migrations
                     b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("CoursesId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -787,6 +785,8 @@ namespace CourseAPI.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CoursesId");
 
                     b.HasIndex("UserId");
 
@@ -919,24 +919,6 @@ namespace CourseAPI.Migrations
                     b.HasIndex("SectionId");
 
                     b.ToTable("Quizs");
-                });
-
-            modelBuilder.Entity("Course.DAL.Models.QuizCompletion", b =>
-                {
-                    b.Property<Guid>("QuizId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("QuizId", "UserId");
-
-                    b.HasIndex("QuizId")
-                        .IsUnique();
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("QuizCompletions");
                 });
 
             modelBuilder.Entity("Course.DAL.Models.QuizOption", b =>
@@ -1362,8 +1344,8 @@ namespace CourseAPI.Migrations
             modelBuilder.Entity("Course.DAL.Models.CourseReview", b =>
                 {
                     b.HasOne("Course.DAL.Models.Enrollment", "Enrollment")
-                        .WithOne("CourseReview")
-                        .HasForeignKey("Course.DAL.Models.CourseReview", "EnrollmentId")
+                        .WithMany("CourseReviews")
+                        .HasForeignKey("EnrollmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1431,9 +1413,9 @@ namespace CourseAPI.Migrations
             modelBuilder.Entity("Course.DAL.Models.LectureCompletion", b =>
                 {
                     b.HasOne("Course.DAL.Models.Lecture", "Lecture")
-                        .WithOne("LectureCompletion")
-                        .HasForeignKey("Course.DAL.Models.LectureCompletion", "LectureId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithMany("LectureCompletions")
+                        .HasForeignKey("LectureId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Course.DAL.Models.AppUser", "User")
@@ -1460,6 +1442,10 @@ namespace CourseAPI.Migrations
 
             modelBuilder.Entity("Course.DAL.Models.Order", b =>
                 {
+                    b.HasOne("Course.DAL.Models.Courses", null)
+                        .WithMany("Orders")
+                        .HasForeignKey("CoursesId");
+
                     b.HasOne("Course.DAL.Models.AppUser", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId")
@@ -1472,7 +1458,7 @@ namespace CourseAPI.Migrations
             modelBuilder.Entity("Course.DAL.Models.OrderItem", b =>
                 {
                     b.HasOne("Course.DAL.Models.Courses", "Course")
-                        .WithMany("OrderItems")
+                        .WithMany()
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1512,25 +1498,6 @@ namespace CourseAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Section");
-                });
-
-            modelBuilder.Entity("Course.DAL.Models.QuizCompletion", b =>
-                {
-                    b.HasOne("Course.DAL.Models.Quiz", "Quiz")
-                        .WithOne("QuizCompletion")
-                        .HasForeignKey("Course.DAL.Models.QuizCompletion", "QuizId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Course.DAL.Models.AppUser", "User")
-                        .WithMany("QuizCompletions")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Quiz");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Course.DAL.Models.QuizOption", b =>
@@ -1707,8 +1674,6 @@ namespace CourseAPI.Migrations
 
                     b.Navigation("Orders");
 
-                    b.Navigation("QuizCompletions");
-
                     b.Navigation("SavedCourses");
 
                     b.Navigation("Subscriptions");
@@ -1738,7 +1703,7 @@ namespace CourseAPI.Migrations
 
                     b.Navigation("Enrollments");
 
-                    b.Navigation("OrderItems");
+                    b.Navigation("Orders");
 
                     b.Navigation("SavedCourses");
 
@@ -1752,12 +1717,12 @@ namespace CourseAPI.Migrations
 
             modelBuilder.Entity("Course.DAL.Models.Enrollment", b =>
                 {
-                    b.Navigation("CourseReview");
+                    b.Navigation("CourseReviews");
                 });
 
             modelBuilder.Entity("Course.DAL.Models.Lecture", b =>
                 {
-                    b.Navigation("LectureCompletion");
+                    b.Navigation("LectureCompletions");
                 });
 
             modelBuilder.Entity("Course.DAL.Models.Order", b =>
@@ -1773,8 +1738,6 @@ namespace CourseAPI.Migrations
             modelBuilder.Entity("Course.DAL.Models.Quiz", b =>
                 {
                     b.Navigation("Questions");
-
-                    b.Navigation("QuizCompletion");
                 });
 
             modelBuilder.Entity("Course.DAL.Models.Section", b =>
