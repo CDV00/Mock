@@ -30,7 +30,7 @@ namespace Course.BLL.Responses
     {
         public int Count { get; set; }
         public Decimal Earning { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime CreatedAt { get; set; }
         
     }
 }

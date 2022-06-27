@@ -543,6 +543,12 @@ namespace Course.BLL.Services
             if (!_user.IsActive)
                 throw new("Authentication failed. Account has been blocked.");
             //
+            //
+            if (_user.AvatarUrl == null)
+            {
+                _user.AvatarUrl = userInfo.Picture.Data.Url;
+                await _userManager.UpdateAsync(_user);
+            }
             _mapper.Map(_user, _userResponse);
             // create token
             var token = await CreateToken(populateExp: true);
@@ -587,6 +593,11 @@ namespace Course.BLL.Services
             if (!_user.IsActive)
                 throw new("Authentication failed. Account has been blocked.");
             //
+            if(_user.AvatarUrl == null)
+            {
+                _user.AvatarUrl = payload.Picture;
+                await _userManager.UpdateAsync(_user);
+            }
             _mapper.Map(_user, _userResponse);
             // create token
             var token = await CreateToken(populateExp: true);

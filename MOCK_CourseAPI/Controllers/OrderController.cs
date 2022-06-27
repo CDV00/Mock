@@ -23,9 +23,11 @@ namespace CourseAPI.Controllers
     public class OrderController : ApiControllerBase
     {
         private readonly IOrderService _orderService;
-        public OrderController(IOrderService orderService)
+        private readonly IOrderItemService _orderItemService;
+        public OrderController(IOrderService orderService, IOrderItemService orderItemService)
         {
             _orderService = orderService;
+            _orderItemService = orderItemService;
         }
 
         /// <summary>
@@ -126,6 +128,23 @@ namespace CourseAPI.Controllers
 
             Response.Headers.Add(SystemConstant.PagedHeader,
                                  JsonSerializer.Serialize(coursePagedList.MetaData));
+
+            return Ok(result);
+        }
+        [HttpGet("Get-all-Statements")]
+        [AllowAnonymous]
+        public async Task<ActionResult<ApiOkResponses<OrderItemDTO>>> GetStatements([FromQuery] DepositParameters orderParameters)
+        {
+            Guid userId = User.GetUserId();
+
+            var result = await _orderItemService.GetStatements(orderParameters, userId);
+            if (!result.IsSuccess)
+                return ProcessError(result);
+
+            var statements = result.GetResult<PagedList<OrderItemDTO>>();
+
+            Response.Headers.Add(SystemConstant.PagedHeader,
+                                 JsonSerializer.Serialize(statements.MetaData));
 
             return Ok(result);
         }

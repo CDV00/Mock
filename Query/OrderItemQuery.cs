@@ -23,14 +23,41 @@ namespace Course.DAL.Queries
         { _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext)); }
         public IOrderItemQuery FilterByCourseId(Guid CourseId)
         {
-
             Query = Query.Where(type => type.CourseId == CourseId);
             return this;
         }
         public IOrderItemQuery FilterByUserId(Guid userId)
         {
-
             Query = Query.Where(type => type.Order.UserId == userId);
+            return this;
+        }
+        public IOrderItemQuery IncludeCourse()
+        {
+            Query.Include(o => o.Course).Load();
+            return this;
+        }
+        public IOrderItemQuery FilterStartDate(DateTime? CreateAt)
+        {
+            if (CreateAt is null)
+            {
+                return this;
+            }
+            Query = Query.Where(type => type.Order.CreatedAt >= CreateAt);
+            return this;
+        }
+        public IOrderItemQuery FilterEndtDate(DateTime? CreateAt)
+        {
+            if (CreateAt is null)
+            {
+                return this;
+            }
+            Query = Query.Where(type => type.Order.CreatedAt <= CreateAt);
+            return this;
+        }
+        public IOrderItemQuery FilterByUserIdInstructor(Guid userId)
+        {
+            Query = Query.Where(o => o.Course.UserId == userId);
+
             return this;
         }
     }
