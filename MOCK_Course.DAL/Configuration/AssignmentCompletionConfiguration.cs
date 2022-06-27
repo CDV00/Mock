@@ -15,7 +15,6 @@ namespace Course.DAL.Configuration
                 .HasForeignKey(l => l.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            // 1-n: asignment-asignmentCompletion
         }
     }
 }
