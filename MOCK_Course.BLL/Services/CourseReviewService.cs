@@ -418,10 +418,10 @@ namespace Course.BLL.Services
         {
             try
             {
-                var IsExistEnrolls = await _enrollmentRepository.BuildQuery()
-                                                                .FilterByUserId(userId)
-                                                                .AnyAsync();
-                if (!IsExistEnrolls)
+                var IsExistReviews = await _courseReviewRepository.BuildQuery()
+                                                           .FilterCourseByUSer(userId)
+                                                           .AnyAsync();
+                if (!IsExistReviews)
                     return new Response<float>(true, 0);
 
                 var courses = await _courseReviewRepository.BuildQuery()

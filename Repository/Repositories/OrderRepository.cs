@@ -45,39 +45,80 @@ namespace Repository.Repositories
             var earning = await BuildQuery().FilterByUserIdInstructor(userId)
                                             .FilterStartDate(orderParameters.startDay)
                                             .FilterEndtDate(orderParameters.endDate)
-                                            .GroupByCreateAt()
+                                            //.GroupByCreateAt()
                                             .Skip((orderParameters.PageNumber - 1) * orderParameters.PageSize)
                                             .Take(orderParameters.PageSize)
                                             .ApplySort(orderParameters.Orderby)
                                             .ToListAsync(o => _mapper.Map<EarningDTO>(o));
-            await AddLast(earning,userId);
-            var count = await BuildQuery().FilterByUserId(userId)
-                                          .CountAsync();
+
+
+            var earningCount = await BuildQuery().FilterByUserIdInstructor(userId)
+                                            .FilterStartDate(orderParameters.startDay)
+                                            .FilterEndtDate(orderParameters.endDate)
+                                            .ToListAsync(o => _mapper.Map<EarningDTO>(o));
+            await AddLast(earning, userId);
+            await AddLast(earningCount, userId);
+            int count = earningCount.Count;
             return new PagedList<EarningDTO>(earning, count, orderParameters.PageNumber, orderParameters.PageSize);
         }
+        //private async Task<int> couutEarning(List<EarningDTO> earning, Guid userId)
+        //{
+        //    for (var i = 0; i < earning.Count; i++)
+        //    {
+        //        if (earning.Find(c => c.CreatedAt.Date == earning[i].CreatedAt.Date).Count > 1)
+        //        {
+        //            earning.Remove(earning[i]);
+        //            i--;
+        //        }
+        //    }
+        //    return  earning.Count;
+        //}
         private async Task AddLast(List<EarningDTO> earning, Guid userId)
         {
             for (var i = 0; i < earning.Count; i++)
             {
-                if ( earning.Find(c=> c.CreatedAt.Date == earning[i].CreatedAt.Date).Count > 1)
+                if (earning.Find(c => c.CreatedAt.Date == earning[i].CreatedAt.Date).Count > 1)
                 {
                     earning.Remove(earning[i]);
                     i--;
+                    continue;
+                }
+                if (earning[i].Count > 0)
+                {
                     continue;
                 }
                 earning[i].Earning = (await TotalPriceDate(userId, earning[i].CreatedAt));
                 earning[i].Count = (await CountOrderDate(userId, earning[i].CreatedAt));
             }
         }
+        //
         private async Task<decimal> TotalPriceDate(Guid userId, DateTime createAt)
         {
             decimal totalPrice = await BuildQuery().FilterByUserIdInstructor(userId).FilterByCreateAt(createAt).SumAsync(o => (long)o.TotalPrice);
             return totalPrice;
         }
+        //
         private async Task<int> CountOrderDate(Guid userId, DateTime createAt)
         {
             int count = await BuildQuery().FilterByUserIdInstructor(userId).FilterByCreateAt(createAt).CountAsync();
             return count;
+        }
+        public async Task<PagedList<StatementsDTO>> GetStatementsAsync(OrderParameters orderParameters, Guid userId)
+        {
+            var statements = await BuildQuery().FilterByUserIdInstructor(userId)
+                                            .FilterStartDate(orderParameters.startDay)
+                                            .FilterEndtDate(orderParameters.endDate)
+                                            .Skip((orderParameters.PageNumber - 1) * orderParameters.PageSize)
+                                            .Take(orderParameters.PageSize)
+                                            .ApplySort(orderParameters.Orderby)
+                                            .ToListAsync(o => _mapper.Map<StatementsDTO>(o));
+
+            var count = await BuildQuery().FilterByUserIdInstructor(userId)
+                                            .FilterStartDate(orderParameters.startDay)
+                                            .FilterEndtDate(orderParameters.endDate)
+                                            .CountAsync();
+
+            return new PagedList<StatementsDTO>(statements, count, orderParameters.PageNumber, orderParameters.PageSize);
         }
     }
 }

@@ -233,6 +233,10 @@ namespace Course.BLL.Services
             return new ApiOkResponse<PagedList<EarningDTO>>(earning);
         }
         //
-
+        public async Task<ApiBaseResponse> GetStatements(OrderParameters orderParameters, Guid userId)
+        {
+            var statements = await _orderRepository.GetStatementsAsync(orderParameters, userId);
+            return new ApiOkResponse<PagedList<StatementsDTO>>(statements);
+        }
     }
 }
