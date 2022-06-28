@@ -22,12 +22,12 @@ namespace Course.BLL.Services
         private readonly IMapper _mapper;
 
         /// <summary>
-        /// contructer CourseReviewService 
+        /// construct CourseReviewService 
         /// </summary>
         /// <param name="courseReviewRepository"></param>
         /// <param name="unitOfWork"></param>
         /// <param name="mapper"></param>
-        public AssignmentService(IAssignmentRepository assignmentRepository, IAttachmentRepository attachmentRepository,IUnitOfWork unitOfWork, IMapper mapper)
+        public AssignmentService(IAssignmentRepository assignmentRepository, IAttachmentRepository attachmentRepository, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _assignmentRepository = assignmentRepository;
             _attachmentRepository = attachmentRepository;
@@ -47,27 +47,6 @@ namespace Course.BLL.Services
 
             return new ApiOkResponse<PagedList<AssignmentDTO>>(assignments);
         }
-        ////public async Task<Response<AssignmentDTO>> Add(AssignmentForCreateRequest assignmentForCreateRequest)
-        ////{
-        ////    try
-        ////    {
-        ////        var assignment = _mapper.Map<Assignment>(assignmentForCreateRequest);
-        ////        assignment.CreatedAt = DateTime.Now;
-        ////        await _assignmentRepository.CreateAsync(assignment);
-
-        ////        await _unitOfWork.SaveChangesAsync();
-        ////        return new Response<AssignmentDTO>(true, _mapper.Map<AssignmentDTO>(assignment));
-        ////    }
-        ////    catch (Exception ex)
-        ////    {
-        ////        return new Response<AssignmentDTO>(false, ex.Message, null);
-        ////    }
-        ////}
-        ///
-
-        //Quiz; Get all theo sectionid 
-
-
 
     }
 }

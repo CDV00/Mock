@@ -9,33 +9,40 @@ using Course.BLL.Services.Abstraction;
 using Course.BLL.Responses;
 using Entities.DTOs;
 using Repository.Repositories.Abstraction;
+using Microsoft.EntityFrameworkCore;
 
 namespace Course.BLL.Services
 {
     public class QuizCompletionService : IQuizCompletionService
     {
         private readonly IQuizCompletionRepository _quizCompletionRepository;
+        private readonly IQuizRepository _quizRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public QuizCompletionService(IQuizCompletionRepository quizCompletionRepository,
             IMapper mapper,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IQuizRepository quizRepository)
         {
             _quizCompletionRepository = quizCompletionRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _quizRepository = quizRepository;
         }
 
-        public async Task<Response<QuizCompletionDTO>> Add(Guid userId, QuizCompletionRequest lectureCompletionRequest)
+        public async Task<Response<QuizCompletionDTO>> Add(Guid userId, QuizCompletionRequest quizCompletionRequest)
         {
+            if (!await _quizRepository.FindByCondition(l => l.Id == quizCompletionRequest.QuizId).AnyAsync())
+                return new Response<QuizCompletionDTO>(false, $"Not found quiz with id:{quizCompletionRequest.QuizId}", "404");
+
             if (await _quizCompletionRepository.BuildQuery()
-                                               .FilterByQuiz(lectureCompletionRequest.QuizId)
+                                               .FilterByQuiz(quizCompletionRequest.QuizId)
                                                .FilterByUser(userId)
                                                .AnyAsync())
-                return new Response<QuizCompletionDTO>(false, $"Duplicate quiz completion with quiz id:{lectureCompletionRequest.QuizId}", "400");
+                return new Response<QuizCompletionDTO>(false, $"Duplicate quiz completion with quiz id:{quizCompletionRequest.QuizId}", "422");
 
-            var quizcompletion = _mapper.Map<QuizCompletion>(lectureCompletionRequest);
+            var quizcompletion = _mapper.Map<QuizCompletion>(quizCompletionRequest);
 
             quizcompletion.UserId = userId;
 

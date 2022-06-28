@@ -7,31 +7,38 @@ using Course.BLL.DTO;
 using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
 using Course.BLL.Responses;
+using Microsoft.EntityFrameworkCore;
 
 namespace Course.BLL.Services
 {
     public class LectureCompletionService : ILectureCompletionService
     {
         private readonly ILectureCompletionRepository _lessonCompletionRepository;
+        private readonly ILectureRepository _lectureRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public LectureCompletionService(ILectureCompletionRepository lessonCompletionRepository,
             IMapper mapper,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            ILectureRepository lectureRepository)
         {
             _lessonCompletionRepository = lessonCompletionRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _lectureRepository = lectureRepository;
         }
 
         public async Task<Response<LectureCompletionDTO>> Add(Guid userId, LectureCompletionRequest lectureCompletionRequest)
         {
+            if (!await _lectureRepository.FindByCondition(l => l.Id == lectureCompletionRequest.LectureId).AnyAsync())
+                return new Response<LectureCompletionDTO>(false, $"Not found lecture with id:{lectureCompletionRequest.LectureId}", "404");
+
             if (await _lessonCompletionRepository.BuildQuery()
                                                  .FilterByLecture(lectureCompletionRequest.LectureId)
                                                  .FilterByUser(userId)
                                                  .AnyAsync())
-                return new Response<LectureCompletionDTO>(false, $"Duplicate lecture completion with lecture id:{lectureCompletionRequest.LectureId}", "400");
+                return new Response<LectureCompletionDTO>(false, $"Duplicate lecture completion with lecture id:{lectureCompletionRequest.LectureId}", "442");
 
             var lessoncompletion = _mapper.Map<LectureCompletion>(lectureCompletionRequest);
 

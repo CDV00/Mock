@@ -9,31 +9,38 @@ using Course.BLL.Services.Abstraction;
 using Course.BLL.Responses;
 using Entities.DTOs;
 using Repository.Repositories.Abstraction;
+using Microsoft.EntityFrameworkCore;
 
 namespace Course.BLL.Services
 {
     public class AssignmentCompletionService : IAssignmentCompletionService
     {
         private readonly IAssignmentCompletionRepository _assignmentCompletionRepository;
+        private readonly IAssignmentRepository _assignmentRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public AssignmentCompletionService(IAssignmentCompletionRepository assignmentCompletionRepository,
             IMapper mapper,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IAssignmentRepository assignmentRepository)
         {
             _assignmentCompletionRepository = assignmentCompletionRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _assignmentRepository = assignmentRepository;
         }
 
         public async Task<Response<AssignmentCompletionDTO>> Add(Guid userId, AssignmentCompletionRequest assignmentCompletionRequest)
         {
+            if (!await _assignmentRepository.FindByCondition(l => l.Id == assignmentCompletionRequest.AssignmentId).AnyAsync())
+                return new Response<AssignmentCompletionDTO>(false, $"Not found assignment with id:{assignmentCompletionRequest.AssignmentId}", "404");
+
             if (await _assignmentCompletionRepository.BuildQuery()
-                                               .FilterByAssignment(assignmentCompletionRequest.AssignmentId)
-                                               .FilterByUser(userId)
-                                               .AnyAsync())
-                return new Response<AssignmentCompletionDTO>(false, $"Duplicate assignment completion with assignment id:{assignmentCompletionRequest.AssignmentId}", "400");
+                                                     .FilterByAssignment(assignmentCompletionRequest.AssignmentId)
+                                                     .FilterByUser(userId)
+                                                     .AnyAsync())
+                return new Response<AssignmentCompletionDTO>(false, $"Duplicate assignment completion with assignment id:{assignmentCompletionRequest.AssignmentId}", "422");
 
             var assignmentCompletion = _mapper.Map<AssignmentCompletion>(assignmentCompletionRequest);
 

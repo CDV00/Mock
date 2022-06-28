@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -12,7 +13,8 @@ namespace Course.DAL.Models
         public string VideoUrl { get; set; }
         public string VideoExternalUrl { get; set; }
         public string VideoPoster { get; set; }
-        public string AttachmentUrl { get; set; }
+        //public string AttachmentUrl { get; set; }
+        public ICollection<LectureAttachment> Attachments { get; set; }
         public int Index { get; set; }
         public bool IsPreview { get; set; }
         public int TotalTime { get; set; }
