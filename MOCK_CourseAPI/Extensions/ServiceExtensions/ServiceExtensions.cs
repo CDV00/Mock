@@ -219,6 +219,7 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IDipositRepository, DipositRepository>();
             services.AddScoped<IAssignmentCompletionRepository, AssignmentCompletionRepository>();
             services.AddScoped<INotificationRepository, NotificationRepository>();
+            services.AddScoped<ILectureAttachmentRepository, LectureAttachmentRepository>();
         }
         /// <summary>
         /// Configure Services

@@ -22,8 +22,6 @@ namespace CourseAPI
         public Startup(IConfiguration configuration)
         {
             var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
-            //string configFileLog = string.Concat(Directory.GetCurrentDirectory(), "/nlog.config");
-            //LogManager.LoadConfiguration(configFileLog);
 
             Configuration = configuration;
         }
@@ -75,8 +73,6 @@ namespace CourseAPI
                     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 
                 });
-
-            
         }
 
 
@@ -125,10 +121,6 @@ namespace CourseAPI
             {
                 endpoints.MapHub<BroadcastHub>("/notify");
             });
-
-
-
-
         }
     }
 }

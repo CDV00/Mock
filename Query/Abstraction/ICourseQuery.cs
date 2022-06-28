@@ -46,5 +46,6 @@ namespace Course.DAL.Queries
         ICourseQuery FilterByPurchased(StatusOfUser? status, Guid? userId, bool isPurchased);
         ICourseQuery FilterByOwner(bool IsOwner, Guid? userId);
         ICourseQuery IncludeLectureCompletion(Guid? userId);
+        ICourseQuery IncludeLectureAttachment();
     }
 }

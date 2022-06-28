@@ -19,6 +19,5 @@ namespace Repository.Repositories
         {
             return new AttachmentQuery(_context.Attachments.AsQueryable(), _context);
         }
-
     }
 }

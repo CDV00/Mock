@@ -14,6 +14,7 @@ using Entities.ParameterRequest;
 using Repository.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using Repository.Repositories.Abstraction;
 
 namespace Course.BLL.Services
 {
@@ -39,6 +40,7 @@ namespace Course.BLL.Services
         private readonly ILectureService _lectureService;
         private readonly IAssignmentRepository _assignmentRepository;
         private readonly IAttachmentRepository _attachmentRepository;
+        private readonly ILectureAttachmentRepository _lectureAttachmentRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
@@ -63,7 +65,8 @@ namespace Course.BLL.Services
                              IQuizRepository quizRepository,
                              IQuizOptionRepository quizOptionRepository,
                              IAttachmentRepository attachmentRepository,
-                             IAssignmentRepository assignmentRepository
+                             IAssignmentRepository assignmentRepository,
+                             ILectureAttachmentRepository lectureAttachmentRepository
             )
         {
             _cousesRepository = cousesRepository;
@@ -88,6 +91,7 @@ namespace Course.BLL.Services
             _quizOptionRepository = quizOptionRepository;
             _attachmentRepository = attachmentRepository;
             _assignmentRepository = assignmentRepository;
+            _lectureAttachmentRepository = lectureAttachmentRepository;
         }
 
         public async Task<ApiBaseResponse> GetAllCourses(CourseParameters parameter, Guid? userId)
@@ -423,6 +427,9 @@ namespace Course.BLL.Services
             {
 
                 Lecture lecture = lectures[i];
+                var attachments = lecture.Attachments.ToList();
+                lecture.Attachments = null;
+
                 if (!await _lectureRepository.FindByCondition(l => l.Id == lecture.Id)
                                              .AnyAsync())
                 {
@@ -431,6 +438,8 @@ namespace Course.BLL.Services
                     await _unitOfWork.SaveChangesAsync();
                     _lectureRepository.ChangeDetachedState(lecture);
                 }
+
+                await UpdateLectureAttachment(attachments, lecture.Id);
             }
         }
 
@@ -455,6 +464,28 @@ namespace Course.BLL.Services
                 }
 
                 await UpdateQuestion(questions, quiz.Id);
+            }
+        }
+
+        private async Task UpdateLectureAttachment(List<LectureAttachment> attachments, Guid lectureId)
+        {
+            if (attachments == null || attachments.Count == 0)
+                return;
+
+            for (var i = 0; i < attachments.Count; i++)
+            {
+                LectureAttachment attachment = attachments[i];
+
+                var Exist = await _lectureAttachmentRepository.BuildQuery()
+                                                              .FilterById(attachment.Id)
+                                                              .AnyAsync();
+                if (!Exist)
+                {
+                    attachment.LectureId = lectureId;
+                    await _lectureAttachmentRepository.CreateAsync(attachment);
+                    await _unitOfWork.SaveChangesAsync();
+                    _lectureAttachmentRepository.ChangeDetachedState(attachment);
+                }
             }
         }
 

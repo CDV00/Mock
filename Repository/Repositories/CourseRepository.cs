@@ -39,6 +39,7 @@ namespace Repository.Repositories
                                            .IncludeLanguage()
                                            .IncludeLevel()
                                            .IncludeSection()
+                                           .IncludeLectureAttachment()
                                            .IncludeQuiz()
                                            .IncludeQuizCompletion(userId)
                                            .IncludeAssignmentCompletion(userId)

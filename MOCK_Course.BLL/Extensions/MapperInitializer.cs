@@ -29,6 +29,9 @@ namespace Course.BLL.Extensions
             CreateMap<Level, CourseLevelDTO>().ReverseMap();
 
             // lesion
+            CreateMap<LectureAttachment, LectureAttachmentDTO>().ReverseMap();
+            CreateMap<LectureAttachment, LectureAttachmentForCreateRequest>().ReverseMap();
+            CreateMap<LectureAttachment, LectureAttachmentForUpdateRequest>().ReverseMap();
             CreateMap<Lecture, LectureForCreateRequest>().ReverseMap();
             CreateMap<Lecture, LectureForUpdateRequest>().ReverseMap();
             CreateMap<Lecture, LectureDTO>().ForMember(des => des.isCompleted,

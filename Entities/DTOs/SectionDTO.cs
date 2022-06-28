@@ -35,5 +35,15 @@ namespace Course.BLL.Responses
         public LectureCompletionDTO LectureCompletion { get; set; }
 
         public bool IsDeleted { get; set; } = false;
+        public IList<LectureAttachmentDTO> Attachments { get; set; }
     }
+
+    public class LectureAttachmentDTO
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; } = "";
+        public string FileUrl { get; set; } = "";
+        public bool IsDeleted { get; set; } = false;
+    }
+
 }

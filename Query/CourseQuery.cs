@@ -296,6 +296,15 @@ namespace Course.DAL.Queries
             Query.Include(c => c.Category).Load();
             return this;
         }
+        public ICourseQuery IncludeLectureAttachment()
+        {
+            Query.Include(c => c.Sections)
+                 .ThenInclude(s => s.Lectures)
+                 .ThenInclude(l => l.Attachments)
+                 .Load();
+
+            return this;
+        }
 
         public ICourseQuery IncludeSection()
         {
