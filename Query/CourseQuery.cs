@@ -42,6 +42,17 @@ namespace Course.DAL.Queries
             Query = Query.Where(type => type.UserId == userId);
             return this;
         }
+
+        public ICourseQuery FilterByOwner(bool IsOwner, Guid? userId)
+        {
+            if (IsOwner == true || userId == null)
+                return this;
+
+            Query = Query.Where(type => type.UserId != userId);
+            return this;
+        }
+
+
         public ICourseQuery FilterByApprove()
         {
             Query = Query.Where(type => type.status == Status.Aprrove);

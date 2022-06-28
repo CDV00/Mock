@@ -19,6 +19,7 @@ namespace Entities.ParameterRequest
         public bool IsDiscount { get; set; } = false;
         public bool IsFree { get; set; } = false;
         public bool? IsActive { get; set; } = null;
+        public bool IsOwner { get; set; } = false;
         public decimal MinPrice { get; set; } = 0;
         public decimal MaxPrice { get; set; } = 999999999;
 
