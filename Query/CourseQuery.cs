@@ -310,7 +310,7 @@ namespace Course.DAL.Queries
         {
             Query.Include(c => c.Sections)
                  .ThenInclude(s => s.Lectures)
-                 .ThenInclude(l => l.LectureCompletion)
+                 //.ThenInclude(l => l.LectureCompletion)
                  .Load();
 
             return this;

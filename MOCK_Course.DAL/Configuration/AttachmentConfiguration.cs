@@ -11,8 +11,8 @@ namespace Course.DAL.Configuration
             builder.HasQueryFilter(u => !u.IsDeleted);
 
             builder.HasOne(a => a.Assignment)
-                .WithMany(a => a.Attachments)
-                .HasForeignKey(a => a.AssignmentId);
+                   .WithMany(a => a.Attachments)
+                   .HasForeignKey(a => a.AssignmentId);
         }
     }
 }
