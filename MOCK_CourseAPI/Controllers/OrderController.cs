@@ -133,15 +133,15 @@ namespace CourseAPI.Controllers
         }
         [HttpGet("Get-all-Statements")]
         [AllowAnonymous]
-        public async Task<ActionResult<ApiOkResponses<OrderItemDTO>>> GetStatements([FromQuery] DepositParameters orderParameters)
+        public async Task<ActionResult<ApiOkResponses<StatementsDTO>>> GetStatements([FromQuery] OrderParameters orderParameters)
         {
             Guid userId = User.GetUserId();
 
-            var result = await _orderItemService.GetStatements(orderParameters, userId);
+            var result = await _orderService.GetStatements(orderParameters, userId);
             if (!result.IsSuccess)
                 return ProcessError(result);
 
-            var statements = result.GetResult<PagedList<OrderItemDTO>>();
+            var statements = result.GetResult<PagedList<StatementsDTO>>();
 
             Response.Headers.Add(SystemConstant.PagedHeader,
                                  JsonSerializer.Serialize(statements.MetaData));

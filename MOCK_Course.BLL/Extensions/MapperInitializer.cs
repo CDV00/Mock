@@ -68,6 +68,7 @@ namespace Course.BLL.Extensions
             CreateMap<Order, OrderDTO>().ReverseMap();
             CreateMap<Order, OrderUpdateRequest>().ReverseMap();
             CreateMap<Order, EarningDTO>().ReverseMap();
+            CreateMap<Order, StatementsDTO>().ReverseMap();
             //
             CreateMap<Deposit, DepositDTO>().ReverseMap();
 

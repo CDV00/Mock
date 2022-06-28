@@ -13,5 +13,6 @@ namespace Course.DAL.Repositories.Abstraction
         IOrderQuery BuildQuery();
         Task<OrderDTO> GetDetailOrder(Guid id);
         Task<PagedList<EarningDTO>> GetEarningAsync(OrderParameters orderParameters, Guid userId);
+        Task<PagedList<StatementsDTO>> GetStatementsAsync(OrderParameters orderParameters, Guid userId);
     }
 }

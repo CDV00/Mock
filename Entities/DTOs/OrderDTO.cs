@@ -33,4 +33,11 @@ namespace Course.BLL.Responses
         public DateTime CreatedAt { get; set; }
         
     }
+    
+    public class StatementsDTO
+    {
+        public Decimal TotalPrice { get; set; }
+        public DateTime CreatedAt { get; set; }
+
+    }
 }
