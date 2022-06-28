@@ -10,7 +10,7 @@ namespace Course.BLL.Requests
         public string VideoUrl { get; set; } = "";
         public string VideoExternalUrl { get; set; } = "";
         public string VideoPoster { get; set; } = "";
-        public string FileUrl { get; set; } = "";
+        public string AttachmentUrl { get; set; } = "";
         public int Index { get; set; } = 0;
         public bool IsPreview { get; set; } = false;
         public int TotalTime { get; set; } = 0;
@@ -25,7 +25,7 @@ namespace Course.BLL.Requests
         public string VideoUrl { get; set; } = "";
         public string VideoExternalUrl { get; set; } = "";
         public string VideoPoster { get; set; } = "";
-        public string FileUrl { get; set; } = "";
+        public string AttachmentUrl { get; set; } = "";
         public int Index { get; set; } = 0;
         public bool IsPreview { get; set; } = false;
         public int TotalTime { get; set; } = 0;
