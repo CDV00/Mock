@@ -58,6 +58,7 @@ namespace Course.DAL.Queries
         {
             if (isActice is null)
                 return this;
+
             Query = Query.Where(type => type.IsActive == isActice);
             return this;
         }
@@ -211,19 +212,22 @@ namespace Course.DAL.Queries
 
         public ICourseQuery FilterByEnrollmented(StatusOfUser? status, Guid? userId, bool IsEnroll)
         {
-            if (status == null && status != StatusOfUser.IsEnrollemt && IsEnroll == false || userId == null)
+            if (status == null || userId == null)
                 return this;
 
-            Query = Query.Where(c => c.Enrollments.Any(s => s.UserId == userId));
+            if (IsEnroll == true || status == StatusOfUser.IsEnrollemt)
+                Query = Query.Where(c => c.Enrollments.Any(s => s.UserId == userId));
+
             return this;
         }
 
         public ICourseQuery FilterByPurchased(StatusOfUser? status, Guid? userId, bool isPurchased)
         {
-            if (status == null && status != StatusOfUser.IsPurchased && isPurchased == false || userId == null)
+            if (status == null || userId == null)
                 return this;
 
-            Query = Query.Where(c => c.OrderItems.Any(s => s.Order.UserId == userId));
+            if (status == StatusOfUser.IsPurchased || isPurchased == true)
+                Query = Query.Where(c => c.OrderItems.Any(s => s.Order.UserId == userId));
             return this;
         }
 

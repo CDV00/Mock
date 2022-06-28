@@ -171,7 +171,6 @@ namespace Course.BLL.Services
 
             var course = _mapper.Map<Courses>(courseRequest);
             course.UserId = userId;
-            course.CreatedAt = DateTime.Now;
 
             await _cousesRepository.CreateAsync(course);
 

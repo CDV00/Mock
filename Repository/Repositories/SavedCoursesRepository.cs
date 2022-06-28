@@ -33,13 +33,13 @@ namespace Repository.Repositories
                                                  .IncludeCourse()
                                                  .IncludeUser()
                                                  .IncludeCategory()
-                                                  .IncludeDiscount()
-                                                  .Skip((savedCoursesParameters.PageNumber - 1) * savedCoursesParameters.PageSize)
-                                                  .Take(savedCoursesParameters.PageSize)
-                                                  .ToListAsync(c => _mapper.Map<SavedCoursesDTO>(c));
+                                                 .IncludeDiscount()
+                                                 .Skip((savedCoursesParameters.PageNumber - 1) * savedCoursesParameters.PageSize)
+                                                 .Take(savedCoursesParameters.PageSize)
+                                                 .ToListAsync(c => _mapper.Map<SavedCoursesDTO>(c));
 
             var count = await BuildQuery().FilterByUserId(userId)
-                                            .CountAsync();
+                                          .CountAsync();
 
             return new PagedList<SavedCoursesDTO>(savedCourses, count, savedCoursesParameters.PageNumber, savedCoursesParameters.PageSize);
         }

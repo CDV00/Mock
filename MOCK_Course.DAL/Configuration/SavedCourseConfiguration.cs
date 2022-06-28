@@ -12,15 +12,14 @@ namespace Course.DAL.Configuration
 
             // 1-n:user-cart
             builder.HasOne(c => c.User)
-                .WithMany(u => u.SavedCourses)
-                .HasForeignKey(c => c.UserId);
+                   .WithMany(u => u.SavedCourses)
+                   .HasForeignKey(c => c.UserId);
 
             // 1-n:course-cart
             builder.HasOne(ct => ct.Course)
-                .WithMany(c => c.SavedCourses)
-                .HasForeignKey(ct => ct.CourseId).
-                OnDelete(DeleteBehavior.NoAction).
-                OnDelete(DeleteBehavior.NoAction);
+                   .WithMany(c => c.SavedCourses)
+                   .HasForeignKey(ct => ct.CourseId)
+                   .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }
