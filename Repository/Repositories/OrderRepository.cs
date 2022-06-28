@@ -45,23 +45,25 @@ namespace Repository.Repositories
             var earning = await BuildQuery().FilterByUserIdInstructor(userId)
                                             .FilterStartDate(orderParameters.startDay)
                                             .FilterEndtDate(orderParameters.endDate)
-                                            .GroupByCreateAt()
+                                            //.GroupByCreateAt()
                                             .Skip((orderParameters.PageNumber - 1) * orderParameters.PageSize)
                                             .Take(orderParameters.PageSize)
                                             .ApplySort(orderParameters.Orderby)
                                             .ToListAsync(o => _mapper.Map<EarningDTO>(o));
-            
-            
+
+
+            var earningCount = await BuildQuery().FilterByUserIdInstructor(userId)
+                                            .FilterStartDate(orderParameters.startDay)
+                                            .FilterEndtDate(orderParameters.endDate)
+                                            .ToListAsync(o => _mapper.Map<EarningDTO>(o));
             await AddLast(earning, userId);
-            int count = await couutEarning(userId);
+            await AddLast(earningCount, userId);
+            int count = earningCount.Count;
             return new PagedList<EarningDTO>(earning, count, orderParameters.PageNumber, orderParameters.PageSize);
         }
         //
-        private async Task<int> couutEarning(Guid userId)
+        private async Task<int> couutEarning(List<EarningDTO> earning, Guid userId)
         {
-            var earning = await BuildQuery().FilterByUserIdInstructor(userId)
-                                          .GroupByCreateAt()
-                                          .ToListAsync(o => _mapper.Map<EarningDTO>(o));
             for (var i = 0; i < earning.Count; i++)
             {
                 if (earning.Find(c => c.CreatedAt.Date == earning[i].CreatedAt.Date).Count > 1)
@@ -70,7 +72,7 @@ namespace Repository.Repositories
                     i--;
                 }
             }
-            return earning.Count;
+            return  earning.Count;
         }
         //
         private async Task AddLast(List<EarningDTO> earning, Guid userId)
