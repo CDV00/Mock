@@ -352,20 +352,14 @@ namespace Course.BLL.Services
 
         public async Task<Response<int>> GetTotalCourseOfUser(Guid userId)
         {
-            try
-            {
                 var status = Status.Aprrove;
                 var courses = await _cousesRepository.BuildQuery()
                                                      .FilterByUserId(userId)
                                                      .FilterStatus(status)
+                                                     .FilterIsActive(true)
                                                      .CountAsync();
 
                 return new Response<int>(true, courses);
-            }
-            catch (Exception ex)
-            {
-                return new Response<int>(false, ex.Message, null);
-            }
         }
 
 
