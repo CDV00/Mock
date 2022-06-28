@@ -573,7 +573,7 @@ namespace Course.BLL.Services
             }
             _user = await _userManager.FindByEmailAsync(payload.Email);
 
-            if (_user is null)
+            if (_user is null || _user.FirstName is null)
             {
                 var appUser = new AppUser()
                 {
