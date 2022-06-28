@@ -146,7 +146,7 @@ namespace Course.BLL.Services
 
         public async Task<ApiBaseResponse> GetDetail(Guid id, Guid? userId)
         {
-            var course = await _cousesRepository.GetDetailCourseAsync(id);
+            var course = await _cousesRepository.GetDetailCourseAsync(id, userId);
             if (course is null)
                 return new CourseNotFoundResponse(id);
 
@@ -352,14 +352,14 @@ namespace Course.BLL.Services
 
         public async Task<Response<int>> GetTotalCourseOfUser(Guid userId)
         {
-                var status = Status.Aprrove;
-                var courses = await _cousesRepository.BuildQuery()
-                                                     .FilterByUserId(userId)
-                                                     .FilterStatus(status)
-                                                     .FilterIsActive(true)
-                                                     .CountAsync();
+            var status = Status.Aprrove;
+            var courses = await _cousesRepository.BuildQuery()
+                                                 .FilterByUserId(userId)
+                                                 .FilterStatus(status)
+                                                 .FilterIsActive(true)
+                                                 .CountAsync();
 
-                return new Response<int>(true, courses);
+            return new Response<int>(true, courses);
         }
 
 

@@ -44,10 +44,6 @@ namespace Course.BLL.Responses
         // isEnroll
 
         public Status Status { get; set; }
-        //public int TotalSection { get; set; }
-        //public int TotalOrder { get; set; }
-
-        //public float PercentComplete { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public UserDTO User { get; set; }
@@ -57,7 +53,6 @@ namespace Course.BLL.Responses
         public IList<AudioLanguageDTO> AudioLanguages { get; set; }
         public IList<CloseCaptionDTO> CloseCaptions { get; set; }
         public IList<CourseLevelDTO> Levels { get; set; }
-
         public IList<SectionDTO> Sections { get; set; }
     }
 }
