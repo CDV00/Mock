@@ -33,17 +33,19 @@ namespace Repository.Repositories
                                      .AnyAsync();
         }
 
-        public async Task<CourseDTO> GetDetailCourseAsync(Guid id)
+        public async Task<CourseDTO> GetDetailCourseAsync(Guid id, Guid? userId)
         {
             var course = await BuildQuery().IncludeCategory()
                                            .IncludeLanguage()
                                            .IncludeLevel()
                                            .IncludeSection()
                                            .IncludeQuiz()
-                                           .IncludeQuizCompletion()
-                                           .IncludeAssignmentCompletion()
+                                           .IncludeQuizCompletion(userId)
+                                           .IncludeAssignmentCompletion(userId)
+                                           .IncludeLectureCompletion(userId)
                                            .IncludeAssignment()
                                            .IncludeUser()
+                                           .IncludeDiscount()
                                            .FilterById(id)
                                            .AsSelectorAsync(x => _mapper.Map<CourseDTO>(x));
 
@@ -69,7 +71,6 @@ namespace Repository.Repositories
                                             .FilterByAddedCart(parameters.StatusOfUser, userId)
                                             .FilterByPurchased(parameters.StatusOfUser, userId, parameters.IsPurchased)
                                             .FilterIsActive(parameters.IsActive)
-                                            //.FilterByApprove()
                                             .FilterByOwner(parameters.IsOwner, userId)
                                             .ApplySort(parameters.Orderby)
                                             .Skip((parameters.PageNumber - 1) * parameters.PageSize)
@@ -90,7 +91,6 @@ namespace Repository.Repositories
                                           .FilterByEnrollmented(parameters.StatusOfUser, userId, parameters.IsEnrollemt)
                                           .FilterByAddedCart(parameters.StatusOfUser, userId)
                                           .FilterIsActive(parameters.IsActive)
-                                          //.FilterByApprove()
                                           .FilterByOwner(parameters.IsOwner, userId)
                                           .CountAsync();
 

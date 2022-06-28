@@ -138,7 +138,7 @@ namespace Course.DAL.Queries
 
         public ICourseQuery IncludeDiscount()
         {
-            Query.Include(c => c.Discounts)
+            Query.Include(c => c.Discounts.Where(d => d.EndDate >= DateTime.UtcNow && d.StartDate <= DateTime.UtcNow))
                  .Load();
 
             return this;
@@ -304,21 +304,39 @@ namespace Course.DAL.Queries
 
             return this;
         }
+        public ICourseQuery IncludeLectureCompletion(Guid? userId)
+        {
+            if (userId == null)
+                return this;
+
+            Query.Include(c => c.Sections)
+                 .ThenInclude(s => s.Lectures.Where(l => l.LectureCompletion.UserId == userId))
+                 .ThenInclude(l => l.LectureCompletion)
+                 .Load();
+
+            return this;
+        }
+
         public ICourseQuery IncludeAssignment()
         {
             Query.Include(c => c.Sections)
                  .ThenInclude(s => s.Assignments)
                  .ThenInclude(a => a.Attachments)
                  .Load();
+
             return this;
         }
 
-        public ICourseQuery IncludeAssignmentCompletion()
+        public ICourseQuery IncludeAssignmentCompletion(Guid? userId)
         {
+            if (userId == null)
+                return this;
+
             Query.Include(c => c.Sections)
-                 .ThenInclude(s => s.Assignments)
+                 .ThenInclude(s => s.Assignments.Where(a => a.AssignmentCompletion.UserId == userId))
                  .ThenInclude(a => a.AssignmentCompletion)
                  .Load();
+
             return this;
         }
 
@@ -332,12 +350,16 @@ namespace Course.DAL.Queries
             return this;
         }
 
-        public ICourseQuery IncludeQuizCompletion()
+        public ICourseQuery IncludeQuizCompletion(Guid? userId)
         {
+            if (userId == null)
+                return this;
+
             Query.Include(c => c.Sections)
-                 .ThenInclude(s => s.Quizzes)
+                 .ThenInclude(s => s.Quizzes.Where(q => q.QuizCompletion.UserId == userId))
                  .ThenInclude(q => q.QuizCompletion)
                  .Load();
+
             return this;
         }
 
