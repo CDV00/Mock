@@ -19,16 +19,17 @@ namespace Course.BLL.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly UserManager<AppUser> _userManager;
+        private readonly ICourseService _courseService;
 
         public SubscriptionService(ISubscriptionRepository subscriptionRepository,
             IMapper mapper,
-            IUnitOfWork unitOfWork,
-            UserManager<AppUser> userManager)
+            IUnitOfWork unitOfWork, ICourseService courseService, UserManager<AppUser> userManager)
         {
             _subscriptionRepository = subscriptionRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _userManager = userManager;
+            _courseService = courseService;
         }
 
         public async Task<Response<SubscriptionDTO>> Add(Guid userId, Guid instructorId)
@@ -141,6 +142,12 @@ namespace Course.BLL.Services
                                                      .FilterByUserByKeyword(subscriptionParameters.Keyword)
                                                      .CountAsync();
 
+            for (var i = 0; i < user.Count; i++)
+            {
+                user[i].TotalSubcripbers = (await GetTotalSubscriber(user[i].Id)).data;
+                user[i].TotalCourses = (await _courseService.GetTotalCourseOfUser(user[i].Id)).data;
+            }
+
             return new PagedList<UserDTO>(user, count, subscriptionParameters.PageNumber, subscriptionParameters.PageSize);
         }
 
@@ -151,11 +158,17 @@ namespace Course.BLL.Services
                                                     .FilterBySubscriber(subscriptionParameters.Keyword)
                                                     .IncludeInstructor()
                                                     .ToListAsync(u => _mapper.Map<UserDTO>(u.User));
+           
 
             var count = await _subscriptionRepository.BuildQuery()
                                                      .FilterBySubscriberId(userId)
                                                      .FilterBySubscriber(subscriptionParameters.Keyword)
                                                      .CountAsync();
+            for (var i = 0; i < user.Count; i++)
+            {
+                user[i].TotalSubcripbers = (await GetTotalSubscriber(user[i].Id)).data;
+                user[i].TotalCourses = (await _courseService.GetTotalCourseOfUser(user[i].Id)).data;
+            }
 
 
             return new PagedList<UserDTO>(user, count, subscriptionParameters.PageNumber, subscriptionParameters.PageSize);
