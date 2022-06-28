@@ -7,6 +7,7 @@ using Course.DAL.DTOs;
 using System;
 using Entities.DTOs;
 using Entities.Requests;
+using Entities.Models;
 
 namespace Course.BLL.Extensions
 {
@@ -67,7 +68,8 @@ namespace Course.BLL.Extensions
             CreateMap<Order, OrderDTO>().ReverseMap();
             CreateMap<Order, OrderUpdateRequest>().ReverseMap();
             CreateMap<Order, EarningDTO>().ReverseMap();
-
+            //
+            CreateMap<Deposit, DepositDTO>().ReverseMap();
 
 
             // map enrollment

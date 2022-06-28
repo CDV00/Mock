@@ -8,5 +8,9 @@ namespace Query.Abstraction
     {
         IOrderItemQuery FilterByCourseId(Guid CourseId);
         IOrderItemQuery FilterByUserId(Guid userId);
+        IOrderItemQuery FilterByUserIdInstructor(Guid userId);
+        IOrderItemQuery FilterEndtDate(DateTime? CreateAt);
+        IOrderItemQuery FilterStartDate(DateTime? CreateAt);
+        IOrderItemQuery IncludeCourse();
     }
 }

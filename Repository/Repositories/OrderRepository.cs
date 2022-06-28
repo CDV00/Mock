@@ -45,17 +45,13 @@ namespace Repository.Repositories
             var earning = await BuildQuery().FilterByUserIdInstructor(userId)
                                             .FilterStartDate(orderParameters.startDay)
                                             .FilterEndtDate(orderParameters.endDate)
-                                            //.SumAsync(o=>(long)o.TotalPrice)
                                             .GroupByCreateAt()
                                             .Skip((orderParameters.PageNumber - 1) * orderParameters.PageSize)
                                             .Take(orderParameters.PageSize)
                                             .ApplySort(orderParameters.Orderby)
-                                            //.ToListAsync(o => _mapper.Map<EarningDTO>(o));
-                                            .ToListAsync(o =>  new EarningDTO { Date =  o.CreatedAt, Earning = 0 /*TotalPriceDate(userId,o.CreatedAt).Result*/, Count =0 });
+                                            .ToListAsync(o => _mapper.Map<EarningDTO>(o));
             await AddLast(earning,userId);
-
             var count = await BuildQuery().FilterByUserId(userId)
-                                          .GroupByCreateAt()
                                           .CountAsync();
             return new PagedList<EarningDTO>(earning, count, orderParameters.PageNumber, orderParameters.PageSize);
         }
@@ -63,8 +59,14 @@ namespace Repository.Repositories
         {
             for (var i = 0; i < earning.Count; i++)
             {
-                earning[i].Earning = (await TotalPriceDate(userId, earning[i].Date));
-                earning[i].Count = (await CountOrderDate(userId, earning[i].Date));
+                if ( earning.Find(c=> c.CreatedAt.Date == earning[i].CreatedAt.Date).Count > 1)
+                {
+                    earning.Remove(earning[i]);
+                    i--;
+                    continue;
+                }
+                earning[i].Earning = (await TotalPriceDate(userId, earning[i].CreatedAt));
+                earning[i].Count = (await CountOrderDate(userId, earning[i].CreatedAt));
             }
         }
         private async Task<decimal> TotalPriceDate(Guid userId, DateTime createAt)

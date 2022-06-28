@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Course.BLL.Share.RequestFeatures;
 using Entities.ParameterRequest;
 using Entities.Responses;
+using Entities.DTOs;
 
 namespace Course.BLL.Services.Abstraction
 {
@@ -18,5 +19,6 @@ namespace Course.BLL.Services.Abstraction
         Task<Response<BaseResponse>> UpdateActive(UpdateUserActiveRequest updateUserActiveRequest);
         //Task<Responses<UserDTO>> GetAllUserByRole(string role);
         Task<ApiBaseResponse> GetAllUserByRole(UserParameter parameter);
+        Task<PagedList<DepositDTO>> GetDeposit(DepositParameters depositParameters, Guid userid);
     }
 }
