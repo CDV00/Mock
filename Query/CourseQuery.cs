@@ -228,6 +228,8 @@ namespace Course.DAL.Queries
 
             if (IsEnroll == true || status == StatusOfUser.IsEnrollemt)
                 Query = Query.Where(c => c.Enrollments.Any(s => s.UserId == userId));
+            if (IsEnroll == false)
+                Query = Query.Where(c => c.Enrollments.Any(s => s.UserId != userId));
 
             return this;
         }
