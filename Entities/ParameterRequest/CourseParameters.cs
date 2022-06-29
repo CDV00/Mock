@@ -19,12 +19,12 @@ namespace Entities.ParameterRequest
         public bool IsDiscount { get; set; } = false;
         public bool IsFree { get; set; } = false;
         public bool? IsActive { get; set; } = null;
-        public bool IsOwner { get; set; } = false;
+        public bool? IsOwner { get; set; } = null;
         public decimal MinPrice { get; set; } = 0;
         public decimal MaxPrice { get; set; } = 999999999;
 
-        public bool IsEnrollemt { get; set; } = false;
-        public bool IsPurchased { get; set; } = false;
+        public bool? IsEnrollemt { get; set; } = null;
+        public bool? IsPurchased { get; set; } = null;
 
         public StatusOfUser? StatusOfUser { get; set; } = null;
     }

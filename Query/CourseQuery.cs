@@ -43,12 +43,17 @@ namespace Course.DAL.Queries
             return this;
         }
 
-        public ICourseQuery FilterByOwner(bool IsOwner, Guid? userId)
+        public ICourseQuery FilterByOwner(bool? IsOwner, Guid? userId)
         {
-            if (IsOwner == true || userId == null)
+            if (userId == null)
                 return this;
 
-            Query = Query.Where(type => type.UserId != userId);
+            if (IsOwner.GetValueOrDefault())
+                Query = Query.Where(type => type.UserId == userId);
+
+            if (!IsOwner.GetValueOrDefault())
+                Query = Query.Where(type => type.UserId != userId);
+
             return this;
         }
 
@@ -221,26 +226,31 @@ namespace Course.DAL.Queries
             return this;
         }
 
-        public ICourseQuery FilterByEnrollmented(StatusOfUser? status, Guid? userId, bool IsEnroll)
+        public ICourseQuery FilterByEnrollmented(StatusOfUser? status, Guid? userId, bool? IsEnroll)
         {
             if (status == null || userId == null)
                 return this;
 
-            if (IsEnroll == true || status == StatusOfUser.IsEnrollemt)
+            if (status == StatusOfUser.IsEnrollemt)
                 Query = Query.Where(c => c.Enrollments.Any(s => s.UserId == userId));
-            if (IsEnroll == false)
+
+            if (IsEnroll != null && IsEnroll == true)
+                Query = Query.Where(c => c.Enrollments.Any(s => s.UserId == userId));
+
+            if (IsEnroll != null && IsEnroll == false)
                 Query = Query.Where(c => c.Enrollments.Any(s => s.UserId != userId));
 
             return this;
         }
 
-        public ICourseQuery FilterByPurchased(StatusOfUser? status, Guid? userId, bool isPurchased)
+        public ICourseQuery FilterByPurchased(StatusOfUser? status, Guid? userId, bool? isPurchased)
         {
             if (status == null || userId == null)
                 return this;
 
             if (status == StatusOfUser.IsPurchased || isPurchased == true)
                 Query = Query.Where(c => c.OrderItems.Any(s => s.Order.UserId == userId));
+
             return this;
         }
 
@@ -308,9 +318,8 @@ namespace Course.DAL.Queries
 
         public ICourseQuery IncludeSection()
         {
-            Query.Include(c => c.Sections)
+            Query.Include(c => c.Sections.OrderBy(s => s.CreatedAt))
                  .ThenInclude(s => s.Lectures)
-                 //.ThenInclude(l => l.LectureCompletion)
                  .Load();
 
             return this;

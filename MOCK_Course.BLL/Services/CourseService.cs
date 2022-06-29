@@ -106,6 +106,7 @@ namespace Course.BLL.Services
         {
             if (userId == null)
                 return;
+
             for (var i = 0; i < courses.Count; i++)
             {
                 courses[i].IsSave = (await _savedCoursesService.IsSaveCourses(userId.GetValueOrDefault(), courses[i].Id)).data;
@@ -404,7 +405,9 @@ namespace Course.BLL.Services
 
                 var section = sections[i];
                 section.CourseId = courseId;
+                section.CreatedAt = DateTime.UtcNow;
                 if (!await _sectionRepositoty.FindByCondition(s => s.Id == section.Id)
+                                             .IgnoreQueryFilters()
                                              .AnyAsync())
                 {
                     await _sectionRepositoty.CreateAsync(section);
@@ -431,6 +434,7 @@ namespace Course.BLL.Services
                 lecture.Attachments = null;
 
                 if (!await _lectureRepository.FindByCondition(l => l.Id == lecture.Id)
+                                             .IgnoreQueryFilters()
                                              .AnyAsync())
                 {
                     lecture.SectionId = sectionId;
@@ -455,6 +459,7 @@ namespace Course.BLL.Services
                 quiz.Questions = null;
 
                 if (!await _quizRepository.FindByCondition(l => l.Id == quiz.Id)
+                                          .IgnoreQueryFilters()
                                           .AnyAsync())
                 {
                     quiz.SectionId = sectionId;
@@ -476,8 +481,8 @@ namespace Course.BLL.Services
             {
                 LectureAttachment attachment = attachments[i];
 
-                var Exist = await _lectureAttachmentRepository.BuildQuery()
-                                                              .FilterById(attachment.Id)
+                var Exist = await _lectureAttachmentRepository.FindByCondition(la => la.Id == attachment.Id)
+                                                              .IgnoreQueryFilters()
                                                               .AnyAsync();
                 if (!Exist)
                 {
@@ -501,6 +506,7 @@ namespace Course.BLL.Services
                 question.Options = null;
 
                 if (!await _questionRepository.FindByCondition(l => l.Id == question.Id)
+                                              .IgnoreQueryFilters()
                                               .AnyAsync())
                 {
                     question.QuizId = quizId;
@@ -521,6 +527,7 @@ namespace Course.BLL.Services
             {
                 QuizOption quizOption = quizOptions[i];
                 if (!await _quizOptionRepository.FindByCondition(l => l.Id == quizOption.Id)
+                                                .IgnoreQueryFilters()
                                                 .AnyAsync())
                 {
                     quizOption.QuestionId = questionId;
@@ -542,6 +549,7 @@ namespace Course.BLL.Services
                 assignment.Attachments = null;
 
                 if (!await _assignmentRepository.FindByCondition(l => l.Id == assignment.Id)
+                                                .IgnoreQueryFilters()
                                                 .AnyAsync())
                 {
                     assignment.SectionId = sectionId;
@@ -562,6 +570,7 @@ namespace Course.BLL.Services
             {
                 Attachment attachment = attachments[i];
                 if (!await _attachmentRepository.FindByCondition(l => l.Id == attachment.Id)
+                                                .IgnoreQueryFilters()
                                                 .AnyAsync())
                 {
                     attachment.AssignmentId = asignmentId;

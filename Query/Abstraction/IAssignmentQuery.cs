@@ -12,5 +12,6 @@ namespace Course.DAL.Queries.Abstraction
         IAssignmentQuery FilterByKeyword(string Keyword);
         IAssignmentQuery IncludeSection();
         IAssignmentQuery IncludeAttachment();
+        IAssignmentQuery FilterByCourse(Guid courseId);
     }
 }

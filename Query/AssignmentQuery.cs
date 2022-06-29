@@ -36,7 +36,7 @@ namespace Course.DAL.Queries
                 return this;
 
             var KEYWORD = Keyword.ToUpper();
-            Query = Query.Where(c => c.Title.ToUpper().Contains(KEYWORD) 
+            Query = Query.Where(c => c.Title.ToUpper().Contains(KEYWORD)
                                 || c.Content.ToUpper().Contains(KEYWORD));
             return this;
         }
@@ -45,6 +45,13 @@ namespace Course.DAL.Queries
             Query.Include(c => c.Section).Load();
             return this;
         }
+
+        public IAssignmentQuery FilterByCourse(Guid courseId)
+        {
+            Query = Query.Where(a => a.Section.CourseId == courseId);
+            return this;
+        }
+
         public IAssignmentQuery IncludeAttachment()
         {
             Query.Include(c => c.Attachments).Load();

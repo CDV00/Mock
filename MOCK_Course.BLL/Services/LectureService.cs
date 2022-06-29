@@ -14,18 +14,24 @@ namespace Course.BLL.Services
     public class LectureService : ILectureService
     {
         private readonly ILectureRepository _lectureRepositoty;
+        private readonly IQuizRepository _quizRepository;
+        private readonly IAssignmentRepository _assignmentRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ILectureCompletionService _lectureCompletionService;
         public LectureService(ILectureRepository lectureRepositoty,
             IMapper mapper,
             IUnitOfWork unitOfWork,
-            ILectureCompletionService lectureCompletionService)
+            ILectureCompletionService lectureCompletionService,
+            IQuizRepository quizRepository,
+            IAssignmentRepository assignmentRepository)
         {
             _lectureRepositoty = lectureRepositoty;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _lectureCompletionService = lectureCompletionService;
+            _quizRepository = quizRepository;
+            _assignmentRepository = assignmentRepository;
         }
         public async Task<Response<LectureDTO>> Add(LectureForCreateRequest LectureRequest)
         {
@@ -126,13 +132,23 @@ namespace Course.BLL.Services
         public async Task<float> PercentCourseCompletion(Guid userId, Guid courseId)
         {
 
-            int countCourses = await totalLectureByCourse(courseId);
-            if (countCourses == 0)
+            int TotalLecture = await totalLectureByCourse(courseId);
+
+            int TotalQuiz = await _quizRepository.BuildQuery()
+                                                 .FilterByCourseId(courseId)
+                                                 .CountAsync();
+            int TotalAssignment = await _assignmentRepository.BuildQuery()
+                                                             .FilterByCourse(courseId)
+                                                             .CountAsync();
+
+            int TotalItem = TotalLecture + TotalQuiz + TotalAssignment;
+            if (TotalLecture == 0)
                 return 0;
+
             float countTotalCompletionLeture = await _lectureCompletionService.TotalLectureCompletionBycourse(userId, courseId);
             if (countTotalCompletionLeture == 0)
                 return 0;
-            float PercentCourseCompletion = countTotalCompletionLeture / countCourses * 100;
+            float PercentCourseCompletion = countTotalCompletionLeture / TotalLecture * 100;
 
             return PercentCourseCompletion;
 

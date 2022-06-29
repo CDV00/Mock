@@ -51,5 +51,11 @@ namespace Course.DAL.Queries
                 .Load();
             return this;
         }
+
+        public IQuizQuery FilterByCourseId(Guid courseId)
+        {
+            Query = Query.Where(c => c.Section.CourseId == courseId);
+            return this;
+        }
     }
 }
