@@ -8,7 +8,7 @@ namespace Course.DAL.Configuration
     {
         public void Configure(EntityTypeBuilder<AssignmentCompletion> builder)
         {
-            builder.HasKey(c => new { c.AssignmentId, c.UserId });
+            //builder.HasKey(c => new { c.AssignmentId, c.UserId });
             // 1-n:user-asignmentCompletion
             builder.HasOne(l => l.User)
                 .WithMany(u => u.AssignmentCompletions)

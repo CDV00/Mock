@@ -4,14 +4,16 @@ using Course.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CourseAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220628234706_updateIDCompletion")]
+    partial class updateIDCompletion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -237,7 +239,8 @@ namespace CourseAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AssignmentId");
+                    b.HasIndex("AssignmentId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -729,7 +732,8 @@ namespace CourseAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LectureId");
+                    b.HasIndex("LectureId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -999,7 +1003,8 @@ namespace CourseAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("QuizId");
+                    b.HasIndex("QuizId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -1389,8 +1394,8 @@ namespace CourseAPI.Migrations
             modelBuilder.Entity("Course.DAL.Models.AssignmentCompletion", b =>
                 {
                     b.HasOne("Course.DAL.Models.Assignment", "Assignment")
-                        .WithMany("AssignmentCompletion")
-                        .HasForeignKey("AssignmentId")
+                        .WithOne("AssignmentCompletion")
+                        .HasForeignKey("Course.DAL.Models.AssignmentCompletion", "AssignmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1528,8 +1533,8 @@ namespace CourseAPI.Migrations
             modelBuilder.Entity("Course.DAL.Models.LectureCompletion", b =>
                 {
                     b.HasOne("Course.DAL.Models.Lecture", "Lecture")
-                        .WithMany("LectureCompletion")
-                        .HasForeignKey("LectureId")
+                        .WithOne("LectureCompletion")
+                        .HasForeignKey("Course.DAL.Models.LectureCompletion", "LectureId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1614,8 +1619,8 @@ namespace CourseAPI.Migrations
             modelBuilder.Entity("Course.DAL.Models.QuizCompletion", b =>
                 {
                     b.HasOne("Course.DAL.Models.Quiz", "Quiz")
-                        .WithMany("QuizCompletion")
-                        .HasForeignKey("QuizId")
+                        .WithOne("QuizCompletion")
+                        .HasForeignKey("Course.DAL.Models.QuizCompletion", "QuizId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

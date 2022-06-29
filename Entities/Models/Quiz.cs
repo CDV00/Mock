@@ -25,6 +25,6 @@ namespace Course.DAL.Models
         public byte PassingScore { get; set; } = 100;
         public uint QuestionsLimit { get; set; } = 10;
 
-        public QuizCompletion QuizCompletion { get; set; }
+        public IList<QuizCompletion> QuizCompletion { get; set; }
     }
 }

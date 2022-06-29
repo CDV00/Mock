@@ -12,6 +12,6 @@ namespace Course.DAL.Models
         public Guid SectionId { get; set; }
         public Section Section { get; set; }
         public int Index { get; set; }
-        public AssignmentCompletion AssignmentCompletion { get; set; }
+        public IList<AssignmentCompletion> AssignmentCompletion { get; set; }
     }
 }

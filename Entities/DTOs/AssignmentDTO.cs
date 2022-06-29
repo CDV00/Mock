@@ -15,6 +15,6 @@ namespace Course.DAL.DTOs
         public bool isCompleted { get; set; } = false;
 
         public bool IsDeleted { get; set; } = false;
-        public AssignmentCompletionDTO assignmentCompletion { get; set; }
+        public IList<AssignmentCompletionDTO> assignmentCompletion { get; set; }
     }
 }

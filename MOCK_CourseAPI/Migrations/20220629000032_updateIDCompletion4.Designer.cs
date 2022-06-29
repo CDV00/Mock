@@ -4,14 +4,16 @@ using Course.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CourseAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220629000032_updateIDCompletion4")]
+    partial class updateIDCompletion4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -225,19 +227,13 @@ namespace CourseAPI.Migrations
 
             modelBuilder.Entity("Course.DAL.Models.AssignmentCompletion", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("AssignmentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("AssignmentId");
+                    b.HasKey("AssignmentId", "UserId");
 
                     b.HasIndex("UserId");
 
@@ -714,22 +710,16 @@ namespace CourseAPI.Migrations
 
             modelBuilder.Entity("Course.DAL.Models.LectureCompletion", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("LectureId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("LectureId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Time")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LectureId");
+                    b.HasKey("LectureId", "UserId");
 
                     b.HasIndex("UserId");
 
@@ -987,19 +977,13 @@ namespace CourseAPI.Migrations
 
             modelBuilder.Entity("Course.DAL.Models.QuizCompletion", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("QuizId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuizId");
+                    b.HasKey("QuizId", "UserId");
 
                     b.HasIndex("UserId");
 

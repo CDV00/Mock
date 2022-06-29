@@ -8,7 +8,7 @@ namespace Course.DAL.Configuration
     {
         public void Configure(EntityTypeBuilder<QuizCompletion> builder)
         {
-            builder.HasKey(c => new { c.QuizId, c.UserId });
+            //builder.HasKey(c => new { c.QuizId, c.UserId });
 
             // 1-n:user-lessonCompletion
             builder.HasOne(l => l.User)

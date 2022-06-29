@@ -18,6 +18,6 @@ namespace Course.DAL.DTOs
         public byte PassingScore { get; set; }
         public uint QuestionsLimit { get; set; }
         public bool isCompleted { get; set; } = false;
-        public QuizCompletionDTO QuizCompletion { get; set; }
+        public IList<QuizCompletionDTO> QuizCompletion { get; set; }
     }
 }

@@ -32,7 +32,7 @@ namespace Course.BLL.Responses
         public int TotalTime { get; set; }
         public bool isCompleted { get; set; } = false;
 
-        public LectureCompletionDTO LectureCompletion { get; set; }
+        public IList<LectureCompletionDTO> LectureCompletion { get; set; }
 
         public bool IsDeleted { get; set; } = false;
         public IList<LectureAttachmentDTO> Attachments { get; set; }

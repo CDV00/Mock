@@ -321,8 +321,8 @@ namespace Course.DAL.Queries
                 return this;
 
             Query.Include(c => c.Sections)
-                 .ThenInclude(s => s.Lectures.Where(l => l.LectureCompletion.UserId == userId))
-                 .ThenInclude(l => l.LectureCompletion)
+                 .ThenInclude(s => s.Lectures)
+                 .ThenInclude(l => l.LectureCompletion.Where(l => l.UserId == userId))
                  .Load();
 
             return this;
@@ -344,8 +344,8 @@ namespace Course.DAL.Queries
                 return this;
 
             Query.Include(c => c.Sections)
-                 .ThenInclude(s => s.Assignments.Where(a => a.AssignmentCompletion.UserId == userId))
-                 .ThenInclude(a => a.AssignmentCompletion)
+                 .ThenInclude(s => s.Assignments)
+                 .ThenInclude(a => a.AssignmentCompletion.Where(a => a.UserId == userId))
                  .Load();
 
             return this;
@@ -367,8 +367,8 @@ namespace Course.DAL.Queries
                 return this;
 
             Query.Include(c => c.Sections)
-                 .ThenInclude(s => s.Quizzes.Where(q => q.QuizCompletion.UserId == userId))
-                 .ThenInclude(q => q.QuizCompletion)
+                 .ThenInclude(s => s.Quizzes)
+                 .ThenInclude(q => q.QuizCompletion.Where(q => q.UserId == userId))
                  .Load();
 
             return this;
