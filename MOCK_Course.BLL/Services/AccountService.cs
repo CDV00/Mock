@@ -35,7 +35,6 @@ namespace Course.BLL.Services
         private readonly RoleManager<IdentityRole<Guid>> _roleManager;
         private readonly ILogger<AuthenticationService> _logger;
         private readonly IMapper _mapper;
-        //private readonly IConfiguration _configuration;
         private readonly JwtConfiguration _jwtConfiguration;
         private readonly IOptions<JwtConfiguration> _configuration;
         private readonly IConfiguration _configurations;
@@ -134,7 +133,7 @@ namespace Course.BLL.Services
         {
             var user = await _userManager.FindByEmailAsync(email);
             DateTime endTime = (user.UpdatedAt != null) ? user.UpdatedAt.Value.AddMinutes(3) : user.CreatedAt.AddMinutes(3);
-            if(user.CodeNumber is null)
+            if (user.CodeNumber is null)
             {
                 return new Response<BaseResponse>(false, "Something went wrong!", null);
             }
@@ -290,7 +289,8 @@ namespace Course.BLL.Services
 
             if (roles.Count == 0 || roles == null)
             {
-                return null;
+                await _userManager.AddToRoleAsync(_user, UserRolesConstant.Student);
+                roles.Add(UserRolesConstant.Student);
             }
             _userResponse.Role = roles[0].ToString();
             foreach (var role in roles)
@@ -298,7 +298,6 @@ namespace Course.BLL.Services
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
             return claims;
-
         }
         private JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials,
         List<Claim> claims)
@@ -382,6 +381,7 @@ namespace Course.BLL.Services
                 await _userManager.CreateAsync(users);
                 user = await _userManager.FindByEmailAsync(email);
             }
+
             Random random = new Random();
             string codeNumber = random.Next(1000, 9999).ToString();
             user.CodeNumber = codeNumber;
@@ -410,35 +410,30 @@ namespace Course.BLL.Services
             return new BaseResponse(true);
         }
         /// <summary>
-        /// Forgot Passworrd
+        /// Forgot Password
         /// </summary>
         /// <param name="email">abc@gmail.com</param>
         /// <returns></returns>
         public async Task<Response<BaseResponse>> ForgetPassWord(string email)
         {
-            try
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
             {
-                var user = await _userManager.FindByEmailAsync(email);
-                if (user == null || !user.EmailConfirmed || user.Fullname == null)
-                {
-                    return new Response<BaseResponse>(false, "No user associated with email", null);
-                }
-                string codeNumber = await AddCodeNumber(user.Email);
-                if (codeNumber == string.Empty)
-                {
-                    return new Response<BaseResponse>(false, "Add Code Number went wrong!", null);
-                }
-                var isSendEmailConfirm = await SendEmailConfirm(user.Email, WorkingMail.ForgetPassword, codeNumber);
-                if (!isSendEmailConfirm.IsSuccess)
-                {
-                    return new Response<BaseResponse>(false, "Send Email went wrong!", null);
-                }
-                return new Response<BaseResponse>(true, null, null);
+                return new Response<BaseResponse>(false, "No user associated with email", null);
             }
-            catch (Exception ex)
+            string codeNumber = await AddCodeNumber(user.Email);
+            if (codeNumber == string.Empty)
             {
-                return new Response<BaseResponse>(false, ex.Message, null);
+                return new Response<BaseResponse>(false, "Add Code Number went wrong!", null);
             }
+            var isSendEmailConfirm = await SendEmailConfirm(user.Email, WorkingMail.ForgetPassword, codeNumber);
+
+            if (!isSendEmailConfirm.IsSuccess)
+            {
+                return new Response<BaseResponse>(false, "Send Email went wrong!", null);
+            }
+
+            return new Response<BaseResponse>(true, null, null);
         }
         //
         public async Task<Response<BaseResponse>> ResetPassWord(ResetPasswordRequest resetPasswordRequest)
@@ -489,7 +484,6 @@ namespace Course.BLL.Services
         {
             try
             {
-
                 switch (externalLoginResquest.Provider.ToUpper())
                 {
                     case Provider.GOOGLE:
@@ -553,9 +547,9 @@ namespace Course.BLL.Services
             // create token
             var token = await CreateToken(populateExp: true);
             if (token == null)
-                throw new ("Authentication Error. User don't have any role, please create new account!");
+                throw new("Authentication Error. User don't have any role, please create new account!");
             //
-            return new LoginDTO( token, _userResponse);
+            return new LoginDTO(token, _userResponse);
         }
 
         /// <summary>
@@ -573,7 +567,7 @@ namespace Course.BLL.Services
             }
             _user = await _userManager.FindByEmailAsync(payload.Email);
 
-            if (_user is null || _user.Fullname is null)
+            if (_user is null)
             {
                 var appUser = new AppUser()
                 {
@@ -583,21 +577,22 @@ namespace Course.BLL.Services
                     EmailConfirmed = true,
                     AvatarUrl = payload.Picture
                 };
+
                 var result = await _userManager.CreateAsync(appUser);
                 if (!result.Succeeded)
                     throw new Exception();
                 await _userManager.AddToRoleAsync(appUser, UserRolesConstant.Student);
-                //find user
-                _user = await _userManager.FindByEmailAsync(payload.Email);
             }
+
             if (!_user.IsActive)
                 throw new("Authentication failed. Account has been blocked.");
             //
-            if(_user.AvatarUrl == null)
+            if (_user.AvatarUrl == null)
             {
                 _user.AvatarUrl = payload.Picture;
                 await _userManager.UpdateAsync(_user);
             }
+
             _mapper.Map(_user, _userResponse);
             // create token
             var token = await CreateToken(populateExp: true);
@@ -615,20 +610,10 @@ namespace Course.BLL.Services
         /// <exception cref="Exception"></exception>
         private async Task<GoogleJsonWebSignature.Payload> VerifyGoogleToken(ExternalLoginResquest externalLoginResquest)
         {
-            try
-            {
-                var httpClient = new HttpClient();
-                var userInfoResponse = await httpClient.GetStringAsync($"https://www.googleapis.com/oauth2/v2/userinfo?alt=json&access_token={externalLoginResquest.Token}");
-                var payload = JsonConvert.DeserializeObject<GoogleJsonWebSignature.Payload>(userInfoResponse);
-                return payload;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            var httpClient = new HttpClient();
+            var userInfoResponse = await httpClient.GetStringAsync($"https://www.googleapis.com/oauth2/v2/userinfo?alt=json&access_token={externalLoginResquest.Token}");
+            var payload = JsonConvert.DeserializeObject<GoogleJsonWebSignature.Payload>(userInfoResponse);
+            return payload;
         }
     }
-
-
-
 }
