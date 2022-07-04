@@ -44,12 +44,15 @@ namespace CourseAPI
             services.AddAutoMapper(typeof(MapperInitializer));
             services.ConfigureInvalidFilter();
             services.ConfigureUpload();
+            services.AddCustomMediaTypes();
 
             services.AddSignalR();
 
             services.AddControllers(config =>
             {
-            });
+                config.ReturnHttpNotAcceptable = true;
+            }).AddNewtonsoftJson();
+
             //login Ex
             services.AddAuthentication()
                 .AddFacebook(facebookOptions =>

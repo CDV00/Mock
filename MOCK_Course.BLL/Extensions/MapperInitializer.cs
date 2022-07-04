@@ -8,6 +8,7 @@ using System;
 using Entities.DTOs;
 using Entities.Requests;
 using Entities.Models;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace Course.BLL.Extensions
 {
@@ -162,6 +163,7 @@ namespace Course.BLL.Extensions
             //course
             CreateMap<Courses, CourseForCreateRequest>().ReverseMap();
             CreateMap<CourseForUpdateRequest, Courses>().ReverseMap();
+            //CreateMap<CourseForUpdateRequest, JsonPatchDocument<CourseForUpdateRequest>>().ReverseMap();
 
             //notification
             CreateMap<Notification, NotificationDTO>().ReverseMap();

@@ -15,6 +15,7 @@ using Repository.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Repository.Repositories.Abstraction;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace Course.BLL.Services
 {
@@ -113,9 +114,9 @@ namespace Course.BLL.Services
 
                 courses[i].PercentCompletion = await _lectureService.PercentCourseCompletion(userId.GetValueOrDefault(), courses[i].Id);
 
-                courses[i].IsEnroll = (await _enrollmentService.IsEnrollment(userId.GetValueOrDefault(), courses[i].Id)).data == null ? false : true;
+                courses[i].IsEnroll = (await _enrollmentService.IsEnrollment(userId.GetValueOrDefault(), courses[i].Id)).data != null;
 
-                courses[i].IsPurchased = (await _orderItemService.IsPurchased(userId.GetValueOrDefault(), courses[i].Id)).data == null ? false : true;
+                courses[i].IsPurchased = (await _orderItemService.IsPurchased(userId.GetValueOrDefault(), courses[i].Id)).data != null;
 
                 courses[i].MyRating = (await _courseReviewRepository.GetMyRating(userId.GetValueOrDefault(), courses[i].Id));
             }
@@ -236,9 +237,6 @@ namespace Course.BLL.Services
         // Upload status course: Id course, status
         public async Task<BaseResponse> UpdateStatus(CourseStatusUpdateRequest courseStatusUpdateRequest)
         {
-            try
-            {
-
                 var course = await _cousesRepository.BuildQuery()
                                                     .FilterById(courseStatusUpdateRequest.CourseId)
                                                     .AsSelectorAsync(c => c);
@@ -255,11 +253,6 @@ namespace Course.BLL.Services
                 return new Response<CourseDTO>(
                     true
                 );
-            }
-            catch (Exception ex)
-            {
-                return new Response<CourseDTO>(false, ex.Message, null);
-            }
         }
 
         public async Task<ApiBaseResponse> Update(Guid id, CourseForUpdateRequest courseRequest, Guid userId)
@@ -308,6 +301,35 @@ namespace Course.BLL.Services
 
             return new ApiOkResponse<CourseDTO>(CourseResponse);
         }
+
+        public async Task<ApiBaseResponse> UpdatePatch(Guid id, 
+            JsonPatchDocument<CourseForUpdateRequest> coursePatch, Guid userId)
+        {
+            var course = await _cousesRepository.BuildQuery()
+                                                .FilterById(id)
+                                                .IncludeLevel()
+                                                .IncludeLanguage()
+                                                .AsSelectorAsync(c => c);
+
+            if (course is null)
+                return new CourseNotFoundResponse(id);
+
+            if (course.UserId != userId)
+                return new NotOwnOfCourseResponse(id);
+
+            var courseToPath = _mapper.Map<CourseForUpdateRequest>(coursePatch);
+            coursePatch.ApplyTo(courseToPath);
+
+            _mapper.Map(courseToPath, course);
+            course.UpdatedAt = DateTime.Now;
+            course.UpdatedBy = id;
+
+            await _unitOfWork.SaveChangesAsync();
+            var CourseResponse = _mapper.Map<CourseDTO>(course);
+
+            return new ApiOkResponse<CourseDTO>(CourseResponse);
+        }
+
 
         /// <summary>
         /// Clear and add audio language, close caption, level

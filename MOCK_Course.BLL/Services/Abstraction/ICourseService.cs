@@ -4,6 +4,7 @@ using Course.BLL.Requests;
 using System;
 using Entities.Responses;
 using Entities.ParameterRequest;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace Course.BLL.Services.Abstraction
 {
@@ -22,5 +23,6 @@ namespace Course.BLL.Services.Abstraction
         //Task<Responses<CourseDTO>> UpcomingCourse(Guid userId);
         Task<ApiBaseResponse> GetDetail(Guid id, Guid? userId);
         Task<ApiBaseResponse> GetAllMyLearning(CourseParameters parameter, Guid userId);
+        Task<ApiBaseResponse> UpdatePatch(Guid id, JsonPatchDocument<CourseForUpdateRequest> coursePatch, Guid userId);
     }
 }

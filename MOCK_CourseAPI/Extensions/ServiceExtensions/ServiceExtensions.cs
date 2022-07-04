@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Contracts;
+using Course.BLL.Responses;
 using Course.BLL.Services;
 using Course.BLL.Services.Abstraction;
 using Course.DAL.ConfigurationModels;
@@ -12,12 +13,14 @@ using Course.DAL.Data;
 using Course.DAL.Models;
 using Course.DAL.Repositories.Abstraction;
 using CourseAPI.ActionFilters;
+using CourseAPI.Utility;
 using LoggerService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,6 +28,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MOCK_Course.BLL.Services.Implementations;
 using Newtonsoft.Json;
+using Repository.DataShaping;
 using Repository.Repositories;
 using Repository.Repositories.Abstraction;
 
@@ -265,6 +269,9 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IGoogleService, GoogleService>();
             services.AddScoped<IQuizCompletionService, QuizCompletionService>();
             services.AddScoped<IAssignmentCompletionService, AssignmentCompletionService>();
+            services.AddScoped<IDataShaper<CourseDTO>, DataShaper<CourseDTO>>();
+            services.AddScoped<ValidateMediaTypeAttribute>();
+            services.AddScoped<CourseLinks>();
         }
 
         public static void ConfigureUpload(this IServiceCollection services)
@@ -287,6 +294,29 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddControllers().AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
+        }
+
+        public static void AddCustomMediaTypes(this IServiceCollection services)
+        {
+            services.Configure<MvcOptions>(config =>
+            {
+                var newtonsoftJsonOutputFormatter = config.OutputFormatters
+                .OfType<NewtonsoftJsonOutputFormatter>()?.FirstOrDefault();
+                if (newtonsoftJsonOutputFormatter != null)
+                {
+                    newtonsoftJsonOutputFormatter
+                    .SupportedMediaTypes
+                    .Add("application/vnd.codemaze.hateoas+json");
+                }
+                var xmlOutputFormatter = config.OutputFormatters
+               .OfType<XmlDataContractSerializerOutputFormatter>()?.FirstOrDefault();
+                if (xmlOutputFormatter != null)
+                {
+                    xmlOutputFormatter
+                    .SupportedMediaTypes
+                    .Add("application/vnd.codemaze.hateoas+xml");
+                }
             });
         }
     }

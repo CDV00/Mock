@@ -14,6 +14,11 @@ using Course.BLL.Share.RequestFeatures;
 using Entities.Extension;
 using Entities.Constants;
 using Entities.ParameterRequest;
+using Microsoft.AspNetCore.JsonPatch;
+using AutoMapper;
+using Contracts;
+using CourseAPI.ActionFilters;
+using CourseAPI.Utility;
 
 namespace CourseAPI.Controllers
 {
@@ -23,9 +28,18 @@ namespace CourseAPI.Controllers
     public class CourseController : ApiControllerBase
     {
         private readonly ICourseService _coursesService;
-        public CourseController(ICourseService coursesService)
+        private readonly IMapper _mapper;
+        private readonly IDataShaper<CourseDTO> _dataShaper;
+        private readonly CourseLinks _courseLinks;
+        public CourseController(ICourseService coursesService,
+                                IMapper mapper,
+                                IDataShaper<CourseDTO> dataShaper,
+                                CourseLinks courseLinks)
         {
             _coursesService = coursesService;
+            _mapper = mapper;
+            _dataShaper = dataShaper;
+            _courseLinks = courseLinks;
         }
 
         /// <summary>
@@ -42,6 +56,7 @@ namespace CourseAPI.Controllers
         /// <param name="parameters"></param>
         /// <returns>List of course</returns>
         [HttpGet("Get-all-course")]
+        [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
         [AllowAnonymous]
         public async Task<ActionResult<ApiOkResponses<CourseDTO>>> GetAllCourses([FromQuery] CourseParameters parameters)
         {
@@ -56,7 +71,10 @@ namespace CourseAPI.Controllers
             Response.Headers.Add(SystemConstant.PagedHeader,
                                  JsonSerializer.Serialize(coursePagedList.MetaData));
 
-            return Ok(result);
+            //return Ok(_dataShaper.ShapeData(coursePagedList, parameters.Fields));
+            var links = _courseLinks.TryGenerateLinks(coursePagedList,
+                                                      parameters.Fields, HttpContext);
+            return links.HasLinks ? Ok(links.LinkedEntities) : Ok(links.ShapedEntities);
         }
 
 
@@ -126,6 +144,20 @@ namespace CourseAPI.Controllers
 
             return Ok(result);
         }
+
+        [HttpPut("Partial-Update")]
+        [Authorize(Roles = "Admin, Instructor")]
+        public async Task<ActionResult<ApiOkResponse<CourseDTO>>> PartialUpdate(Guid id, [FromBody] JsonPatchDocument<CourseForUpdateRequest> patchCourse)
+        {
+            var userId = User.GetUserId();
+
+            var result = await _coursesService.UpdatePatch(id, patchCourse, userId);
+            if (result.IsSuccess == false)
+                return ProcessError(result);
+
+            return Ok(result);
+        }
+
 
         /// <summary>
         /// Delete an Courses by Id
