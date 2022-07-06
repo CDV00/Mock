@@ -31,9 +31,15 @@ namespace Course.BLL.Responses
         public int Count { get; set; }
         public Decimal Earning { get; set; }
         public DateTime CreatedAt { get; set; }
-        
     }
-    
+
+    public class SaleOfCourse
+    {
+        public Decimal Earning { get; set; }
+        public int Moth { get; set; }
+    }
+
+
     public class StatementsDTO
     {
         public Decimal TotalPrice { get; set; }

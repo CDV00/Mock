@@ -95,6 +95,28 @@ namespace Course.DAL.Queries
                         .ToListAsync();
         }
 
+        //public Task<List<SaleOfCourse>> GetGroupByYeaer()
+        //{
+        //    var listSales = Query
+        //                .GroupBy(o => o.CreatedAt.Date.Month)
+        //                .Select(o => new SaleOfCourse
+        //                {
+        //                    Earning = o.Select(c => c.TotalPrice).Sum(),
+        //                    Moth = o.Key,
+        //                })
+        //                .ToListAsync();
+        //    var result = new List<SaleOfCourse>();
+        //    for(var i = 1; i<=12;i++)
+        //    {
+        //        if(result.)
+        //        {
+
+        //        }
+        //    }    
+        //    return 
+        //}
+
+
         public Task<int> CountGroupByCreate(OrderParameters parameter)
         {
             return Query

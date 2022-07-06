@@ -45,18 +45,18 @@ namespace CourseAPI
             services.ConfigureUpload();
             services.ConfigureAuthentication(Configuration);
             services.AddCustomMediaTypes();
-            services.ConfigureHttpCacheHeaders();
-            services.ConfigureResponseCaching();
+            //services.ConfigureHttpCacheHeaders();
+            //services.ConfigureResponseCaching();
 
             services.AddSignalR();
 
             services.AddControllers(config =>
             {
                 //config.ReturnHttpNotAcceptable = true;
-                config.CacheProfiles.Add("120SecondsDuration", new CacheProfile
-                {
-                    Duration = 120
-                });
+                //config.CacheProfiles.Add("120SecondsDuration", new CacheProfile
+                //{
+                //    Duration = 120
+                //});
             }).AddNewtonsoftJson();
 
             //login Ex
@@ -95,8 +95,8 @@ namespace CourseAPI
 
             app.UseAuthentication();
 
-            app.UseResponseCaching();
-            app.UseHttpCacheHeaders();
+            //app.UseResponseCaching();
+            //app.UseHttpCacheHeaders();
 
             app.UseRouting();
 

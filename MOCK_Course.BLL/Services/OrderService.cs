@@ -14,6 +14,8 @@ using Entities.Responses;
 using Repository.Repositories.Abstraction;
 using Course.BLL.Share.RequestFeatures;
 using Entities.ParameterRequest;
+using Entities.DTOs;
+using Microsoft.EntityFrameworkCore;
 
 namespace Course.BLL.Services
 {
@@ -237,6 +239,27 @@ namespace Course.BLL.Services
         {
             var statements = await _orderRepository.GetStatementsAsync(orderParameters, userId);
             return new ApiOkResponse<PagedList<StatementsDTO>>(statements);
+        }
+        public async Task<ApiOkResponse<ListAnalysisOrderResponse>> SumMoneyOrderByMonth(Guid userId)
+        {
+            var filterdata = await _orderRepository.FindByCondition(j => j.Id == j.OrderItem.Where(o => o.Course.UserId == userId)
+            .Select(o => o.OrderId)
+            .FirstOrDefault())
+            .ToListAsync();
+
+            var yearAndMonthRange = filterdata.Select(m => m.CreatedAt.Year).Distinct().OrderBy(t => t).Select(m => Enumerable.Range(1, 12).Select(t => new { Year = m, Month = t })).ToList();
+
+            var result = yearAndMonthRange.Select(m => m.GroupJoin(filterdata, key => key, f => new { Year = f.CreatedAt.Year, Month = f.CreatedAt.Month }, (key, f) => new OrderAnalysisDisplayDTO { Year = key.Year, Month = key.Month, Amount = f.Sum(o=>o.TotalPrice) }).OrderBy(d => d.Year).ThenBy(d => d.Month).ToList()).ToList();
+
+            var totalCount = filterdata.Sum(o=>o.TotalPrice);
+
+            return new ApiOkResponse<ListAnalysisOrderResponse>(new ListAnalysisOrderResponse
+            {
+
+                Data = result,
+                Total = totalCount
+            }
+            );
         }
     }
 }

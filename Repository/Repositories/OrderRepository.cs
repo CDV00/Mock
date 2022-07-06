@@ -60,6 +60,27 @@ namespace Repository.Repositories
             return new PagedList<EarningDTO>(earning, earningCount, orderParameters.PageNumber, orderParameters.PageSize);
         }
 
+        public async Task<PagedList<EarningDTO>> GetSaleOfYear(OrderParameters orderParameters, Guid userId)
+        {
+            var earning = await BuildQuery()
+                                            .FilterByUserIdInstructor(userId)
+                                            .FilterStartDate(orderParameters.startDay)
+                                            .FilterEndtDate(orderParameters.endDate)
+                                            .GetGroupByCreate(orderParameters);
+
+            var earningCount = await BuildQuery()
+                                                 .FilterByUserIdInstructor(userId)
+                                                 .FilterStartDate(orderParameters.startDay)
+                                                 .FilterEndtDate(orderParameters.endDate)
+                                                 .CountGroupByCreate(orderParameters);
+
+            //await AddLast(earning, userId);
+            //await AddLast(earningCount, userId);
+            //int count = earningCount.Count;
+            return new PagedList<EarningDTO>(earning, earningCount, orderParameters.PageNumber, orderParameters.PageSize);
+        }
+
+
 
         private async Task AddLast(List<EarningDTO> earning, Guid userId)
         {
