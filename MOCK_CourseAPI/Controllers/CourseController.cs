@@ -19,6 +19,10 @@ using AutoMapper;
 using Contracts;
 using CourseAPI.ActionFilters;
 using CourseAPI.Utility;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Routing;
+using Entities.LinkModels;
+using Entities.Models;
 
 namespace CourseAPI.Controllers
 {
@@ -31,15 +35,18 @@ namespace CourseAPI.Controllers
         private readonly IMapper _mapper;
         private readonly IDataShaper<CourseDTO> _dataShaper;
         private readonly CourseLinks _courseLinks;
+        private readonly LinkGenerator _linkGenerator;
         public CourseController(ICourseService coursesService,
                                 IMapper mapper,
                                 IDataShaper<CourseDTO> dataShaper,
-                                CourseLinks courseLinks)
+                                CourseLinks courseLinks,
+                                LinkGenerator linkGenerator)
         {
             _coursesService = coursesService;
             _mapper = mapper;
             _dataShaper = dataShaper;
             _courseLinks = courseLinks;
+            _linkGenerator = linkGenerator;
         }
 
         /// <summary>
@@ -55,8 +62,8 @@ namespace CourseAPI.Controllers
         /// </remarks>
         /// <param name="parameters"></param>
         /// <returns>List of course</returns>
-        [HttpGet("Get-all-course")]
-        [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
+        [HttpGet("Get-all-course", Name = "getallcourses")]
+        //[ServiceFilter(typeof(ValidateMediaTypeAttribute))]
         [AllowAnonymous]
         public async Task<ActionResult<ApiOkResponses<CourseDTO>>> GetAllCourses([FromQuery] CourseParameters parameters)
         {
@@ -71,10 +78,10 @@ namespace CourseAPI.Controllers
             Response.Headers.Add(SystemConstant.PagedHeader,
                                  JsonSerializer.Serialize(coursePagedList.MetaData));
 
-            //return Ok(_dataShaper.ShapeData(coursePagedList, parameters.Fields));
-            var links = _courseLinks.TryGenerateLinks(coursePagedList,
-                                                      parameters.Fields, HttpContext);
-            return links.HasLinks ? Ok(links.LinkedEntities) : Ok(links.ShapedEntities);
+            return Ok(new ApiOkResponses<CourseDTO>(coursePagedList));
+            //var links = _courseLinks.TryGenerateLinks(coursePagedList,
+            //                                          parameters.Fields, HttpContext);
+            //return links.HasLinks ? Ok(new ApiOkResponse<CourseDTO>(links.LinkedEntities as CourseDTO)) : Ok(links.ShapedEntities);
         }
 
 
@@ -84,6 +91,7 @@ namespace CourseAPI.Controllers
         /// <returns>an course</returns>
         [HttpGet]
         [AllowAnonymous]
+        [ResponseCache(Duration = 60)]
         public async Task<ActionResult<ApiOkResponse<CourseDTO>>> Get(Guid id)
         {
             Guid? userId = (User.GetUserId() == Guid.Empty) ? null : User.GetUserId();

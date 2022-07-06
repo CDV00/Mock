@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿//using Microsoft.AspNetCore.SignalR;
 
-namespace Course.DAL.Models
-{
-    public class BroadcastHub : Hub<IHubClient>
-    {
-    }
-}
+//namespace Course.DAL.Models
+//{
+//    public class BroadcastHub : Hub<IHubClient>
+//    {
+//    }
+//}

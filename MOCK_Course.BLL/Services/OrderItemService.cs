@@ -62,6 +62,12 @@ namespace Course.BLL.Services
             var order = await _orderItemRepository.GetStatements(orderParameters, userId);
             return new ApiOkResponse<PagedList<OrderItemDTO>>(order);
         }
-        //
+
+        public async Task<ApiOkResponse<PagedList<EarningDTO>>> GetEarning(OrderParameters orderParameters, Guid userId)
+        {
+            var order = await _orderItemRepository.GetEarningAsync(orderParameters, userId);
+
+            return new ApiOkResponse<PagedList<EarningDTO>>(order);
+        }
     }
 }

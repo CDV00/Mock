@@ -42,37 +42,25 @@ namespace Repository.Repositories
 
         public async Task<PagedList<EarningDTO>> GetEarningAsync(OrderParameters orderParameters, Guid userId)
         {
-            var earning = await BuildQuery().FilterByUserIdInstructor(userId)
+            var earning = await BuildQuery()
+                                            .FilterByUserIdInstructor(userId)
                                             .FilterStartDate(orderParameters.startDay)
                                             .FilterEndtDate(orderParameters.endDate)
-                                            //.GroupByCreateAt()
-                                            .Skip((orderParameters.PageNumber - 1) * orderParameters.PageSize)
-                                            .Take(orderParameters.PageSize)
-                                            .ApplySort(orderParameters.Orderby)
-                                            .ToListAsync(o => _mapper.Map<EarningDTO>(o));
+                                            .GetGroupByCreate(orderParameters);
 
+            var earningCount = await BuildQuery()
+                                                 .FilterByUserIdInstructor(userId)
+                                                 .FilterStartDate(orderParameters.startDay)
+                                                 .FilterEndtDate(orderParameters.endDate)
+                                                 .CountGroupByCreate(orderParameters);
 
-            var earningCount = await BuildQuery().FilterByUserIdInstructor(userId)
-                                            .FilterStartDate(orderParameters.startDay)
-                                            .FilterEndtDate(orderParameters.endDate)
-                                            .ToListAsync(o => _mapper.Map<EarningDTO>(o));
-            await AddLast(earning, userId);
-            await AddLast(earningCount, userId);
-            int count = earningCount.Count;
-            return new PagedList<EarningDTO>(earning, count, orderParameters.PageNumber, orderParameters.PageSize);
+            //await AddLast(earning, userId);
+            //await AddLast(earningCount, userId);
+            //int count = earningCount.Count;
+            return new PagedList<EarningDTO>(earning, earningCount, orderParameters.PageNumber, orderParameters.PageSize);
         }
-        //private async Task<int> couutEarning(List<EarningDTO> earning, Guid userId)
-        //{
-        //    for (var i = 0; i < earning.Count; i++)
-        //    {
-        //        if (earning.Find(c => c.CreatedAt.Date == earning[i].CreatedAt.Date).Count > 1)
-        //        {
-        //            earning.Remove(earning[i]);
-        //            i--;
-        //        }
-        //    }
-        //    return  earning.Count;
-        //}
+
+
         private async Task AddLast(List<EarningDTO> earning, Guid userId)
         {
             for (var i = 0; i < earning.Count; i++)
@@ -106,17 +94,17 @@ namespace Repository.Repositories
         public async Task<PagedList<StatementsDTO>> GetStatementsAsync(OrderParameters orderParameters, Guid userId)
         {
             var statements = await BuildQuery().FilterByUserIdInstructor(userId)
-                                            .FilterStartDate(orderParameters.startDay)
-                                            .FilterEndtDate(orderParameters.endDate)
-                                            .Skip((orderParameters.PageNumber - 1) * orderParameters.PageSize)
-                                            .Take(orderParameters.PageSize)
-                                            .ApplySort(orderParameters.Orderby)
-                                            .ToListAsync(o => _mapper.Map<StatementsDTO>(o));
+                                               .FilterStartDate(orderParameters.startDay)
+                                               .FilterEndtDate(orderParameters.endDate)
+                                               .Skip((orderParameters.PageNumber - 1) * orderParameters.PageSize)
+                                               .Take(orderParameters.PageSize)
+                                               //.ApplySort(orderParameters.Orderby)
+                                               .ToListAsync(o => _mapper.Map<StatementsDTO>(o));
 
             var count = await BuildQuery().FilterByUserIdInstructor(userId)
-                                            .FilterStartDate(orderParameters.startDay)
-                                            .FilterEndtDate(orderParameters.endDate)
-                                            .CountAsync();
+                                          .FilterStartDate(orderParameters.startDay)
+                                          .FilterEndtDate(orderParameters.endDate)
+                                          .CountAsync();
 
             return new PagedList<StatementsDTO>(statements, count, orderParameters.PageNumber, orderParameters.PageSize);
         }

@@ -7,9 +7,12 @@ using Course.DAL.Queries;
 using Course.DAL.Queries.Abstraction;
 using Course.DAL.Repositories.Abstraction;
 using Entities.ParameterRequest;
+using Microsoft.EntityFrameworkCore;
 using Query.Abstraction;
 using Repository.Repositories.Abstraction;
 using System;
+using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 
 namespace Repository.Repositories
@@ -28,17 +31,17 @@ namespace Repository.Repositories
         {
             return new OrderItemQuery(_context.OrderItems.AsQueryable(), _context);
         }
-        //
+
         public async Task<PagedList<OrderItemDTO>> GetStatements(DepositParameters depositParameters, Guid userid)
         {
             var statements = await BuildQuery().FilterByUserIdInstructor(userid)
-                                          .FilterStartDate(depositParameters.startDate)
-                                          .FilterEndtDate(depositParameters.endDate)
-                                          .IncludeCourse()
-                                          .ApplySort(depositParameters.Orderby)
-                                          .Skip((depositParameters.PageNumber - 1) * depositParameters.PageSize)
-                                          .Take(depositParameters.PageSize)
-                                          .ToListAsync(d => _mapper.Map<OrderItemDTO>(d));
+                                               .FilterStartDate(depositParameters.startDate)
+                                               .FilterEndtDate(depositParameters.endDate)
+                                               .IncludeCourse()
+                                               .ApplySort(depositParameters.Orderby)
+                                               .Skip((depositParameters.PageNumber - 1) * depositParameters.PageSize)
+                                               .Take(depositParameters.PageSize)
+                                               .ToListAsync(d => _mapper.Map<OrderItemDTO>(d));
 
             var count = await BuildQuery().FilterByUserId(userid)
                                           .CountAsync();
@@ -46,5 +49,19 @@ namespace Repository.Repositories
             return pageList;
         }
 
+        public async Task<PagedList<EarningDTO>> GetEarningAsync(OrderParameters orderParameters, Guid userId)
+        {
+            //var result = await _context.Orders.GroupBy(o => o.CreatedAt.Date)
+            //    .Select(o => new EarningDTO
+            //    {
+            //        Earning = o.Select(c => c.TotalPrice).Sum(),
+            //        CreatedAt = o.Key,
+            //        Count = o.Select(c => c).Count(),
+            //    })
+            //    .ToListAsync();
+
+            //return result;
+            return null;
+        }
     }
 }

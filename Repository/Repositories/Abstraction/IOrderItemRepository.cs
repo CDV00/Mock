@@ -12,6 +12,7 @@ namespace Repository.Repositories.Abstraction
     public interface IOrderItemRepository : IRepository<OrderItem>
     {
         IOrderItemQuery BuildQuery();
+        Task<PagedList<EarningDTO>> GetEarningAsync(OrderParameters orderParameters, Guid userId);
         Task<PagedList<OrderItemDTO>> GetStatements(DepositParameters depositParameters, Guid userid);
     }
 }

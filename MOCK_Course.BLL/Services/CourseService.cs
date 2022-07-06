@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Repository.Repositories.Abstraction;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Course.BLL.Services
 {
@@ -237,20 +238,20 @@ namespace Course.BLL.Services
         // Upload status course: Id course, status
         public async Task<BaseResponse> UpdateStatus(CourseStatusUpdateRequest courseStatusUpdateRequest)
         {
-                var course = await _cousesRepository.BuildQuery()
-                                                    .FilterById(courseStatusUpdateRequest.CourseId)
-                                                    .AsSelectorAsync(c => c);
+            var course = await _cousesRepository.BuildQuery()
+                                                .FilterById(courseStatusUpdateRequest.CourseId)
+                                                .AsSelectorAsync(c => c);
 
-                if (course == null)
-                {
-                    return new Response<BaseResponse>(false, "can't find course", null);
-                }
+            if (course == null)
+            {
+                return new Response<BaseResponse>(false, "can't find course", null);
+            }
 
-                course.status = (Status)courseStatusUpdateRequest.status;
-                await _unitOfWork.SaveChangesAsync();
+            course.status = (Status)courseStatusUpdateRequest.status;
+            await _unitOfWork.SaveChangesAsync();
+            //await _notificationHubContext.Clients.All.SendAsync();
 
-
-                return new Response<CourseDTO>(
+            return new Response<CourseDTO>(
                     true
                 );
         }
@@ -302,7 +303,7 @@ namespace Course.BLL.Services
             return new ApiOkResponse<CourseDTO>(CourseResponse);
         }
 
-        public async Task<ApiBaseResponse> UpdatePatch(Guid id, 
+        public async Task<ApiBaseResponse> UpdatePatch(Guid id,
             JsonPatchDocument<CourseForUpdateRequest> coursePatch, Guid userId)
         {
             var course = await _cousesRepository.BuildQuery()

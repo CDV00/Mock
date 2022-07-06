@@ -72,7 +72,7 @@ namespace Repository.Repositories
                                             .FilterByAddedCart(parameters.StatusOfUser, userId)
                                             .FilterByPurchased(parameters.StatusOfUser, userId, parameters.IsPurchased)
                                             .FilterIsActive(parameters.IsActive)
-                                            .FilterByOwner(parameters.IsOwner, userId)
+                                            //.FilterByOwner(parameters.IsOwner, userId)
                                             .ApplySort(parameters.Orderby)
                                             .Skip((parameters.PageNumber - 1) * parameters.PageSize)
                                             .Take(parameters.PageSize)
@@ -92,7 +92,7 @@ namespace Repository.Repositories
                                           .FilterByEnrollmented(parameters.StatusOfUser, userId, parameters.IsEnrollemt)
                                           .FilterByAddedCart(parameters.StatusOfUser, userId)
                                           .FilterIsActive(parameters.IsActive)
-                                          .FilterByOwner(parameters.IsOwner, userId)
+                                          //.FilterByOwner(parameters.IsOwner, userId)
                                           .CountAsync();
 
             return new PagedList<CourseDTO>(courses, count, parameters.PageNumber, parameters.PageSize);

@@ -1,10 +1,17 @@
-﻿using Course.DAL.Data;
+﻿using Course.BLL.Responses;
+using Course.DAL.Data;
 using Course.DAL.Models;
 using Course.DAL.Queries.Abstraction;
 using Microsoft.EntityFrameworkCore;
 using SES.HomeServices.Data.Queries.Abstractions;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+using System.Linq.Dynamic.Core;
+using Entities.ParameterRequest;
 
 namespace Course.DAL.Queries
 {
@@ -53,7 +60,7 @@ namespace Course.DAL.Queries
         }
         public IOrderQuery IncludeCourse()
         {
-            Query.Include(c => c.OrderItem).ThenInclude(o=>o.Course).Load();
+            Query.Include(c => c.OrderItem).ThenInclude(o => o.Course).Load();
             return this;
         }
         public IOrderQuery IncludeUser()
@@ -71,14 +78,36 @@ namespace Course.DAL.Queries
             Query = Query.Where(type => type.Id == Id);
             return this;
         }
-        public IOrderQuery GroupByCreateAt()
+
+        public Task<List<EarningDTO>> GetGroupByCreate(OrderParameters parameter)
         {
-            Query.GroupBy(type => type.CreatedAt.Date).Select(g => new
-            {
-                CreatedAt = g.Key
-            });
-            return this;
+            return Query
+                        .GroupBy(o => o.CreatedAt.Date)
+                        .Select(o => new EarningDTO
+                        {
+                            Earning = o.Select(c => c.TotalPrice).Sum(),
+                            CreatedAt = o.Key,
+                            Count = o.Select(c => c).Count(),
+                        })
+                        .Skip((parameter.PageNumber - 1) * parameter.PageSize)
+                        .Take(parameter.PageSize)
+                        .OrderByDescending(o => o.CreatedAt)
+                        .ToListAsync();
         }
+
+        public Task<int> CountGroupByCreate(OrderParameters parameter)
+        {
+            return Query
+                        .GroupBy(o => o.CreatedAt.Date)
+                        .Select(o => o.Key)
+                        .Skip((parameter.PageNumber - 1) * parameter.PageSize)
+                        .Take(parameter.PageSize)
+                        .CountAsync();
+        }
+
+
+
+
         public IOrderQuery FilterByCreateAt(DateTime CreatedAt)
         {
             Query = Query.Where(type => type.CreatedAt.Date == CreatedAt.Date);
@@ -86,7 +115,7 @@ namespace Course.DAL.Queries
         }
         public IOrderQuery FilterStartDate(DateTime? CreateAt)
         {
-            if(CreateAt is null)
+            if (CreateAt is null)
             {
                 return this;
             }
@@ -104,10 +133,10 @@ namespace Course.DAL.Queries
         }
         public IOrderQuery FilterByUserIdInstructor(Guid userId)
         {
-            var orderItems = _dbContext.OrderItems.AsQueryable().Where(orderItem => orderItem.Course.UserId == userId);
-            Query = Query.Where(o => orderItems.Any(oi => oi.OrderId == o.Id));
+            Query = Query.Where(o => o.UserId == userId);
 
             return this;
         }
+
     }
 }

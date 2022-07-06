@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace Entities.ParameterRequest
 {
-    public class OrderParameters: RequestParameters
+    public class OrderParameters : RequestParameters
     {
         public DateTime? startDay { get; set; }
         public DateTime? endDate { get; set; }
-        public string Orderby { get; set; }
     }
 }

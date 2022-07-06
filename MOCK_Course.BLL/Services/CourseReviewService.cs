@@ -20,20 +20,16 @@ namespace Course.BLL.Services
         private readonly ICourseRepository _cousesRepository;
         private readonly ICourseReviewRepository _courseReviewRepository;
         private readonly IEnrollmentRepository _enrollmentRepository;
-        private readonly INotificationRepository _notificationRepository;
-        private readonly IHubContext<BroadcastHub, IHubClient> _hubContext;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public CourseReviewService(ICourseReviewRepository courseReviewRepository, ICourseRepository cousesRepository, IEnrollmentRepository enrollmentRepository, INotificationRepository notificationRepository, IHubContext<BroadcastHub, IHubClient> hubContext, IUnitOfWork unitOfWork, IMapper mapper)
+        public CourseReviewService(ICourseReviewRepository courseReviewRepository, ICourseRepository cousesRepository, IEnrollmentRepository enrollmentRepository, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _courseReviewRepository = courseReviewRepository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _enrollmentRepository = enrollmentRepository;
             _cousesRepository = cousesRepository;
-            _notificationRepository = notificationRepository;
-            _hubContext = hubContext;
         }
 
 
@@ -66,10 +62,7 @@ namespace Course.BLL.Services
                 Messenge = "Add"
             };
 
-            await _notificationRepository.CreateAsync(notification);
-
             await _unitOfWork.SaveChangesAsync();
-            await _hubContext.Clients.All.BroadcastMessage();
 
             var courseReviewDTO = _mapper.Map<CourseReviewDTO>(courseReview);
             return new ApiOkResponse<CourseReviewDTO>(courseReviewDTO);

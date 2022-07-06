@@ -15,6 +15,9 @@ using Course.DAL.Repositories.Abstraction;
 using CourseAPI.ActionFilters;
 using CourseAPI.Utility;
 using LoggerService;
+using Marvin.Cache.Headers;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Features;
@@ -222,7 +225,6 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IQuizOptionRepository, QuizOptionRepository>();
             services.AddScoped<IDipositRepository, DipositRepository>();
             services.AddScoped<IAssignmentCompletionRepository, AssignmentCompletionRepository>();
-            services.AddScoped<INotificationRepository, NotificationRepository>();
             services.AddScoped<ILectureAttachmentRepository, LectureAttachmentRepository>();
         }
         /// <summary>
@@ -297,6 +299,30 @@ namespace CourseAPI.Extensions.ServiceExtensions
             });
         }
 
+        public static void ConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddAuthentication()
+                          .AddFacebook(facebookOptions =>
+                          {
+                              facebookOptions.AppId = configuration["Authentication:Facebook:AppId"];
+                              facebookOptions.AppSecret = configuration["Authentication:Facebook:AppSecret"];
+                          })
+                          .AddGoogle(googleOptions =>
+                          {
+                              IConfigurationSection googleAuthNSection = configuration.GetSection("Authentication:Google");
+                              googleOptions.ClientId = googleAuthNSection["ClientId"];
+                              googleOptions.ClientSecret = googleAuthNSection["ClientSecret"];
+
+                          });
+            services.AddAuthentication(
+                options =>
+                {
+                    options.DefaultChallengeScheme = FacebookDefaults.AuthenticationScheme;
+                    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
+                });
+        }
+
         public static void AddCustomMediaTypes(this IServiceCollection services)
         {
             services.Configure<MvcOptions>(config =>
@@ -308,6 +334,10 @@ namespace CourseAPI.Extensions.ServiceExtensions
                     newtonsoftJsonOutputFormatter
                     .SupportedMediaTypes
                     .Add("application/vnd.codemaze.hateoas+json");
+                    newtonsoftJsonOutputFormatter
+                    .SupportedMediaTypes
+                    .Add("application/vnd.codemaze.apiroot+json");
+
                 }
                 var xmlOutputFormatter = config.OutputFormatters
                .OfType<XmlDataContractSerializerOutputFormatter>()?.FirstOrDefault();
@@ -316,8 +346,26 @@ namespace CourseAPI.Extensions.ServiceExtensions
                     xmlOutputFormatter
                     .SupportedMediaTypes
                     .Add("application/vnd.codemaze.hateoas+xml");
+                    xmlOutputFormatter
+                    .SupportedMediaTypes
+                    .Add("application/vnd.codemaze.apiroot+xml");
                 }
             });
         }
+        public static void ConfigureHttpCacheHeaders(this IServiceCollection services) =>
+                                                    services.AddHttpCacheHeaders(
+                                                        (expirationOpt) =>
+                                                        {
+                                                            expirationOpt.MaxAge = 65;
+                                                            expirationOpt.CacheLocation = CacheLocation.Private;
+                                                        },
+                                                         (validationOpt) =>
+                                                         {
+                                                             validationOpt.MustRevalidate = true;
+                                                         }
+                                                        );
+
+        public static void ConfigureResponseCaching(this IServiceCollection services) =>
+            services.AddResponseCaching();
     }
 }

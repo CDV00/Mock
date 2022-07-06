@@ -1,14 +1,13 @@
-﻿using System.IO;
-using Contracts;
+﻿using Contracts;
 using Course.BLL.Extensions;
 using Course.DAL.Models;
+using CourseAPI.Controllers;
 using CourseAPI.Extensions.Middleware;
 using CourseAPI.Extensions.ServiceExtensions;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -44,38 +43,23 @@ namespace CourseAPI
             services.AddAutoMapper(typeof(MapperInitializer));
             services.ConfigureInvalidFilter();
             services.ConfigureUpload();
+            services.ConfigureAuthentication(Configuration);
             services.AddCustomMediaTypes();
+            services.ConfigureHttpCacheHeaders();
+            services.ConfigureResponseCaching();
 
             services.AddSignalR();
 
             services.AddControllers(config =>
             {
-                config.ReturnHttpNotAcceptable = true;
+                //config.ReturnHttpNotAcceptable = true;
+                config.CacheProfiles.Add("120SecondsDuration", new CacheProfile
+                {
+                    Duration = 120
+                });
             }).AddNewtonsoftJson();
 
             //login Ex
-            services.AddAuthentication()
-                .AddFacebook(facebookOptions =>
-                {
-                    facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
-                    facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
-                })
-                .AddGoogle(googleOptions =>
-                {
-                    // Đọc thông tin Authentication:Google từ appsettings.json
-                    IConfigurationSection googleAuthNSection = Configuration.GetSection("Authentication:Google");
-                    // Thiết lập ClientID và ClientSecret để truy cập API google
-                    googleOptions.ClientId = googleAuthNSection["ClientId"];
-                    googleOptions.ClientSecret = googleAuthNSection["ClientSecret"];
-
-                });
-            services.AddAuthentication(
-                options =>
-                {
-                    options.DefaultChallengeScheme = FacebookDefaults.AuthenticationScheme;
-                    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-
-                });
         }
 
 
@@ -111,6 +95,9 @@ namespace CourseAPI
 
             app.UseAuthentication();
 
+            app.UseResponseCaching();
+            app.UseHttpCacheHeaders();
+
             app.UseRouting();
 
             app.UseAuthorization();
@@ -122,7 +109,7 @@ namespace CourseAPI
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHub<BroadcastHub>("/notify");
+                //endpoints.MapHub<Course.BLL.Services.Hubs.NotificationHub>("notificationHub");
             });
         }
     }

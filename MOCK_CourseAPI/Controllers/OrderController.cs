@@ -48,6 +48,11 @@ namespace CourseAPI.Controllers
         /// <summary>
         /// Add New Order
         /// </summary>
+        /// <remarks>
+        /// Payment type:
+        /// 1: stripe
+        /// 2: balance user
+        /// </remarks>
         /// <param name="orderRequest"></param>
         /// <returns></returns>
         [HttpPost]
@@ -106,7 +111,7 @@ namespace CourseAPI.Controllers
         //    var result = await _orderService.GetAll(userId);
         //    if (result.IsSuccess == false)
         //        return BadRequest(result);
-        //    return Ok(result);
+        //    return Ok(result);()
         //}
 
         /// <summary>
@@ -115,7 +120,6 @@ namespace CourseAPI.Controllers
         /// <param name="orderRequest"></param>
         /// <returns></returns>
         [HttpGet("Get-all-Earning")]
-        [AllowAnonymous]
         public async Task<ActionResult<ApiOkResponses<EarningDTO>>> GetEarning([FromQuery] OrderParameters orderParameters)
         {
             Guid userId = User.GetUserId();

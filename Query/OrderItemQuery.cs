@@ -45,6 +45,12 @@ namespace Course.DAL.Queries
             Query = Query.Where(type => type.Order.CreatedAt >= CreateAt);
             return this;
         }
+
+        public IOrderItemQuery GroupByDateTime()
+        {
+            //Query = Query.GroupBy(o => new { o.Order.CreatedAt, o.Course.Title });
+            return this;
+        }
         public IOrderItemQuery FilterEndtDate(DateTime? CreateAt)
         {
             if (CreateAt is null)
