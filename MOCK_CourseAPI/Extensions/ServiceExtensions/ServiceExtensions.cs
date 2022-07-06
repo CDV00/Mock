@@ -97,7 +97,10 @@ namespace CourseAPI.Extensions.ServiceExtensions
             {
                 //CVPANHTNT6-59
                 options.UseSqlServer(configuration.GetConnectionString("MOCK_Course"), b =>
-                b.MigrationsAssembly("CourseAPI"));
+                {
+                    b.MigrationsAssembly("CourseAPI");
+                    b.EnableRetryOnFailure();
+                });
             });
         }
 
