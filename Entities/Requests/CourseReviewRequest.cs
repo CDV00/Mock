@@ -12,9 +12,7 @@ namespace Course.BLL.Requests
     }
     public class CourseReviewUpdateRequest
     {
-        [Required]
         public string Content { get; set; }
-        [Required]
         public float Rating { get; set; }
     }
 }

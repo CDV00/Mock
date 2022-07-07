@@ -4,10 +4,6 @@ using Course.BLL.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Course.BLL.Services.Abstraction;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Extensions.Primitives;
-using System;
 
 namespace CourseAPI.Controllers
 {
@@ -77,14 +73,6 @@ namespace CourseAPI.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<BaseResponse>> ForgetPassword(string email)
         {
-            /*var originValue = Request.Headers["Origin"].FirstOrDefault();
-
-            // or
-
-            StringValues originValues;
-            Request.Headers.TryGetValue("Origin", out originValues);
-            Console.WriteLine(originValue);*/
-
             var result = await _userService.ForgetPassWord(email);
             if (result.IsSuccess)
             {

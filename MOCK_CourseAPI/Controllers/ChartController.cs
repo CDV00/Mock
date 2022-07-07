@@ -1,7 +1,4 @@
-﻿using Course.BLL.Requests;
-using Course.BLL.Responses;
-using Course.BLL.DTO;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -9,11 +6,7 @@ using CourseAPI.Extensions.ControllerBase;
 using Course.BLL.Services.Abstraction;
 using CourseAPI.Presentation.Controllers;
 using Entities.Responses;
-using Entities.ParameterRequest;
-using Course.BLL.Share.RequestFeatures;
-using Entities.Extension;
-using Entities.Constants;
-using System.Text.Json;
+using Entities.DTOs;
 
 namespace CourseAPI.Controllers
 {
@@ -23,11 +16,14 @@ namespace CourseAPI.Controllers
     public class ChartController : ApiControllerBase
     {
         private readonly IOrderService _orderService;
+        private readonly ISubscriptionService _subscriptionService;
         private readonly IOrderItemService _orderItemService;
-        public ChartController(IOrderService orderService, IOrderItemService orderItemService)
+        public ChartController(IOrderService orderService, IOrderItemService orderItemService,
+            ISubscriptionService subscriptionService)
         {
             _orderService = orderService;
             _orderItemService = orderItemService;
+            _subscriptionService = subscriptionService;
         }
 
 
@@ -36,21 +32,43 @@ namespace CourseAPI.Controllers
         /// </summary>
         /// <param name="orderRequest"></param>
         /// <returns></returns>
-        [HttpGet("Sale-Of-Year")]
-        public async Task<ActionResult<ApiOkResponses<EarningDTO>>> SaleOfYear([FromQuery] OrderParameters orderParameters)
+        [HttpGet("sum-price-sale-of-course-group-by-moth")]
+        [AllowAnonymous]
+        public async Task<ActionResult<ApiOkResponse<ListAnalysisOrderResponse>>> CountMoneyOrderByMonth()
         {
             Guid userId = User.GetUserId();
 
-            var result = await _orderService.GetEarning(orderParameters, userId);
+            var result = await _orderService.SumMoneyOrderByMonth(userId);
             if (!result.IsSuccess)
                 return ProcessError(result);
 
-            var coursePagedList = result.GetResult<PagedList<EarningDTO>>();
+            return Ok(result);
+        }
 
-            Response.Headers.Add(SystemConstant.PagedHeader,
-                                 JsonSerializer.Serialize(coursePagedList.MetaData));
+        [HttpGet("count-sale-of-course-by-week")]
+        [AllowAnonymous]
+        public async Task<ActionResult<ApiOkResponse<ListSaleAnalysisResponse>>> CountOrderByWeek()
+        {
+            Guid userId = User.GetUserId();
+
+            var result = await _orderService.CountOrderByWeek(userId);
+            if (!result.IsSuccess)
+                return ProcessError(result);
 
             return Ok(result);
         }
-         }
+
+        [HttpGet("count-subscription-by-month")]
+        [AllowAnonymous]
+        public async Task<ActionResult<ApiOkResponse<ListSaleAnalysisResponse>>> CountSubcriberByMonth()
+        {
+            Guid userId = User.GetUserId();
+
+            var result = await _subscriptionService.CountSubcriberByMonth(userId);
+            if (!result.IsSuccess)
+                return ProcessError(result);
+
+            return Ok(result);
+        }
+    }
 }

@@ -18,5 +18,6 @@ namespace Course.BLL.Services.Abstraction
         Task<ApiBaseResponse> GetStatements(OrderParameters orderParameters, Guid userId);
         Task<ApiBaseResponse> GetTotal(Guid courseId);
         Task<ApiBaseResponse> IsPurchased(Guid userId, Guid courseId);
+        Task<ApiOkResponse<ListSaleAnalysisResponse>> CountOrderByWeek(Guid userId);
     }
 }

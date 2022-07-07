@@ -107,6 +107,7 @@ namespace Course.BLL.Services
             await UpdateRate(courseReviewUpdateRequest, courseReview);
 
             _mapper.Map(courseReviewUpdateRequest, courseReview);
+            courseReview.UpdatedAt = DateTime.UtcNow;
             await _unitOfWork.SaveChangesAsync();
             var courseReviewDTO = _mapper.Map<CourseReviewDTO>(courseReview);
             return new ApiOkResponse<CourseReviewDTO>(courseReviewDTO);

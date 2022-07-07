@@ -10,6 +10,9 @@ using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using Course.BLL.Share.RequestFeatures;
 using Entities.ParameterRequest;
+using Microsoft.EntityFrameworkCore;
+using Entities.DTOs;
+using Entities.Responses;
 
 namespace Course.BLL.Services
 {
@@ -48,6 +51,7 @@ namespace Course.BLL.Services
                 {
                     UserId = instructorId,
                     SubscriberId = userId,
+                    CreatedAt = DateTime.UtcNow,
                 };
 
                 await _subscriptionRepository.CreateAsync(subscription);
@@ -158,7 +162,7 @@ namespace Course.BLL.Services
                                                     .FilterBySubscriber(subscriptionParameters.Keyword)
                                                     .IncludeInstructor()
                                                     .ToListAsync(u => _mapper.Map<UserDTO>(u.User));
-           
+
 
             var count = await _subscriptionRepository.BuildQuery()
                                                      .FilterBySubscriberId(userId)
@@ -194,6 +198,22 @@ namespace Course.BLL.Services
                 return new Response<SubscriptionDTO>(false, ex.Message, null);
             }
         }
-    }
 
+        public async Task<ApiOkResponse<ListAnalysisSubscriberResponse>> CountSubcriberByMonth(Guid subscriberId)
+        {
+            var filterdata = await _subscriptionRepository.FindByCondition(j => j.SubscriberId == subscriberId).ToListAsync();
+
+            var yearAndMonthRange = filterdata.Select(m => m.CreatedAt.Year).Distinct().OrderBy(t => t).Select(m => Enumerable.Range(1, 12).Select(t => new { year = m, month = t })).ToList();
+
+            var result = yearAndMonthRange.Select(m => m.GroupJoin(filterdata, key => key, f => new { year = f.CreatedAt.Year, month = f.CreatedAt.Month }, (key, f) => new AnalysisSubscriberDTO { Year = key.year, Month = key.month, Amount = f.Count() }).OrderBy(d => d.Year).ThenBy(d => d.Month).ToList()).ToList();
+
+            var totalCount = _subscriptionRepository.FindByCondition(j => j.SubscriberId == subscriberId).Count();
+
+            return new ApiOkResponse<ListAnalysisSubscriberResponse>(new ListAnalysisSubscriberResponse()
+            {
+                Data = result,
+                Total = totalCount
+            });
+        }
+    }
 }

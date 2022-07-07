@@ -153,17 +153,5 @@ namespace CourseAPI.Controllers
 
             return Ok(result);
         }
-        [HttpGet("sum-price-sale-of-course-group-by-moth")]
-        [AllowAnonymous]
-        public async Task<ActionResult<ApiOkResponse<ListAnalysisOrderResponse>>> CountMoneyOrderByMonth()
-        {
-            Guid userId = User.GetUserId();
-
-            var result = await _orderService.SumMoneyOrderByMonth(userId);
-            if (!result.IsSuccess)
-                return ProcessError(result);
-
-            return Ok(result);
-        }
     }
 }

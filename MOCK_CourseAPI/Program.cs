@@ -22,21 +22,21 @@ namespace CourseAPI
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
-                //using (var appContext = scope.ServiceProvider.GetRequiredService<AppDbContext>())
-                //{
-                //    try
-                //    {
-                //        var userManager = services.GetRequiredService<UserManager<AppUser>>();
-                //        var roleManager = services.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
-                //        await appContext.Database.MigrateAsync();
-                //        await Seed.SeedDataAsync(userManager, roleManager, appContext);
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //        var logger = services.GetRequiredService<ILogger<Program>>();
-                //        logger.LogError(ex, "An error occurred during migration");
-                //    }
-                //}
+                using (var appContext = scope.ServiceProvider.GetRequiredService<AppDbContext>())
+                {
+                    try
+                    {
+                        var userManager = services.GetRequiredService<UserManager<AppUser>>();
+                        var roleManager = services.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
+                        await appContext.Database.MigrateAsync();
+                        await Seed.SeedDataAsync(userManager, roleManager, appContext);
+                    }
+                    catch (Exception ex)
+                    {
+                        var logger = services.GetRequiredService<ILogger<Program>>();
+                        logger.LogError(ex, "An error occurred during migration");
+                    }
+                }
             }
 
             host.Run();

@@ -457,6 +457,7 @@ namespace Course.BLL.Services
                 {
                     return new Response<BaseResponse>(false, "Password doesn't match its confirmation", null);
                 }
+                user.UpdatedAt = DateTime.UtcNow;
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var Result = await _userManager.ResetPasswordAsync(user, token, resetPasswordRequest.newPassword);
 

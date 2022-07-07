@@ -249,15 +249,55 @@ namespace Course.BLL.Services
 
             var yearAndMonthRange = filterdata.Select(m => m.CreatedAt.Year).Distinct().OrderBy(t => t).Select(m => Enumerable.Range(1, 12).Select(t => new { Year = m, Month = t })).ToList();
 
-            var result = yearAndMonthRange.Select(m => m.GroupJoin(filterdata, key => key, f => new { Year = f.CreatedAt.Year, Month = f.CreatedAt.Month }, (key, f) => new OrderAnalysisDisplayDTO { Year = key.Year, Month = key.Month, Amount = f.Sum(o=>o.TotalPrice) }).OrderBy(d => d.Year).ThenBy(d => d.Month).ToList()).ToList();
+            var result = yearAndMonthRange.Select(m => m.GroupJoin(filterdata, key => key, f => new { Year = f.CreatedAt.Year, Month = f.CreatedAt.Month }, (key, f) => new OrderAnalysisDisplayDTO { Year = key.Year, Month = key.Month, Amount = f.Sum(o => o.TotalPrice) }).OrderBy(d => d.Year).ThenBy(d => d.Month).ToList()).ToList();
 
-            var totalCount = filterdata.Sum(o=>o.TotalPrice);
+            var totalCount = filterdata.Sum(o => o.TotalPrice);
 
             return new ApiOkResponse<ListAnalysisOrderResponse>(new ListAnalysisOrderResponse
             {
 
                 Data = result,
                 Total = totalCount
+            }
+            );
+        }
+
+        public async Task<ApiOkResponse<ListSaleAnalysisResponse>> CountOrderByWeek(Guid userId)
+        {
+            DayOfWeek currentday = DateTime.Now.DayOfWeek;
+            int daysTillCurrentday = currentday - DayOfWeek.Sunday;
+            DateTime lastWeekStartDate = DateTime.Now.AddDays(-daysTillCurrentday - 1);
+            DateTime lastWeekEndDate = lastWeekStartDate.AddDays(-6);
+            var getOrderId = await _orderItemRepository.FindByCondition(o => o.Course.UserId == userId).Include(x => x.Course).Select(x => x.CourseId).AnyAsync();
+            var data = await _orderRepository.FindByCondition(x => x.UserId == userId
+                                                         && x.CreatedAt >= lastWeekEndDate
+                                                         && x.CreatedAt <= lastWeekStartDate)
+                                                          .GroupBy(p => new { p.CreatedAt })
+                                                          .Select(p => new SaleAnalysisDTO
+                                                          {
+                                                              Date = p.Key.CreatedAt,
+                                                              Sale = p.Count()
+                                                          }).ToListAsync();
+
+            var total = await _orderRepository.FindByCondition(x => x.UserId == userId
+                                                         && x.CreatedAt >= lastWeekEndDate
+                                                         && x.CreatedAt <= lastWeekStartDate).CountAsync();
+            var listDayOfWeek = new List<DayOfWeek> { DayOfWeek.Sunday, DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday };
+            foreach (var item in listDayOfWeek)
+            {
+                if (!data.Any(p => p.DayOfWeek == item))
+                {
+                    data.Add(new SaleAnalysisDTO
+                    {
+                        Date = DateTime.Today.AddDays(-(int)(DateTime.Today.DayOfWeek - item)),
+                        Sale = 0
+                    });
+                }
+            }
+            return new ApiOkResponse<ListSaleAnalysisResponse>(new ListSaleAnalysisResponse
+            {
+                Total = total,
+                Data = data
             }
             );
         }

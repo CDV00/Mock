@@ -39,17 +39,15 @@ namespace Repository.Repositories
             if (permanent == null || permanent == false)
             {
                 _object.IsDeleted = true;
-                return;
             }
 
-            DbSet.Remove(_object);
+           DbSet.Remove(_object);
         }
 
         public virtual void RemoveRange(List<T> _objects)
         {
             Entity().RemoveRange(_objects);
         }
-
 
         public virtual IQueryable<T> GetAll() => DbSet.AsNoTracking();
 
