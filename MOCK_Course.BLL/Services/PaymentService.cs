@@ -94,7 +94,7 @@ namespace MOCK_Course.BLL.Services.Implementations
             }
             catch (Exception ex)
             {
-                return new BaseResponse(false, null, ex.Message.ToString());
+                return new BaseResponse(false, ex.Message.ToString(), "500");
             }
         }
     }
