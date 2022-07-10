@@ -14,7 +14,6 @@ namespace Course.DAL.Models
         public string FacebookLink { get; set; }
         public string LinkedlnLink { get; set; }
         public string YoutubeLink { get; set; }
-        //public string Instroduction { get; set; }
         public string HeadLine { get; set; }
         public string Description { get; set; }
 
@@ -38,6 +37,8 @@ namespace Course.DAL.Models
         public ICollection<ShoppingCart> Carts { get; set; }
         public ICollection<SavedCourses> SavedCourses { get; set; }
         public ICollection<Notification> Notifications { get; set; }
+        public ICollection<MessageChat> MessageChats { get; set; }
+        public ICollection<Participant> Participants { get; set; }
         //public ICollection<Notification> SentNotifications { get; set; }
     }
 }

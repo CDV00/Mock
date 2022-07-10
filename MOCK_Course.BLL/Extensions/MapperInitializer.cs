@@ -163,6 +163,8 @@ namespace Course.BLL.Extensions
             //CreateMap<CourseForUpdateRequest, JsonPatchDocument<CourseForUpdateRequest>>().ReverseMap();
 
             //notification
+            CreateMap<RoomMessageDTO, Room>().ReverseMap();
+            CreateMap<RoomDTO, Room>().ReverseMap();
         }
     }
 }

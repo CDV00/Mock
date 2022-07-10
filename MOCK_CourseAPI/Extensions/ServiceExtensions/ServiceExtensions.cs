@@ -30,6 +30,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MOCK_Course.BLL.Services.Implementations;
+using MOCK_Course.DAL.Repositories.Implementations;
 using Newtonsoft.Json;
 using Repository.DataShaping;
 using Repository.Repositories;
@@ -229,6 +230,9 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IDipositRepository, DipositRepository>();
             services.AddScoped<IAssignmentCompletionRepository, AssignmentCompletionRepository>();
             services.AddScoped<ILectureAttachmentRepository, LectureAttachmentRepository>();
+            services.AddScoped<IMessageChatRepository, MessageChatRepository>();
+            services.AddScoped<IRoomRepository, RoomRepository>();
+            services.AddScoped<IParticipantRepository, ParticipantRepository>();
         }
         /// <summary>
         /// Configure Services
@@ -276,6 +280,7 @@ namespace CourseAPI.Extensions.ServiceExtensions
             services.AddScoped<IAssignmentCompletionService, AssignmentCompletionService>();
             services.AddScoped<IDataShaper<CourseDTO>, DataShaper<CourseDTO>>();
             services.AddScoped<ValidateMediaTypeAttribute>();
+            services.AddScoped<IRoomService, RoomService>();
             services.AddScoped<CourseLinks>();
         }
 

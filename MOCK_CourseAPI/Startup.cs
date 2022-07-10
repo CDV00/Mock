@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Course.BLL.Extensions;
+using Course.BLL.Services;
 using Course.DAL.Models;
 using CourseAPI.Controllers;
 using CourseAPI.Extensions.Middleware;
@@ -73,6 +74,7 @@ namespace CourseAPI
             else
             {
                 app.UseHsts();
+                //app.UseMiddleware<ExceptionMiddleware>();
             }
 
             app.UseStaticFiles();
@@ -83,7 +85,6 @@ namespace CourseAPI
                 options.SwaggerEndpoint("/swagger/v2/swagger.json", "MOCK_CourseAPI v2");
             });
 
-            app.UseMiddleware<ExceptionMiddleware>();
             app.UseHttpsRedirection();
 
             app.UseCors("CorsPolicy");
@@ -109,7 +110,7 @@ namespace CourseAPI
 
             app.UseEndpoints(endpoints =>
             {
-                //endpoints.MapHub<Course.BLL.Services.Hubs.NotificationHub>("notificationHub");
+                endpoints.MapHub<ChatHubService>("/chat");
             });
         }
     }

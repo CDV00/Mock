@@ -43,6 +43,9 @@ namespace Course.DAL.Data
         //public DbSet<QuizSetting> QuizSettings { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<LectureAttachment> LectureAttachments { get; set; }
+        public DbSet<MessageChat> MessageChats { get; set; }
+        public DbSet<Room> Rooms { get; set; }
+        public DbSet<Participant> Participants { get; set; }
 
         public DbSet<Logs> Logs { get; set; }
         #endregion
@@ -84,9 +87,10 @@ namespace Course.DAL.Data
             modelBuilder.ApplyConfiguration(new QuizCompletionConfiguration());
             modelBuilder.ApplyConfiguration(new AssignmentCompletionConfiguration());
             modelBuilder.ApplyConfiguration(new LectureAttachmentConfiguration());
+            modelBuilder.ApplyConfiguration(new MessageChatConfiguration());
+            modelBuilder.ApplyConfiguration(new ParticipantConfiguration());
 
             modelBuilder.ConfigTablesOfIdentity();
-            //modelBuilder.SeedData();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
