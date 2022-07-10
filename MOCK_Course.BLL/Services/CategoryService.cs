@@ -8,6 +8,7 @@ using Course.DAL.Repositories.Abstraction;
 using Course.BLL.Services.Abstraction;
 using Entities.ParameterRequest;
 using Course.BLL.Share.RequestFeatures;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Course.BLL.Services
 {
@@ -18,7 +19,8 @@ namespace Course.BLL.Services
         private readonly IMapper _mapper;
         public CategoryService(ICategoryRepository categoryRepository,
             IMapper mapper,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork
+)
         {
             _categoryRepository = categoryRepository;
             _mapper = mapper;

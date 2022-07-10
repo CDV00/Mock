@@ -24,6 +24,7 @@ using Course.BLL.Services.Abstraction;
 using Entities.Constants;
 using static Google.Apis.Auth.JsonWebToken;
 using Google.Apis.Auth.OAuth2;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Course.BLL.Services
 {
@@ -41,7 +42,16 @@ namespace Course.BLL.Services
         private AppUser _user;
         private UserDTO _userResponse = new UserDTO();
         private static readonly HttpClient Client = new();
-        public AuthenticationService(UserManager<AppUser> userManager, IMapper mapper, SignInManager<AppUser> signInManager, RoleManager<IdentityRole<Guid>> roleManager, ILogger<AuthenticationService> logger, IOptions<JwtConfiguration> configuration, IEmailService emailService, IConfiguration configurations)
+        private readonly IHubContext<NotiHubService> _hubContext;
+        public AuthenticationService(UserManager<AppUser> userManager,
+                                     IMapper mapper,
+                                     SignInManager<AppUser> signInManager,
+                                     RoleManager<IdentityRole<Guid>> roleManager,
+                                     ILogger<AuthenticationService> logger,
+                                     IOptions<JwtConfiguration> configuration,
+                                     IEmailService emailService,
+                                     IConfiguration configurations,
+                                     IHubContext<NotiHubService> hubContext)
         {
             _mapper = mapper;
             _userManager = userManager;
@@ -52,6 +62,7 @@ namespace Course.BLL.Services
             _jwtConfiguration = _configuration.Value;
             _emailService = emailService;
             _configurations = configurations;
+            _hubContext = hubContext;
         }
         public async Task<Response<LoginDTO>> Login(LoginRequest loginRequest)
         {
@@ -75,6 +86,7 @@ namespace Course.BLL.Services
             if (token == null)
                 return new Response<LoginDTO>(false, "Authentication Error. User don't have any role, please create new account!", null);
 
+            await _hubContext.Clients.User(user.Id.ToString()).SendAsync($"You are login successful!");
             return new Response<LoginDTO>(true, new LoginDTO(token, _userResponse));
         }
 

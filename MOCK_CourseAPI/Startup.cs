@@ -111,6 +111,7 @@ namespace CourseAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<ChatHubService>("/chat");
+                endpoints.MapHub<NotiHubService>("/notification");
             });
         }
     }

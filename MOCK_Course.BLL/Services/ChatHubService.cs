@@ -37,13 +37,12 @@ namespace Course.BLL.Services
             await Clients.Group(groupName).SendAsync("Send", $"{userId} has left the group {groupName}.");
         }
 
-
-        private readonly IDictionary<string, Guid> _connections;
+        private readonly IDictionary<string, JoinGroupRequest> _connections;
         private readonly UserManager<AppUser> _userManager;
         private readonly IMessageChatService _messageChatService;
         private readonly IRoomService _roomService;
 
-        public ChatHubService(IDictionary<string, Guid> connections, IMessageChatService messageChatService, IRoomService roomService)
+        public ChatHubService(IDictionary<string, JoinGroupRequest> connections, IMessageChatService messageChatService, IRoomService roomService)
         {
             _connections = connections;
             _messageChatService = messageChatService;
@@ -52,7 +51,7 @@ namespace Course.BLL.Services
 
         public override Task OnDisconnectedAsync(Exception exception)
         {
-            if (_connections.TryGetValue(Context.ConnectionId, out Guid userId))
+            if (_connections.TryGetValue(Context.ConnectionId, out JoinGroupRequest user))
             {
                 _connections.Remove(Context.ConnectionId);
                 //Clients.Group(userConnection.Room).SendAsync("ReceiveMessage", userConnection.User, $"{userConnection.User} has left");
@@ -66,12 +65,12 @@ namespace Course.BLL.Services
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, joinGroupRequest.RoomId.ToString());
 
-            _connections[Context.ConnectionId] = joinGroupRequest.UserId;
+            _connections[Context.ConnectionId] = joinGroupRequest;
 
             var getRoom = await _roomService.GetByRoomId(joinGroupRequest.RoomId);
             await Clients.Caller.SendAsync("ReceiveHistoryMessage", getRoom.Data.Select(r => r.MessageChats));
 
-            //await SendUsersConnected(userConnection.Room);
+            await SendUsersConnected(joinGroupRequest.RoomId);
             //var a = new RoomRequest()
             //{
             //    Name = userConnection.Room,
@@ -103,13 +102,13 @@ namespace Course.BLL.Services
         //    }
         //}
 
-        //public Task SendUsersConnected(string room)
-        //{
-        //    var users = _connections.Values
-        //        .Where(c => c.Room == room)
-        //        .Select(c => c.User);
+        public Task SendUsersConnected(Guid roomId)
+        {
+            var users = _connections.Values
+                .Where(c => c.RoomId == roomId)
+                .Select(c => c);
 
-        //    return Clients.Group(room).SendAsync("UsersInRoom", users);
-        //}
+            return Clients.Group(roomId.ToString()).SendAsync("UsersInRoom", users);
+        }
     }
 }
