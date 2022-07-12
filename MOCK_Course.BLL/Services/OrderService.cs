@@ -117,31 +117,33 @@ namespace Course.BLL.Services
 
             await _orderRepository.CreateAsync(order);
 
-            //payment stripe
-            switch (orderRequest.PaymentType)
+            if (totalPrice >= 0)
             {
-                case PaymentType.Stripe:
-                    {
-                        var resultPayment = await _paymentService.PayAsync(orderRequest.Payment);
-                        if (!resultPayment.IsSuccess)
+                switch (orderRequest.PaymentType)
+                {
+                    case PaymentType.Stripe:
                         {
-                            return new PaymentFailResponse(resultPayment.Message, int.Parse(resultPayment.StatusCode));
+                            var resultPayment = await _paymentService.PayAsync(orderRequest.Payment);
+                            if (!resultPayment.IsSuccess)
+                            {
+                                return new PaymentFailResponse(resultPayment.Message, int.Parse(resultPayment.StatusCode));
+                            }
+
+                            break;
                         }
 
-                        break;
-                    }
-
-                default:
-                    {
-                        var user = await _userManager.FindByIdAsync(userId.ToString());
-                        user.Balance -= totalPrice;
-                        if (user.Balance < 0)
+                    default:
                         {
-                            return new DontEnoughtMoney(user.Balance, totalPrice);
+                            var user = await _userManager.FindByIdAsync(userId.ToString());
+                            user.Balance -= totalPrice;
+                            if (user.Balance < 0)
+                            {
+                                return new DontEnoughtMoney(user.Balance, totalPrice);
+                            }
+                            await _userManager.UpdateAsync(user);
+                            break;
                         }
-                        await _userManager.UpdateAsync(user);
-                        break;
-                    }
+                }
             }
 
             await _unitOfWork.SaveChangesAsync();
