@@ -19,7 +19,7 @@ namespace Course.BLL.Services.Abstraction
         Task<ApiBaseResponse> UpcomingCourse(CourseParameters parameter, Guid userId);
         Task<ApiBaseResponse> GetAllMyPurchase(CourseParameters parameter, Guid userId);
         Task<ApiBaseResponse> GetAllCourses(CourseParameters courseParameter, Guid? userId);
-        Task<BaseResponse> UpdateStatus(CourseStatusUpdateRequest courseStatusUpdateRequest);
+        Task<ApiBaseResponse> UpdateStatus(CourseStatusUpdateRequest courseStatusUpdateRequest);
         //Task<Responses<CourseDTO>> UpcomingCourse(Guid userId);
         Task<ApiBaseResponse> GetDetail(Guid id, Guid? userId);
         Task<ApiBaseResponse> GetAllMyLearning(CourseParameters parameter, Guid userId);

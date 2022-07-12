@@ -79,9 +79,6 @@ namespace CourseAPI.Controllers
                                  JsonSerializer.Serialize(coursePagedList.MetaData));
 
             return Ok(new ApiOkResponses<CourseDTO>(coursePagedList));
-            //var links = _courseLinks.TryGenerateLinks(coursePagedList,
-            //                                          parameters.Fields, HttpContext);
-            //return links.HasLinks ? Ok(new ApiOkResponse<CourseDTO>(links.LinkedEntities as CourseDTO)) : Ok(links.ShapedEntities);
         }
 
 
@@ -286,11 +283,12 @@ namespace CourseAPI.Controllers
         /// <returns></returns>
         [HttpPut("update-status")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Response<CourseDTO>>> UpdateStatus(CourseStatusUpdateRequest courseStatusUpdateRequest)
+        public async Task<ActionResult<ApiOkResponse<CourseDTO>>> UpdateStatus(CourseStatusUpdateRequest courseStatusUpdateRequest)
         {
             var result = await _coursesService.UpdateStatus(courseStatusUpdateRequest);
             if (result.IsSuccess == false)
-                return BadRequest(result);
+                return ProcessError(result);
+
             return Ok(result);
         }
 

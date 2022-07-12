@@ -46,11 +46,12 @@ namespace CourseAPI.Controllers
 
         [HttpPut("update-active")]
         //[Authorize(Roles = "Admin")]
-        public async Task<ActionResult<BaseResponse>> UpdateStatus(UpdateUserActiveRequest updateUserActiveRequest)
+        public async Task<ActionResult<ApiOkResponse<UserDTO>>> UpdateStatus(UpdateUserActiveRequest updateUserActiveRequest)
         {
             var result = await _userService.UpdateActive(updateUserActiveRequest);
             if (result.IsSuccess == false)
-                return BadRequest(result);
+                return ProcessError(result);
+
             return Ok(result);
         }
     }

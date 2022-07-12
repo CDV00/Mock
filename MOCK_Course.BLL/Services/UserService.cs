@@ -64,33 +64,25 @@ namespace Course.BLL.Services
         }*/
         public async Task<ApiBaseResponse> GetAllUserByRole(UserParameter parameter)
         {
-            
+
             var users = await _userRepository.GetAllUserByRole(parameter);
 
             return new ApiOkResponse<PagedList<UserDTO>>(users);
         }
         // Update User: Id, IsActive
-        public async Task<Response<BaseResponse>> UpdateActive(UpdateUserActiveRequest updateUserActiveRequest)
+        public async Task<ApiBaseResponse> UpdateActive(UpdateUserActiveRequest updateUserActiveRequest)
         {
-            try
+            var user = await _userManager.FindByIdAsync(updateUserActiveRequest.Id.ToString());
+            if (user == null)
             {
-                var user = await _userManager.FindByIdAsync(updateUserActiveRequest.Id.ToString());
-                if (user == null)
-                {
-                    return new Response<BaseResponse>(false, "can't find user", null);
-                }
-                user.IsActive = updateUserActiveRequest.IsActive;
-                await _userManager.UpdateAsync(user);
-                return new Response<BaseResponse>(
-                    true
-                );
-
+                return new NotFoundEntity(nameof(user), updateUserActiveRequest.Id);
             }
-            catch (Exception ex)
-            {
-                return new Response<BaseResponse>(false, ex.Message, null);
-            }
+            user.IsActive = updateUserActiveRequest.IsActive;
+            await _userManager.UpdateAsync(user);
+            var userDto = _mapper.Map<UserDTO>(user);
+            return new ApiOkResponse<UserDTO>(userDto);
         }
+
         public async Task<Response<UserDTO>> GetUserProfile(Guid id)
         {
             try

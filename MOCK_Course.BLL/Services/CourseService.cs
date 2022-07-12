@@ -236,7 +236,7 @@ namespace Course.BLL.Services
         }
 
         // Upload status course: Id course, status
-        public async Task<BaseResponse> UpdateStatus(CourseStatusUpdateRequest courseStatusUpdateRequest)
+        public async Task<ApiBaseResponse> UpdateStatus(CourseStatusUpdateRequest courseStatusUpdateRequest)
         {
             var course = await _cousesRepository.BuildQuery()
                                                 .FilterById(courseStatusUpdateRequest.CourseId)
@@ -244,16 +244,15 @@ namespace Course.BLL.Services
 
             if (course == null)
             {
-                return new Response<BaseResponse>(false, "can't find course", null);
+                return new NotFoundEntity(nameof(course), courseStatusUpdateRequest.CourseId);
             }
 
             course.status = (Status)courseStatusUpdateRequest.status;
             await _unitOfWork.SaveChangesAsync();
+            var courseDto = _mapper.Map<CourseDTO>(course);
             //await _notificationHubContext.Clients.All.SendAsync();
 
-            return new Response<CourseDTO>(
-                    true
-                );
+            return new ApiOkResponse<CourseDTO>(courseDto);
         }
 
         public async Task<ApiBaseResponse> Update(Guid id, CourseForUpdateRequest courseRequest, Guid userId)
