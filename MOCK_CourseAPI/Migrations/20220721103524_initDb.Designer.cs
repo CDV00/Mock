@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CourseAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220629000032_updateIDCompletion4")]
-    partial class updateIDCompletion4
+    [Migration("20220721103524_initDb")]
+    partial class initDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -227,13 +227,19 @@ namespace CourseAPI.Migrations
 
             modelBuilder.Entity("Course.DAL.Models.AssignmentCompletion", b =>
                 {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("AssignmentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("AssignmentId", "UserId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssignmentId");
 
                     b.HasIndex("UserId");
 
@@ -710,16 +716,22 @@ namespace CourseAPI.Migrations
 
             modelBuilder.Entity("Course.DAL.Models.LectureCompletion", b =>
                 {
-                    b.Property<Guid>("LectureId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("LectureId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Time")
                         .HasColumnType("int");
 
-                    b.HasKey("LectureId", "UserId");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LectureId");
 
                     b.HasIndex("UserId");
 
@@ -977,13 +989,19 @@ namespace CourseAPI.Migrations
 
             modelBuilder.Entity("Course.DAL.Models.QuizCompletion", b =>
                 {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("QuizId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("QuizId", "UserId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuizId");
 
                     b.HasIndex("UserId");
 
@@ -1112,6 +1130,9 @@ namespace CourseAPI.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("SubscriberId", "UserId");
 
                     b.HasIndex("UserId");
@@ -1190,6 +1211,98 @@ namespace CourseAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Logs");
+                });
+
+            modelBuilder.Entity("Entities.Models.MessageChat", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("RoomId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoomId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("MessageChats");
+                });
+
+            modelBuilder.Entity("Entities.Models.Participant", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RoomId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("UserId", "RoomId");
+
+                    b.HasIndex("RoomId");
+
+                    b.ToTable("Participants");
+                });
+
+            modelBuilder.Entity("Entities.Models.Room", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Rooms");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
@@ -1719,6 +1832,44 @@ namespace CourseAPI.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Entities.Models.MessageChat", b =>
+                {
+                    b.HasOne("Entities.Models.Room", "Room")
+                        .WithMany("MessageChats")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Course.DAL.Models.AppUser", "User")
+                        .WithMany("MessageChats")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Room");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Entities.Models.Participant", b =>
+                {
+                    b.HasOne("Entities.Models.Room", "Room")
+                        .WithMany("Participants")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Course.DAL.Models.AppUser", "User")
+                        .WithMany("Participants")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Room");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
@@ -1786,9 +1937,13 @@ namespace CourseAPI.Migrations
 
                     b.Navigation("LectureCompletions");
 
+                    b.Navigation("MessageChats");
+
                     b.Navigation("Notifications");
 
                     b.Navigation("Orders");
+
+                    b.Navigation("Participants");
 
                     b.Navigation("QuizCompletions");
 
@@ -1871,6 +2026,13 @@ namespace CourseAPI.Migrations
                     b.Navigation("Lectures");
 
                     b.Navigation("Quizzes");
+                });
+
+            modelBuilder.Entity("Entities.Models.Room", b =>
+                {
+                    b.Navigation("MessageChats");
+
+                    b.Navigation("Participants");
                 });
 #pragma warning restore 612, 618
         }

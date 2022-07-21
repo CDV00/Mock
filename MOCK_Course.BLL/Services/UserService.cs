@@ -140,6 +140,7 @@ namespace Course.BLL.Services
                 user.UpdatedAt = DateTime.Now;
                 await _userManager.UpdateAsync(user);
 
+
                 return new Response<UserDTO>(
                     true,
                     _mapper.Map<UserDTO>(user)

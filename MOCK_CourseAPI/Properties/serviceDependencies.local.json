@@ -8,9 +8,9 @@
     },
     "mssql2": {
       "secretStore": "LocalSecretsFile",
+      "resourceId": null,
       "type": "mssql.onprem",
-      "connectionId": "ConnectionStrings:MOCK_Course",
-      "dynamicId": null
+      "connectionId": "ConnectionStrings:MOCK_Course"
     }
   }
 }

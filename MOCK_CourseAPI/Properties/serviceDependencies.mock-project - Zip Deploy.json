@@ -2,6 +2,7 @@
   "dependencies": {
     "mssql2": {
       "secretStore": "AzureAppSettings",
+      "resourceId": null,
       "type": "mssql.onprem",
       "connectionId": "ConnectionStrings:MOCK_Course"
     }
