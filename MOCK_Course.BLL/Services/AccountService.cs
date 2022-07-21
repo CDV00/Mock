@@ -86,7 +86,7 @@ namespace Course.BLL.Services
             if (token == null)
                 return new Response<LoginDTO>(false, "Authentication Error. User don't have any role, please create new account!", null);
 
-            await _hubContext.Clients.User(user.Id.ToString()).SendAsync($"You are login successful!");
+            //await _hubContext.Clients.User(user.Id.ToString()).SendAsync($"You are login successful!");
             return new Response<LoginDTO>(true, new LoginDTO(token, _userResponse));
         }
 

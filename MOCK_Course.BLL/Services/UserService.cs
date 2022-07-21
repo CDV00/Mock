@@ -43,25 +43,6 @@ namespace Course.BLL.Services
             _dipositRepository = dipositRepository;
         }
 
-        // Get All User(role):Full Name, Birthday,... IsActive
-        /*public async Task<Responses<UserDTO>> GetAllUserByRole(string role)
-        {
-            try
-            {
-                var users = await _userRepository.BuildQuery()
-                                                 .FilterByRole(role)
-                                                 .ToListAsync(u => _mapper.Map<UserDTO>(u));
-                foreach (var user in users)
-                {
-                    user.Role = role;
-                }    
-                return new Responses<UserDTO>(true, users);
-            }
-            catch (Exception ex)
-            {
-                return new Responses<UserDTO>(false, ex.Message, null);
-            }
-        }*/
         public async Task<ApiBaseResponse> GetAllUserByRole(UserParameter parameter)
         {
 
@@ -80,6 +61,7 @@ namespace Course.BLL.Services
             user.IsActive = updateUserActiveRequest.IsActive;
             await _userManager.UpdateAsync(user);
             var userDto = _mapper.Map<UserDTO>(user);
+            userDto.Role = (await _userManager.GetRolesAsync(user))[0]?.ToString();
             return new ApiOkResponse<UserDTO>(userDto);
         }
 
@@ -93,6 +75,7 @@ namespace Course.BLL.Services
                 userResponse.isSubscribed = await _subscriptionService.IsSubscribed(userResponse.Id, userResponse.Id) == null ? false : true;
                 userResponse.TotalSubcripbers = (await _subscriptionService.GetTotalSubscriber(userResponse.Id)).data;
                 userResponse.TotalCourses = (await _courseService.GetTotalCourseOfUser(userResponse.Id)).data;
+                userResponse.Role = (await _userManager.GetRolesAsync(user))[0]?.ToString();
 
                 return new Response<UserDTO>(
                     true,
@@ -120,9 +103,7 @@ namespace Course.BLL.Services
                 }
 
                 user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, changePasswordRequest.NewPassword);
-                //update user password
                 await _userManager.UpdateAsync(user);
-                //return BadRequest("request is incorrect");
                 return new Response<UserDTO>(true, null, null);
             }
             catch (Exception ex)
@@ -140,10 +121,12 @@ namespace Course.BLL.Services
                 user.UpdatedAt = DateTime.Now;
                 await _userManager.UpdateAsync(user);
 
+                var userDto = _mapper.Map<UserDTO>(user);
+                userDto.Role = (await _userManager.GetRolesAsync(user))[0]?.ToString();
 
                 return new Response<UserDTO>(
                     true,
-                    _mapper.Map<UserDTO>(user)
+                    userDto
                 );
 
             }
@@ -196,13 +179,13 @@ namespace Course.BLL.Services
         public async Task<PagedList<DepositDTO>> GetDeposit(DepositParameters depositParameters, Guid userid)
         {
             var users = await _dipositRepository.BuildQuery()
-                                             .FilterByUser(userid)
-                                             .FilterDateStart(depositParameters.startDate)
-                                             .FilterDateEnd(depositParameters.endDate)
-                                             .ApplySort(depositParameters.Orderby)
-                                             .Skip((depositParameters.PageNumber - 1) * depositParameters.PageSize)
-                                             .Take(depositParameters.PageSize)
-                                             .ToListAsync(d => _mapper.Map<DepositDTO>(d));
+                                                .FilterByUser(userid)
+                                                .FilterDateStart(depositParameters.startDate)
+                                                .FilterDateEnd(depositParameters.endDate)
+                                                .ApplySort(depositParameters.Orderby)
+                                                .Skip((depositParameters.PageNumber - 1) * depositParameters.PageSize)
+                                                .Take(depositParameters.PageSize)
+                                                .ToListAsync(d => _mapper.Map<DepositDTO>(d));
 
             var count = await _dipositRepository.BuildQuery()
                                              .FilterByUser(userid)
